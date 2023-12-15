@@ -1,0 +1,18 @@
+name = "features"
+main = "src/index.ts"
+compatibility_date = "2023-01-25"
+keep_vars = true
+node_compat = true
+
+routes = [
+	{ pattern = "features.lenshareapp.xyz", custom_domain = true }
+]
+
+kv_namespaces = [
+  { binding = "FEATURES", id = "7f319321a8b44003b99f9d41e1d7e065", preview_id = "7f319321a8b44003b99f9d41e1d7e065" }
+]
+
+[env.production.vars]
+RELEASE = ""
+SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53aW1wdWNoc3FpdXdlcmFjenpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTQwMjMwMjUsImV4cCI6MjAwOTU5OTAyNX0.uKX7Te2uO7p_m9A4fMk4CdDqWEAs7zpnQcVeibYiZJ0"
+

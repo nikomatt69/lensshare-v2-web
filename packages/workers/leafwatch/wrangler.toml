@@ -1,0 +1,14 @@
+name = "leafwatch"
+main = "src/index.ts"
+compatibility_date = "2023-01-25"
+keep_vars = true
+node_compat = true
+
+routes = [
+	{ pattern = "leafwatch.lenshareapp.xyz", custom_domain = true }
+]
+
+[env.production.vars]
+RELEASE = ""
+CLICKHOUSE_PASSWORD = "gieK~6F9vTWnG"
+IPAPI_KEY = "ace541d28b5da0b13d53049b165a60aa"

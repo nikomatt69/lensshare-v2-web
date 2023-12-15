@@ -1,0 +1,31 @@
+# Packages
+
+This folder contains all the shared packages that are used in the LensShare project.
+
+- [ABIs](./abis/README.md) - Contract ABIs
+- [Irys](./irys/README.md) - Create bundles on Arweave
+- [Config](./config/README.md) - ESlint and TypeScript config
+- [Data](./data/README.md) - Data like constants, storage, etc.
+- [Types](./types/README.md) - Shared types
+- [Image Cropper](./image-cropper/README.md) - Image cropper avatar and cover
+- [Lens](./lens/README.md) - Lens GraphQL client, helpers, and documents
+- [Lib](./lib/README.md) - Shared libraries
+- [UI](./ui/README.md) - Shared UI components
+- [Workers](./workers/README.md) - Cloudflare Workers
+  - [Prerender](../packages/workers/prerender/README.md) - Prerender for SEO only for bots
+  - [STS Token Generator](../packages/workers/sts/README.md) - Generate S3 Compatible STS token in 4Everland
+  - [Metadata](../packages/workers/metadata/README.md) - Create metadata on Arweave via Irys
+  - [Freshdesk](../packages/workers/freshdesk/README.md) - Create Freshdesk tickets
+  - [Snapshot Relay](../packages/workers/snapshot-relay/README.md) - Relayer for Snapshot for Polls and Proposals
+  - [ENS Resolver](../packages/workers/ens/README.md) - Resolve Ethereum address to ENS names
+  - [Oembed](../packages/workers/oembed/README.md) - Create rich embeds for URLs also proxy images
+  - [Leafwatch](../packages/workers/leafwatch/README.md) - Telemetry for LensShare
+  - [Achievements](../packages/workers/achievements/README.md) - Achievements API for LensShare
+  - [Invite](../packages/workers/invite/README.md) - Invite API for LensShare
+  - [Feeds](../packages/workers/feeds/README.md) - Feeds API for LensShare
+  - [Access](../packages/workers/access/README.md) - Access API for LensShare
+  - [Preferences](../packages/workers/preferences/README.md) - Preferences API for LensShare
+  - [Groups](../packages/workers/groups/README.md) - Groups API for LensShare
+  - [NFT](../packages/workers/nft/README.md) - NFT API for LensShare
+  - [Staff Picks](../packages/workers/staff-picks/README.md) - Staff Picks API for LensShare
+  - [Live](../packages/workers/live/README.md) - Live API for LensShare

@@ -1,0 +1,13 @@
+name = "oembed"
+main = "src/index.ts"
+compatibility_date = "2023-01-25"
+keep_vars = true
+
+routes = [
+	{ pattern = "oembed.lenshareapp.xyz", custom_domain = true }
+]
+
+[env.production.vars]
+RELEASE = ""
+WORKER_ENV="production"
+IMAGEKIT_URL="https://ik.imagekit.io/lens/media-snapshot"

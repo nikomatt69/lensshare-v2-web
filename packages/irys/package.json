@@ -1,0 +1,17 @@
+{
+  "name": "@lensshare/irys",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0",
+  "scripts": {
+    "typecheck": "tsc --pretty"
+  },
+  "dependencies": {
+    "base64url": "^3.0.1",
+    "viem": "^1.18.3"
+  },
+  "devDependencies": {
+    "@lensshare/config": "*",
+    "typescript": "^5.2.2"
+  }
+}
