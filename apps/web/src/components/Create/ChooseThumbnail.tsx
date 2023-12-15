@@ -108,9 +108,7 @@ const ChooseThumbnail: FC<Props> = ({ file }) => {
 
   useEffect(() => {
     if (file) {
-      generateThumbnails(file).catch((error) =>
-        logger.error('[Error Generate Thumbnails from File]')
-      );
+      generateThumbnails(file).catch((error) => logger.error(error));
     }
     return () => {
       setSelectedThumbnailIndex(-1);
