@@ -5,7 +5,7 @@
   "license": "AGPL-3.0",
   "scripts": {
     "build:sw": "node script/build-sw.mjs",
-    "build": "yarn run build:sw; next build",
+    "build": "next build",
     "buildVercel": "yarn run build:sw;next build",
     "dev": "next dev",
     "export":"yarn run build:sw; next build",

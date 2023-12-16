@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BASE_URL } from '@lensshare/data/constants';
 import { ServiceWorkerCache } from './cache';
-importScripts('https://progressier.app/n3shfjBJt3OOEInGTpqa/sw.js');
+importScripts('https://progressier.app/UyYlhOtlyHyST7enRwK8/sw.js');
 declare let self: ServiceWorkerGlobalScope;
 
 const impressionsEndpoint = `${BASE_URL}/api/leafwatch/impressions`;

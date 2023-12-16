@@ -7,6 +7,7 @@ import Loading from '@components/Shared/Loading';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
+    
     <Suspense fallback={<Loading />}>
       <Providers>
         <style jsx global>{`

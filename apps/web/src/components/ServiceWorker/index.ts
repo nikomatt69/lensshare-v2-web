@@ -5,7 +5,7 @@ const SW: FC = () => {
   useEffectOnce(() => {
     if ('serviceWorker' in navigator) {
       (navigator.serviceWorker as ServiceWorkerContainer)
-        .register('/sw.js', { scope: '/' })
+        .register('/progressier.js', { scope: '/' })
         .catch(console.error);
     }
   });
