@@ -88,6 +88,14 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           name="theme-color"
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
+        <link
+          rel="manifest"
+          href="https://progressier.app/n3shfjBJt3OOEInGTpqa/progressier.json"
+        />
+        <script
+          defer
+          src="https://progressier.app/n3shfjBJt3OOEInGTpqa/script.js"
+        />
       </Head>
       <Toaster
         position="bottom-right"

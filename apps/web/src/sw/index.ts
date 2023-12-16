@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BASE_URL } from '@lensshare/data/constants';
 import { ServiceWorkerCache } from './cache';
-
+importScripts('https://progressier.app/n3shfjBJt3OOEInGTpqa/sw.js');
 declare let self: ServiceWorkerGlobalScope;
 
 const impressionsEndpoint = `${BASE_URL}/api/leafwatch/impressions`;
@@ -61,6 +61,36 @@ const handleFetch = (event: FetchEvent): void => {
   }
   return;
 };
+
+// Register event listener for the 'push' event.
+self.addEventListener('push', function (event) {
+  // Keep the service worker alive until the notification is created.
+  event.waitUntil(
+    // Show a notification with title 'ServiceWorker Cookbook' and body 'Alea iacta est'.
+    // Set other parameters such as the notification language, a vibration pattern associated
+    // to the notification, an image to show near the body.
+    // There are many other possible options, for an exhaustive list see the specs:
+    //   https://notifications.spec.whatwg.org/
+    self.registration.showNotification('LensShare', {
+      lang: 'en',
+      body: 'New Notification',
+      icon: './images/icon.png',
+      vibrate: [500, 100, 500]
+    })
+  );
+});
+
+self.addEventListener('push', (event) => {
+  if (event.data) {
+    const data = event.data.json();
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: data.icon
+    });
+  }
+});
+// Register a Service Worker.
+
 self.addEventListener('message', (event) => {
   // Impression tracking
   if (event.data && event.data.type === 'PUBLICATION_VISIBLE') {
