@@ -36,6 +36,7 @@ const LensSubscriptionsProvider: FC = () => {
     useNewNotificationSubscriptionSubscription({
       variables: { for: currentSessionProfileId },
       skip: !canUseSubscriptions || isAddress(currentSessionProfileId)
+     
     });
 
   useUpdateEffect(() => {
