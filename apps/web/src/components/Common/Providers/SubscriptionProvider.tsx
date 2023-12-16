@@ -29,7 +29,7 @@ const SubscriptionProvider = () => {
 
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
     API_URL.replace('http', 'ws'),
-    { protocols: ['graphql-transport-ws'] }
+    { protocols: ['graphql-ws'] }
   );
 
   useEffect(() => {
