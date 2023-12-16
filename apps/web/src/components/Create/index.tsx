@@ -47,7 +47,6 @@ import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
 import { getProfile } from 'src/hooks/getProfile';
 import type { CustomErrorWithData } from 'src/types/custom-types';
 import {
-  APP_ID,
   APP_NAME,
   BASE_URL,
   BUNDLR_CONNECT_MESSAGE,
@@ -65,6 +64,8 @@ import { getUploadedMediaType } from './getUploadedMediaType';
 import { canUploadedToIpfs } from 'src/hooks/canUploadedToIpfs';
 import { LensHub } from '@lensshare/abis';
 import { checkLensManagerPermissions } from './checkLensManagerPermissions';
+import { Leafwatch } from '@lib/leafwatch';
+import { PUBLICATION } from '@lensshare/data/tracking';
 
 const CreateSteps = () => {
   const getIrysInstance = useBytesStore((state) => state.getIrysInstance);
@@ -102,17 +103,17 @@ const CreateSteps = () => {
     resetToDefaults();
     router.push(
       uploadedMedia.isByteVideo
-        ? `https://lenshareapp.xyz${getProfile(currentProfile).link}?type=bytes`
-        : `https://lenshareapp.xyz${getProfile(currentProfile).link}?type=bytes`
+        ? `/u/${getProfile(currentProfile).link}?type=bytes`
+        : `/u/${getProfile(currentProfile).link}`
     );
   };
 
   const redirectToWatchPage = (pubId: string) => {
     resetToDefaults();
     if (uploadedMedia.type === 'AUDIO') {
-      return router.push(`/bytes/${pubId}`);
+      return router.push(`/listen/${pubId}`);
     }
-    router.push(`/bytes/${pubId}`);
+    router.push(`/posts/${pubId}`);
   };
 
   const setToQueue = (txn: { txnId?: string; txnHash?: string }) => {
@@ -152,6 +153,21 @@ const CreateSteps = () => {
     if (__typename === 'RelayError') {
       return;
     }
+    Leafwatch.track(PUBLICATION.NEW_POST, {
+      video_format: uploadedMedia.mediaType,
+      video_type: uploadedMedia.isByteVideo ? 'SHORT_FORM' : 'LONG_FORM',
+      publication_state: uploadedMedia.collectModule.isRevertCollect
+        ? 'MOMOKA'
+        : 'ON_CHAIN',
+      video_storage: uploadedMedia.isUploadToIpfs ? 'IPFS' : 'ARWEAVE',
+
+      publication_reference_module: enabledReferenceModule,
+      publication_reference_module_degrees_of_separation: uploadedMedia
+        .referenceModule.degreesOfSeparationReferenceModule
+        ? degreesOfSeparation
+        : null,
+      user_id: currentProfile?.id
+    });
 
     return stopLoading();
   };
