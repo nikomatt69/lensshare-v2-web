@@ -94,7 +94,7 @@ const MessageIcon: FC = () => {
     // badging per-conversation, we can remove this.
     const newMessageValidator = (profileId: string): boolean => {
       return (
-        !window.location.pathname.startsWith('/messages') &&
+        !window.location.pathname.startsWith('/messages2') &&
         currentProfile.id === profileId
       );
     };

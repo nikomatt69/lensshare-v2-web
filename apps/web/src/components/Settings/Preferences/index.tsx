@@ -10,7 +10,7 @@ import { useEffectOnce } from 'usehooks-ts';
 
 import SettingsSidebar from '../Sidebar';
 import HighSignalNotificationFilter from './HighSignalNotificationFilter';
-import IsPride from './IsPride';
+
 import PushNotifications from './PushNotifications';
 
 const PreferencesSettings: NextPage = () => {
@@ -41,7 +41,7 @@ const PreferencesSettings: NextPage = () => {
           <div className="space-y-6">
             <HighSignalNotificationFilter />
             <PushNotifications />
-            <IsPride />
+        
           </div>
         </Card>
       </GridItemEight>

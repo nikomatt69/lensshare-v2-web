@@ -37,9 +37,7 @@ interface ListProps {
 }
 
 const List: FC<ListProps> = ({ feedType }) => {
-  const highSignalNotificationFilter = usePreferencesStore(
-    (state) => state.highSignalNotificationFilter
-  );
+  const preferences = usePreferencesStore((state) => state.preferences);
   const latestNotificationId = useNotificationPersistStore(
     (state) => state.latestNotificationId
   );
@@ -65,12 +63,12 @@ const List: FC<ListProps> = ({ feedType }) => {
   const request: NotificationRequest = {
     where: {
       customFilters: [CustomFiltersType.Gardeners],
-      highSignalFilter: highSignalNotificationFilter,
+      highSignalFilter: preferences.highSignalNotificationFilter,
       notificationTypes: getNotificationType()
     }
   };
 
-  const { data, loading, error, fetchMore, refetch } = useNotificationsQuery({
+  const { data, error, fetchMore, loading, refetch } = useNotificationsQuery({
     variables: { request }
   });
 
@@ -104,14 +102,14 @@ const List: FC<ListProps> = ({ feedType }) => {
   }
 
   if (error) {
-    return <ErrorMessage title="Failed to load notifications" error={error} />;
+    return <ErrorMessage error={error} title="Failed to load notifications" />;
   }
 
   if (notifications?.length === 0) {
     return (
       <EmptyState
+        icon={<BellIcon className="text-brand-500 h-8 w-8" />}
         message="Inbox zero!"
-        icon={<BellIcon className="text-brand h-8 w-8" />}
       />
     );
   }
@@ -119,17 +117,16 @@ const List: FC<ListProps> = ({ feedType }) => {
   return (
     <Card>
       <Virtuoso
-        useWindowScroll
         className="virtual-notification-list"
         data={notifications}
         endReached={onEndReached}
         itemContent={(_, notification) => {
           return (
             <motion.div
-              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
               className="p-5"
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
             >
               {notification.__typename === 'FollowNotification' ? (
                 <FollowNotification
@@ -169,6 +166,7 @@ const List: FC<ListProps> = ({ feedType }) => {
             </motion.div>
           );
         }}
+        useWindowScroll
       />
     </Card>
   );

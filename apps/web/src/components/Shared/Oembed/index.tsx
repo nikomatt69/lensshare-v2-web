@@ -49,7 +49,7 @@ const Oembed: FC<OembedProps> = ({ url, publicationId, onData }) => {
     html: data?.html
   };
 
-  if (!og.title) {
+  if (!og.title && !og.html) {
     return null;
   }
 

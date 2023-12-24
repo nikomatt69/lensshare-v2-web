@@ -1,6 +1,6 @@
 import MetaTags from '@components/Common/MetaTags';
 import { APP_NAME } from '@lensshare/data/constants';
-import { Localstorage } from '@lensshare/data/storage';
+import { IndexDB, Localstorage } from '@lensshare/data/storage';
 import {
   Button,
   Card,
@@ -25,6 +25,7 @@ const CleanupSettings: NextPage = () => {
 
   const cleanup = (key: string) => {
     localStorage.removeItem(key);
+    indexedDB.deleteDatabase(key)
     toast.success(`Cleared ${key}`);
     disconnectXmtp;
   };
@@ -78,7 +79,7 @@ const CleanupSettings: NextPage = () => {
               </div>
               <Button
                 onClick={() => {
-                  cleanup(Localstorage.MessageStore), disconnectXmtp();
+                  cleanup(IndexDB.MessageStore && Localstorage.MessageStore ), disconnectXmtp();
                   toast.success(`Cleared DM keys`);
                 }}
               >

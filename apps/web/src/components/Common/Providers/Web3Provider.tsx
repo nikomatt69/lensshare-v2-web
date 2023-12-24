@@ -2,8 +2,8 @@ import { APP_NAME, WALLETCONNECT_PROJECT_ID } from '@lensshare/data/constants';
 import { CoinbaseWalletConnector } from '@wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from '@wagmi/connectors/injected';
 import { WalletConnectConnector } from '@wagmi/connectors/walletConnect';
-import type { FC, ReactNode } from 'react';
-import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import { FC, ReactNode } from 'react';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   base,
   baseGoerli,
@@ -17,11 +17,7 @@ import {
   zoraTestnet
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
 
-// 1. Import the DynamicWagmiConnector
-import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
-import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 const { chains, publicClient } = configureChains(
   [
     polygon,
@@ -42,15 +38,13 @@ const connectors: any = [
   new InjectedConnector({ chains, options: { shimDisconnect: true } }),
   new CoinbaseWalletConnector({ options: { appName: APP_NAME } }),
   new WalletConnectConnector({
-    options: {
-      projectId: WALLETCONNECT_PROJECT_ID
-    },
-    chains
+    chains,
+    options: { projectId: WALLETCONNECT_PROJECT_ID }
   })
 ];
 
 const wagmiConfig = createConfig({
-  autoConnect: false,
+  autoConnect: true,
   connectors,
   publicClient
 });
@@ -60,18 +54,7 @@ interface Web3ProviderProps {
 }
 
 const Web3Provider: FC<Web3ProviderProps> = ({ children }) => {
-  return (
-    <WagmiConfig config={wagmiConfig}>
-      <DynamicContextProvider
-        settings={{
-          environmentId: '4ae8558e-661a-44a9-85e5-f570bc06e76a',
-          walletConnectors: [EthereumWalletConnectors]
-        }}
-      >
-        <DynamicWagmiConnector>{children}</DynamicWagmiConnector>
-      </DynamicContextProvider>
-    </WagmiConfig>
-  );
+  return <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>;
 };
 
 export default Web3Provider;

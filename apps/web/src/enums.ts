@@ -64,3 +64,33 @@ export enum TestnetContracts {
   LensHubProxy = '0xC1E77eE73403B8a7478884915aA599932A677870',
   DefaultToken = '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889'
 }
+
+export enum SpacesEvents {
+  APP_INITIALIZED = 'app:initialized',
+  APP_MIC_ON = 'app:mic-on',
+  APP_MIC_OFF = 'app:mic-off',
+  ROOM_DATA_RECEIVED = 'room:data-received',
+  ROOM_PEER_JOINED = 'room:peer-joined',
+  ROOM_ME_LEFT = 'room:me-left',
+  ROOM_ME_ROLE_UPDATE = 'room:me-role-update'
+}
+
+
+export enum TokenGateCondition {
+  HAVE_A_LENS_PROFILE = 'HAVE_HANDLE',
+  FOLLOW_A_LENS_PROFILE = 'FOLLOW_HANDLE',
+  COLLECT_A_POST = 'COLLECT_POST',
+  MIRROR_A_POST = 'MIRROR_POST'
+}
+
+export enum MusicTrack {
+  DEFAULT = 'DEFAULT',
+  CALM_MY_MIND = 'CALM_MY_MIND',
+  CRADLE_OF_SOUL = 'CRADLE_OF_SOUL',
+  FOREST_LULLABY = 'FOREST_LULLABY'
+}
+
+export enum NewPublicationTypes {
+  Publication = 'PUBLICATION',
+  Spaces = 'SPACES'
+}

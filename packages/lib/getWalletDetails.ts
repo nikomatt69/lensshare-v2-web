@@ -18,14 +18,14 @@ const getWalletDetails = (name: string): WalletDetails => {
       name: 'Coinbase Wallet',
       logo: `${STATIC_ASSETS_URL}/coinbase.svg`
     },
-    'Dynamic Wallet': {
-      name: 'Dynamic Wallet',
-      logo: `${STATIC_ASSETS_URL}/dynamic.svg`
+    'Wallet Connect': {
+      name: 'Wallet Connect',
+      logo: `${STATIC_ASSETS_URL}/walletconnect.svg`
     }
   };
   const defaultDetails: WalletDetails = {
     name,
-    logo: `${STATIC_ASSETS_URL}/wallets/browser-wallet.svg`
+    logo: `${STATIC_ASSETS_URL}/icon.png`
   };
 
   return walletDetails[name] || defaultDetails;

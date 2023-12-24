@@ -1,5 +1,6 @@
 import getEnvConfig from './utils/getEnvConfig';
-
+import { CONSTANTS } from '@pushprotocol/restapi';
+import packageJson from '../../package.json';
 export const IS_MAINNET = process.env.NEXT_PUBLIC_LENS_NETWORK === 'mainnet';
 export const IS_PRODUCTION = process.env.NEXT_PUBLIC_IS_PRODUCTION === 'true';
 export const HANDLE_PREFIX = IS_MAINNET ? 'lens/' : 'lens/';
@@ -8,7 +9,7 @@ export const HEY_API_URL = 'https://api.lenshareapp.xyz';
 
 export const APP_ID = 'lensshare';
 export const APP_NAME = 'LensShare';
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = packageJson.version;
 export const LENSTOK_URL = process.env.NEXT_PUBLIC_LENSTOK_URL;
 export const DESCRIPTION = 'Decentralized Social Platform';
 export const LENS_NETWORK = process.env.NEXT_PUBLIC_LENS_NETWORK ?? 'mainnet';
@@ -19,6 +20,8 @@ export const GIT_COMMIT_SHA =
 
 export const API_URL = getEnvConfig().apiEndpoint;
 export const ADMIN_ADDRESS = '0x38B2b78246B9b162f3B365f3970ac77FB07AbF90';
+export const ADMIN_ADDRESS2 = '0xD47904193219374AcBe05fD0D6c42F5bC6349028';
+export const ADMIN_ADDRESS3 = '0x64979cA4449b9Db7aaB4052d96E42D3A5EAF4513';
 export const REWARDS_ADDRESS = '0x38B2b78246B9b162f3B365f3970ac77FB07AbF90';
 
 export const LENSHUB_PROXY = getEnvConfig().lensHubProxyAddress;
@@ -62,6 +65,9 @@ export const MESSAGING_PROVIDER = {
   XMTP: 'xmtp',
   PUSH: 'push'
 };
+
+
+export const PUSH_ENV = IS_MAINNET ? CONSTANTS.ENV.PROD : CONSTANTS.ENV.PROD;
 export const BASE_URL = IS_MAINNET
   ? 'https://lenshareapp.xyz'
   : 'https://lenshareapp.xyz';

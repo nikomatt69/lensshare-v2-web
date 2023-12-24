@@ -23,5 +23,6 @@ export const IndexDB = {
   FeatureFlagsStore: 'featureflags.store',
   VerifiedMembersStore: 'verifiedmembers.store',
   FeaturedGroupsStore: 'featuredgroups.store',
-  TBAStore: 'tba.store'
+  TBAStore: 'tba.store',
+  MessageStore: 'message.store',
 };

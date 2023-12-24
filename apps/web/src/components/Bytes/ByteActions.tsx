@@ -43,7 +43,7 @@ const ByteActions: FC<Props> = ({ video }) => {
   };
   const targetPublication = isMirrorPublication(video) ? video.mirrorOn : video;
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const gardenerMode = usePreferencesStore((state) => state.gardenerMode);
+
   const hasOpenAction = (targetPublication.openActionModules?.length || 0) > 0;
   const publicationViews = useImpressionsStore(
     (state) => state.publicationViews

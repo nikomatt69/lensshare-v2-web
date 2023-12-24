@@ -28,7 +28,7 @@ import Feed from './Feed';
 const FILTER_APPS = knownApps;
 
 const Mod: NextPage = () => {
-  const isGardener = usePreferencesStore((state) => state.isGardener);
+
   const [refresing, setRefreshing] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [publicationTypes, setPublicationTypes] = useState([
@@ -52,9 +52,7 @@ const Mod: NextPage = () => {
 
 
 
-  if (!isGardener) {
-    return <Custom404 />;
-  }
+ 
 
   const toggleMainContentFocus = (focus: PublicationMetadataMainFocusType) => {
     if (mainContentFocus.includes(focus)) {

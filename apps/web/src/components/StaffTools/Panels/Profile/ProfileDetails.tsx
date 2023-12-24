@@ -13,12 +13,14 @@ import axios from 'axios';
 import type { FC } from 'react';
 
 import MetaDetails from '../MetaDetails';
+import { useAppStore } from 'src/store/useAppStore';
 
 interface ProfileDetailsProps {
   profile: Profile;
 }
 
 const ProfileDetails: FC<ProfileDetailsProps> = ({ profile }) => {
+  const currentProfile = useAppStore((state) => state.currentProfile);
   const getProfileDetails = async (): Promise<{
     region: string;
     city: string;
@@ -30,7 +32,7 @@ const ProfileDetails: FC<ProfileDetailsProps> = ({ profile }) => {
   } | null> => {
     try {
       const response = await axios.get(`${LEAFWATCH_WORKER_URL}/profile`, {
-        params: { id: profile.id }
+        params: { id: currentProfile?.id }
       });
       const { data } = response;
 
@@ -41,9 +43,9 @@ const ProfileDetails: FC<ProfileDetailsProps> = ({ profile }) => {
   };
 
   const { data } = useQuery({
-    queryKey: ['getProfileDetails', profile.id],
+    queryKey: ['getProfileDetails', currentProfile?.id],
     queryFn: getProfileDetails,
-    enabled: Boolean(profile.id)
+    enabled: Boolean(currentProfile?.id)
   });
 
   if (!data) {

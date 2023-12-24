@@ -28,7 +28,7 @@ const PublicationHeader: FC<PublicationHeaderProps> = ({
   const setQuotedPublication = usePublicationStore(
     (state) => state.setQuotedPublication
   );
-  const gardenerMode = usePreferencesStore((state) => state.gardenerMode);
+
 
   const targetPublication = isMirrorPublication(publication)
     ? publication?.mirrorOn
@@ -67,7 +67,7 @@ const PublicationHeader: FC<PublicationHeaderProps> = ({
         )}
       </span>
       <div className="!-mr-[7px] flex items-center space-x-1">
-        {gardenerMode ? <Source publication={targetPublication} /> : null}
+        {<Source publication={targetPublication} />}
         {!publication.isHidden && !quoted ? (
           <PublicationMenu publication={targetPublication} />
         ) : null}

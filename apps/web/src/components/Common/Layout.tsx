@@ -15,11 +15,13 @@ import { useNonceStore } from 'src/store/useNonceStore';
 import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import { useEffectOnce, useIsMounted } from 'usehooks-ts';
 import { useAccount, useDisconnect } from 'wagmi';
+import { isIOS, isMobile } from 'react-device-detect';
 import GlobalModals from '../Shared/GlobalModals';
 import Loading from '../Shared/Loading';
 import Navbar from '../Shared/Navbar';
 import { isAddress } from 'viem';
-import Script from 'next/script';
+import PWAInstallPrompt from './PWAInstallPrompt';
+
 
 interface LayoutProps {
   children: ReactNode;
@@ -28,9 +30,7 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   const { resolvedTheme } = useTheme();
   const setCurrentProfile = useAppStore((state) => state.setCurrentProfile);
-  const loadingPreferences = usePreferencesStore(
-    (state) => state.loadingPreferences
-  );
+
   const resetPreferences = usePreferencesStore(
     (state) => state.resetPreferences
   );
@@ -77,7 +77,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     validateAuthentication();
   });
 
-  if (loading || loadingPreferences || !isMounted()) {
+  if (loading || !isMounted()) {
     return <Loading />;
   }
   return (
@@ -91,14 +91,18 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           rel="manifest"
           href="https://progressier.app/UyYlhOtlyHyST7enRwK8/progressier.json"
         />
-        <Script src="https://progressier.app/UyYlhOtlyHyST7enRwK8/script.js" />
+        <script
+          defer
+          src="https://progressier.app/UyYlhOtlyHyST7enRwK8/script.js"
+        />
       </Head>
       <Toaster
         position="bottom-right"
         containerStyle={{ wordBreak: 'break-word' }}
         toastOptions={getToastOptions(resolvedTheme)}
       />
-
+      
+      {isMobile && isIOS ? <PWAInstallPrompt /> : null}
       <GlobalModals />
       <GlobalAlerts />
       <div className="flex min-h-screen flex-col pb-14 md:pb-0">

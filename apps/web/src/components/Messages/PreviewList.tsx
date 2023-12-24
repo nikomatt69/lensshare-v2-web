@@ -48,7 +48,7 @@ const PreviewList: FC<PreviewListProps> = ({
   previewsProgress
 }) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const staffMode = usePreferencesStore((state) => state.staffMode);
+
   const selectedTab = useMessageStore((state) => state.selectedTab);
   const ensNames = useMessageStore((state) => state.ensNames);
   const setSelectedTab = useMessageStore((state) => state.setSelectedTab);
@@ -116,7 +116,7 @@ const PreviewList: FC<PreviewListProps> = ({
   return (
     <GridItemFour
       className={cn(
-        staffMode ? 'h-[calc(100vh-9.78rem)]' : 'h-[calc(100vh-8rem)]',
+        'h-[calc(100vh-8rem)]',
         'xs:mx-2 xs:h-[100vh] xs:mx-2 xs:col-span-4  mb-0 w-full justify-between rounded-xl sm:mx-2 sm:h-[76vh] md:col-span-4 md:h-[80vh] xl:h-[84vh]'
       )}
     >

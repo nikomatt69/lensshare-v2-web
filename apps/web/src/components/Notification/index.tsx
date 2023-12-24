@@ -36,7 +36,7 @@ const Notification: FC = () => {
         <div className="m-1 flex flex-wrap justify-between gap-3 pb-2">
           <FeedType setFeedType={setFeedType} feedType={feedType} />
           <Settings />
-          <Push trigger />
+         
         </div>
         <List feedType={feedType} />
       </div>

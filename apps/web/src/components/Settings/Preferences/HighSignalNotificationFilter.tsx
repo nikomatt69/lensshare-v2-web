@@ -1,53 +1,68 @@
-import ToggleWithHelper from '@components/Shared/ToggleWithHelper';
+import ToggleWithHelper from '@components/Shared/ToggleWithHelper2';
 import { SwatchIcon } from '@heroicons/react/24/outline';
-import { IS_MAINNET, PREFERENCES_WORKER_URL } from '@lensshare/data/constants';
+import { BASE_URL, IS_MAINNET, PREFERENCES_WORKER_URL } from '@lensshare/data/constants';
 import { SETTINGS } from '@lensshare/data/tracking';
+import getPreferences from '@lib/api/getPreferences';
+import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
 import { Leafwatch } from '@lib/leafwatch';
 import axios from 'axios';
-import type { FC } from 'react';
+import { useState, type FC } from 'react';
 import { toast } from 'react-hot-toast';
+import { useAppStore } from 'src/store/useAppStore';
 import { hydrateAuthTokens } from 'src/store/useAuthPersistStore';
 import { usePreferencesStore } from 'src/store/usePreferencesStore';
 
 const HighSignalNotificationFilter: FC = () => {
-  const highSignalNotificationFilter = usePreferencesStore(
-    (state) => state.highSignalNotificationFilter
-  );
-  const setHighSignalNotificationFilter = usePreferencesStore(
-    (state) => state.setHighSignalNotificationFilter
-  );
+  const currentProfile = useAppStore((state) => state.currentProfile);
+  const preferences = usePreferencesStore((state) => state.preferences);
+  const setPreferences = usePreferencesStore((state) => state.setPreferences);
+  const [updating, setUpdating] = useState(false);
 
   const toggleHighSignalNotificationFilter = () => {
     toast.promise(
       axios.post(
-        `${PREFERENCES_WORKER_URL}/update`,
-        { highSignalNotificationFilter: !highSignalNotificationFilter },
+        `${BASE_URL}/api/preferences/updatePreferences`,
         {
-          headers: {
-            'X-Access-Token': hydrateAuthTokens().accessToken,
-            'X-Lens-Network': IS_MAINNET ? 'mainnet' : 'mainnet'
-          }
-        }
+          highSignalNotificationFilter:
+            !preferences.highSignalNotificationFilter
+        },
+        { headers: getAuthWorkerHeaders() }
       ),
       {
+        error: () => {
+          setUpdating(false);
+          return 'Error updating notification preference';
+        },
         loading: 'Updating preference settings...',
         success: () => {
-          setHighSignalNotificationFilter(!highSignalNotificationFilter);
-       
+          getPreferences(currentProfile?.id, getAuthWorkerHeaders());
+          setUpdating(false);
+          setPreferences({
+            ...preferences,
+            highSignalNotificationFilter:
+              !preferences.highSignalNotificationFilter
+          });
+          Leafwatch.track(
+            SETTINGS.PREFERENCES.TOGGLE_HIGH_SIGNAL_NOTIFICATION_FILTER,
+            {
+              enabled: !preferences.highSignalNotificationFilter
+            }
+          );
+
           return 'Notification preference updated';
-        },
-        error: 'Error updating notification preference'
+        }
       }
     );
   };
 
   return (
     <ToggleWithHelper
-      on={highSignalNotificationFilter}
-      setOn={toggleHighSignalNotificationFilter}
-      heading="Notification Signal filter"
       description="Turn on high-signal notification filter"
+      disabled={updating}
+      heading="Notification Signal filter"
       icon={<SwatchIcon className="h-4 w-4" />}
+      on={preferences.highSignalNotificationFilter}
+      setOn={toggleHighSignalNotificationFilter}
     />
   );
 };

@@ -31,6 +31,7 @@ const getMetadata = async (url: string): Promise<any> => {
       .replace('https://', '')
       .replace('http://', '')}.ico`,
     isLarge,
+    lastIndexedAt: new Date().toISOString(),
     html: generateIframe(getEmbedUrl(document), url)
   };
 

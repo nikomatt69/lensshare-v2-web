@@ -1,5 +1,4 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
-import Script from 'next/script';
 
 class LensShareDocument extends Document {
   render() {
@@ -53,7 +52,7 @@ class LensShareDocument extends Document {
             rel="manifest"
             href="https://progressier.app/UyYlhOtlyHyST7enRwK8/progressier.json"
           />
-          <Script
+          <script
             defer
             src="https://progressier.app/UyYlhOtlyHyST7enRwK8/script.js"
           />

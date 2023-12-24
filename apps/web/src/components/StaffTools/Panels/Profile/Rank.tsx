@@ -15,12 +15,15 @@ import type { FC } from 'react';
 import urlcat from 'urlcat';
 
 import MetaDetails from '../MetaDetails';
+import { useAppStore } from 'src/store/useAppStore';
 
 interface RankProps {
   profile: Profile;
 }
 
 const Rank: FC<RankProps> = ({ profile }) => {
+
+  const currentProfile = useAppStore((state) => state.currentProfile);
   const getRank = async (strategy: string) => {
     try {
       const response = await axios.get(
@@ -41,7 +44,7 @@ const Rank: FC<RankProps> = ({ profile }) => {
       const response = await axios.get(
         urlcat('https://api.scorer.gitcoin.co/registry/score/:id/:address', {
           id: 335,
-          address: profile.ownedBy.address
+          address: currentProfile?.ownedBy.address
         }),
         { headers: { 'X-API-Key': GITCOIN_PASSPORT_KEY } }
       );
@@ -53,27 +56,27 @@ const Rank: FC<RankProps> = ({ profile }) => {
   };
 
   const { data: followship } = useQuery({
-    queryKey: ['getRank', profile.id, 'followship'],
+    queryKey: ['getRank', currentProfile?.id, 'followship'],
     queryFn: async () => getRank('followship')
   });
 
   const { data: engagement } = useQuery({
-    queryKey: ['getRank', profile.id, 'engagement'],
+    queryKey: ['getRank', currentProfile?.id, 'engagement'],
     queryFn: async () => getRank('engagement')
   });
 
   const { data: influencer } = useQuery({
-    queryKey: ['getRank', profile.id, 'influencer'],
+    queryKey: ['getRank', currentProfile?.id, 'influencer'],
     queryFn: async () => getRank('influencer')
   });
 
   const { data: creator } = useQuery({
-    queryKey: ['getRank', profile.id, 'creator'],
+    queryKey: ['getRank', currentProfile?.id, 'creator'],
     queryFn: async () => getRank('creator')
   });
 
   const { data: gitcoinScore } = useQuery({
-    queryKey: ['getGitcoinScore', profile.id],
+    queryKey: ['getGitcoinScore', currentProfile?.id],
     queryFn: getGitcoinScore
   });
 

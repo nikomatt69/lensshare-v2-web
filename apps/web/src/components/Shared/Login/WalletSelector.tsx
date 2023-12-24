@@ -38,6 +38,7 @@ import {
 
 import UserProfile from '../UserProfile';
 import { IS_MAINNET } from '@lensshare/data/constants';
+import SwitchNetwork from '../SwitchNetwork';
 
 interface WalletSelectorProps {
   setHasConnected?: Dispatch<SetStateAction<boolean>>;
@@ -49,7 +50,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
   setShowSignup
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [loggingInProfileId, setLoggingInProfileId] = useState<string | null>(
+  const [loggingInProfileId, setLoggingInProfileId] = useState<null | string>(
     null
   );
 
@@ -58,12 +59,11 @@ const WalletSelector: FC<WalletSelectorProps> = ({
     errorToast(error);
   };
 
-  const isMounted = useIsMounted();
   const chain = useChainId();
   const {
+    connectAsync,
     connectors,
     error,
-    connectAsync,
     isLoading: isConnectLoading,
     pendingConnector
   } = useConnect({ chainId: CHAIN_ID });
@@ -76,16 +76,16 @@ const WalletSelector: FC<WalletSelectorProps> = ({
   });
   const [authenticate, { error: errorAuthenticate }] =
     useAuthenticateMutation();
-  const request: ProfileManagersRequest | LastLoggedInProfileRequest = {
+  const request: LastLoggedInProfileRequest | ProfileManagersRequest = {
     for: address
   };
   const { data: profilesManaged, loading: profilesManagedLoading } =
     useProfilesManagedQuery({
+      skip: !address,
       variables: {
-        profilesManagedRequest: request,
-        lastLoggedInProfileRequest: request
-      },
-      skip: !address
+        lastLoggedInProfileRequest: request,
+        profilesManagedRequest: request
+      }
     });
 
   const onConnect = async (connector: Connector) => {
@@ -106,9 +106,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
       setIsLoading(true);
       // Get challenge
       const challenge = await loadChallenge({
-        variables: {
-          request: { ...(id && { for: id }), signedBy: address }
-        }
+        variables: { request: { ...(id && { for: id }), signedBy: address } }
       });
 
       if (!challenge?.data?.challenge?.text) {
@@ -150,7 +148,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
           profilesManagedLoading ? (
             <Card className="w-full dark:divide-gray-700" forceRounded>
               <div className="space-y-2 p-4 text-center text-sm font-bold">
-                <Spinner size="sm" className="mx-auto" />
+                <Spinner className="mx-auto" size="sm" />
                 <div>Loading profiles managed by you...</div>
               </div>
             </Card>
@@ -158,16 +156,16 @@ const WalletSelector: FC<WalletSelectorProps> = ({
             <Card className="w-full dark:divide-gray-700" forceRounded>
               {profiles.map((profile) => (
                 <div
-                  key={profile.id}
                   className="flex items-center justify-between p-3"
+                  key={profile.id}
                 >
                   <UserProfile
                     linkToProfile={false}
-                    showUserPreview={false}
                     profile={profile as Profile}
+                    showUserPreview={false}
                   />
                   <Button
-                    onClick={() => handleSign(profile.id)}
+                    disabled={isLoading && loggingInProfileId === profile.id}
                     icon={
                       isLoading && loggingInProfileId === profile.id ? (
                         <Spinner size="xs" />
@@ -175,7 +173,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                         <ArrowRightCircleIcon className="h-4 w-4" />
                       )
                     }
-                    disabled={isLoading && loggingInProfileId === profile.id}
+                    onClick={() => handleSign(profile.id)}
                   >
                     Login
                   </Button>
@@ -185,7 +183,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
           ) : (
             <div>
               <Button
-                onClick={() => handleSign()}
+                disabled={isLoading}
                 icon={
                   isLoading ? (
                     <Spinner size="xs" />
@@ -193,56 +191,35 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                     <ArrowRightCircleIcon className="h-4 w-4" />
                   )
                 }
-                disabled={isLoading}
+                onClick={() => handleSign()}
               >
                 Sign in with Lens
               </Button>
             </div>
           )
         ) : (
-          profiles.map((profile) => (
-            <div
-              key={profile.id}
-              className="flex items-center justify-between p-3"
-            >
-              <UserProfile
-                linkToProfile={false}
-                showUserPreview={false}
-                profile={profile as Profile}
-              />
-              <Button
-                onClick={() => handleSign(profile.id)}
-                icon={
-                  isLoading && loggingInProfileId === profile.id ? (
-                    <Spinner size="xs" />
-                  ) : (
-                    <ArrowRightCircleIcon className="h-4 w-4" />
-                  )
-                }
-                disabled={isLoading && loggingInProfileId === profile.id}
-              >
-                Login
-              </Button>
-            </div>
-          ))
+          <SwitchNetwork toChainId={CHAIN_ID} />
         )}
         {!IS_MAINNET && (
           <button
+            className="flex items-center space-x-1 text-sm underline"
             onClick={() => {
               setShowSignup?.(true);
+             
             }}
-            className="flex items-center space-x-1 text-sm underline"
+            type="button"
           >
             <UserPlusIcon className="h-4 w-4" />
             <div>Create a testnet account</div>
           </button>
         )}
         <button
+          className="flex items-center space-x-1 text-sm underline"
           onClick={() => {
             disconnect?.();
             Leafwatch.track(AUTH.CHANGE_WALLET);
           }}
-          className="flex items-center space-x-1 text-sm underline"
+          type="reset"
         >
           <KeyIcon className="h-4 w-4" />
           <div>Change wallet</div>
@@ -260,8 +237,6 @@ const WalletSelector: FC<WalletSelectorProps> = ({
       {connectors.map((connector) => {
         return (
           <button
-            type="button"
-            key={connector.id}
             className={cn(
               {
                 'hover:bg-gray-100 dark:hover:bg-gray-700':
@@ -269,18 +244,14 @@ const WalletSelector: FC<WalletSelectorProps> = ({
               },
               'flex w-full items-center justify-between space-x-2.5 overflow-hidden rounded-xl border px-4 py-3 outline-none dark:border-gray-700'
             )}
+            disabled={connector.id === activeConnector?.id}
+            key={connector.id}
             onClick={() => onConnect(connector)}
-            disabled={
-              isMounted()
-                ? !connector.ready || connector.id === activeConnector?.id
-                : false
-            }
+            type="button"
           >
             <span>
-              {isMounted()
-                ? connector.id === 'injected'
-                  ? 'Browser Wallet'
-                  : getWalletDetails(connector.name).name
+              {connector.id === 'injected'
+                ? 'Browser Wallet'
                 : getWalletDetails(connector.name).name}
             </span>
             <div className="flex items-center space-x-4">
@@ -288,12 +259,12 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                 <Spinner className="mr-0.5" size="xs" />
               ) : null}
               <img
-                src={getWalletDetails(connector.name).logo}
-                draggable={false}
-                className="h-6 w-6"
-                height={24}
-                width={24}
                 alt={connector.id}
+                className="h-6 w-6"
+                draggable={false}
+                height={24}
+                src={getWalletDetails(connector.name).logo}
+                width={24}
               />
             </div>
           </button>
@@ -302,7 +273,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
       {error?.message ? (
         <div className="flex items-center space-x-1 text-red-500">
           <XCircleIcon className="h-5 w-5" />
-          <div>{error?.message ?? 'Failed to connect'}</div>
+          <div>{error?.message || 'Failed to connect'}</div>
         </div>
       ) : null}
     </div>

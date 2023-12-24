@@ -38,7 +38,7 @@ const Message: FC<MessageProps> = ({}) => {
   const listRef = useRef<HTMLDivElement | null>(null);
   const currentProfile = useAppStore((state) => state.currentProfile);
   const conversationKey = useMessageStore((state) => state.conversationKey);
-  const staffMode = usePreferencesStore((state) => state.staffMode);
+
   const queuedMessages = useMessageStore((state) =>
     state.queuedMessages.get(conversationKey)
   );
@@ -179,9 +179,9 @@ const Message: FC<MessageProps> = ({}) => {
             {conversationKey ? (
               <Card
                 className={cn(
-                  staffMode
-                    ? 'mb-2 h-[calc(100vh-9.78rem)]'
-                    : 'mb-2 h-[calc(100vh-12.5rem)]',
+                  
+                  
+                   'mb-2 h-[calc(100vh-12.5rem)]',
                   'xs:mx-2 xs:h-[78vh] xs:mx-2 xs:col-span-4 mb-0 flex w-full  flex-col justify-between rounded-xl sm:mx-2 sm:h-[70vh] md:col-span-4 md:h-[80vh] xl:h-[84vh]'
                 )}
               >

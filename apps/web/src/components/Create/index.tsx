@@ -64,8 +64,6 @@ import { getUploadedMediaType } from './getUploadedMediaType';
 import { canUploadedToIpfs } from 'src/hooks/canUploadedToIpfs';
 import { LensHub } from '@lensshare/abis';
 import { checkLensManagerPermissions } from './checkLensManagerPermissions';
-import { Leafwatch } from '@lib/leafwatch';
-import { PUBLICATION } from '@lensshare/data/tracking';
 
 const CreateSteps = () => {
   const getIrysInstance = useBytesStore((state) => state.getIrysInstance);
@@ -103,8 +101,8 @@ const CreateSteps = () => {
     resetToDefaults();
     router.push(
       uploadedMedia.isByteVideo
-        ? `/u/${getProfile(currentProfile).link}?type=bytes`
-        : `/u/${getProfile(currentProfile).link}`
+        ? `/u/${getProfile(currentProfile)?.slug}?type=bytes`
+        : `/u/${getProfile(currentProfile)?.slug}`
     );
   };
 
@@ -153,22 +151,6 @@ const CreateSteps = () => {
     if (__typename === 'RelayError') {
       return;
     }
-    Leafwatch.track(PUBLICATION.NEW_POST, {
-      video_format: uploadedMedia.mediaType,
-      video_type: uploadedMedia.isByteVideo ? 'SHORT_FORM' : 'LONG_FORM',
-      publication_state: uploadedMedia.collectModule.isRevertCollect
-        ? 'MOMOKA'
-        : 'ON_CHAIN',
-      video_storage: uploadedMedia.isUploadToIpfs ? 'IPFS' : 'ARWEAVE',
-
-      publication_reference_module: enabledReferenceModule,
-      publication_reference_module_degrees_of_separation: uploadedMedia
-        .referenceModule.degreesOfSeparationReferenceModule
-        ? degreesOfSeparation
-        : null,
-      user_id: currentProfile?.id
-    });
-
     return stopLoading();
   };
 
@@ -401,9 +383,8 @@ const CreateSteps = () => {
       marketplace: {
         attributes,
         animation_url: uploadedMedia.dUrl,
-        external_url: `https://lenshareapp.xyz${
-          getProfile(currentProfile).link
-        }`,
+        external_url: `https://lenshareapp.xyz${getProfile(currentProfile)
+          ?.link}`,
         image: uploadedMedia.thumbnail,
         name: uploadedMedia.title,
         description: trimify(uploadedMedia.description)
@@ -463,9 +444,8 @@ const CreateSteps = () => {
       marketplace: {
         attributes,
         animation_url: uploadedMedia.dUrl,
-        external_url: `https://lenshareapp.xyz${
-          getProfile(currentProfile).link
-        }`,
+        external_url: `https://lenshareapp.xyz${getProfile(currentProfile)
+          ?.link}`,
         image: uploadedMedia.thumbnail,
         name: uploadedMedia.title,
         description: trimify(uploadedMedia.description)

@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import Loading from '@components/Shared/Loading';
 
 const App = ({ Component, pageProps }: AppProps) => {
+  
   return (
     
     <Suspense fallback={<Loading />}>

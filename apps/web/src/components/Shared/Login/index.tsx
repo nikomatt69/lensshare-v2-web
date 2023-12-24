@@ -51,18 +51,6 @@ const Login: FC = () => {
             setHasConnected={setHasConnected}
             setShowSignup={setShowSignup}
           />
-
-
-          <DynamicContextProvider
-            settings={{
-              environmentId: '4ae8558e-661a-44a9-85e5-f570bc06e76a',
-              walletConnectors: [EthereumWalletConnectors]
-            }}
-          >
-            <DynamicWagmiConnector>
-            <DynamicEmbeddedWidget background="default" />
-            </DynamicWagmiConnector>
-          </DynamicContextProvider>
         </div>
       )}
     </div>

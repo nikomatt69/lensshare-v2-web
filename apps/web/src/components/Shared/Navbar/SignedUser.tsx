@@ -14,21 +14,22 @@ import Slug from '../Slug';
 import { NextLink } from './MenuItems';
 import MobileDrawerMenu from './MobileDrawerMenu';
 import AppVersion from './NavItems/AppVersion';
-import GardenerMode from './NavItems/GardenerMode';
 import Invites from './NavItems/Invites';
 import Logout from './NavItems/Logout';
 import Mod from './NavItems/Mod';
 import Settings from './NavItems/Settings';
-import StaffMode from './NavItems/StaffMode';
 import SwitchProfile from './NavItems/SwitchProfile';
 import ThemeSwitch from './NavItems/ThemeSwitch';
 import YourProfile from './NavItems/YourProfile';
-import Pro from '@components/Pro';
+import {
+  ADMIN_ADDRESS,
+  ADMIN_ADDRESS2,
+  ADMIN_ADDRESS3
+} from '@lensshare/data/constants';
 
 const SignedUser: FC = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const isStaff = usePreferencesStore((state) => state.isStaff);
-  const isGardener = usePreferencesStore((state) => state.isGardener);
+
   const setShowMobileDrawer = useGlobalModalStateStore(
     (state) => state.setShowMobileDrawer
   );
@@ -112,7 +113,9 @@ const SignedUser: FC = () => {
             >
               <Settings />
             </Menu.Item>
-            {isGardener ? (
+            {currentProfile?.ownedBy.address === ADMIN_ADDRESS ||
+            ADMIN_ADDRESS2 ||
+            ADMIN_ADDRESS3 ? (
               <Menu.Item
                 as={NextLink}
                 href="/mod"
@@ -130,7 +133,7 @@ const SignedUser: FC = () => {
               }
             >
               <Invites />
-            </Menu.Item>       
+            </Menu.Item>
             <Menu.Item
               as="div"
               className={({ active }) =>
@@ -148,32 +151,7 @@ const SignedUser: FC = () => {
             >
               <ThemeSwitch />
             </Menu.Item>
-            {isGardener ? (
-              <Menu.Item
-                as="div"
-                className={({ active }) =>
-                  cn(
-                    { 'bg-yellow-100 dark:bg-yellow-800': active },
-                    'm-2 rounded-lg'
-                  )
-                }
-              >
-                <GardenerMode />
-              </Menu.Item>
-            ) : null}
-            {isStaff ? (
-              <Menu.Item
-                as="div"
-                className={({ active }) =>
-                  cn(
-                    { 'bg-yellow-100 dark:bg-yellow-800': active },
-                    'm-2 rounded-lg'
-                  )
-                }
-              >
-                <StaffMode />
-              </Menu.Item>
-            ) : null}
+
             <div className="divider" />
             <AppVersion />
           </Menu.Items>

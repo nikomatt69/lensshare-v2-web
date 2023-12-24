@@ -42,7 +42,7 @@ const StaffBar: FC = () => {
         </div>
         {GIT_COMMIT_SHA ? (
           <Link
-            href={urlcat('https://github.com/heyxyz/hey/commit/:sha', {
+            href={urlcat('https://github.com/nikomatt69/commit/:sha', {
               sha: GIT_COMMIT_SHA
             })}
             className="flex items-center space-x-1"

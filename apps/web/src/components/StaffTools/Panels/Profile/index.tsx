@@ -25,28 +25,17 @@ import MetaDetails from '../MetaDetails';
 import Access from './Access';
 import ProfileDetails from './ProfileDetails';
 import Rank from './Rank';
+import { useAppStore } from 'src/store/useAppStore';
 
 interface ProfileStaffToolProps {
   profile: Profile;
 }
 
 const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
-  const getHaveUsedHey = async () => {
-    try {
-      const response = await axios.get(
-        `${ACHIEVEMENTS_WORKER_URL}/haveUsedHey/${profile.id}`
-      );
+  
+  const currentProfile = useAppStore((state) => state.currentProfile);
 
-      return response.data.haveUsedHey;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const { data: haveUsedHey } = useQuery({
-    queryKey: ['getHaveUsedHey', profile.id],
-    queryFn: getHaveUsedHey
-  });
+  
 
   return (
     <Card
@@ -59,7 +48,7 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
         <div className="text-lg font-bold">Staff tool</div>
       </div>
       <div className="mt-3 space-y-2">
-        {haveUsedHey ? (
+        {(
           <MetaDetails
             icon={
               <img
@@ -70,63 +59,63 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
                 alt="Logo"
               />
             }
-            value={profile.id}
+            value={currentProfile?.id}
           >
             Have used {APP_NAME}
           </MetaDetails>
-        ) : null}
+        ) }
         <MetaDetails
           icon={<HashtagIcon className="lt-text-gray-500 h-4 w-4" />}
-          value={profile.id}
+          value={currentProfile?.id}
           title="Profile ID"
         >
-          {profile.id}
+          {currentProfile?.id}
         </MetaDetails>
         <MetaDetails
           icon={<BanknotesIcon className="lt-text-gray-500 h-4 w-4" />}
-          value={profile.ownedBy.address}
+          value={currentProfile?.ownedBy.address}
           title="Address"
         >
-          {formatAddress(profile.ownedBy.address)}
+          {formatAddress(currentProfile?.ownedBy.address)}
         </MetaDetails>
-        {profile?.followNftAddress ? (
+        {currentProfile?.followNftAddress ? (
           <MetaDetails
             icon={<PhotoIcon className="lt-text-gray-500 h-4 w-4" />}
-            value={profile.followNftAddress.address}
+            value={currentProfile?.followNftAddress.address}
             title="NFT address"
           >
-            {formatAddress(profile.followNftAddress.address)}
+            {formatAddress(currentProfile?.followNftAddress.address)}
           </MetaDetails>
         ) : null}
         <MetaDetails
           icon={<HandRaisedIcon className="lt-text-gray-500 h-4 w-4" />}
-          value={profile.signless ? 'Yes' : 'No'}
+          value={currentProfile?.signless ? 'Yes' : 'No'}
           title="Has Lens Manager"
         >
-          {profile.signless ? 'Yes' : 'No'}
+          {currentProfile?.signless ? 'Yes' : 'No'}
         </MetaDetails>
         <MetaDetails
           icon={<HandRaisedIcon className="lt-text-gray-500 h-4 w-4" />}
-          value={profile.sponsor ? 'Yes' : 'No'}
+          value={currentProfile?.sponsor ? 'Yes' : 'No'}
           title="Gas sponsored"
         >
-          {profile.sponsor ? 'Yes' : 'No'}
+          {currentProfile?.sponsor ? 'Yes' : 'No'}
         </MetaDetails>
         <MetaDetails
           icon={<IdentificationIcon className="lt-text-gray-500 h-4 w-4" />}
-          value={profile.id}
+          value={currentProfile?.id}
           title="Follow module"
         >
-          {getFollowModule(profile?.followModule?.__typename).description}
+          {getFollowModule(currentProfile?.followModule?.__typename).description}
         </MetaDetails>
-        {profile?.metadata?.rawURI ? (
+        {currentProfile?.metadata?.rawURI ? (
           <MetaDetails
             icon={<LinkIcon className="lt-text-gray-500 h-4 w-4" />}
-            value={profile.metadata.rawURI}
+            value={currentProfile?.metadata.rawURI}
             title="Metadata"
           >
             <Link
-              href={profile.metadata.rawURI}
+              href={currentProfile?.metadata.rawURI}
               target="_blank"
               rel="noreferrer"
             >
@@ -137,9 +126,9 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
       </div>
       {IS_MAINNET ? (
         <>
-          <ProfileDetails profile={profile} />
-          <Rank profile={profile} />
-          <Access profile={profile} />
+          <ProfileDetails profile={currentProfile?.id} />
+          <Rank profile={currentProfile?.id} />
+         
         </>
       ) : null}
     </Card>

@@ -1,18 +1,11 @@
 import { APP_NAME } from '@lensshare/data/constants';
-import { MISCELLANEOUS } from '@lensshare/data/tracking';
-import { Leafwatch } from '@lib/leafwatch';
 import Link from 'next/link';
 import type { FC } from 'react';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import urlcat from 'urlcat';
 
 const Footer: FC = () => {
-  const staffMode = usePreferencesStore((state) => state.staffMode);
-
   return (
-    <footer
-      className={`sticky text-sm leading-7 ${staffMode ? 'top-28' : 'top-20'}`}
-    >
+    <footer className={`'top-20'} sticky text-sm leading-7`}>
       <div className="mt-4 flex flex-wrap gap-x-[12px] px-3 lg:px-0">
         <span className="lt-text-gray-500 font-bold">
           &copy; {new Date().getFullYear()} Lenshareapp.xyz
@@ -23,7 +16,6 @@ const Footer: FC = () => {
           href="https://lenshareapp.xyz/discord"
           target="_blank"
           rel="noreferrer noopener"
-   
         >
           Discord
         </Link>
@@ -31,7 +23,6 @@ const Footer: FC = () => {
           href="https://lenshareapp.xyz/donate"
           target="_blank"
           rel="noreferrer noopener"
-     
         >
           Donate
         </Link>
@@ -39,7 +30,6 @@ const Footer: FC = () => {
           href="https://status.lenshareapp.xyz"
           target="_blank"
           rel="noreferrer noopener"
-  
         >
           Status
         </Link>
@@ -47,7 +37,6 @@ const Footer: FC = () => {
           href="https://feedback.lenshareapp.xyz"
           target="_blank"
           rel="noreferrer noopener"
-
         >
           Feedback
         </Link>
@@ -56,7 +45,6 @@ const Footer: FC = () => {
           href="https://github.com/nikomatt69/LensShare-2.0"
           target="_blank"
           rel="noreferrer noopener"
-
         >
           GitHub
         </Link>
@@ -64,7 +52,6 @@ const Footer: FC = () => {
           href="https://translate.lenshareapp.xyz"
           target="_blank"
           rel="noreferrer noopener"
-
         >
           Translate
         </Link>
@@ -78,7 +65,6 @@ const Footer: FC = () => {
           })}
           target="_blank"
           rel="noreferrer noopener"
-
         >
           ▲ Powered by Vercel
         </Link>

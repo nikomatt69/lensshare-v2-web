@@ -1,5 +1,9 @@
 import NotificationIcon from '@components/Notification/NotificationIcon';
-import { MagnifyingGlassIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  MagnifyingGlassIcon,
+  PlusIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline';
 import type { Profile } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import cn from '@lensshare/ui/cn';
@@ -13,14 +17,12 @@ import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import MenuItems from './MenuItems';
 import MoreNavItems from './MoreNavItems';
 import Search from './Search';
-import StaffBar from './StaffBar';
-import MessageIcon from '@components/Messages/MessageIcon';
 import PlusOutline from '@components/Icons/PlusOutline';
+import { ADMIN_ADDRESS2, ADMIN_ADDRESS3 } from '@lensshare/data/constants';
 
 const Navbar: FC = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const staffMode = usePreferencesStore((state) => state.staffMode);
-  const isPride = usePreferencesStore((state) => state.isPride);
+
   const [showSearch, setShowSearch] = useState(false);
   const router = useRouter();
   const isActivePath = (path: string) => router.pathname === path;
@@ -64,6 +66,17 @@ const Navbar: FC = () => {
           name="Explore"
           current={pathname === '/explore'}
         />
+        <NavItem
+          current={pathname === '/messages'}
+          name="Messages"
+          url="/messages"
+        />
+        {currentProfile?.ownedBy.address === ADMIN_ADDRESS2 ? (
+          <NavItem current={pathname === '/staff'} name="Staff" url="/staff" />
+        ) : null}
+        {currentProfile?.ownedBy.address === ADMIN_ADDRESS2 ? (
+          <NavItem current={pathname === '/mod'} name="Mod" url="/mod" />
+        ) : null}
         <MoreNavItems />
       </>
     );
@@ -71,7 +84,6 @@ const Navbar: FC = () => {
 
   return (
     <header className="divider sticky top-0 z-10 w-full bg-white dark:bg-black">
-      {staffMode ? <StaffBar /> : null}
       <div className="container mx-auto max-w-screen-xl px-5">
         <div className="relative flex h-14 items-center justify-between sm:h-16">
           <div className="flex items-center justify-start">
@@ -90,7 +102,7 @@ const Navbar: FC = () => {
                 className="h-8 w-8"
                 height={32}
                 width={32}
-                src={isPride ? '/pride.png' : '/logo.png'}
+                src={'/logo.png'}
                 alt="Logo"
               />
             </Link>
@@ -111,20 +123,19 @@ const Navbar: FC = () => {
               className="h-7 w-7"
               height={32}
               width={32}
-              src={isPride ? '/pride.png' : '/logo.png'}
+              src={'/logo.png'}
               alt="Logo"
             />
           </Link>
           <div className="flex items-center gap-3">
             {currentProfile ? <NotificationIcon /> : null}
             <Link href="/create" className="mx-auto my-2">
-          {isActivePath('/create') ? (
-            <PlusOutline className="text-brand h-6 w-6" />
-          ) : (
-            <PlusIcon className="h-6 w-6" />
-          )}
-           </Link>
-
+              {isActivePath('/create') ? (
+                <PlusOutline className="text-brand h-6 w-6" />
+              ) : (
+                <PlusIcon className="h-6 w-6" />
+              )}
+            </Link>
 
             <MenuItems />
           </div>

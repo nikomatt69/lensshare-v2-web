@@ -30,7 +30,7 @@ import PublicationPageShimmer from './Shimmer';
 
 const ViewPublication: NextPage = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const staffMode = usePreferencesStore((state) => state.staffMode);
+
   const showNewPostModal = useGlobalModalStateStore(
     (state) => state.showNewPostModal
   );
@@ -91,7 +91,7 @@ const ViewPublication: NextPage = () => {
         </Card>
         <RelevantPeople publication={publication} />
         <OnchainMeta publication={publication} />
-        {staffMode ? <PublicationStaffTool publication={publication} /> : null}
+        
         <Footer />
       </GridItemFour>
     </GridLayout>

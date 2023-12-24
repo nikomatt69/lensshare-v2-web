@@ -8,27 +8,26 @@ import Link from 'next/link';
 import type { FC } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
 import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
 
 import Slug from '../Slug';
 import AppVersion from './NavItems/AppVersion';
 import Bookmarks from './NavItems/Bookmarks';
 import Contact from './NavItems/Contact';
-import GardenerMode from './NavItems/GardenerMode';
+
 import Invites from './NavItems/Invites';
 import Logout from './NavItems/Logout';
 import Mod from './NavItems/Mod';
 import ReportBug from './NavItems/ReportBug';
 import Settings from './NavItems/Settings';
-import StaffMode from './NavItems/StaffMode';
+
 import SwitchProfile from './NavItems/SwitchProfile';
 import ThemeSwitch from './NavItems/ThemeSwitch';
 import YourProfile from './NavItems/YourProfile';
+import { ADMIN_ADDRESS2 } from '@lensshare/data/constants';
 
 const MobileDrawerMenu: FC = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const isStaff = usePreferencesStore((state) => state.isStaff);
-  const isGardener = usePreferencesStore((state) => state.isGardener);
+
   const setShowMobileDrawer = useGlobalModalStateStore(
     (state) => state.setShowMobileDrawer
   );
@@ -85,11 +84,12 @@ const MobileDrawerMenu: FC = () => {
               className={cn(itemClass, 'px-4')}
               onClick={closeDrawer}
             />
-            {isGardener ? (
+            {currentProfile?.ownedBy.address === ADMIN_ADDRESS2 ? (
               <Link href="/mod" onClick={closeDrawer}>
                 <Mod className={cn(itemClass, 'px-4')} />
               </Link>
             ) : null}
+
             <Invites className={cn(itemClass, 'px-4')} />
             <ThemeSwitch
               className={cn(itemClass, 'px-4')}
@@ -119,30 +119,6 @@ const MobileDrawerMenu: FC = () => {
             />
           </div>
           <div className="divider" />
-          {isGardener ? (
-            <>
-              <div
-                onClick={closeDrawer}
-                className="hover:bg-gray-200 dark:hover:bg-gray-800"
-                aria-hidden="true"
-              >
-                <GardenerMode className={cn(itemClass, 'px-4 py-3')} />
-              </div>
-              <div className="divider" />
-            </>
-          ) : null}
-          {isStaff ? (
-            <>
-              <div
-                onClick={closeDrawer}
-                className="hover:bg-gray-200 dark:hover:bg-gray-800"
-                aria-hidden="true"
-              >
-                <StaffMode className={cn(itemClass, 'px-4 py-3')} />
-              </div>
-              <div className="divider" />
-            </>
-          ) : null}
         </div>
         {currentProfile ? <AppVersion /> : null}
       </div>

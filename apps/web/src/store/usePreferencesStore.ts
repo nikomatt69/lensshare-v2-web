@@ -1,50 +1,26 @@
+
+import { Preferences } from '@lensshare/types/hey';
 import { create } from 'zustand';
 
+export type ExtendedPreference = Omit<
+  NonNullable<Preferences['preference']>,
+  'createdAt' | 'id'
+>;
+
+const DefaultPreferences: ExtendedPreference = {
+  highSignalNotificationFilter: false,
+  isPride: false
+};
+
 interface PreferencesState {
-  loadingPreferences: boolean;
-  setLoadingPreferences: (loadingPreferences: boolean) => void;
-  isStaff: boolean;
-  setIsStaff: (isStaff: boolean) => void;
-  isGardener: boolean;
-  setIsGardener: (isGardener: boolean) => void;
-  staffMode: boolean;
-  setStaffMode: (staffMode: boolean) => void;
-  gardenerMode: boolean;
-  setGardenerMode: (gardenerMode: boolean) => void;
-  isPride: boolean;
-  setIsPride: (isPride: boolean) => void;
-  highSignalNotificationFilter: boolean;
-  setHighSignalNotificationFilter: (
-    highSignalNotificationFilter: boolean
-  ) => void;
+  preferences: ExtendedPreference;
   resetPreferences: () => void;
+  setPreferences: (preferences: ExtendedPreference) => void;
 }
 
 export const usePreferencesStore = create<PreferencesState>((set) => ({
-  loadingPreferences: true,
-  setLoadingPreferences: (loadingPreferences) =>
-    set(() => ({ loadingPreferences })),
-  isStaff: false,
-  setIsStaff: (isStaff) => set(() => ({ isStaff })),
-  isGardener: false,
-  setIsGardener: (isGardener) => set(() => ({ isGardener })),
-  staffMode: false,
-  setStaffMode: (staffMode) => set(() => ({ staffMode })),
-  gardenerMode: false,
-  setGardenerMode: (gardenerMode) => set(() => ({ gardenerMode })),
-  isPride: false,
-  setIsPride: (isPride) => set(() => ({ isPride })),
-  highSignalNotificationFilter: false,
-  setHighSignalNotificationFilter: (highSignalNotificationFilter) =>
-    set(() => ({ highSignalNotificationFilter })),
-  resetPreferences: () =>
-    set(() => ({
-      isStaff: false,
-      isGardener: false,
-
-      staffMode: false,
-      gardenerMode: false,
-      isPride: false,
-      highSignalNotificationFilter: false
-    }))
+  preferences: DefaultPreferences,
+  resetPreferences: () => set(() => ({ preferences: DefaultPreferences })),
+  setPreferences: (preferences) =>
+    set(() => ({ preferences: { ...preferences } }))
 }));

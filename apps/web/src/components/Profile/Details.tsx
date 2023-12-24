@@ -10,10 +10,7 @@ import {
   MapPinIcon,
   UsersIcon
 } from '@heroicons/react/24/outline';
-import {
-  CheckBadgeIcon,
-  ExclamationCircleIcon
-} from '@heroicons/react/24/solid';
+import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import {
   EXPANDED_AVATAR,
   RARIBLE_URL,
@@ -30,13 +27,11 @@ import getProfile from '@lensshare/lib/getProfile';
 import getProfileAttribute from '@lensshare/lib/getProfileAttribute';
 import hasMisused from '@lensshare/lib/hasMisused';
 import { Button, Image, LightBox, Modal, Tooltip } from '@lensshare/ui';
-import isVerified from '@lib/isVerified';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import urlcat from 'urlcat';
 
 import Followerings from './Followerings';
@@ -51,7 +46,6 @@ import SuperfluidSubscribe from '@components/Superfluid';
 import TbaBadge from './TbaBadge';
 import IsVerified from '@components/Shared/IsVerified';
 
-
 interface DetailsProps {
   profile: Profile;
   following: boolean;
@@ -60,8 +54,7 @@ interface DetailsProps {
 
 const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const isStaff = usePreferencesStore((state) => state.isStaff);
-  const staffMode = usePreferencesStore((state) => state.staffMode);
+
   const [showMutualFollowersModal, setShowMutualFollowersModal] =
     useState(false);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
@@ -257,7 +250,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
                           .replace('http://', '')
                       }
                     )}
-                    className="h-4 w-4 rounded-full"
+                    className="h-5 w-5 rounded-full"
                     height={16}
                     width={16}
                     alt="Website"
@@ -287,7 +280,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
                     src={`${STATIC_ASSETS_URL}/images/brands/${
                       resolvedTheme === 'dark' ? 'x-dark.svg' : 'x-light.svg'
                     }`}
-                    className="h-4 w-4"
+                    className="h-5 w-5"
                     height={16}
                     width={16}
                     alt="X Logo"
@@ -321,7 +314,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
         </>
       ) : null}
 
-      {isStaff && staffMode ? <ProfileStaffTool profile={profile} /> : null}
+      
     </div>
   );
 };

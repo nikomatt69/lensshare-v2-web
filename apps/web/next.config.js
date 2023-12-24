@@ -1,4 +1,6 @@
 const headers = [{ key: 'Cache-Control', value: 'public, max-age=3600' }];
+const allowedBots =
+  '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
 
 /** @type {import('next').NextConfig} */
 
@@ -18,6 +20,16 @@ const nextConfig = {
       {
         source: '/sitemaps/:match*',
         destination: 'https://lenshareapp.xyz/api/sitemap/:match*'
+      },
+      {
+        destination: `${process.env.NEXT_PUBLIC_OG_URL}/u/:match*`,
+        has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
+        source: '/u/:match*'
+      },
+      {
+        destination: `${process.env.NEXT_PUBLIC_OG_URL}/posts/:match*`,
+        has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
+        source: '/posts/:match*'
       }
     ];
   },

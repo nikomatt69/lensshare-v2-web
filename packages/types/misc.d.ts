@@ -37,6 +37,7 @@ export interface OG {
   image: string | null;
   favicon: string | null;
   isLarge: boolean | null;
+  lastIndexedAt?: string;
   html: string | null;
 }
 
@@ -80,4 +81,9 @@ export interface MetadataAsset {
   cover?: string;
   artist?: string;
   title?: string;
+}
+export interface SpaceMetadata {
+  id: string;
+  host: `0x${string}`;
+  startTime: string;
 }
