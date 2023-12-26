@@ -1,6 +1,6 @@
 import type { AllowedToken } from '@lensshare/types/hey';
 
-import { HEY_API_URL } from '@lensshare/data/constants';
+import { HEY_API_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import axios from 'axios';
 
 /**
@@ -12,7 +12,7 @@ const getAllTokens = async (
   callbackFn?: (tokens: AllowedToken[]) => void
 ): Promise<AllowedToken[]> => {
   try {
-    const response = await axios.get(`/api/token/all`);
+    const response = await axios.get(`${LENSSHARE_API_URL}/token/all`);
     const { data } = response;
     callbackFn?.(data?.tokens || []);
 

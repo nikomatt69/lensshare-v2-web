@@ -1,4 +1,4 @@
-import { BASE_URL } from '@lensshare/data/constants';
+import { BASE_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 
 import getCurrentSessionProfileId from './getCurrentSessionProfileId';
 import getCurrentSession from './getCurrentSession';
@@ -30,7 +30,7 @@ export const Leafwatch = {
     worker.onmessage = (event: MessageEvent) => {
       const response = event.data;
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', `${BASE_URL}/api/leafwatch/events`);
+      xhr.open('POST', `${LENSSHARE_API_URL}/leafwatch/events`);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(response));
     };

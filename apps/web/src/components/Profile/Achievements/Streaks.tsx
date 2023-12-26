@@ -1,4 +1,4 @@
-import { ACHIEVEMENTS_WORKER_URL, BASE_URL, STATS_WORKER_URL } from '@lensshare/data/constants';
+import { LENSSHARE_API_URL } from '@lensshare/data/constants';
 import type { Profile } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import { Card } from '@lensshare/ui';
@@ -15,9 +15,12 @@ interface StreaksProps {
 const Streaks: FC<StreaksProps> = ({ profile }) => {
   const fetchStreaks = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/stats/streaksCalendar`, {
-        params: { id: profile.id }
-      });
+      const response = await axios.get(
+        `${LENSSHARE_API_URL}/stats/streaksCalendar`,
+        {
+          params: { id: profile.id }
+        }
+      );
 
       const outputData = Object.entries(response.data.data).map(
         ([date, count]: any) => ({
@@ -28,7 +31,7 @@ const Streaks: FC<StreaksProps> = ({ profile }) => {
       );
 
       return outputData;
-    } catch (error) {
+    } catch {
       return [];
     }
   };
@@ -50,7 +53,7 @@ const Streaks: FC<StreaksProps> = ({ profile }) => {
             getProfile(profile).slugWithPrefix
           } has {{count}} activities in ${new Date().getFullYear()}`
         }}
-        theme={{ light: ['#FED5D9', '#FB3A5D'] }}
+        theme={{ light: ['#FED5D9', '#000fff'] }}
       />
     </Card>
   );

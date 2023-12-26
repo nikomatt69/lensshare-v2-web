@@ -1,4 +1,4 @@
-import { BASE_URL } from '@lensshare/data/constants';
+import { BASE_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { type FC } from 'react';
@@ -9,7 +9,7 @@ const FeaturedGroupsProvider: FC = () => {
 
   const fetchFeaturedGroups = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/group/featuredGroups`);
+      const response = await axios.get(`${LENSSHARE_API_URL}/group/featured`);
       const { data } = response;
       setFeaturedGroups(data.result || []);
     } catch {}

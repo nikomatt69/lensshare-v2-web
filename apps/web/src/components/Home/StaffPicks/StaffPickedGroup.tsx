@@ -1,6 +1,6 @@
 import GroupProfile from '@components/Shared/GroupProfile';
 import GroupProfileShimmer from '@components/Shared/Shimmer/GroupProfileShimmer';
-import { GROUPS_WORKER_URL } from '@lensshare/data/constants';
+import { GROUPS_WORKER_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import type { Group } from '@lensshare/types/hey';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -14,7 +14,7 @@ const StaffPickedGroup: FC<StaffPickedGroupProps> = ({ id }) => {
   const fetchGroup = async (): Promise<Group> => {
     const response: {
       data: { result: Group };
-    } = await axios.get(`${GROUPS_WORKER_URL}/get/${id}`);
+    } = await axios.get(`${LENSSHARE_API_URL}/group/get`);
 
     return response.data?.result;
   };

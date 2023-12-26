@@ -1,4 +1,4 @@
-import { FEEDS_WORKER_URL } from '@lensshare/data/constants';
+import { FEEDS_WORKER_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import axios from 'axios';
 
 /**
@@ -16,7 +16,7 @@ const getPublicationIds = async (
   profile?: string
 ) => {
   try {
-    const response = await axios.get(`${FEEDS_WORKER_URL}/ids`, {
+    const response = await axios.get(`${LENSSHARE_API_URL}/feed/getPublicationIds`, {
       params: {
         provider,
         strategy,

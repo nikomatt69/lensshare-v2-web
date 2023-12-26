@@ -33,7 +33,7 @@ const CACHEABLE_PATHS = ['/', '/contact', '/explore'];
 const CACHEABLE_DOMAINS = [
   'https://static-asset.lenshareapp.xyz',
   'https://asset.lenshareapp.xyz',
-  'https://prerender.lenshareapp.xyz'
+
 ];
 
 const cache = new ServiceWorkerCache({

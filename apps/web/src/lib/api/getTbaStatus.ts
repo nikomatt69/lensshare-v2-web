@@ -1,5 +1,5 @@
 
-import { BASE_URL } from '@lensshare/data/constants';
+import { BASE_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import axios from 'axios';
 
 /**
@@ -17,7 +17,7 @@ const getTbaStatus = async (
   }
 
   try {
-    const response = await axios.get(`${BASE_URL}/api/deployed`, {
+    const response = await axios.get(`${LENSSHARE_API_URL}/tba/deployed`, {
       params: { address }
     });
     const { data } = response;

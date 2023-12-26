@@ -1,7 +1,6 @@
 import {
   ArrowsRightLeftIcon,
   ChatBubbleLeftRightIcon,
-  ChatBubbleOvalLeftEllipsisIcon,
   CheckCircleIcon,
   HeartIcon,
   PencilSquareIcon,
@@ -9,7 +8,7 @@ import {
   UserPlusIcon
 } from '@heroicons/react/24/outline';
 import { CalendarIcon } from '@heroicons/react/24/solid';
-import { ACHIEVEMENTS_WORKER_URL, BASE_URL, STATS_WORKER_URL } from '@lensshare/data/constants';
+import { LENSSHARE_API_URL } from '@lensshare/data/constants';
 import { PROFILE, PUBLICATION } from '@lensshare/data/tracking';
 import type { Profile } from '@lensshare/lens';
 import { Card, Spinner } from '@lensshare/ui';
@@ -24,9 +23,12 @@ interface StreaksListProps {
 const StreaksList: FC<StreaksListProps> = ({ profile }) => {
   const fetchStreaksList = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/stats/streaksList`, {
-        params: { id: profile.id, date: 'latest' }
-      });
+      const response = await axios.get(
+        `${LENSSHARE_API_URL}/stats/streaksList`,
+        {
+          params: { id: profile.id, date: 'latest' }
+        }
+      );
 
       return response.data.data;
     } catch (error) {

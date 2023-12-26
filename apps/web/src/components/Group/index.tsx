@@ -1,5 +1,5 @@
 import MetaTags from '@components/Common/MetaTags';
-import { APP_NAME, GROUPS_WORKER_URL } from '@lensshare/data/constants';
+import { APP_NAME, GROUPS_WORKER_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import { PAGEVIEW } from '@lensshare/data/tracking';
 import type { Group } from '@lensshare/types/hey';
 import { GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
@@ -18,30 +18,35 @@ import GroupPageShimmer from './Shimmer';
 
 const ViewGroup: NextPage = () => {
   const {
-    query: { slug },
-    isReady
+    isReady,
+    query: { slug }
   } = useRouter();
 
+  useEffectOnce(() => {
+    Leafwatch.track(PAGEVIEW, { page: 'group' });
+  });
 
   const fetchGroup = async (): Promise<Group> => {
     const response: {
       data: { result: Group };
-    } = await axios.get(`${GROUPS_WORKER_URL}/get/${slug}`);
+    } = await axios.get(`${LENSSHARE_API_URL}/group/get`, {
+      params: { slug }
+    });
 
     return response.data?.result;
   };
 
   const {
     data: group,
-    isLoading,
-    error
+    error,
+    isLoading
   } = useQuery({
-    queryKey: ['fetchGroup', slug],
+    enabled: isReady,
     queryFn: fetchGroup,
-    enabled: isReady
+    queryKey: ['fetchGroup', slug]
   });
 
-  if (isLoading) {
+  if (!isReady || isLoading) {
     return <GroupPageShimmer />;
   }
 

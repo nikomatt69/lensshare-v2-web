@@ -65,6 +65,9 @@ export const MESSAGING_PROVIDER = {
   XMTP: 'xmtp',
   PUSH: 'push'
 };
+export const LIVEPEER_API_KEY =
+  '9e17a7ab-3370-4e31-85c3-43072da2315e';
+
 
 
 export const PUSH_ENV = IS_MAINNET ? CONSTANTS.ENV.PROD : CONSTANTS.ENV.PROD;

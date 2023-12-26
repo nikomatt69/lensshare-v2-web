@@ -1,6 +1,6 @@
 import type { Feature } from '@lensshare/types/hey';
 
-import { HEY_API_URL } from '@lensshare/data/constants';
+import { HEY_API_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import axios from 'axios';
 
 /**
@@ -14,7 +14,7 @@ const getAllFeatureFlags = async (
   callbackFn?: (flags: Feature[]) => void
 ): Promise<Feature[]> => {
   try {
-    const response = await axios.get(`/api/internal/feature/all`, {
+    const response = await axios.get(`${LENSSHARE_API_URL}/internal/feature/all`, {
       headers
     });
     const { data } = response;

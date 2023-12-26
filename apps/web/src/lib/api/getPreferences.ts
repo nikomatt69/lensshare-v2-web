@@ -1,6 +1,6 @@
 import type { Preferences } from '@lensshare/types/hey';
 
-import { BASE_URL, HEY_API_URL, PREFERENCES_WORKER_URL } from '@lensshare/data/constants';
+import { BASE_URL, HEY_API_URL, LENSSHARE_API_URL, PREFERENCES_WORKER_URL } from '@lensshare/data/constants';
 import axios from 'axios';
 
 /**
@@ -15,7 +15,7 @@ const getPreferences = async (
 ): Promise<Preferences> => {
   try {
     const response: { data: { result: Preferences } } = await axios.get(
-      `${PREFERENCES_WORKER_URL}/getPreferences`,
+      `${LENSSHARE_API_URL}/preference/getPreferences`,
       { headers, params: { id } }
     );
 

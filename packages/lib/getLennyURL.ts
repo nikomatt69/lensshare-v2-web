@@ -1,5 +1,5 @@
 
-import { BASE_URL } from '@lensshare/data/constants';
+import { BASE_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import urlcat from 'urlcat';
 
 /**
@@ -8,7 +8,7 @@ import urlcat from 'urlcat';
  * @returns The lenny avatar URL.
  */
 const getLennyURL = (id: string): string => {
-  return urlcat(`/api/avatar`, { id });
+  return urlcat(`${LENSSHARE_API_URL}/avatar`, { id });
 };
 
 export default getLennyURL;

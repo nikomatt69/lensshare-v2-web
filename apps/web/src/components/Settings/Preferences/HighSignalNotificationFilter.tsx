@@ -1,6 +1,6 @@
 import ToggleWithHelper from '@components/Shared/ToggleWithHelper2';
 import { SwatchIcon } from '@heroicons/react/24/outline';
-import { BASE_URL, IS_MAINNET, PREFERENCES_WORKER_URL } from '@lensshare/data/constants';
+import { BASE_URL, IS_MAINNET, LENSSHARE_API_URL, PREFERENCES_WORKER_URL } from '@lensshare/data/constants';
 import { SETTINGS } from '@lensshare/data/tracking';
 import getPreferences from '@lib/api/getPreferences';
 import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
@@ -21,7 +21,7 @@ const HighSignalNotificationFilter: FC = () => {
   const toggleHighSignalNotificationFilter = () => {
     toast.promise(
       axios.post(
-        `${BASE_URL}/api/preferences/updatePreferences`,
+        `${LENSSHARE_API_URL}/preference/updatePreferences`,
         {
           highSignalNotificationFilter:
             !preferences.highSignalNotificationFilter

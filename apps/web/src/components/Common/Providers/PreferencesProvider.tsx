@@ -1,9 +1,8 @@
-import { BASE_URL, PREFERENCES_WORKER_URL } from '@lensshare/data/constants';
+import { LENSSHARE_API_URL } from '@lensshare/data/constants';
 import getPreferences from '@lib/api/getPreferences';
 import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
 import getCurrentSession from '@lib/getCurrentSession';
-import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
-
+import { FeatureFlag } from '@lensshare/data/feature-flags';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { type FC } from 'react';
@@ -12,11 +11,11 @@ import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
 import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import { useProStore } from 'src/store/useProStore';
 import { isAddress } from 'viem';
-
+import { useMembershipNftStore } from 'src/store/useMembershipNftStore';
 
 const PreferencesProvider: FC = () => {
   const { id: sessionProfileId } = getCurrentSession();
-  
+  const setVerifiedMembers = useAppStore((state) => state.setVerifiedMembers);
   const setPreferences = usePreferencesStore((state) => state.setPreferences);
   const setIsPro = useProStore((state) => state.setIsPro);
   const setFeatureFlags = useFeatureFlagsStore(
@@ -26,7 +25,9 @@ const PreferencesProvider: FC = () => {
   const setGardenerMode = useFeatureFlagsStore(
     (state) => state.setGardenerMode
   );
-  
+  const setDismissedOrMinted = useMembershipNftStore(
+    (state) => state.setDismissedOrMinted
+  );
 
   // Fetch preferences
   const fetchPreferences = async () => {
@@ -49,11 +50,11 @@ const PreferencesProvider: FC = () => {
 
         // Feature flags
         setFeatureFlags(preferences.features);
-        setStaffMode
-        setGardenerMode
+        setStaffMode(preferences.features.includes(FeatureFlag.Spaces));
+        setGardenerMode(preferences?.features.includes(FeatureFlag.Spaces));
 
         // Membership NFT
-        
+        setDismissedOrMinted(preferences.membershipNft.dismissedOrMinted);
       }
       return true;
     } catch {
@@ -67,7 +68,21 @@ const PreferencesProvider: FC = () => {
   });
 
   // Fetch verified members
-  
+  const fetchVerifiedMembers = async () => {
+    try {
+      const response = await axios.get(`${LENSSHARE_API_URL}/misc/getVerified`);
+      const { data } = response;
+      setVerifiedMembers(data.result || []);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  useQuery({
+    queryFn: fetchVerifiedMembers,
+    queryKey: ['fetchVerifiedMembers']
+  });
 
   return null;
 };

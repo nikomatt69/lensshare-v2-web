@@ -1,5 +1,5 @@
 import { ChartBarSquareIcon } from '@heroicons/react/24/outline';
-import { BASE_URL, STATS_WORKER_URL } from '@lensshare/data/constants';
+import { BASE_URL, LENSSHARE_API_URL, STATS_WORKER_URL } from '@lensshare/data/constants';
 import type { Profile } from '@lensshare/lens';
 import humanize from '@lensshare/lib/humanize';
 import { Card, ErrorMessage, Spinner } from '@lensshare/ui';
@@ -79,7 +79,7 @@ const ProfileAnalytics: FC<ProfileAnalyticsProps> = ({ profile }) => {
   const fetchProfileAnalytics =
     async (): Promise<ProfileAnalyticsData | null> => {
       try {
-        const response = await axios.get(`/api/stats/profile`, {
+        const response = await axios.get(`${LENSSHARE_API_URL}/stats/profile`, {
           params: {
             id: profile?.id,
             handle: profile?.handle?.localName
