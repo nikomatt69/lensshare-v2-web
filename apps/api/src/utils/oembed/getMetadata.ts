@@ -1,6 +1,5 @@
 import type { OG } from '@lensshare/types/misc';
 
-import getFavicon from '@lensshare/lib/getFavicon';
 import { parseHTML } from 'linkedom';
 
 import getProxyUrl from './getProxyUrl';
@@ -11,6 +10,7 @@ import getImage from './meta/getImage';
 import getIsLarge from './meta/getIsLarge';
 import getSite from './meta/getSite';
 import getTitle from './meta/getTitle';
+import getFavicon from '@utils/getFavicon';
 
 const getMetadata = async (url: string): Promise<any> => {
   const { html } = await fetch(url, {

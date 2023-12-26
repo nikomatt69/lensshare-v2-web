@@ -1,6 +1,6 @@
 const headers = [{ key: 'Cache-Control', value: 'public, max-age=3600' }];
 const allowedBots =
-  '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
+ '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
 
 /** @type {import('next').NextConfig} */
 
@@ -22,12 +22,12 @@ const nextConfig = {
         destination: 'https://lenshareapp.xyz/api/sitemap/:match*'
       },
       {
-        destination: `${process.env.NEXT_PUBLIC_OG_URL}/u/:match*`,
+        destination: `https://og.lenshareapp.xyz/u/:match*`,
         has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
         source: '/u/:match*'
       },
       {
-        destination: `${process.env.NEXT_PUBLIC_OG_URL}/posts/:match*`,
+        destination: `https://og.lenshareapp.xyz/posts/:match*`,
         has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
         source: '/posts/:match*'
       }
@@ -75,5 +75,5 @@ const nextConfig = {
     ];
   }
 };
-// eslint-disable-next-line prettier/prettier
+
 module.exports = nextConfig;
