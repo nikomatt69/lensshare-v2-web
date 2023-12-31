@@ -7,7 +7,11 @@ import {
   SCROLL_ROOT_MARGIN,
   TAPE_APP_ID
 } from '@lensshare/data/constants';
-import type { AnyPublication, Post, PublicationsRequest } from '@lensshare/lens';
+import type {
+  AnyPublication,
+  Post,
+  PublicationsRequest
+} from '@lensshare/lens';
 import {
   LimitType,
   PublicationMetadataMainFocusType,
@@ -23,13 +27,20 @@ import { useInView } from 'react-cool-inview';
 import { getPublicationData } from 'src/hooks/getPublicationData';
 import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
 
+import { startOfDay, isAfter, parseISO } from 'date-fns';
+
+// ...
 type Props = {
   profileId: string;
-  publication: AnyPublication
+  publication: Post;
 };
 
-const ProfileBytes: FC<Props> = ({ profileId ,publication}) => {
+const ProfileBytesLast: FC<Props> = ({ publication, profileId }) => {
+  const targetPublication = publication ? publication : publication;
+  const startOfToday = startOfDay(new Date());
+
   const request: PublicationsRequest = {
+
     where: {
       metadata: {
         mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo],
@@ -39,6 +50,7 @@ const ProfileBytes: FC<Props> = ({ profileId ,publication}) => {
       from: [profileId]
     },
     limit: LimitType.Fifty
+    // assuming `createdAt` is a field in the `where` object
   };
 
   const { data, loading, error, fetchMore } = usePublicationsQuery({
@@ -46,7 +58,10 @@ const ProfileBytes: FC<Props> = ({ profileId ,publication}) => {
     skip: !profileId
   });
 
-  const bytes = data?.publications?.items as Post[];
+  let bytes = data?.publications?.items as Post[];
+  bytes = bytes?.filter((byte) =>
+    isAfter(parseISO(byte.createdAt), startOfToday)
+  );
   const pageInfo = data?.publications?.pageInfo;
 
   const { observe } = useInView({
@@ -56,7 +71,7 @@ const ProfileBytes: FC<Props> = ({ profileId ,publication}) => {
         variables: {
           request: {
             ...request,
-            cursor: pageInfo?.next
+           
           }
         }
       });
@@ -84,7 +99,7 @@ const ProfileBytes: FC<Props> = ({ profileId ,publication}) => {
               >
                 <img
                   className="h-full w-full rounded-xl object-cover"
-                  src={imageKit(getThumbnailUrl(byte.metadata))}
+                  src={imageKit(getThumbnailUrl(byte.metadata.content))}
                   alt="thumbnail"
                   draggable={false}
                   onError={({ currentTarget }) => {
@@ -114,4 +129,4 @@ const ProfileBytes: FC<Props> = ({ profileId ,publication}) => {
   );
 };
 
-export default ProfileBytes;
+export default ProfileBytesLast;

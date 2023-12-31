@@ -6,7 +6,7 @@ import {
   IS_MAINNET,
   STATIC_ASSETS_URL
 } from '@lensshare/data/constants';
-import type { Profile } from '@lensshare/lens';
+import type { AnyPublication, Post, Profile } from '@lensshare/lens';
 import { FollowModuleType, useProfileQuery } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import { GridItemEight, GridItemFour, GridLayout, Modal } from '@lensshare/ui';
@@ -28,9 +28,10 @@ import FollowDialog from './FollowDialog';
 import NftGallery from './NftGallery';
 import ProfilePageShimmer from './Shimmer';
 import SubscribersFeed from './SubscribersFeed';
-import ProfileBytes from './ProfileBytes';
+import StoriesRender from '@components/Composer/Stories (1)';
+import ProfileBytesLast from './ProfileBytesLast';
 
-const ViewProfile: NextPage = () => {
+const ViewProfile: NextPage = (publication) => {
   const {
     query: { handle, id, type, followIntent },
     isReady
@@ -137,6 +138,11 @@ const ViewProfile: NextPage = () => {
         </GridItemFour>
         <GridItemEight className="space-y-5">
           <FeedType setFeedType={setFeedType} feedType={feedType} />
+          <StoriesRender
+            trigger
+            profile={profile as Profile}
+            publication={publication as Post}
+          />
           <div className="pb-3 text-center">
             {currentProfile && <NewPost />}
           </div>
@@ -149,14 +155,17 @@ const ViewProfile: NextPage = () => {
           {feedType === ProfileFeedType.Gallery ? (
             <NftGallery profile={profile as Profile} />
           ) : null}
-           {feedType === ProfileFeedType.Subscribers && (
+          {feedType === ProfileFeedType.Subscribers && (
             <SubscribersFeed profile={profile as Profile} />
           )}
           {feedType === ProfileFeedType.Stats && IS_MAINNET ? (
             <Achievements profile={profile as Profile} />
           ) : null}
-          {feedType === ProfileFeedType.Bytes &&  (
-            <ProfileBytes profileId={profile.id}  />
+          {feedType === ProfileFeedType.Bytes && (
+            <ProfileBytesLast
+              publication={publication as Post}
+              profileId={profile.id}
+            />
           )}
         </GridItemEight>
       </GridLayout>

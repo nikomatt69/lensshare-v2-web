@@ -14,9 +14,8 @@ app.use(cors(corsConfig));
 app.disable('x-powered-by');
 
 (async () => {
-  app.use('/', await router());
+  app.use('*', await router());
 
-  ViteExpress.listen(app, 4784, () =>
-    console.log('Server is listening on port 4784...')
-  );
+ 
+  
 })();

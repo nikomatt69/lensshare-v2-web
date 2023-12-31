@@ -1,6 +1,6 @@
 const headers = [{ key: 'Cache-Control', value: 'public, max-age=3600' }];
 const allowedBots =
- '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
+  '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
 
 /** @type {import('next').NextConfig} */
 
@@ -64,7 +64,7 @@ const nextConfig = {
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'Referrer-Policy', value: 'strict-origin' }
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' }
         ],
         source: '/(.*)'
       },

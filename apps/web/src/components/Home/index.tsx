@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 import MetaTags from '@components/Common/MetaTags';
 import NewPost from '@components/Composer/Post/New';
 import ExploreFeed from '@components/Explore/Feed';
@@ -19,14 +20,13 @@ import SetProfile from './SetProfile';
 import Timeline from './Timeline';
 import Waitlist from './Waitlist';
 import { useTheme } from 'next-themes';
-import AddToHome from './AddToHome';
 import EnableMessages from './EnableMessages';
 import RefreshButton from './Refresh';
 import Trending from './Trending';
 import RecommendedProfiles from './RecommendedProfiles';
 import Wrapper from '@components/Echos/Wrapper';
 
-const Home: NextPage = () => {
+const Home: NextPage = (publication) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
   const [feedType, setFeedType] = useState<HomeFeedType>(
     HomeFeedType.FOLLOWING
@@ -44,8 +44,6 @@ const Home: NextPage = () => {
       <GridLayout>
         <GridItemEight>
           <>
-            <AddToHome />
-
             {resolvedTheme === 'dark' ? (
               <Image
                 className="cursor-pointer"
@@ -65,6 +63,7 @@ const Home: NextPage = () => {
           {currentProfile ? (
             <>
               <NewPost />
+
               <div className="space-y-3">
                 <FeedType feedType={feedType} setFeedType={setFeedType} />
                 <RefreshButton />

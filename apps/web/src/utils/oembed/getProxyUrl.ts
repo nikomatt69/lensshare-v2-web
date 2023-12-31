@@ -2,13 +2,13 @@ const directUrls = [
   'zora.co/api/thumbnail' // Zora
 ];
 
-const IMAGEKIT_URL = "https://ik.imagekit.io/seasgram"
+const IMAGEKIT_URL = 'https://ik.imagekit.io/seasgram';
 
 const getProxyUrl = (url: string, isLarge: boolean) => {
   if (!url) {
     return null;
   }
-  
+
   const isDirect = directUrls.some((directUrl) => url.includes(directUrl));
 
   if (isDirect) {

@@ -7,7 +7,7 @@ const createClickhouseClient = () => {
   return createClient({
     host: CLICKHOUSE_URL,
     database: 'default',
-    password: NEXT_PUBLIC_CLICKHOUSE_PASSWORD || ''
+    password: NEXT_PUBLIC_CLICKHOUSE_PASSWORD
   });
 };
 

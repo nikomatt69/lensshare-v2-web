@@ -1,18 +1,14 @@
-import type cors from 'cors';
-
-const corsConfig: cors.CorsOptions = {
-  origin: (origin, callback) => {
-    if (
-      !origin ||
-      origin.includes('lenshareapp.xyz') ||
-      origin.includes('https://api,lenshareapp.xyz') ||
-      origin.startsWith('http://*.lenshareapp.xyz')
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
+const corsConfig = {
+  origin: [
+    'http://lenshareapp.xyz',
+    'https://api.lenshareapp.xyz',
+    'https://lenshareapp.xyz',
+    'http://api.lenshareapp.xyz',
+    '*'
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 
 export default corsConfig;

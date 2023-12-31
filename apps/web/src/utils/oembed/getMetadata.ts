@@ -9,6 +9,8 @@ import getImage from './meta/getImage';
 import getIsLarge from './meta/getIsLarge';
 import getSite from './meta/getSite';
 import getTitle from './meta/getTitle';
+import getFavicon from './getFavicon';
+
 
 const getMetadata = async (url: string): Promise<any> => {
   const { html } = await fetch(url, {
@@ -27,9 +29,7 @@ const getMetadata = async (url: string): Promise<any> => {
     description: getDescription(document),
     image: proxiedUrl,
     site: getSite(document),
-    favicon: `https://external-content.duckduckgo.com/ip3/${url
-      .replace('https://', '')
-      .replace('http://', '')}.ico`,
+    favicon: getFavicon(url),
     isLarge,
     lastIndexedAt: new Date().toISOString(),
     html: generateIframe(getEmbedUrl(document), url)
