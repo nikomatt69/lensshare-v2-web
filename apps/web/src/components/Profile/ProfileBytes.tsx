@@ -1,3 +1,4 @@
+
 import LatestBytesShimmer from '@components/Bytes/LatestBytesShimmer';
 import Loader from '@components/Shared/Loader';
 import {
@@ -7,7 +8,7 @@ import {
   SCROLL_ROOT_MARGIN,
   TAPE_APP_ID
 } from '@lensshare/data/constants';
-import type { AnyPublication, Post, PublicationsRequest } from '@lensshare/lens';
+import type { Post, PublicationsRequest } from '@lensshare/lens';
 import {
   LimitType,
   PublicationMetadataMainFocusType,
@@ -25,10 +26,9 @@ import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
 
 type Props = {
   profileId: string;
-  publication: AnyPublication
 };
 
-const ProfileBytes: FC<Props> = ({ profileId ,publication}) => {
+const ProfileBytes: FC<Props> = ({ profileId }) => {
   const request: PublicationsRequest = {
     where: {
       metadata: {

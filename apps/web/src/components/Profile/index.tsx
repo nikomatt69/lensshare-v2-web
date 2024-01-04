@@ -30,6 +30,7 @@ import ProfilePageShimmer from './Shimmer';
 import SubscribersFeed from './SubscribersFeed';
 import StoriesRender from '@components/Composer/Stories (1)';
 import ProfileBytesLast from './ProfileBytesLast';
+import ProfileBytes from './ProfileBytes';
 
 const ViewProfile: NextPage = (publication) => {
   const {
@@ -162,8 +163,7 @@ const ViewProfile: NextPage = (publication) => {
             <Achievements profile={profile as Profile} />
           ) : null}
           {feedType === ProfileFeedType.Bytes && (
-            <ProfileBytesLast
-              publication={publication as Post}
+            <ProfileBytes
               profileId={profile.id}
             />
           )}

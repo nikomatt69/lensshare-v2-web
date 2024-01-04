@@ -24,6 +24,7 @@ import {
 } from '@lensshare/data/constants';
 import { useInView } from 'react-cool-inview';
 import ProfileBytes from '@components/Profile/ProfileBytes';
+import ProfileBytesLast from '@components/Profile/ProfileBytesLast';
 
 type Props = {
   trigger: React.ReactNode;
@@ -122,7 +123,7 @@ const StoriesRender: FC<Props> = ({ trigger, publication, profile }) => {
         </div>
         <div className=" overflow-y-auto">
           
-            <ProfileBytes
+            <ProfileBytesLast
               publication={{
                 ...publication,
                 createdAt: filterTodayPosts(bytes)

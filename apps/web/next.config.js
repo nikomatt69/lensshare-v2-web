@@ -64,9 +64,17 @@ const nextConfig = {
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' }
+          { key: 'Referrer-Policy', value: 'same-origin' }
         ],
         source: '/(.*)'
+      },
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Max-Age', value: '1728000' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type' }
+        ]
       },
 
       { source: '/about', headers },

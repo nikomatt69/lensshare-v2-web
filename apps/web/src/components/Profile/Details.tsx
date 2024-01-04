@@ -6,6 +6,7 @@ import SuperFollow from '@components/Shared/SuperFollow';
 import ProfileStaffTool from '@components/StaffTools/Panels/Profile';
 import {
   Cog6ToothIcon,
+  EnvelopeIcon,
   HashtagIcon,
   MapPinIcon,
   UsersIcon
@@ -175,12 +176,11 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
           ) : null}
           <ProfileMenu profile={profile} />
           <div className="text-brand-500">{<MeetingIcon />}</div>
-          <div className="text-brand-500">{<MessageIcon />}</div>
-          <div className="text-brand-500">
+           <Link href={`/messages2`}><EnvelopeIcon className='h-6 w-6' /></Link>
             {currentProfile?.id !== profile.id && (
               <SuperfluidSubscribe profile={profile} />
             )}
-          </div>
+          
         </div>
         {currentProfile?.id !== profile.id ? (
           <>

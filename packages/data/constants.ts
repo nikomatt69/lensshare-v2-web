@@ -65,10 +65,7 @@ export const MESSAGING_PROVIDER = {
   XMTP: 'xmtp',
   PUSH: 'push'
 };
-export const LIVEPEER_API_KEY =
-  '9e17a7ab-3370-4e31-85c3-43072da2315e';
-
-
+export const LIVEPEER_API_KEY = '9e17a7ab-3370-4e31-85c3-43072da2315e';
 
 export const PUSH_ENV = IS_MAINNET ? CONSTANTS.ENV.PROD : CONSTANTS.ENV.PROD;
 export const BASE_URL = IS_MAINNET
@@ -102,7 +99,7 @@ export const OEMBED_WORKER_URL = IS_MAINNET
 export const SPACES_WORKER_URL = IS_MAINNET
   ? 'https://spaces.lenshareapp.xyz'
   : 'https://spaces.lenshareapp.xyz';
-  export const STATS_WORKER_URL = IS_PRODUCTION
+export const STATS_WORKER_URL = IS_PRODUCTION
   ? 'https://stats.lenshaerapp.xyz'
   : 'https://stats.lenshaerapp.xyz';
 export const LEAFWATCH_WORKER_URL = IS_MAINNET
@@ -132,7 +129,7 @@ export const STAFF_PICKS_WORKER_URL = IS_MAINNET
 export const PREFERENCES_WORKER_URL = IS_MAINNET
   ? 'https://preferences.lenshareapp.xyz'
   : 'https://preferences.lenshareapp.xyz';
-  export const IMPRESSIONS_WORKER_URL = IS_MAINNET
+export const IMPRESSIONS_WORKER_URL = IS_MAINNET
   ? 'https://impressions.lenshareapp.xyz'
   : 'https://impressions.lenshareapp.xyz';
 export const ACHIEVEMENTS_WORKER_URL = 'https://achievements.lenshareapp.xyz';
@@ -150,7 +147,7 @@ export const IMAGE_TRANSFORMATIONS = {
   AVATAR_LG: 'tr:w-300,h-300',
   THUMBNAIL: 'tr:w-720,h-404',
   THUMBNAIL_V: 'tr:w-404,h-720',
-  AVATAR : 'tr:w-300,h-300',
+  AVATAR: 'tr:w-300,h-300',
   SQUARE: 'tr:w-200,h-200'
 };
 export const AVATAR = 'tr:w-300,h-300';

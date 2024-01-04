@@ -21,6 +21,9 @@ import Loading from '../Shared/Loading';
 import Navbar from '../Shared/Navbar';
 import { isAddress } from 'viem';
 import PWAInstallPrompt from './PWAInstallPrompt';
+import OutgoingCallModal from '@components/messages2/Video/OutgoingCallModal';
+import IncomingCallModal from '@components/messages2/Video/IncomingCallModal';
+import Script from 'next/script';
 
 
 interface LayoutProps {
@@ -91,7 +94,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           rel="manifest"
           href="https://progressier.app/UyYlhOtlyHyST7enRwK8/progressier.json"
         />
-        <script
+        <Script
           defer
           src="https://progressier.app/UyYlhOtlyHyST7enRwK8/script.js"
         />
@@ -105,6 +108,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       {isMobile && isIOS ? <PWAInstallPrompt /> : null}
       <GlobalModals />
       <GlobalAlerts />
+      
       <div className="flex min-h-screen flex-col pb-14 md:pb-0">
         <Navbar />
         <GlobalBanners />

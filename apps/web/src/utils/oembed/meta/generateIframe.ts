@@ -23,8 +23,10 @@ const youtubeRegex =
   /^https?:\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w-]+)(?:\?.*)?$/;
 const tapeRegex =
   /^https?:\/\/tape\.xyz\/watch\/[\dA-Za-z-]+(\?si=[\dA-Za-z]+)?$/;
-const twitchRegex = /^https?:\/\/www\.twitch\.tv\/videos\/[\dA-Za-z-]+$/;
-const kickRegex = /^https?:\/\/kick\.com\/[\dA-Za-z-]+$/;
+const twitchRegex =
+ /^https?:\/\/www\.twitch\.tv\/[\dA-Za-z-]+$/;
+const kickRegex =
+ /^https?:\/\/kick\.com\/[\dA-Za-z-]+$/;
 
 const generateIframe = (
   embedUrl: string | null,

@@ -66,7 +66,6 @@ const Home: NextPage = (publication) => {
 
               <div className="space-y-3">
                 <FeedType feedType={feedType} setFeedType={setFeedType} />
-                <RefreshButton />
                 <Tabs feedType={feedType} setFeedType={setFeedType} />
               </div>
               {feedType === HomeFeedType.FOLLOWING ? (

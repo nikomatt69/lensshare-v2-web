@@ -16,7 +16,7 @@ import Layout from '../Layout';
 import LensSubscriptionsProvider from './LensSubscriptionsProvider';
 import PreferencesProvider from './PreferencesProvider';
 import Web3Provider from './Web3Provider';
-import { LENSTOK_URL } from '@lensshare/data/constants';
+import { BASE_URL, LENSTOK_URL } from '@lensshare/data/constants';
 import LeafwatchProvider from './LeafwatchProvider';
 import SW from '@components/ServiceWorker';
 import FeaturedGroupsProvider from './FeaturedGroupsProvider';
@@ -28,7 +28,7 @@ const lensApolloClient = apolloClient(authLink);
 const livepeerClient = createReactClient({
   provider: studioProvider({
     apiKey: '9e17a7ab-3370-4e31-85c3-43072da2315e' || '',
-    baseUrl: LENSTOK_URL
+    baseUrl: BASE_URL
   })
 });
 const queryClient = new QueryClient({
@@ -44,9 +44,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
         <ApolloProvider client={lensApolloClient}>
           <LensSubscriptionsProvider />
           <QueryClientProvider client={queryClient}>
-            <PreferencesProvider />
-            <TbaStatusProvider />
-            <FeaturedGroupsProvider />
             <LivepeerConfig client={livepeerClient} theme={getLivepeerTheme}>
               <ThemeProvider>
                 <Layout>{children}</Layout>

@@ -1,6 +1,9 @@
 import BytesOutline from '@components/Icons/BytesOutline';
-import MessageIcon from '@components/Messages/MessageIcon';
-import { HomeIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
+import {
+  EnvelopeIcon,
+  HomeIcon,
+  Squares2X2Icon
+} from '@heroicons/react/24/outline';
 import {
   HomeIcon as HomeIconSolid,
   Squares2X2Icon as Squares2X2IconSolid
@@ -37,8 +40,12 @@ const BottomNavigation = () => {
           )}
         </Link>
 
-        <Link href="/messages" className="mx-auto my-2">
-          {isActivePath('/messages') ? <MessageIcon /> : <MessageIcon />}
+        <Link href="/messages2" className="mx-auto my-2">
+          {isActivePath('/messages2') ? (
+            <EnvelopeIcon className="text-brand h-6 w-6" />
+          ) : (
+            <EnvelopeIcon className=" h-6 w-6" />
+          )}
         </Link>
       </div>
     </div>

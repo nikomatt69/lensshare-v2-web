@@ -8,7 +8,7 @@ import urlcat from 'urlcat';
  * @returns The lenny avatar URL.
  */
 const getLennyURL = (id: string): string => {
-  return urlcat(`${LENSSHARE_API_URL}/avatar`, { id });
+  return urlcat(`/api/avatar`, { id });
 };
 
 export default getLennyURL;

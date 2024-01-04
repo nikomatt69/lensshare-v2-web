@@ -3,7 +3,8 @@ export { Button } from './src/Button';
 export { Card } from './src/Card';
 export { Checkbox } from './src/Checkbox';
 export { EmptyState } from './src/EmptyState';
-export { ErrorMessage } from './src/ErrorMessage';
+export { ErrorMessage } from './src/ErrorMessage'
+export { HeyPopover } from './src/Popover';;
 export { FieldError, Form, useZodForm } from './src/Form';
 export { GridItemEight, GridItemFour, GridLayout } from './src/GridLayout';
 export { default as HelpTooltip } from './src/HelpTooltip';

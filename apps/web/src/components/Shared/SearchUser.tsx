@@ -55,7 +55,7 @@ const SearchUser: FC<SearchUserProps> = ({
       />
       {!hideDropdown && value.length > 0 ? (
         <div className="absolute mt-2 flex w-[94%] max-w-md flex-col">
-          <Card className="z-[2] max-h-[80vh] overflow-y-auto py-2">
+          <Card className="z-[2] max-h-[80vh] overflow-y-auto bg-gray-300 py-2">
             {loading ? (
               <div className="space-y-2 px-4 py-2 text-center text-sm font-bold">
                 <Spinner size="sm" className="mx-auto" />
