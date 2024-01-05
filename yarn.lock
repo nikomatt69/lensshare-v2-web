@@ -5149,7 +5149,29 @@
     video-stream-merger "^4.0.1"
     viem "^1.3.0"
 
-"@pushprotocol/socket@^0.5.2":
+"@pushprotocol/restapi@^1.5.1":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@pushprotocol/restapi/-/restapi-1.5.4.tgz#5f86a11b1f1404887cfa9c13949cfa959da78eef"
+  integrity sha512-RzypeUgQTUdwrClaSik7KV/5DnPTU9cOf30I10gJ3Hrd0okRT8n8L71XlGAk6uk7h7/ludppH3ZRhk+YvO4vSg==
+  dependencies:
+    "@ambire/signature-validator" "^1.3.1"
+    "@metamask/eth-sig-util" "^5.0.2"
+    axios "^0.27.2"
+    buffer "^6.0.3"
+    crypto-js "^4.1.1"
+    immer "^10.0.2"
+    joi "^17.9.2"
+    livepeer "^2.5.8"
+    openpgp "^5.5.0"
+    simple-peer "^9.11.1"
+    socket.io-client "^4.7.2"
+    tslib "^2.3.0"
+    unique-names-generator "^4.7.1"
+    uuid "^9.0.0"
+    video-stream-merger "^4.0.1"
+    viem "^1.20.3"
+
+"@pushprotocol/socket@^0.5.2", "@pushprotocol/socket@^0.5.3":
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/@pushprotocol/socket/-/socket-0.5.3.tgz#4768e33bdf4a54319d283d80c49a63a536e51f64"
   integrity sha512-n2+OlaA0zgJXlRLc376LtBHvQW5OooccD6MfZFldZ8K9wH/y57pdLim7aGmeMffvPSHPpG/Hhw9PlcmXP2fi1A==
@@ -6810,7 +6832,7 @@
     "@smithy/types" "^2.4.0"
     tslib "^2.5.0"
 
-"@socket.io/component-emitter@~3.1.0":
+"@socket.io/component-emitter@^3.1.0", "@socket.io/component-emitter@~3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz#96116f2a912e0c02817345b3c10751069920d553"
   integrity sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==
@@ -7166,6 +7188,11 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.8.1.tgz#5215a028370d9b2f32e83787a0ea119e2f977996"
   integrity sha512-Y0enatz2zQXBAsd7XmajlCs+WaitdR7dIFkqz9Xd7HL4KV04JOigWVreYseTmNH7YFSBSC/BJ9uuNp1MAf+GfA==
 
+"@tanstack/query-devtools@5.17.1":
+  version "5.17.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.17.1.tgz#e227a9e633b48ed049f85f28d608f36ae9d3136d"
+  integrity sha512-gNdt6PYzYlyjtSAoO8Jt9GIFq5VSLLDV2qq0TCi1t/PGnpAIlIHqNZGYkQTPsy0FyGUTX3pCq4bd7v5z/wzf3A==
+
 "@tanstack/query-persist-client-core@4.29.23":
   version "4.29.23"
   resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-4.29.23.tgz#5085646b7fb4ba55a0ec96bb786c157d5ea50cc8"
@@ -7186,6 +7213,13 @@
   integrity sha512-yMEt5hWe2+1eclf1agMtXHnPIkxEida0lYWkfdhR8U6KXk/lO4Vca6piJmhKI85t0NHlx3l/z6zX+t/Fn5O9NA==
   dependencies:
     "@tanstack/query-persist-client-core" "4.36.1"
+
+"@tanstack/react-query-devtools@^5.17.0":
+  version "5.17.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-5.17.1.tgz#d42b25ecc080d47cae008430eafd11463f96eb2f"
+  integrity sha512-QWHqdEN2TJpj76r0yzdOJEopmPvdAHOJHAKXaygubRASqCqfcWGkOHGD9pqqHOfTu5eQdV1Csx97EuSjnHMKcA==
+  dependencies:
+    "@tanstack/query-devtools" "5.17.1"
 
 "@tanstack/react-query-persist-client@4.29.23":
   version "4.29.23"
@@ -18627,6 +18661,20 @@ viem@^1.0.0, viem@^1.13.0, viem@^1.18.0, viem@^1.18.3:
   integrity sha512-eAXtoTwAFA3YEgjTYMb5ZTQrDC0UPx5qyZ4sv90TirVKepcM9mBPksTkC1SSWya0UdxhBmhEBL/CiYMjmGCTWg==
   dependencies:
     "@adraffy/ens-normalize" "1.9.4"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@scure/bip32" "1.3.2"
+    "@scure/bip39" "1.2.1"
+    abitype "0.9.8"
+    isows "1.0.3"
+    ws "8.13.0"
+
+viem@^1.20.3:
+  version "1.21.4"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-1.21.4.tgz#883760e9222540a5a7e0339809202b45fe6a842d"
+  integrity sha512-BNVYdSaUjeS2zKQgPs+49e5JKocfo60Ib2yiXOWBT6LuVxY1I/6fFX3waEtpXvL1Xn4qu+BVitVtMh9lyThyhQ==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
     "@noble/hashes" "1.3.2"
     "@scure/bip32" "1.3.2"

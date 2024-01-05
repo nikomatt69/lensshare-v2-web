@@ -4,6 +4,8 @@ import heyFont from '@lib/heyFont';
 import type { AppProps } from 'next/app';
 import { Suspense } from 'react';
 import Loading from '@components/Shared/Loading';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 
 const App = ({ Component, pageProps }: AppProps) => {
   

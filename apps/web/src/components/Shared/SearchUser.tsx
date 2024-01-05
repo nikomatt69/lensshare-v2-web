@@ -6,13 +6,14 @@ import {
 } from '@lensshare/lens';
 import { Card, Input, Spinner } from '@lensshare/ui';
 import { motion } from 'framer-motion';
-import type { ChangeEvent, FC } from 'react';
+import type { ChangeEvent, FC, Ref } from 'react';
 
 import SmallUserProfile from './SmallUserProfile';
 
 interface SearchUserProps {
   onProfileSelected: (profile: Profile) => void;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  inputRef?: Ref<HTMLInputElement>;
   value: string;
   placeholder?: string;
   hideDropdown?: boolean;
@@ -23,6 +24,7 @@ const SearchUser: FC<SearchUserProps> = ({
   onProfileSelected,
   onChange,
   value,
+  inputRef,
   placeholder = 'Search…',
   hideDropdown = false,
   error = false
@@ -50,6 +52,7 @@ const SearchUser: FC<SearchUserProps> = ({
         type="text"
         placeholder={placeholder}
         onChange={handleSearch}
+        ref={inputRef}
         value={value}
         error={error}
       />

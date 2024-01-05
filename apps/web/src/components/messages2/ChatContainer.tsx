@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { PUSH_ENV, STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import formatAddress from '@lensshare/lib/formatAddress';
-import { Button, Spinner, Image } from '@lensshare/ui';
+import { Image } from '@lensshare/ui';
 import { transformMessages } from '@lib/mapReactionsToMessages';
 import { chat } from '@pushprotocol/restapi';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
@@ -234,12 +234,14 @@ const ChatListItemContainer = ({
       if (!message) {
         return;
       }
-      if (!replyMessage) {
+      const reference = replyMessage?.link;
+      if (!reference) {
         await sendMessage({ content: message, type: 'Text' });
       } else {
+        setReplyMessage(null);
         await sendMessage({
           content: { content: message, type: 'Text' },
-          reference: replyMessage.link,
+          reference: reference,
           type: 'Reply'
         });
       }
@@ -304,7 +306,7 @@ const ChatListItemContainer = ({
           className="mr-4 h-10 w-10 cursor-pointer rounded-full border dark:border-gray-700"
           src={getStampFyiURL(profile.address) ?? address2}
         />
-       
+
         <span>
           <h3 className="mr-6 text-base font-semibold leading-6 text-gray-900 dark:bg-gray-800 dark:text-white">
             {profile.name
@@ -409,14 +411,14 @@ const ChatListItemContainer = ({
 
             return (
               <div
-                className={`group flex items-center gap-1 text-xs ${
+                className={`group flex items-center gap-1 text-sm ${
                   isMessageFromProfile ? 'flex-row-reverse' : 'flex-row'
                 }`}
               >
                 <div className="max-w-[75%]">
                   <div
                     className={clsx(
-                      'text-wrap my-2 rounded-2xl px-4 py-2 text-xs',
+                      'text-wrap my-2 rounded-2xl px-4 py-2 text-sm',
                       {
                         'bg-gray-300 dark:text-black': !isMessageFromProfile,
                         'opacity-80': message.isOptimistic,
@@ -478,7 +480,6 @@ const ChatListItemContainer = ({
         />
       </div>
       <ChatMessageInput
-        
         onRemoveReplyMessage={onRemoveReplyMessage}
         onSend={(message) => {
           onSendMessage(message);

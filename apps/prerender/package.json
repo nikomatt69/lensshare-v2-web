@@ -17,6 +17,10 @@
     "schema-dts": "^1.1.2"
   },
   "devDependencies": {
+    "@lensshare/data": "*",
+    "@lensshare/lens": "*",
+    "@lensshare/lib": "*",
+    "@lensshare/config": "*",
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.34",
     "typescript": "^5.2.2"

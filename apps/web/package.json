@@ -69,6 +69,8 @@
     "remark-linkify-regex": "^1.2.1",
     "shared-zustand": "^2.0.0",
     "strip-markdown": "^6.0.0",
+    "@pushprotocol/restapi": "^1.5.1",
+    "@pushprotocol/socket": "^0.5.3",
     "urlcat": "^3.1.0",
     "use-resize-observer": "^9.1.0",
     "usehooks-ts": "^2.9.1",
@@ -84,6 +86,9 @@
   },
   "devDependencies": {
     "@lensshare/config": "*",
+    "@tanstack/react-query-devtools": "^5.17.0",
+    "@socket.io/component-emitter": "^3.1.0",
+    "socket.io-client": "^4.7.2",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.6",
     "@types/node": "^20.8.10",

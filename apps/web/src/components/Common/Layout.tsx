@@ -21,10 +21,9 @@ import Loading from '../Shared/Loading';
 import Navbar from '../Shared/Navbar';
 import { isAddress } from 'viem';
 import PWAInstallPrompt from './PWAInstallPrompt';
-import OutgoingCallModal from '@components/messages2/Video/OutgoingCallModal';
-import IncomingCallModal from '@components/messages2/Video/IncomingCallModal';
 import Script from 'next/script';
-
+import { DynamicIsland } from '@lensshare/ui';
+import { useRoom } from '@huddle01/react/hooks';
 
 interface LayoutProps {
   children: ReactNode;
@@ -54,7 +53,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     signOut();
     disconnect?.();
   };
-
+  const { isRoomJoined } = useRoom();
   const { loading } = useCurrentProfileQuery({
     variables: { request: { forProfileId: currentSessionProfileId } },
     skip: !currentSessionProfileId || isAddress(currentSessionProfileId),
@@ -104,13 +103,14 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         containerStyle={{ wordBreak: 'break-word' }}
         toastOptions={getToastOptions(resolvedTheme)}
       />
-      
+
       {isMobile && isIOS ? <PWAInstallPrompt /> : null}
       <GlobalModals />
+
       <GlobalAlerts />
-      
-      <div className="flex min-h-screen flex-col pb-14 md:pb-0">
+      <div className="flex min-h-screen  flex-col pb-14 md:pb-0">
         <Navbar />
+        {isRoomJoined ? <DynamicIsland /> : null}
         <GlobalBanners />
         <BottomNavigation />
         {children}

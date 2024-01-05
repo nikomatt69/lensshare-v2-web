@@ -6,7 +6,8 @@ import { XCircleIcon } from '@heroicons/react/24/solid';
 import { Button, HeyPopover } from '@lensshare/ui';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
 import EmojiPicker, { EmojiStyle } from 'emoji-picker-react';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useMessageContent } from '@lib/useMessageContent';
 
 const ChatMessageInput = ({
   onRemoveReplyMessage,
@@ -28,6 +29,11 @@ const ChatMessageInput = ({
     attachmentInputRef.current?.click();
   }, []);
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [replyMessage]);
+  const replyContent = useMessageContent(replyMessage);
+
   return (
     <div className="mx-4 my-2 flex space-x-4">
       <div className="min-w-0 flex-1">
@@ -36,15 +42,7 @@ const ChatMessageInput = ({
             <p className="text-sm font-bold text-gray-600">
               You're replying to:
             </p>
-            <span className="ml-2">
-              {replyMessage && (
-                <>
-                  {replyMessage.messageType === MessageType.TEXT &&
-                    replyMessage.messageContent}
-                  {replyMessage.messageType === MessageType.IMAGE && 'Image'}
-                </>
-              )}
-            </span>
+            <span className="ml-2">{replyMessage && replyContent}</span>
             <div
               className="ml-auto h-5 w-5"
               onClick={onRemoveReplyMessage}
