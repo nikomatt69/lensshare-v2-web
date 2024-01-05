@@ -5,6 +5,9 @@ import { apolloClient } from '@lensshare/lens/apollo'
 
 import Custom404 from '@/components/Custom404'
 import Publication from '@/components/Publication'
+import { getPublication } from '@/components/getPublication'
+import { isListenable } from '@/components/isListenable'
+import { isWatchable } from '@/components/isWatchable'
 
 type Props = {
   params: { pubId: string }

@@ -64,22 +64,6 @@ const FeedType: FC<FeedTypeProps> = ({ setFeedType, feedType }) => {
           onClick={() => switchTab(ProfileFeedType.Collects)}
         />
         <TabButton
-          name="Gallery"
-          icon={<RectangleGroupIcon className="h-4 w-4" />}
-          active={feedType === ProfileFeedType.Gallery}
-          type={ProfileFeedType.Gallery.toLowerCase()}
-          onClick={() => switchTab(ProfileFeedType.Gallery)}
-        />
-        {IS_MAINNET ? (
-          <TabButton
-            name="Stats"
-            icon={<ChartBarIcon className="h-4 w-4" />}
-            active={feedType === ProfileFeedType.Stats}
-            type={ProfileFeedType.Stats.toLowerCase()}
-            onClick={() => switchTab(ProfileFeedType.Stats)}
-          />
-        ) : null}
-        <TabButton
           name={`Subscribers`}
           icon={<CurrencyDollarIcon className="h-4 w-4" />}
           active={feedType === ProfileFeedType.Subscribers}

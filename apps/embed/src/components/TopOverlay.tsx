@@ -6,10 +6,15 @@ import {
 } from '@lensshare/data/constants'
 
 import type { PrimaryPublication } from '@lensshare/lens'
-import { CopyOutline } from '@lensshare/ui'
+
+import { getPublicationData } from '@lensshare/web/src/hooks/getPublicationData'
 import Link from 'next/link'
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
+import { getProfile } from './getProfile'
+import { getProfilePicture } from './getProfilePicture'
+import { CopyOutline } from './CopyOutline'
+import { useCopyToClipboard } from './useCopyToClipboard'
 
 type OverlayProps = {
   playerRef: HTMLMediaElement | undefined

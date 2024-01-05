@@ -1,25 +1,22 @@
 'use client'
 
-import { useAverageColor } from '@lensshare/browser'
+import VideoPlayer from '@lensshare/web/src/utils/VideoPlayer';
 import { APP_ID } from '@lensshare/data/constants'
-import {
-  EVENTS,
-  getPublicationMediaUrl,
-  getShouldUploadVideo,
-  getThumbnailUrl,
-  imageCdn,
-  sanitizeDStorageUrl,
-  Tower
-} from '@lensshare/generic'
+import { getPublicationData } from '@lensshare/web/src/hooks/getPublicationData';
 import type { PrimaryPublication } from '@lensshare/lens'
-import { PlayOutline } from '@lensshare/ui'
-import VideoPlayer from '@lensshare/ui/VideoPlayer'
+import { useAverageColor } from '@lensshare/web/src/hooks/useAverageColor'
+import { getThumbnailUrl } from '@lensshare/web/src/hooks/getThumbnailUrl';
+import { imageCdn } from '@lensshare/web/src/hooks/imageCdn';
 import clsx from 'clsx'
 import { useSearchParams } from 'next/navigation'
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 
 import TopOverlay from './TopOverlay'
+import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
+import { getPublicationMediaUrl } from '@lensshare/web/src/hooks/getPublicationMediaUrl';
+import { PlayOutline } from './PlayOutline';
+import { getShouldUploadVideo } from './getShouldUploadVideo';
 
 type Props = {
   video: PrimaryPublication
@@ -41,10 +38,6 @@ const Video: FC<Props> = ({ video }) => {
     isBytesVideo ? 'THUMBNAIL_V' : 'THUMBNAIL'
   )
   const { color: backgroundColor } = useAverageColor(thumbnailUrl, isBytesVideo)
-
-  useEffect(() => {
-    Tower.track(EVENTS.EMBED_VIDEO.LOADED)
-  }, [])
 
   const refCallback = (ref: HTMLMediaElement) => {
     if (!ref) {

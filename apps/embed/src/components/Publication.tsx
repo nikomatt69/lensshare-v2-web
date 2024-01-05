@@ -8,6 +8,10 @@ import React, { useEffect } from 'react'
 
 import Audio from './Audio'
 import Video from './Video'
+import { getPublication } from './getPublication'
+import { isListenable } from './isListenable'
+import { setFingerprint } from './fingerprint'
+import { getLivepeerClient, videoPlayerTheme } from './livepeer'
 
 type Props = {
   publication: AnyPublication
@@ -23,7 +27,7 @@ const Publication: FC<Props> = ({ publication }) => {
   const isAudio = isListenable(target)
 
   return (
-    <div className={heyFont.className}>
+    <div >
       {isAudio ? (
         <Audio audio={target} />
       ) : (

@@ -2,12 +2,18 @@
 
 import { APP_NAME, BASE_URL, STATIC_ASSETS_URL } from '@lensshare/data/constants'
 import type { PrimaryPublication } from '@lensshare/lens'
-
-
+import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
+import { getPublicationData } from '@lensshare/web/src/hooks/getPublicationData';
+import { getThumbnailUrl } from '@lensshare/web/src/hooks/getThumbnailUrl';
+import { imageCdn } from '@lensshare/web/src/hooks/imageCdn';
 import Link from 'next/link'
 import type { FC } from 'react'
 import React, { useState } from 'react'
+import { useAverageColor } from '@lensshare/web/src/hooks/useAverageColor'
 
+import AudioPlayer from '@lensshare/web/src/components/Listen/AudioPlayer'
+import { PlayOutline } from './PlayOutline';
+import { PauseOutline } from './PauseOutline';
 type Props = {
   audio: PrimaryPublication
 }
@@ -50,7 +56,7 @@ const Audio: FC<Props> = ({ audio }) => {
           <Link
             title={`Listen on ${APP_NAME}`}
             href={`${BASE_URL}/listen/${audio?.id}`}
-            onClick={() => Tower.track(EVENTS.EMBED_VIDEO.CLICK_LISTEN_ON_TAPE)}
+            
             className="line-clamp-1 inline-block text-xl font-bold !leading-normal md:text-4xl"
           >
             {getPublicationData(audio.metadata)?.title}
