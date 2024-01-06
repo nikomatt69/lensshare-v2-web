@@ -1,4 +1,5 @@
 import CopyOutline from '@components/Icons/CopyOutline';
+import ShareOutline from '@components/Icons/ShareOutline';
 import { ClockIcon } from '@heroicons/react/24/outline';
 import { APP_NAME, LENSSHARE_EMBED_URL } from '@lensshare/data/constants';
 import { Tooltip } from '@lensshare/ui';
@@ -35,13 +36,13 @@ const EmbedMedia: FC<Props> = ({ publicationId, isAudio }) => {
         <button
           type="button"
           onClick={() => openModal()}
-          className="rounded-full bg-purple-200 p-2.5 dark:bg-purple-800"
+          className="ml-5 flex rounded-full text-sm"
         >
-          <CopyOutline className="size-5" />
+          <ShareOutline className="mr-2 h-5 w-5" /> Embed
         </button>
       </Dialog.Trigger>
 
-      <Dialog.Content style={{ maxWidth: 650 }}>
+      <Dialog.Content className="z-10000" style={{ maxWidth: 650 }}>
         <Flex justify="between" pb="5" align="center">
           <Dialog.Title mb="0">Embed Media</Dialog.Title>
           <Dialog.Close>
@@ -51,10 +52,10 @@ const EmbedMedia: FC<Props> = ({ publicationId, isAudio }) => {
           </Dialog.Close>
         </Flex>
 
-        <div className="flex flex-col space-y-3">
-          <div className="w-full">
+        <div className="z-[10000] flex flex-col space-y-3">
+          <div className="z-[10000]  w-full">
             <iframe
-              sandbox="allow-scripts allow-same-origin"
+              sandbox="allow-scripts z-[10000] allow-same-origin"
               className={cn(
                 'w-full',
                 isAudio ? 'min-h-[200px]' : 'aspect-[16/9] '
@@ -66,7 +67,7 @@ const EmbedMedia: FC<Props> = ({ publicationId, isAudio }) => {
             />
           </div>
           <Flex>
-            <Card className="relative">
+            <Card className="relative ">
               <code className="select-all text-sm opacity-60">
                 {iframeCode}
               </code>
