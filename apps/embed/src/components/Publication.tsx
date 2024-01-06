@@ -28,13 +28,11 @@ const Publication: FC<Props> = ({ publication }) => {
 
   return (
     <div >
-      {isAudio ? (
-        <Audio audio={target} />
-      ) : (
+     
         <LivepeerConfig client={getLivepeerClient()} theme={videoPlayerTheme}>
           <Video video={target} />
         </LivepeerConfig>
-      )}
+   
     </div>
   )
 }
