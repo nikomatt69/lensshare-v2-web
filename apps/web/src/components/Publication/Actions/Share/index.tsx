@@ -14,7 +14,7 @@ import { useMirrorOrQuoteOptimisticStore } from 'src/store/OptimisticActions/use
 
 import Mirror from './Mirror';
 import Quote from './Quote';
-import Share from './Share';
+import ShareE from './ShareE';
 
 interface PublicationMenuProps {
   publication: AnyPublication;
@@ -96,7 +96,7 @@ const ShareMenu: FC<PublicationMenuProps> = ({ publication, showCount }) => {
               isLoading={isLoading}
             />
             <Quote publication={publication} />
-            <Share publication={publication as MirrorablePublication} />
+            <ShareE publication={publication as MirrorablePublication} />
           </Menu.Items>
         </MenuTransition>
       </Menu>

@@ -10,12 +10,16 @@ import { Tooltip } from '@lensshare/ui';
 import CopyOutline from '@components/Icons/CopyOutline';
 import { useCopyToClipboard } from '@lib/useCopyToClipboard';
 import EmbedMedia from '@components/Publication/EmbedMedia';
+import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
+import cn from '@lensshare/ui/cn';
+import { Menu } from '@headlessui/react';
+
 
 type Props = {
   publication: MirrorablePublication;
 };
 
-const Share: FC<Props> = ({ publication }) => {
+const ShareE: FC<Props> = ({ publication }) => {
   const [copy] = useCopyToClipboard();
   const { resolvedTheme } = useTheme();
   const isAudio = publication.metadata?.__typename === 'AudioMetadataV3';
@@ -26,7 +30,20 @@ const Share: FC<Props> = ({ publication }) => {
   };
 
   return (
-    <div>
+  
+<Menu.Item
+      as="div"
+      className={({ active }) =>
+        cn(
+          { 'dropdown-active': active },
+          'm-2 block cursor-pointer rounded-lg px-2 py-1.5 text-sm'
+        )
+      }
+      onClick={(event) => {
+        stopEventPropagation(event);
+      }}
+    >
+      <div className="flex items-center space-x-2">
       <div className="no-scrollbar z-[5] mb-4 flex flex-nowrap items-center space-x-3 overflow-x-auto">
         <EmbedMedia publicationId={publication.id} isAudio={isAudio} />
       </div>
@@ -43,8 +60,9 @@ const Share: FC<Props> = ({ publication }) => {
           </IconButton>
         </Tooltip>
       </div>
-    </div>
+      </div>
+    </Menu.Item>
   );
 };
 
-export default Share;
+export default ShareE;

@@ -1,7 +1,7 @@
 import MenuTransition from '@components/Shared/MenuTransition';
 import { Menu } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import type { AnyPublication } from '@lensshare/lens';
+import type { AnyPublication, MirrorablePublication } from '@lensshare/lens';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
@@ -15,6 +15,7 @@ import NotInterested from './NotInterested';
 import Report from './Report';
 import Share from './Share';
 import Translate from './Translate';
+import ShareE from '../Share/ShareE';
 
 interface PublicationMenuProps {
   publication: AnyPublication;
@@ -56,6 +57,7 @@ const PublicationMenu: FC<PublicationMenuProps> = ({ publication }) => {
           <Share publication={publication} />
           <Translate publication={publication} />
           <CopyPostText publication={publication} />
+          <ShareE publication={publication as MirrorablePublication} />
         </Menu.Items>
       </MenuTransition>
     </Menu>
