@@ -24,7 +24,7 @@ const Publication: FC<Props> = ({ publication }) => {
   }, [])
 
   const target = getPublication(publication)
-  const isAudio = isListenable(target)
+ 
 
   return (
     <div >

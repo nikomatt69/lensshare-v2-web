@@ -19,14 +19,6 @@ const nextConfig = {
           { key: 'Access-Control-Allow-Headers', value: 'Content-Type' }
         ]
       },
-      {
-        source: '/(.*)',
-        headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Max-Age', value: '1728000' },
-          { key: 'Access-Control-Allow-Headers', value: 'Content-Type' }
-        ]
-      }
     ];
   }
 };
