@@ -28,10 +28,9 @@ export default async function Page({ params }: Props) {
 
   const publication = data.publication as AnyPublication
   const targetPublication = getPublication(publication)
-  const isAudio = isListenable(targetPublication)
   const isVideo = isWatchable(targetPublication)
 
-  if (!isAudio && !isVideo) {
+  if ( !isVideo) {
     return <Custom404 />
   }
 
