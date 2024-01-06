@@ -101,13 +101,13 @@ const TopOverlay: FC<OverlayProps> = ({ playerRef, video }) => {
         
         >
           <img
-            src={`${STATIC_ASSETS_URL}/brand/logo.svg`}
+            src={`${STATIC_ASSETS_URL}/images/icon.png`}
             draggable={false}
             className="ml-2 size-5 md:size-10"
             alt={APP_NAME}
             width={40}
           />
-          <b>Watch on Tape</b>
+          
         </Link>
       </div>
     </div>

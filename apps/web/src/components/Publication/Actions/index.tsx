@@ -15,6 +15,7 @@ import Views from './Views';
 import { useImpressionsStore } from 'src/store/useImpressionsStore';
 import getPublicationViewCountById from '@lib/getPublicationViewCountById';
 import { ADMIN_ADDRESS } from '@lensshare/data/constants';
+import EmbedMedia from '../EmbedMedia';
 
 interface PublicationActionsProps {
   publication: AnyPublication;
@@ -44,6 +45,7 @@ const PublicationActions: FC<PublicationActionsProps> = ({
     targetPublication
   );
 
+
   return (
     <span
       className="-ml-2 mt-3 flex flex-wrap items-center gap-x-6 gap-y-1 sm:gap-8"
@@ -58,10 +60,12 @@ const PublicationActions: FC<PublicationActionsProps> = ({
       {canAct ? (
         <OpenAction publication={publication} showCount={showCount} />
       ) : null}
+      <EmbedMedia publicationId={publication.id}/>
       {views ? <Views views={views} showCount={showCount} /> : null}
       {currentProfile?.ownedBy.address === ADMIN_ADDRESS ? (
         <Mod publication={publication} isFullPublication={showCount} />
       ) : null}
+
     </span>
   );
 };

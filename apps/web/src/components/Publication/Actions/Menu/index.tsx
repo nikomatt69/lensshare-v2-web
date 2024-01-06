@@ -15,7 +15,7 @@ import NotInterested from './NotInterested';
 import Report from './Report';
 import Share from './Share';
 import Translate from './Translate';
-import ShareE from '../Share/ShareE';
+
 
 interface PublicationMenuProps {
   publication: AnyPublication;
@@ -57,7 +57,7 @@ const PublicationMenu: FC<PublicationMenuProps> = ({ publication }) => {
           <Share publication={publication} />
           <Translate publication={publication} />
           <CopyPostText publication={publication} />
-          <ShareE publication={publication as MirrorablePublication} />
+
         </Menu.Items>
       </MenuTransition>
     </Menu>

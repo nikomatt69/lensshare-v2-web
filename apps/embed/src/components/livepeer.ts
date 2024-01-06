@@ -5,7 +5,7 @@ import { LIVEPEER_API_KEY } from '@lensshare/data/constants'
 export const getLivepeerClient = () => {
   return createReactClient({
     provider: studioProvider({
-      apiKey: LIVEPEER_API_KEY
+      apiKey: LIVEPEER_API_KEY || ''
     })
   })
 }
@@ -13,8 +13,8 @@ export const getLivepeerClient = () => {
 export const videoPlayerTheme: ThemeConfig = {
   colors: {
     accent: '#fff',
-    progressLeft: '#39C4FF',
-    loading: '#39C4FF'
+    progressLeft: '#1d4ed8',
+    loading: '#1d4ed8'
   },
   fontSizes: {
     timeFontSize: '12px'
