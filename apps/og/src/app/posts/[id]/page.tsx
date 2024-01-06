@@ -1,7 +1,7 @@
 import type { AnyPublication } from '@lensshare/lens';
 import type { Metadata } from 'next';
 
-import { APP_NAME } from '@lensshare/data/constants';
+import { APP_NAME, LENSSHARE_EMBED_URL } from '@lensshare/data/constants';
 import { PublicationDocument } from '@lensshare/lens';
 import { apolloClient } from '@lensshare/lens/apollo';
 import getAvatar from '@lensshare/lib/getAvatar';
@@ -42,6 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     getProfile(profile).slugWithPrefix
   } • ${APP_NAME}`;
 
+  const embedUrl = `${LENSSHARE_EMBED_URL}/${targetPublication.id}`;
   return {
     description: profile?.metadata?.bio,
     metadataBase: new URL(
@@ -50,11 +51,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       images: [getAvatar(profile)],
       siteName: 'LensShare',
-      type: 'article'
+      type: 'article',
+      videos: [embedUrl],
+
     },
     title: title,
     twitter: {
-      card: 'summary'
+      card: 'summary',
     }
   };
 }
