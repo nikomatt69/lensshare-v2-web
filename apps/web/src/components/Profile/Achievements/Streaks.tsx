@@ -1,6 +1,4 @@
-import { LENSSHARE_API_URL } from '@lensshare/data/constants';
-import type { Profile } from '@lensshare/lens';
-import getProfile from '@lensshare/lib/getProfile';
+import { BRAND_COLOR, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import { Card } from '@lensshare/ui';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -9,23 +7,24 @@ import type { Activity } from 'react-activity-calendar';
 import ActivityCalendar from 'react-activity-calendar';
 
 interface StreaksProps {
-  profile: Profile;
+  handle: string;
+  profileId: string;
 }
 
-const Streaks: FC<StreaksProps> = ({ profile }) => {
+const Streaks: FC<StreaksProps> = ({ handle, profileId }) => {
   const fetchStreaks = async () => {
     try {
       const response = await axios.get(
         `${LENSSHARE_API_URL}/stats/streaksCalendar`,
         {
-          params: { id: profile.id }
+          params: { id: profileId }
         }
       );
 
       const outputData = Object.entries(response.data.data).map(
         ([date, count]: any) => ({
-          date,
           count,
+          date,
           level: count > 0 ? Math.min(Math.floor(count / 10) + 1, 4) : 0
         })
       );
@@ -37,23 +36,23 @@ const Streaks: FC<StreaksProps> = ({ profile }) => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ['fetchStreaks', profile.id],
-    queryFn: fetchStreaks
+    queryFn: fetchStreaks,
+    queryKey: ['fetchStreaks', profileId]
   });
 
   return (
     <Card className="p-6">
       <ActivityCalendar
-        data={data as Activity[]}
-        loading={isLoading}
-        colorScheme="light"
+        blockMargin={3}
         blockRadius={50}
+        blockSize={11.5}
+        colorScheme="light"
+        data={data as Activity[]}
         labels={{
-          totalCount: `${
-            getProfile(profile).slugWithPrefix
-          } has {{count}} activities in ${new Date().getFullYear()}`
+          totalCount: `${handle} has {{count}} activities in ${new Date().getFullYear()}`
         }}
-        theme={{ light: ['#FED5D9', '#000fff'] }}
+        loading={isLoading}
+        theme={{ light: ['#FED5D9', BRAND_COLOR] }}
       />
     </Card>
   );

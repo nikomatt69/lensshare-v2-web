@@ -27,12 +27,17 @@ import FullPublication from './FullPublication';
 import OnchainMeta from './OnchainMeta';
 import RelevantPeople from './RelevantPeople';
 import PublicationPageShimmer from './Shimmer';
+import { useNativeNavigation } from 'src/store/useNative';
+
 
 const ViewPublication: NextPage = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
 
   const showNewPostModal = useGlobalModalStateStore(
     (state) => state.showNewPostModal
+  );
+  const preLoadedPublication = useNativeNavigation(
+    (state) => state.preLoadedPublication
   );
 
   const {
@@ -42,14 +47,14 @@ const ViewPublication: NextPage = () => {
 
   const { data, loading, error } = usePublicationQuery({
     variables: { request: { forId: id } },
-    skip: !id
+    skip: !id || preLoadedPublication?.id,
   });
 
   if (!isReady ||loading) {
     return <PublicationPageShimmer />;
   }
 
-  if (!data?.publication) {
+  if (!preLoadedPublication && !data?.publication) {
     return <Custom404 />;
   }
 
@@ -57,7 +62,8 @@ const ViewPublication: NextPage = () => {
     return <Custom500 />;
   }
 
-  const publication = data.publication as AnyPublication;
+  const publication =
+  preLoadedPublication || (data?.publication as AnyPublication);
   const targetPublication = isMirrorPublication(publication)
     ? publication.mirrorOn
     : publication;

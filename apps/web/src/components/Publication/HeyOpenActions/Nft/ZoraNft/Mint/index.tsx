@@ -39,7 +39,7 @@ const Mint: FC<MintProps> = ({ nft, zoraLink, publication, onCompleted }) => {
         <MintedBy address={nft.creator} />
         <Markup
           className="lt-text-gray-500 line-clamp-4"
-          mentions={getMentions(nft.description)}
+          
         >
           {nft.description}
         </Markup>
