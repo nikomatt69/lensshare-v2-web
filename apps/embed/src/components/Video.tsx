@@ -33,8 +33,7 @@ const Video: FC<Props> = ({ video }) => {
   const [clicked, setClicked] = useState(isAutoPlay || currentTime !== 0)
 
   const isBytesVideo = video.publishedOn?.id === APP_ID
-  const thumbnailUrl = imageCdn(
-    sanitizeDStorageUrl(getThumbnailUrl(video.metadata, true)),
+  const thumbnailUrl = (imageKit(getThumbnailUrl(video.metadata, true)),
     isBytesVideo ? 'THUMBNAIL_V' : 'THUMBNAIL'
   )
   const { color: backgroundColor } = useAverageColor(thumbnailUrl, isBytesVideo)
@@ -107,3 +106,7 @@ const Video: FC<Props> = ({ video }) => {
 }
 
 export default Video
+function imageKit(arg0: string): string {
+  throw new Error('Function not implemented.');
+}
+

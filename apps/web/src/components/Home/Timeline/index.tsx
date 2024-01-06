@@ -92,7 +92,7 @@ const Timeline: FC = () => {
           <QueuedPublication key={txn.id} txn={txn} />
         ) : null
       )}
-      <Card className="divide-y-[1px] dark:divide-gray-700 border-blue-700">
+      <Card className="divide-y-[1px] dark:divide-gray-700">
         {publications?.map((publication, index) => (
           <SinglePublication
             key={`${publication.root.__typename}_${index}`}

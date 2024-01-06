@@ -188,7 +188,7 @@ const ChatView = () => {
 
   return (
     <GridLayout
-      className="  mx-auto my-1 items-center justify-center rounded-xl  bg-white p-0 dark:bg-black"
+      className="  mx-auto my-0.5 items-center justify-center rounded-xl  bg-white p-0 dark:bg-black"
       classNameChild="mx-auto  items-center justify-center rounded-xl"
     >
       <GridItemFour className=" mx-auto items-center justify-center rounded-xl ">
@@ -220,7 +220,7 @@ const ChatView = () => {
               </div>
             )}
             <Collapsible.Root
-              className="inline-flex-col m-2 mx-auto w-[300px] items-center justify-between"
+              className="inline-flex-col m-1 mx-auto w-[300px] items-center justify-between"
               open={open}
               onOpenChange={setOpen}
             >
@@ -264,7 +264,7 @@ const ChatView = () => {
                           }
                         }}
                       >
-                        <div className="flex rounded-xl p-2 dark:bg-gray-700 dark:text-white">
+                        <div className="flex rounded-xl p-0.5 dark:bg-gray-700 dark:text-white">
                           <Image
                             alt={chat.chatId}
                             className="mr-2 h-8 w-8 cursor-pointer rounded-full border dark:border-gray-700"

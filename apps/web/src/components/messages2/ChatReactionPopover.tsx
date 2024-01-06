@@ -19,19 +19,15 @@ const emojis = [
   },
   {
     action: 'Cry',
+    emoji: '😂'
+  },
+  {
+    action: 'Cry',
     emoji: '😭'
   },
   {
     action: 'Fire',
     emoji: '🔥'
-  },
-  {
-    action: 'Money',
-    emoji: '💸'
-  },
-  {
-    action: 'Sexy',
-    emoji: ' 🍑 '
   }
 ];
 
