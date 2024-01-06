@@ -31,11 +31,11 @@ const EmbedMedia: FC<Props> = ({ publicationId }) => {
         onClick={() => setShow(true)}
         className=" lt-text-gray-500 flex rounded-full text-sm"
       >
-        <CodeBracketIcon className="lt-text-gray-500 mr-2 h-5 w-5" />
+        <CodeBracketIcon className="lt-text-gray-500 mr-2 h-4 w-4" />
       </button>
       <Modal
         title="Embed Media"
-        icon={<CodeBracketIcon className="text-brand h-5 w-5" />}
+        icon={<CodeBracketIcon className="text-brand h-4 w-4" />}
         show={show}
         onClose={() => setShow(false)}
       >
