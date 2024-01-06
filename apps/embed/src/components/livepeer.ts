@@ -1,11 +1,12 @@
 import type { ThemeConfig } from '@livepeer/react'
 import { createReactClient, studioProvider } from '@livepeer/react'
-import { LIVEPEER_API_KEY } from '@lensshare/data/constants'
+import { BASE_URL, LIVEPEER_API_KEY } from '@lensshare/data/constants'
 
 export const getLivepeerClient = () => {
   return createReactClient({
     provider: studioProvider({
-      apiKey: LIVEPEER_API_KEY || ''
+      apiKey: LIVEPEER_API_KEY || '',
+      baseUrl: BASE_URL
     })
   })
 }
