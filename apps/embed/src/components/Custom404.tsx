@@ -6,7 +6,7 @@ const Custom404 = () => {
     <div className="flex h-[calc(100vh-8rem)] flex-col items-center justify-center space-y-4 text-center">
       <div className="mb-10">
         <img
-          src={`${STATIC_ASSETS_URL}/images/illustrations/404.gif`}
+          src={`${STATIC_ASSETS_URL}/images/icon.png`}
           draggable={false}
           height={200}
           width={200}

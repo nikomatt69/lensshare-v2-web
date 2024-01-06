@@ -30,9 +30,7 @@ export default async function Page({ params }: Props) {
   const targetPublication = getPublication(publication)
   const isVideo = isWatchable(targetPublication)
 
-  if ( !isVideo) {
-    return <Custom404 />
-  }
+  
 
   return <Publication publication={targetPublication} />
 }

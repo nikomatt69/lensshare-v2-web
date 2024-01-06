@@ -5,7 +5,7 @@ import { BASE_URL, LIVEPEER_API_KEY } from '@lensshare/data/constants'
 export const getLivepeerClient = () => {
   return createReactClient({
     provider: studioProvider({
-      apiKey: '9e17a7ab-3370-4e31-85c3-43072da2315e'
+      apiKey: '30c0057f-d721-414e-8e03-7ff98f407535'
     })
   })
 }
