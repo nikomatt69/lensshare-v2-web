@@ -16,7 +16,7 @@ import Layout from '../Layout';
 import LensSubscriptionsProvider from './LensSubscriptionsProvider';
 import PreferencesProvider from './PreferencesProvider';
 import Web3Provider from './Web3Provider';
-import { BASE_URL, LENSTOK_URL } from '@lensshare/data/constants';
+import { BASE_URL } from '@lensshare/data/constants';
 import LeafwatchProvider from './LeafwatchProvider';
 import SW from '@components/ServiceWorker';
 import FeaturedGroupsProvider from './FeaturedGroupsProvider';
@@ -44,6 +44,9 @@ const Providers = ({ children }: { children: ReactNode }) => {
         <ApolloProvider client={lensApolloClient}>
           <LensSubscriptionsProvider />
           <QueryClientProvider client={queryClient}>
+            <PreferencesProvider />
+            <TbaStatusProvider />
+            <FeaturedGroupsProvider />
             <LivepeerConfig client={livepeerClient} theme={getLivepeerTheme}>
               <ThemeProvider>
                 <Layout>{children}</Layout>

@@ -13,4 +13,4 @@ export const CACHE_AGE = 'public, s-maxage=1, stale-while-revalidate=59';
 
 // Snapshot
 export const PROPOSAL_CREATOR_ADDRESS =
-  '0x81aD96a4bAdE55b3Bfb1Ea84A597FCC6e5e3BEc1';
+  '0x38B2b78246B9b162f3B365f3970ac77FB07AbF90';

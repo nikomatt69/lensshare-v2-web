@@ -1,7 +1,6 @@
-import { AnyPublication } from "@lensshare/lens";
-import { isMirrorPublication } from "@lensshare/lib/publicationHelpers";
-import { PublicationViewCount } from "@lensshare/types/hey";
-
+import type { AnyPublication } from '@lensshare/lens';
+import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
+import type { PublicationViewCount } from '@lensshare/types/hey';
 
 /**
  * Get the number of views of a publication

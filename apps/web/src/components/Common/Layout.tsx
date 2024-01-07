@@ -15,16 +15,13 @@ import { useNonceStore } from 'src/store/useNonceStore';
 import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import { useEffectOnce, useIsMounted } from 'usehooks-ts';
 import { useAccount, useDisconnect } from 'wagmi';
-import { isIOS, isMobile } from 'react-device-detect';
 import GlobalModals from '../Shared/GlobalModals';
 import Loading from '../Shared/Loading';
 import Navbar from '../Shared/Navbar';
 import { isAddress } from 'viem';
-import PWAInstallPrompt from './PWAInstallPrompt';
 import Script from 'next/script';
-import { DynamicIsland } from '@lensshare/ui';
 import { useRoom } from '@huddle01/react/hooks';
-
+import SpacesWindow from './SpacesWindow/SpacesWindow';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -103,14 +100,13 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         containerStyle={{ wordBreak: 'break-word' }}
         toastOptions={getToastOptions(resolvedTheme)}
       />
-
-      {isMobile && isIOS ? <PWAInstallPrompt /> : null}
       <GlobalModals />
 
       <GlobalAlerts />
       <div className="flex min-h-screen  flex-col pb-14 md:pb-0">
         <Navbar />
-        {isRoomJoined ? <DynamicIsland /> : null}
+        {isRoomJoined ? <SpacesWindow /> : null}
+
         <GlobalBanners />
         <BottomNavigation />
         {children}

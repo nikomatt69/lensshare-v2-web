@@ -90,7 +90,6 @@ const Home: NextPage = (publication) => {
             <>
               <Trending />
               <RecommendedProfiles />
-              <EnableMessages />
               <EnableLensManager />
               <SetProfile />
             </>

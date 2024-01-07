@@ -4,6 +4,7 @@ import { Image } from '@lensshare/ui';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
 
 import type { DisplayedMessage } from './mapReactionsToMessages';
+import Link from 'next/link';
 
 export const useMessageContent = (message: DisplayedMessage | null) => {
   const getMessageContent = (
@@ -28,6 +29,15 @@ export const useMessageContent = (message: DisplayedMessage | null) => {
             height={50}
             src={message.messageObj.content as string}
             width={50}
+          />
+        );
+      }
+      case MessageType.MEDIA_EMBED: {
+        return (
+          <Link
+          
+            href={message.messageObj.content as string}
+         
           />
         );
       }

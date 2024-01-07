@@ -28,7 +28,7 @@ const Embed: FC<EmbedProps> = ({ og, publicationId }) => {
         target={og.url.includes(location.host) ? '_self' : '_blank'}
         rel="noreferrer noopener"
       >
-        <Card forceRounded>
+        <Card className="border border-gray-500" forceRounded>
           {og.isLarge && og.image ? (
             <Image
               className="divider aspect-2 w-full rounded-t-xl object-cover"

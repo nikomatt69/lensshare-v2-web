@@ -31,8 +31,11 @@ const VideoElem = ({ track }: { track: MediaStreamTrack }) => {
 
   return (
     <video
-      className="min-h-full min-w-full rounded-lg object-cover"
+      className="min-h-[60vh] min-w-full rounded-lg object-cover"
       ref={videoRef}
+      disablePictureInPicture
+              disableRemotePlayback
+              playsInline
       autoPlay
       style={{ transform: 'rotateY(180deg)' }}
     />

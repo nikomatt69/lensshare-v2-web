@@ -130,6 +130,9 @@ const Lobby: NextPage = () => {
                 ref={videoRef}
                 autoPlay
                 muted
+                disablePictureInPicture
+              disableRemotePlayback
+              playsInline
                 className="min-h-full min-w-full self-stretch rounded-lg object-cover"
               />
             ) : (

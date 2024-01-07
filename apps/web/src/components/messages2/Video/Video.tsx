@@ -57,6 +57,9 @@ const Video = ({
               ref={videoRef}
               autoPlay
               muted={isMuted}
+              disablePictureInPicture
+              disableRemotePlayback
+              playsInline
             />
           </div>
         ) : (

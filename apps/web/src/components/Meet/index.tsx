@@ -3,11 +3,12 @@ import type { NextPage } from 'next';
 
 import Lobby from './Lobby';
 import Meet from './Meet';
+import SpacesWindow from '@components/Common/SpacesWindow/SpacesWindow';
 
 const Main: NextPage = () => {
   const { isRoomJoined } = useRoom();
 
-  return isRoomJoined ? <Meet /> : <Lobby />;
+  return isRoomJoined ? <SpacesWindow /> : <Lobby />;
 };
 
 export default Main;

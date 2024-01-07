@@ -10,9 +10,7 @@ interface ViewsProps {
 }
 
 const Views: FC<ViewsProps> = ({ views, showCount }) => {
-  if (showCount) {
-    return null;
-  }
+  
 
   return (
     <div className="ld-text-gray-500 flex items-center space-x-1">
