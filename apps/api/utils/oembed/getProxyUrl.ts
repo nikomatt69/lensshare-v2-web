@@ -2,6 +2,8 @@ const directUrls = [
   'zora.co/api/thumbnail' // Zora
 ];
 
+const IMAGEKIT_URL = 'https://ik.imagekit.io/seasgram';
+
 const getProxyUrl = (url: string, isLarge: boolean) => {
   if (!url) {
     return null;
@@ -17,7 +19,7 @@ const getProxyUrl = (url: string, isLarge: boolean) => {
   const height = isSquare ? 400 : 600;
   const width = isSquare ? 400 : 'auto';
 
-  return `${process.env.IMAGEKIT_URL}/tr:di-placeholder.webp,h-${height},w-${width}/${url}`;
+  return `${IMAGEKIT_URL}/tr:di-placeholder.webp,h-${height},w-${width}/${url}`;
 };
 
 export default getProxyUrl;

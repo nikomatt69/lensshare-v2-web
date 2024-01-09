@@ -3,8 +3,6 @@ import cn from '@lensshare/ui/cn';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { type FC, type ReactNode } from 'react';
-import { useNativeNavigation } from 'src/store/useNative';
-
 
 interface PublicationWrapperProps {
   publication: AnyPublication;
@@ -17,9 +15,6 @@ const PublicationWrapper: FC<PublicationWrapperProps> = ({
   className = '',
   children
 }) => {
-  const setPreLoadedPublication = useNativeNavigation(
-    (state) => state.setPreLoadedPublication
-  );
   const { push } = useRouter();
 
   return (
@@ -31,7 +26,7 @@ const PublicationWrapper: FC<PublicationWrapperProps> = ({
       onClick={() => {
         const selection = window.getSelection();
         if (!selection || selection.toString().length === 0) {
-          setPreLoadedPublication(publication);
+          publication;
           push(`/posts/${publication?.id}`);
         }
       }}

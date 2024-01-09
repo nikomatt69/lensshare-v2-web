@@ -22,7 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const receipt = await client.upload(JSON.stringify(body), {
       tags: [
         { name: 'content-type', value: 'application/json' },
-        { name: 'App-Name', value: 'Hey.xyz' }
+        { name: 'App-Name', value: 'LensShare.xyz' }
       ]
     });
 

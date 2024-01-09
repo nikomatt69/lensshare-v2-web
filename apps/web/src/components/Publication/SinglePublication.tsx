@@ -26,7 +26,6 @@ interface SinglePublicationProps {
   showMore?: boolean;
   isFirst?: boolean;
   isLast?: boolean;
-
 }
 
 const SinglePublication: FC<SinglePublicationProps> = ({
@@ -38,8 +37,7 @@ const SinglePublication: FC<SinglePublicationProps> = ({
   showThread = true,
   showMore = true,
   isFirst = false,
-  isLast = false,
-  
+  isLast = false
 }) => {
   const firstComment = feedItem?.comments?.[0];
   const rootPublication = feedItem
@@ -94,10 +92,7 @@ const SinglePublication: FC<SinglePublicationProps> = ({
             />
             <div className="flex flex-wrap items-center gap-x-7">
               {showActions ? (
-                <PublicationActions
-                  publication={rootPublication}
-                 
-                />
+                <PublicationActions publication={rootPublication} />
               ) : null}
               <FeaturedGroup className="mt-3" tags={metadata?.tags} />
             </div>

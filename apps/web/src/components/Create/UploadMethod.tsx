@@ -16,13 +16,11 @@ const UploadMethod = () => {
 
   useEffect(() => {
     if (!isUnderFreeLimit) {
-      setUploadedMedia({ isUploadToIpfs: false });
+      setUploadedMedia({ isUploadToIpfs: true });
     }
   }, [isUnderFreeLimit, setUploadedMedia]);
 
-  if (isUnderFreeLimit) {
-    return null;
-  }
+  
 
   return (
     <div className="pt-4">

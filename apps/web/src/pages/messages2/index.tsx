@@ -8,8 +8,7 @@ import useMessageStore from 'src/store/useMessageStore2';
 import { useAppStore } from 'src/store/useAppStore';
 import { useUpdateEffect } from 'usehooks-ts';
 import { useWalletClient } from 'wagmi';
-import OutgoingCallModal from '@components/messages2/Video/OutgoingCallModal';
-import IncomingCallModal from '@components/messages2/Video/IncomingCallModal';
+
 
 const ChatPage = () => {
   const { data: signer, isLoading } = useWalletClient();
@@ -55,8 +54,7 @@ const ChatPage = () => {
       <>
         <MetaTags title={`Messages • ${APP_NAME}`} />
         <ChatView />
-        <OutgoingCallModal />
-        <IncomingCallModal />
+
       </>
     )
   );

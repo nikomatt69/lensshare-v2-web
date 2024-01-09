@@ -5,11 +5,10 @@
   "license": "AGPL-3.0",
   "scripts": {
     "build:sw": "node script/build-sw.mjs",
-    "build": "next build",
-    "buildVercel": "yarn run build:sw;next build",
-    "dev": "next dev --experimental-https",
-    "export":"yarn run build:sw; next build",
-  
+    "buildVercel": "next build",
+    "build": "yarn run build:sw;next build",
+    "dev": "next dev",
+    "export": "yarn run build:sw; next build",
     "start": "next start --port 4783",
     "typecheck": "tsc --pretty"
   },

@@ -1,10 +1,9 @@
-import { LENSHUB_PROXY } from '@lensshare/data/constants';
+import { LENSHUB_PROXY, PUSH_ENV } from '@lensshare/data/constants';
 import type { IFeeds, IUser } from '@pushprotocol/restapi';
-import { ENV } from '@pushprotocol/restapi/src/lib/constants';
 
+import { ENV } from '@pushprotocol/restapi/src/lib/constants';
 import moment from 'moment';
 import { CHAIN_ID } from 'src/constants';
-import { PUSH_ENV } from 'src/store/push-chat';
 
 export const HANDLE_SUFFIX = {
   LENS: '.lens',
@@ -47,12 +46,8 @@ export const dateToFromNowDaily = (timestamp: number): string => {
 };
 
 export const getIsHandle = (handle: string) => {
-  if (PUSH_ENV === ENV.STAGING) {
-    return handle.includes(HANDLE_SUFFIX.TEST);
-  }
-  if (PUSH_ENV === ENV.PROD) {
-    return handle.includes(HANDLE_SUFFIX.LENS);
-  }
+  PUSH_ENV === ENV.PROD;
+  return handle.includes(HANDLE_SUFFIX.LENS);
 };
 
 export const checkIfGroup = (feed: IFeeds): boolean => {

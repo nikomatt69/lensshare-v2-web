@@ -16,9 +16,9 @@
   "dependencies": {
     "@aws-sdk/client-sts": "^3.454.0",
     "@clickhouse/client-web": "^0.2.6",
+    "@irys/sdk": "^0.0.4",
     "@lensshare/data": "*",
     "@lensshare/lib": "*",
-    "@irys/sdk": "^0.0.4",
     "@supabase/supabase-js": "^2.38.4",
     "axios": "^1.6.2",
     "fast-xml-parser": "^4.3.2",

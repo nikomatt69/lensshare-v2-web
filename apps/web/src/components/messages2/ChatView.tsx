@@ -125,10 +125,10 @@ const ChatView = () => {
       if (event === EVENTS.CHAT_RECEIVED_MESSAGE) {
         const decrypted = await chat.decryptConversation({
           connectedUser: userInfo,
-          // connectedUser:
           env: PUSH_ENV,
           messages: [data as any],
-          pgpPrivateKey: pgpPvtKey
+          pgpPrivateKey: pgpPvtKey,
+
         });
 
         if (!decrypted) {

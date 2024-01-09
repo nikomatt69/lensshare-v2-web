@@ -1,6 +1,6 @@
 import getEnvConfig from './utils/getEnvConfig';
 import { CONSTANTS } from '@pushprotocol/restapi';
-import packageJson from '../../package.json';
+
 export const IS_MAINNET = process.env.NEXT_PUBLIC_LENS_NETWORK === 'mainnet';
 export const IS_PRODUCTION = process.env.NEXT_PUBLIC_IS_PRODUCTION === 'true';
 export const HANDLE_PREFIX = IS_MAINNET ? 'lens/' : 'lens/';
@@ -9,7 +9,7 @@ export const HEY_API_URL = 'https://api.lenshareapp.xyz';
 
 export const APP_ID = 'lensshare';
 export const APP_NAME = 'LensShare';
-export const APP_VERSION = packageJson.version;
+export const APP_VERSION = '0.0.1';
 export const LENSTOK_URL = process.env.NEXT_PUBLIC_LENSTOK_URL;
 export const DESCRIPTION = 'Decentralized Social Platform';
 export const LENS_NETWORK = process.env.NEXT_PUBLIC_LENS_NETWORK ?? 'mainnet';

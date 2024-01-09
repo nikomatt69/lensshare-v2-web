@@ -121,25 +121,27 @@ const Lobby: NextPage = () => {
         <div
           className={cn(
             resolvedTheme == 'dark' ? 'bg-gray-900' : 'bg-brand-100',
-            'relative mx-auto flex w-fit items-center justify-center rounded-lg text-center'
+            'relative  flex items-center justify-center rounded-lg text-center'
           )}
         >
-          <div className="flex h-[36vh] w-[44vw] items-center justify-center rounded-lg ">
+          <div className="xs:w-[44vw] flex h-[36vh] items-center justify-center rounded-lg sm:w-[44vw] md:w-[44vw] ">
             {camStream ? (
               <video
                 ref={videoRef}
                 autoPlay
                 muted
                 disablePictureInPicture
-              disableRemotePlayback
-              playsInline
-                className="min-h-full min-w-full self-stretch rounded-lg object-cover"
+                disableRemotePlayback
+                playsInline
+                style={{ transform: 'rotateY(180deg)' }}
+                className="min-h-full  self-stretch rounded-lg object-cover"
               />
             ) : (
               <img
                 src={`${STATIC_ASSETS_URL}/images/default-avatar.svg`}
                 alt="avatar"
                 className="mb-16 mt-16 h-24 w-24"
+                style={{ transform: 'rotateY(180deg)' }}
               />
             )}
           </div>

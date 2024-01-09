@@ -384,7 +384,7 @@ const CreateSteps = () => {
         attributes,
         animation_url: uploadedMedia.dUrl,
         external_url: `https://lenshareapp.xyz${getProfile(currentProfile)
-          ?.link}`,
+          ?.slug}`,
         image: uploadedMedia.thumbnail,
         name: uploadedMedia.title,
         description: trimify(uploadedMedia.description)
@@ -445,7 +445,7 @@ const CreateSteps = () => {
         attributes,
         animation_url: uploadedMedia.dUrl,
         external_url: `https://lenshareapp.xyz${getProfile(currentProfile)
-          ?.link}`,
+          ?.slug}`,
         image: uploadedMedia.thumbnail,
         name: uploadedMedia.title,
         description: trimify(uploadedMedia.description)

@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { PUSH_ENV, STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import formatAddress from '@lensshare/lib/formatAddress';
-import { Image } from '@lensshare/ui';
+import { Card, Image } from '@lensshare/ui';
 import { transformMessages } from '@lib/mapReactionsToMessages';
 import { chat } from '@pushprotocol/restapi';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
@@ -33,10 +33,21 @@ import RenderReplyMessage from './RenderReplyMessage';
 import Follow from '@components/Shared/Profile/Follow';
 import Unfollow from '@components/Shared/Profile/Unfollow';
 import getStampFyiURL from '@lensshare/lib/getStampFyiURL';
-import Link from 'next/link';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import { useAppStore } from 'src/store/useAppStore';
 import usePushVideoCall from './Video/usePushVideoCall';
+import {
+  useAudio,
+  useHuddle01,
+  useLobby,
+  useRoom,
+  useVideo
+} from '@huddle01/react/hooks';
+import type { HTMLAudioElementWithSetSinkId } from '@components/Common/SpacesWindow/SpacesTypes';
+import { useDisplayName } from '@huddle01/react/app-utils';
+import { useTheme } from 'next-themes';
+import { useMeetPersistStore } from 'src/store/meet';
+import Link from 'next/link';
 
 type SavedQueryData = {
   pageParams: string[];
@@ -106,6 +117,32 @@ const ChatListItemContainer = ({
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10
   });
+
+  const { query, push } = useRouter();
+  const { initialize } = useHuddle01();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const { joinLobby, isLobbyJoined } = useLobby();
+  const { joinRoom } = useRoom();
+  const { fetchVideoStream, stopVideoStream, stream: camStream } = useVideo();
+  const { fetchAudioStream, stopAudioStream, stream: micStream } = useAudio();
+  const { setDisplayName } = useDisplayName();
+  const currentProfile = useAppStore((state) => state.currentProfile);
+  const [displayUserName, setDisplayUserName] = useState<string>(
+    currentProfile?.handle?.localName ?? ''
+  );
+  const {
+    toggleMicMuted,
+    toggleCamOff,
+    isMicMuted,
+    isCamOff,
+    videoDevice,
+    audioInputDevice,
+    audioOutputDevice
+  } = useMeetPersistStore();
+
+  const [audio] = useState(new Audio() as HTMLAudioElementWithSetSinkId);
+
+  const { resolvedTheme } = useTheme();
 
   const isMessagesLoading = isHistoryFetching && !isHistoryLoading;
   const messages = transformMessages(
@@ -207,19 +244,18 @@ const ChatListItemContainer = ({
       }
     }
   );
-  const currentProfile = useAppStore((state) => state.currentProfile);
 
   const address2 = profile as unknown as Profile;
 
   const { isPending: isApproving, mutateAsync: onApprove } = useMutation({
-    mutationFn: async (_did: string) => {
+    mutationFn: async (did: string) => {
       return true;
     },
     mutationKey: ['approve-user']
   });
 
   const { isPending: isRejecting, mutateAsync: onReject } = useMutation({
-    mutationFn: async (_did: string) => {
+    mutationFn: async (did: string) => {
       return true;
     },
     mutationKey: ['approve-user']
@@ -335,22 +371,30 @@ const ChatListItemContainer = ({
             const currentUrl = window.location.href;
             const url = currentUrl.match(/^https?:\/\/([^/]+)/)?.[0];
             const meetingUrl = `${url}/meet/${roomId}`;
-            onSendMessage(`VideoCall url : lenshareapp.xyz/meet/${roomId}`);
+            onSendMessage(`https://lenshareapp.xyz/meet/${roomId}`);
 
             // Instead of sending a message, set the meeting URL in the state
 
             // Instead of sending a message, set the meeting URL in the state
             setShow(true);
             setMeetingUrl(meetingUrl);
-            router.push(`${url}/meet/${roomId}`);
           }}
           className="text-brand-700 ml-2 inline h-8 w-8 cursor-pointer"
         />
         <div className="mx-2 mt-2 ">
-          {show && (
-            <Link href={meetingUrl}>
-              <PhoneIcon className="h-6 w-6 text-green-500" />
-            </Link>
+          {show && currentProfile && (
+            <Card className="mb-1 p-2 text-center">
+              <Link href={meetingUrl}>
+                <PhoneIcon className="text-brand-600 h-5 w-5" />
+              </Link>
+            </Card>
+          )}
+          {show && !currentProfile && (
+            <Card className="mb-1 p-2 text-center">
+              <Link href={meetingUrl}>
+                <PhoneIcon className="h-5 w-5 text-emerald-600" />
+              </Link>
+            </Card>
           )}
         </div>
         {profile.address ? (

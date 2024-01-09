@@ -27,7 +27,7 @@ const validateLensAccount = async (request: NextApiRequest) => {
       `
     },
     {
-      headers: { 'Content-Type': 'application/json', 'User-agent': 'Hey.xyz' },
+      headers: { 'Content-Type': 'application/json', 'User-agent': 'LensShare.xyz' },
       withCredentials: true
     }
   );

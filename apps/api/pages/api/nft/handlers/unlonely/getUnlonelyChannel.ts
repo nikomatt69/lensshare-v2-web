@@ -17,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'User-agent': 'Hey.xyz'
+          'User-agent': 'LensShare.xyz'
         },
         body: JSON.stringify({
           query: `

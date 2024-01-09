@@ -12,8 +12,10 @@ import React, { useState } from 'react'
 import { useAverageColor } from '@lensshare/web/src/hooks/useAverageColor'
 
 import AudioPlayer from '@lensshare/web/src/components/Listen/AudioPlayer'
-import { PlayOutline } from './PlayOutline';
+
 import { PauseOutline } from './PauseOutline';
+import { PlayButton } from '@livepeer/react';
+import { PlayOutline } from './PlayOutline';
 type Props = {
   audio: PrimaryPublication
 }

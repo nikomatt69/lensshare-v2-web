@@ -138,7 +138,7 @@ const Meet: FC = () => {
           className={cn(
             Object.values(peers).length === 0
               ? 'my-10 h-[14vh] w-[14vw]'
-              : 'h-[40vh] w-[36vw] xl:h-[30vh]',
+              : 'h-[40vh] w-[38vw] xl:h-[30vh]',
             resolvedTheme == 'dark' ? 'bg-gray-900' : 'bg-white-100',
             'relative mt-2 flex flex-shrink-0 items-center justify-center rounded-xl '
           )}
@@ -178,7 +178,7 @@ const Meet: FC = () => {
             key={peerId}
             className={cn(
               resolvedTheme == 'dark' ? 'bg-gray-900' : 'bg-brand-100',
-              'relative flex h-[40vh] w-[36vw] flex-shrink-0 items-center justify-center rounded-lg'
+              'relative flex h-[40vh] w-[38vw] flex-shrink-0 items-center justify-center rounded-lg'
             )}
           >
             {cam ? (
