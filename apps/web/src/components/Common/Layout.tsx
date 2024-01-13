@@ -22,6 +22,7 @@ import { isAddress } from 'viem';
 import Script from 'next/script';
 import { useRoom } from '@huddle01/react/hooks';
 import SpacesWindow from './SpacesWindow/SpacesWindow';
+import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -29,7 +30,7 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   const { resolvedTheme } = useTheme();
   const setCurrentProfile = useAppStore((state) => state.setCurrentProfile);
-
+  const currentProfile = useAppStore((state) => state.currentProfile);
   const resetPreferences = usePreferencesStore(
     (state) => state.resetPreferences
   );
@@ -38,17 +39,25 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     (state) => state.setLensHubOnchainSigNonce
   );
 
+
+  const resetPushChatStore = usePushChatStore(
+    (state) => state.resetPushChatStore
+  );
+
   const isMounted = useIsMounted();
   const { connector } = useAccount();
   const { disconnect } = useDisconnect();
 
   const currentSessionProfileId = getCurrentSessionProfileId();
 
-  const logout = () => {
+  const logout = (reload = false) => {
     resetPreferences();
-
+    resetPushChatStore();
     signOut();
     disconnect?.();
+    if (reload) {
+      location.reload();
+    }
   };
   const { isRoomJoined } = useRoom();
   const { loading } = useCurrentProfileQuery({
@@ -76,9 +85,13 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     validateAuthentication();
   });
 
-  if (loading || !isMounted()) {
+  
+  const profileLoading = !currentProfile && loading;
+
+  if (profileLoading || !isMounted()) {
     return <Loading />;
   }
+
   return (
     <>
       <Head>

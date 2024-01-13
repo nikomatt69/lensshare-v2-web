@@ -16,6 +16,10 @@ import {
   useChallengeLazyQuery,
   useProfilesManagedQuery
 } from '@lensshare/lens';
+
+import usePushHooks from 'src/hooks/messaging/push/usePush';
+
+import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 import getWalletDetails from '@lensshare/lib/getWalletDetails';
 import { Button, Card, Spinner } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
@@ -24,7 +28,7 @@ import { Leafwatch } from '@lib/leafwatch';
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { CHAIN_ID } from 'src/constants';
+import { CHAIN } from 'src/constants';
 import { signIn } from 'src/store/useAuthPersistStore';
 import { useIsMounted } from 'usehooks-ts';
 import type { Connector } from 'wagmi';
@@ -33,12 +37,17 @@ import {
   useChainId,
   useConnect,
   useDisconnect,
-  useSignMessage
+  useSignMessage,
+  useWalletClient
 } from 'wagmi';
-
+import * as PushAPI from '@pushprotocol/restapi';
 import UserProfile from '../UserProfile';
-import { IS_MAINNET } from '@lensshare/data/constants';
+import parseJwt from '@lensshare/lib/parseJwt';
+import { getAccountFromProfile } from '@components/Messages/Push/helper';
+import { IS_MAINNET, PUSH_ENV } from '@lensshare/data/constants';
 import SwitchNetwork from '../SwitchNetwork';
+
+
 
 interface WalletSelectorProps {
   setHasConnected?: Dispatch<SetStateAction<boolean>>;
@@ -53,6 +62,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
   const [loggingInProfileId, setLoggingInProfileId] = useState<null | string>(
     null
   );
+  const { data: signer } = useWalletClient();
 
   const onError = (error: any) => {
     setIsLoading(false);
@@ -60,17 +70,11 @@ const WalletSelector: FC<WalletSelectorProps> = ({
   };
 
   const chain = useChainId();
-  const {
-    connectAsync,
-    connectors,
-    error,
-    isLoading: isConnectLoading,
-    pendingConnector
-  } = useConnect({ chainId: CHAIN_ID });
+  const { connectAsync, connectors, error, isPending } = useConnect();
 
   const { disconnect } = useDisconnect();
   const { address, connector: activeConnector } = useAccount();
-  const { signMessageAsync } = useSignMessage({ onError });
+  const { signMessageAsync } = useSignMessage({ mutation: { onError } });
   const [loadChallenge, { error: errorChallenge }] = useChallengeLazyQuery({
     fetchPolicy: 'no-cache'
   });
@@ -79,6 +83,13 @@ const WalletSelector: FC<WalletSelectorProps> = ({
   const request: LastLoggedInProfileRequest | ProfileManagersRequest = {
     for: address
   };
+  const setConnectedProfile = usePushChatStore(
+    (state) => state.setConnectedProfile
+  );
+  const setPgpPassword = usePushChatStore((state) => state.setPgpPassword);
+  const setPgpPrivateKey = usePushChatStore((state) => state.setPgpPrivateKey);
+  const { decryptPGPKey } = usePushHooks();
+
   const { data: profilesManaged, loading: profilesManagedLoading } =
     useProfilesManagedQuery({
       skip: !address,
@@ -98,6 +109,60 @@ const WalletSelector: FC<WalletSelectorProps> = ({
         wallet: connector.name.toLowerCase()
       });
     } catch {}
+  };
+
+  const handlePushAuth = async (accessToken: string) => {
+    const { id: profileID, role } = parseJwt(accessToken);
+
+    if (role === 'wallet') {
+      return;
+    }
+    const account = getAccountFromProfile(profileID);
+
+    const user = await PushAPI.user.get({
+      account: account,
+      env: PUSH_ENV
+    });
+
+    const passwordHex = await signMessageAsync({
+      message: account
+    });
+
+    // stupid requirement by Push SDK to have special char even if the length is 32 char
+    const PASSWORD_PREFIX = '@HeY';
+    const password = `${PASSWORD_PREFIX}/${passwordHex}`;
+
+    if (!password) {
+      return setIsLoading(false);
+    }
+
+    let pgpPrivateKey: string | undefined;
+
+    if (!user) {
+      const response = await PushAPI.user.create({
+        account: account,
+        additionalMeta: {
+          NFTPGP_V1: { password: password }
+        },
+        env: PUSH_ENV,
+        signer: signer as PushAPI.SignerType
+      });
+
+      pgpPrivateKey = response.decryptedPrivateKey;
+    } else {
+      pgpPrivateKey = await decryptPGPKey(
+        password,
+        account,
+        user.encryptedPrivateKey
+      );
+    }
+
+    if (!pgpPrivateKey) {
+      return;
+    }
+    setConnectedProfile(user);
+    setPgpPassword(password);
+    setPgpPrivateKey(pgpPrivateKey);
   };
 
   const handleSign = async (id?: string) => {
@@ -124,10 +189,13 @@ const WalletSelector: FC<WalletSelectorProps> = ({
       });
       const accessToken = auth.data?.authenticate.accessToken;
       const refreshToken = auth.data?.authenticate.refreshToken;
+      await handlePushAuth(accessToken);
       signIn({ accessToken, refreshToken });
       Leafwatch.track(AUTH.SIWL);
       location.reload();
-    } catch {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const allProfiles = profilesManaged?.profilesManaged.items || [];
@@ -144,7 +212,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
   return activeConnector?.id ? (
     <div className="space-y-3">
       <div className="space-y-2.5">
-        {chain === CHAIN_ID ? (
+        {chain === CHAIN.id ? (
           profilesManagedLoading ? (
             <Card className="w-full dark:divide-gray-700" forceRounded>
               <div className="space-y-2 p-4 text-center text-sm font-bold">
@@ -170,7 +238,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                       isLoading && loggingInProfileId === profile.id ? (
                         <Spinner size="xs" />
                       ) : (
-                        <ArrowRightCircleIcon className="h-4 w-4" />
+                        <ArrowRightCircleIcon className="size-4" />
                       )
                     }
                     onClick={() => handleSign(profile.id)}
@@ -188,7 +256,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                   isLoading ? (
                     <Spinner size="xs" />
                   ) : (
-                    <ArrowRightCircleIcon className="h-4 w-4" />
+                    <ArrowRightCircleIcon className="size-4" />
                   )
                 }
                 onClick={() => handleSign()}
@@ -198,18 +266,18 @@ const WalletSelector: FC<WalletSelectorProps> = ({
             </div>
           )
         ) : (
-          <SwitchNetwork toChainId={CHAIN_ID} />
+          <SwitchNetwork toChainId={CHAIN.id} />
         )}
         {!IS_MAINNET && (
           <button
             className="flex items-center space-x-1 text-sm underline"
             onClick={() => {
               setShowSignup?.(true);
-             
+        
             }}
             type="button"
           >
-            <UserPlusIcon className="h-4 w-4" />
+            <UserPlusIcon className="size-4" />
             <div>Create a testnet account</div>
           </button>
         )}
@@ -217,62 +285,63 @@ const WalletSelector: FC<WalletSelectorProps> = ({
           className="flex items-center space-x-1 text-sm underline"
           onClick={() => {
             disconnect?.();
-            Leafwatch.track(AUTH.CHANGE_WALLET);
+         
           }}
           type="reset"
         >
-          <KeyIcon className="h-4 w-4" />
+          <KeyIcon className="size-4" />
           <div>Change wallet</div>
         </button>
       </div>
       {errorChallenge || errorAuthenticate ? (
         <div className="flex items-center space-x-1 font-bold text-red-500">
-          <XCircleIcon className="h-5 w-5" />
+          <XCircleIcon className="size-5" />
           <div>{Errors.SomethingWentWrong}</div>
         </div>
       ) : null}
     </div>
   ) : (
     <div className="inline-block w-full space-y-3 overflow-hidden text-left align-middle">
-      {connectors.map((connector) => {
-        return (
-          <button
-            className={cn(
-              {
-                'hover:bg-gray-100 dark:hover:bg-gray-700':
-                  connector.id !== activeConnector?.id
-              },
-              'flex w-full items-center justify-between space-x-2.5 overflow-hidden rounded-xl border px-4 py-3 outline-none dark:border-gray-700'
-            )}
-            disabled={connector.id === activeConnector?.id}
-            key={connector.id}
-            onClick={() => onConnect(connector)}
-            type="button"
-          >
-            <span>
-              {connector.id === 'injected'
-                ? 'Browser Wallet'
-                : getWalletDetails(connector.name).name}
-            </span>
-            <div className="flex items-center space-x-4">
-              {isConnectLoading && pendingConnector?.id === connector.id ? (
-                <Spinner className="mr-0.5" size="xs" />
-              ) : null}
+      {connectors
+        .filter(
+          // This removes last connector if it's injected
+          (connector, index, self) =>
+            self.findIndex((c) => c.type === connector.type) === index
+        )
+        .map((connector) => {
+          return (
+            <button
+              className={cn(
+                {
+                  'hover:bg-gray-100 dark:hover:bg-gray-700':
+                    connector.id !== activeConnector?.id
+                },
+                'flex w-full items-center justify-between space-x-2.5 overflow-hidden rounded-xl border px-4 py-3 outline-none dark:border-gray-700'
+              )}
+              disabled={connector.id === activeConnector?.id || isPending}
+              key={connector.id}
+              onClick={() => onConnect(connector)}
+              type="button"
+            >
+              <span>
+                {connector.id === 'injected'
+                  ? 'Browser Wallet'
+                  : getWalletDetails(connector.name).name}
+              </span>
               <img
                 alt={connector.id}
-                className="h-6 w-6"
+                className="size-6"
                 draggable={false}
                 height={24}
                 src={getWalletDetails(connector.name).logo}
                 width={24}
               />
-            </div>
-          </button>
-        );
-      })}
+            </button>
+          );
+        })}
       {error?.message ? (
         <div className="flex items-center space-x-1 text-red-500">
-          <XCircleIcon className="h-5 w-5" />
+          <XCircleIcon className="size-5" />
           <div>{error?.message || 'Failed to connect'}</div>
         </div>
       ) : null}

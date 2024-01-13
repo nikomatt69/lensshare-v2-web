@@ -17,12 +17,13 @@ import type { FC } from 'react';
 import { memo, useState } from 'react';
 import { isIOS, isMobile } from 'react-device-detect';
 
-import EncryptedPublication from './EncryptedPublication';
+
 import Embed from './HeyOpenActions/Embed';
 import Nft from './HeyOpenActions/Nft';
 import NotSupportedPublication from './NotSupportedPublication';
 import getSnapshotProposalId from '@lib/getSnapshotProposalId';
 import Snapshot from './HeyOpenActions/Snapshot';
+import EncryptedPublication from './EncryptedPublication';
 
 interface PublicationBodyProps {
   publication: AnyPublication;
@@ -59,8 +60,9 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   const [content, setContent] = useState(rawContent);
 
   if (targetPublication.isEncrypted) {
-    return <EncryptedPublication type={targetPublication.__typename} />;
+    return <EncryptedPublication publication={targetPublication} />;
   }
+
 
   if (!isPublicationMetadataTypeAllowed(metadata.__typename)) {
     return <NotSupportedPublication type={metadata.__typename} />;
@@ -75,8 +77,12 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   const showEmbed = metadata.__typename === 'EmbedMetadataV3';
   // Show attachments if it's there
   const showAttachments = filteredAttachments.length > 0 || filteredAsset;
+
+  const showSharingLink = metadata.__typename === 'LinkMetadataV3';
+  // Show oembed if no NFT, no attachments, no quoted publication
   // Show oembed if no NFT, no attachments, no snapshot, no quoted publication
   const showOembed =
+  !showSharingLink &&
     hasURLs &&
     !showNft &&
     !showLive &&
@@ -127,11 +133,14 @@ const PublicationBody: FC<PublicationBodyProps> = ({
           <Video src={metadata.liveURL || metadata.playbackURL} />
         </div>
       ) : null}
+       {showSharingLink ? (
+        <Oembed publicationId={publication.id} url={metadata.sharingLink} />
+      ) : null}
       {showOembed ? (
         <Oembed
           url={urls[0]}
           publicationId={publication.id}
-          onData={onOembedData}
+
         />
       ) : null}
       {targetPublication.__typename === 'Quote' && (

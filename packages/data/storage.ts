@@ -14,7 +14,8 @@ export const Localstorage = {
   LocaleStore: 'locale.store',
   FingerprintStore: 'fingerprint.store',
   FeaturesCache: 'gbFeaturesCache',
-  LeafwatchStore: 'leafwatch.store'
+  LeafwatchStore: 'leafwatch.store',
+  PushStore: 'push.store',
 };
 
 export const IndexDB = {

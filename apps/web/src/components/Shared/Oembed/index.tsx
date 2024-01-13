@@ -7,56 +7,55 @@ import urlcat from 'urlcat';
 
 import Embed from './Embed';
 import Player from './Player';
+import getFavicon from 'src/utils/oembed/getFavicon';
+
 
 interface OembedProps {
-  url?: string;
+  className?: string;
   publicationId?: string;
-  onData: (data: OG) => void;
+  url?: string;
 }
 
-const Oembed: FC<OembedProps> = ({ url, publicationId, onData }) => {
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['oembed', url],
+const Oembed: FC<OembedProps> = ({ className = '', publicationId, url }) => {
+  const { data, error, isLoading } = useQuery({
+    enabled: Boolean(url),
     queryFn: async () => {
-      const response = await axios.get(`/api/oembed`, {
+      const response = await axios.get(`api/oembed`, {
         params: { url }
       });
       return response.data.oembed;
     },
-    enabled: Boolean(url)
+    queryKey: ['oembed', url],
+    refetchOnMount: false
   });
 
   if (isLoading || error || !data) {
     return null;
-  } else if (data) {
-    onData(data);
   }
 
   const og: OG = {
-    url: url as string,
-    title: data?.title,
     description: data?.description,
-    site: data?.site,
-    favicon: urlcat(
-      'https://external-content.duckduckgo.com/ip3/:domain.ico' ||
-      'https://www.google.com/s2/favicons',
-      {
-        domain: data.url.replace('https://', '').replace('http://', '')
-      }
-    ),
+    favicon: getFavicon(data.url),
+    html: data?.html,
     image: data?.image,
     isLarge: data?.isLarge,
-    html: data?.html
+    site: data?.site,
+    title: data?.title,
+    url: url as string
   };
 
   if (!og.title && !og.html) {
     return null;
   }
 
-  return og.html ? (
-    <Player og={og} />
-  ) : (
-    <Embed og={og} publicationId={publicationId} />
+  return (
+    <div className={className}>
+      {og.html ? (
+        <Player og={og} />
+      ) : (
+        <Embed og={og} publicationId={publicationId} />
+      )}
+    </div>
   );
 };
 

@@ -4,7 +4,7 @@ import { video as PushVideo, VideoCallStatus } from '@pushprotocol/restapi';
 import { initVideoCallData } from '@pushprotocol/restapi/src/lib/video';
 import { produce } from 'immer';
 import { useEffect } from 'react';
-import { CHAIN_ID } from 'src/constants';
+import { CHAIN } from 'src/constants';
 import useEthersWalletClient from 'src/hooks/useEthersWalletClient';
 import { usePushChatStore } from 'src/store/push-chat';
 
@@ -59,7 +59,7 @@ const usePushVideoCall = () => {
 
     const videoObject = new PushVideo.Video({
       signer: walletClient as SignerType,
-      chainId: CHAIN_ID,
+      chainId: CHAIN.id,
       pgpPrivateKey: decryptedPgpPvtKey,
       env: PUSH_ENV,
       setData: setVideoCallData

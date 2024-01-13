@@ -7,9 +7,5 @@ const POLYGON_MAINNET = {
   name: 'Polygon Mainnet',
   rpcUrls: { default: 'https://polygon.publicnode.com' }
 };
-const POLYGON_MUMBAI = {
-  ...polygonMumbai,
-  name: 'Polygon Mumbai',
-  rpcUrls: { default: 'https://polygon-mumbai-bor.publicnode.com' }
-};
-export const CHAIN_ID = IS_MAINNET ? POLYGON_MAINNET.id : POLYGON_MAINNET.id;
+
+export const CHAIN = IS_MAINNET ? polygon : polygon;

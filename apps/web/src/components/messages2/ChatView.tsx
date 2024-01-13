@@ -2,6 +2,7 @@
 import SearchUser from '@components/Shared/SearchUser';
 import { PUSH_ENV } from '@lensshare/data/constants';
 import formatAddress from '@lensshare/lib/formatAddress';
+import { PGPHelper } from '@pushprotocol/restapi/src/lib/chat/helpers';
 import {
   Button,
   GridItemEight,
@@ -128,6 +129,7 @@ const ChatView = () => {
           env: PUSH_ENV,
           messages: [data as any],
           pgpPrivateKey: pgpPvtKey,
+          pgpHelper: PGPHelper
 
         });
 

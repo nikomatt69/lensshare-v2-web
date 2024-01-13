@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 const handler = (_req: NextApiRequest, res: NextApiResponse) => {
   try {
     res.status(200).json({
-      message: 'Hey API ✨'
+      message: 'Lensshare API ✨'
     });
   } catch {
     res.status(500).json({ success: false });

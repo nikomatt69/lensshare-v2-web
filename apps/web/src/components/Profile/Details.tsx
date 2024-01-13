@@ -3,7 +3,6 @@ import Follow from '@components/Shared/Profile/Follow';
 import Unfollow from '@components/Shared/Profile/Unfollow';
 import Slug from '@components/Shared/Slug';
 import SuperFollow from '@components/Shared/SuperFollow';
-import ProfileStaffTool from '@components/StaffTools/Panels/Profile';
 import {
   Cog6ToothIcon,
   EnvelopeIcon,
@@ -42,10 +41,12 @@ import MutualFollowers from './MutualFollowers';
 import MutualFollowersList from './MutualFollowers/List';
 import ScamWarning from './ScamWarning';
 import MeetingIcon from '@components/Meet/MeetingIcon';
-import MessageIcon from '@components/Messages/MessageIcon';
 import SuperfluidSubscribe from '@components/Superfluid';
 import TbaBadge from './TbaBadge';
 import IsVerified from '@components/Shared/IsVerified';
+import router from 'next/router';
+import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
+import Message from '@components/Messages/Push/Header/Message';
 
 interface DetailsProps {
   profile: Profile;
@@ -55,11 +56,24 @@ interface DetailsProps {
 
 const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-
+  const { setRecipientProfile } = usePushChatStore();
   const [showMutualFollowersModal, setShowMutualFollowersModal] =
     useState(false);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const { resolvedTheme } = useTheme();
+
+  const onMessageClick = () => {
+    const conversationKey = `${profile.ownedBy.address}/${profile.id}`;
+    setRecipientProfile({
+      id: profile.id,
+      localHandle: profile.handle?.localName!,
+      ownedBy: {
+        address: profile.ownedBy.address
+      },
+      threadHash: null
+    });
+    router.push(`/messages/${conversationKey}`);
+  };
 
   const MetaDetails = ({
     children,
@@ -174,13 +188,16 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
               />
             )
           ) : null}
+
+          {currentProfile && <Message onClick={onMessageClick} />}
           <ProfileMenu profile={profile} />
           <div className="text-brand-500">{<MeetingIcon />}</div>
-           <Link href={`/messages2`}><EnvelopeIcon className='h-6 w-6' /></Link>
-            {currentProfile?.id !== profile.id && (
-              <SuperfluidSubscribe profile={profile} />
-            )}
-          
+          <Link href={`/messages2`}>
+            <EnvelopeIcon className="h-6 w-6" />
+          </Link>
+          {currentProfile?.id !== profile.id && (
+            <SuperfluidSubscribe profile={profile} />
+          )}
         </div>
         {currentProfile?.id !== profile.id ? (
           <>
@@ -313,8 +330,6 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
           <InvitedBy profile={profile.invitedBy} />
         </>
       ) : null}
-
-      
     </div>
   );
 };
