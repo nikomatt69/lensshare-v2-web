@@ -1,7 +1,6 @@
 import Slug from '@components/Shared/Slug';
 import { PhoneIcon } from '@heroicons/react/24/outline';
 import { STATIC_ASSETS_URL } from '@lensshare/data/constants';
-import formatAddress from '@lensshare/lib/formatAddress';
 import getAvatar2 from '@lensshare/lib/getAvatar2';
 import getStampFyiURL from '@lensshare/lib/getStampFyiURL';
 import { Card, Image } from '@lensshare/ui';
@@ -18,13 +17,15 @@ import usePushHooks from 'src/hooks/messaging/push/usePush';
 import type { Message } from '@pushprotocol/restapi';
 import type { Profile } from 'src/store/persisted/usePushChatStore';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
-import { DisplayedMessage } from '@lib/mapReactionsToMessages';
+import type { DisplayedMessage } from '@lib/mapReactionsToMessages';
+import formatAddress from '@lensshare/lib/formatAddress';
+import getAvatar from '@lensshare/lib/getAvatar';
 interface MessageHeaderProps {
   profile?: Profile;
 }
 
 export default function Header({ profile }: MessageHeaderProps) {
-  const avatar = getAvatar2(profile?.id);
+  const avatar = getAvatar(profile?.id);
   const [show, setShow] = useState(false);
   const [meetingUrl, setMeetingUrl] = useState('');
   const currentProfile = useAppStore((state) => state.currentProfile);
@@ -118,7 +119,6 @@ export default function Header({ profile }: MessageHeaderProps) {
     null
   );
 
-
   const onSendMessage = useCallback(
     async (message: string) => {
       if (!message) {
@@ -157,10 +157,14 @@ export default function Header({ profile }: MessageHeaderProps) {
             />
 
             <div className="flex flex-col">
-              <Slug className="text-md" slug={profile.localHandle!} />
-              <p className="text-xs">
+              <p className="text-base">
                 {formatAddress(profile?.ownedBy.address)}
               </p>
+              <Slug
+                className="text-sm"
+                prefix="@"
+                slug={profile.localHandle!}
+              />
             </div>
           </div>
         ) : null}

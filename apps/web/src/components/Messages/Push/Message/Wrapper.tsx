@@ -21,7 +21,7 @@ export const MessageWrapper: React.FC<MessageWrapperProps> = ({
       className={clsx('relative w-fit max-w-fit font-medium', {
         'border py-3 pl-4 pr-[50px]': !isAttachment,
         'rounded-xl rounded-tl-sm': messageOrigin === MessageOrigin.Receiver,
-        'rounded-xl rounded-tr-sm bg-brand-500':
+        'bg-brand-500 rounded-xl rounded-tr-sm':
           messageOrigin === MessageOrigin.Sender
       })}
     >
