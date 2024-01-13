@@ -1,22 +1,24 @@
 import Slug from '@components/Shared/Slug';
 import { PhoneIcon } from '@heroicons/react/24/outline';
-import { BASE_URL, STATIC_ASSETS_URL } from '@lensshare/data/constants';
+import { STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import formatAddress from '@lensshare/lib/formatAddress';
 import getAvatar2 from '@lensshare/lib/getAvatar2';
 import getStampFyiURL from '@lensshare/lib/getStampFyiURL';
 import { Card, Image } from '@lensshare/ui';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { useAppStore } from 'src/store/useAppStore';
 import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
 import { computeSendPayload, createTemporaryMessage } from '../helper';
-import {usePublicationStore} from 'src/store/non-persisted/usePublicationStore';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 import toast from 'react-hot-toast';
 import usePushHooks from 'src/hooks/messaging/push/usePush';
 import type { Message } from '@pushprotocol/restapi';
-import { Profile, usePushChatStore } from 'src/store/persisted/usePushChatStore';
+import type { Profile } from 'src/store/persisted/usePushChatStore';
+import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
+import { DisplayedMessage } from '@lib/mapReactionsToMessages';
 interface MessageHeaderProps {
   profile?: Profile;
 }
@@ -112,6 +114,32 @@ export default function Header({ profile }: MessageHeaderProps) {
     await sendMessageAndHandleResponse(messageContent);
   };
 
+  const [replyMessage, setReplyMessage] = useState<DisplayedMessage | null>(
+    null
+  );
+
+
+  const onSendMessage = useCallback(
+    async (message: string) => {
+      if (!message) {
+        return;
+      }
+      const reference = replyMessage?.link;
+      if (!reference) {
+        await sendMessage({ content: message, type: 'Text' });
+      } else {
+        setReplyMessage(null);
+        await sendMessage({
+          content: { content: message, type: 'Text' },
+          reference: reference,
+          type: 'Reply'
+        });
+      }
+      setReplyMessage(null);
+    },
+    [replyMessage, sendMessage]
+  );
+
   return (
     <section className="flex w-full justify-between border-b px-5	py-2.5">
       <div className="flex items-center">
@@ -157,10 +185,8 @@ export default function Header({ profile }: MessageHeaderProps) {
             const currentUrl = window.location.href;
             const url = currentUrl.match(/^https?:\/\/([^/]+)/)?.[0];
             const meetingUrl = `${url}/meet/${roomId}`;
-            const sentMessage = await sendMessage(
-              `${BASE_URL}/meet/${roomId}` as unknown  as Message
-            );
-            sentMessage
+            onSendMessage(`lenshareapp.xyz/meet/${roomId}`);
+
             handleSend();
 
             // Instead of sending a message, set the meeting URL in the state

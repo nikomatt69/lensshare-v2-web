@@ -15,14 +15,17 @@ import { useAppStore } from 'src/store/useAppStore';
 import SettingsSidebar from '../Sidebar';
 import { useDisconnectXmtp } from 'src/hooks/useXmtpClient';
 import Custom404 from 'src/pages/404';
+import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 const CleanupSettings: NextPage = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
   const disconnectXmtp = useDisconnectXmtp();
-
+  const resetPushChatStore = usePushChatStore(
+    (state) => state.resetPushChatStore
+  );
   if (!currentProfile) {
     return <Custom404 />;
   }
-
+ 
   const cleanup = (key: string) => {
     localStorage.removeItem(key);
     indexedDB.deleteDatabase(key)
@@ -79,7 +82,7 @@ const CleanupSettings: NextPage = () => {
               </div>
               <Button
                 onClick={() => {
-                  cleanup(IndexDB.MessageStore && Localstorage.MessageStore ), disconnectXmtp();
+                  cleanup(IndexDB.MessageStore && Localstorage.PushStore ), resetPushChatStore();
                   toast.success(`Cleared DM keys`);
                 }}
               >

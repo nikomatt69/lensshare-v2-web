@@ -70,11 +70,17 @@ const WalletSelector: FC<WalletSelectorProps> = ({
   };
 
   const chain = useChainId();
-  const { connectAsync, connectors, error, isPending } = useConnect();
+  const {
+    connectAsync,
+    connectors,
+    error,
+    isLoading: isConnectLoading,
+    pendingConnector
+  } = useConnect({ chainId: CHAIN.id });
 
   const { disconnect } = useDisconnect();
   const { address, connector: activeConnector } = useAccount();
-  const { signMessageAsync } = useSignMessage({ mutation: { onError } });
+  const { signMessageAsync } = useSignMessage({ onError });
   const [loadChallenge, { error: errorChallenge }] = useChallengeLazyQuery({
     fetchPolicy: 'no-cache'
   });
@@ -129,7 +135,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
     });
 
     // stupid requirement by Push SDK to have special char even if the length is 32 char
-    const PASSWORD_PREFIX = '@HeY';
+    const PASSWORD_PREFIX = '@ShRe';
     const password = `${PASSWORD_PREFIX}/${passwordHex}`;
 
     if (!password) {
@@ -238,7 +244,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                       isLoading && loggingInProfileId === profile.id ? (
                         <Spinner size="xs" />
                       ) : (
-                        <ArrowRightCircleIcon className="size-4" />
+                        <ArrowRightCircleIcon className="h-4 w-4" />
                       )
                     }
                     onClick={() => handleSign(profile.id)}
@@ -256,7 +262,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                   isLoading ? (
                     <Spinner size="xs" />
                   ) : (
-                    <ArrowRightCircleIcon className="size-4" />
+                    <ArrowRightCircleIcon className="h-4 w-4" />
                   )
                 }
                 onClick={() => handleSign()}
@@ -273,11 +279,10 @@ const WalletSelector: FC<WalletSelectorProps> = ({
             className="flex items-center space-x-1 text-sm underline"
             onClick={() => {
               setShowSignup?.(true);
-        
             }}
             type="button"
           >
-            <UserPlusIcon className="size-4" />
+            <UserPlusIcon className="h-4 w-4" />
             <div>Create a testnet account</div>
           </button>
         )}
@@ -285,17 +290,17 @@ const WalletSelector: FC<WalletSelectorProps> = ({
           className="flex items-center space-x-1 text-sm underline"
           onClick={() => {
             disconnect?.();
-         
+            Leafwatch.track(AUTH.CHANGE_WALLET);
           }}
           type="reset"
         >
-          <KeyIcon className="size-4" />
+          <KeyIcon className="h-4 w-4" />
           <div>Change wallet</div>
         </button>
       </div>
       {errorChallenge || errorAuthenticate ? (
         <div className="flex items-center space-x-1 font-bold text-red-500">
-          <XCircleIcon className="size-5" />
+          <XCircleIcon className="h-5 w-5" />
           <div>{Errors.SomethingWentWrong}</div>
         </div>
       ) : null}
@@ -303,11 +308,15 @@ const WalletSelector: FC<WalletSelectorProps> = ({
   ) : (
     <div className="inline-block w-full space-y-3 overflow-hidden text-left align-middle">
       {connectors
-        .filter(
-          // This removes last connector if it's injected
-          (connector, index, self) =>
-            self.findIndex((c) => c.type === connector.type) === index
-        )
+        .filter((connector) => {
+          if (
+            connector.id === 'safe' &&
+            !document.location.ancestorOrigins[0]?.includes('app.safe.global')
+          ) {
+            return false;
+          }
+          return true;
+        })
         .map((connector) => {
           return (
             <button
@@ -318,7 +327,7 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                 },
                 'flex w-full items-center justify-between space-x-2.5 overflow-hidden rounded-xl border px-4 py-3 outline-none dark:border-gray-700'
               )}
-              disabled={connector.id === activeConnector?.id || isPending}
+              disabled={connector.id === activeConnector?.id}
               key={connector.id}
               onClick={() => onConnect(connector)}
               type="button"
@@ -328,20 +337,25 @@ const WalletSelector: FC<WalletSelectorProps> = ({
                   ? 'Browser Wallet'
                   : getWalletDetails(connector.name).name}
               </span>
-              <img
-                alt={connector.id}
-                className="size-6"
-                draggable={false}
-                height={24}
-                src={getWalletDetails(connector.name).logo}
-                width={24}
-              />
+              <div className="flex items-center space-x-4">
+                {isConnectLoading && pendingConnector?.id === connector.id ? (
+                  <Spinner className="mr-0.5" size="xs" />
+                ) : null}
+                <img
+                  alt={connector.id}
+                  className="h-6 w-6"
+                  draggable={false}
+                  height={24}
+                  src={getWalletDetails(connector.name).logo}
+                  width={24}
+                />
+              </div>
             </button>
           );
         })}
       {error?.message ? (
         <div className="flex items-center space-x-1 text-red-500">
-          <XCircleIcon className="size-5" />
+          <XCircleIcon className="h-5 w-5" />
           <div>{error?.message || 'Failed to connect'}</div>
         </div>
       ) : null}
