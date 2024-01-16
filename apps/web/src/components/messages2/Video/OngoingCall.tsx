@@ -1,15 +1,12 @@
-
-
 import React from 'react';
 import { usePushChatStore } from 'src/store/push-chat';
-import { Card , Image} from '@lensshare/ui';
+import { Card, Image } from '@lensshare/ui';
 import usePushVideoCall from './usePushVideoCall';
 import Video from './Video';
 import { getProfileFromDID } from './helper';
 import LensHandleTag from './LensHandleTag';
 import MediaToggleButton from './MediaToggleButton';
 import CallButton from './CallButton';
-
 
 const OngoingCall = () => {
   const connectedProfile = usePushChatStore((state) => state.connectedProfile);

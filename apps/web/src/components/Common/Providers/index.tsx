@@ -39,13 +39,11 @@ const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <ErrorBoundary>
       <SW />
-      <LeafwatchProvider />
       <Web3Provider>
         <ApolloProvider client={lensApolloClient}>
           <LensSubscriptionsProvider />
           <QueryClientProvider client={queryClient}>
             <PreferencesProvider />
-            <TbaStatusProvider />
             <FeaturedGroupsProvider />
             <LivepeerConfig client={livepeerClient} theme={getLivepeerTheme}>
               <ThemeProvider>

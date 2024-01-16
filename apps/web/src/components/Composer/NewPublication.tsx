@@ -59,6 +59,7 @@ import LivestreamEditor from './Actions/LivestreamSettings/LivestreamEditor';
 import PollEditor from './Actions/PollSettings/PollEditor';
 import Editor from './Editor';
 import Discard from './Post/Discard';
+import LinkPreviews from './LinkPreviews';
 
 const Attachment = dynamic(
   () => import('@components/Composer/Actions/Attachment'),
@@ -132,8 +133,6 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     setShowLiveVideoEditor,
     resetLiveVideoConfig
   } = usePublicationStore();
-
-  
 
   // Collect module store
   const { collectModule, reset: resetCollectSettings } =
@@ -541,6 +540,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           />
         </Wrapper>
       ) : null}
+      <LinkPreviews />
       <div className="block items-center px-5 sm:flex">
         <div className="flex items-center space-x-4">
           <Attachment />

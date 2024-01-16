@@ -15,7 +15,7 @@ const MeetingIcon: FC = () => {
     <div>
       <div className="mx-1 mt-3 flex">
         <img
-          src={`${STATIC_ASSETS_URL}/images/camera-video.svg`}
+          src={`${STATIC_ASSETS_URL}/push/callacceptbtn.svg`}
           onClick={async () => {
             const apiCall = await fetch('/api/create-room', {
               mode: 'no-cors',
@@ -34,12 +34,12 @@ const MeetingIcon: FC = () => {
             const { roomId } = data.data;
             const currentUrl = window.location.href;
             const url = currentUrl.match(/^https?:\/\/([^/]+)/)?.[0];
-            const meetingUrl = `${url}/meet/${roomId}`;
+            const meetingUrl = `${url}/spaces/${roomId}`;
 
             // Instead of sending a message, set the meeting URL in the state
             setShow(true);
             setMeetingUrl(meetingUrl);
-            router.push(`${url}/meet/${roomId}`);
+            router.push(`${url}/spaces/${roomId}`);
           }}
           className="text-brand-500 mb-1 mr-1 inline h-7 w-7 cursor-pointer"
         />

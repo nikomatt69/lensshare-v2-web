@@ -23,7 +23,7 @@ export const ADMIN_ADDRESS = '0x38B2b78246B9b162f3B365f3970ac77FB07AbF90';
 export const ADMIN_ADDRESS2 = '0xD47904193219374AcBe05fD0D6c42F5bC6349028';
 export const ADMIN_ADDRESS3 = '0x64979cA4449b9Db7aaB4052d96E42D3A5EAF4513';
 export const REWARDS_ADDRESS = '0x38B2b78246B9b162f3B365f3970ac77FB07AbF90';
-
+export const ZERO_PUBLICATION_ID = '0x00-0x00';
 export const LENSHUB_PROXY = getEnvConfig().lensHubProxyAddress;
 export const DEFAULT_COLLECT_TOKEN = getEnvConfig().defaultCollectToken;
 export const LIT_PROTOCOL_ENVIRONMENT = getEnvConfig().litProtocolEnvironment;

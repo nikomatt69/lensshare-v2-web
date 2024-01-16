@@ -67,9 +67,9 @@ const Navbar: FC = () => {
           current={pathname === '/explore'}
         />
         <NavItem
-          current={pathname === '/messages2'}
+          current={pathname === '/messages'}
           name="Messages"
-          url="/messages2"
+          url="/messages"
         />
         {currentProfile?.ownedBy.address === ADMIN_ADDRESS2 ? (
           <NavItem current={pathname === '/staff'} name="Staff" url="/staff" />

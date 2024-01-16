@@ -11,7 +11,8 @@
   "dependencies": {
     "@apollo/client": "^3.8.7",
     "@lensshare/data": "*",
-    "axios": "^1.6.0"
+    "axios": "^1.6.2",
+    "graphql-ws": "^5.14.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.0",

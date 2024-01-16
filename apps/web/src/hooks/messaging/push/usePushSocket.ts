@@ -1,9 +1,5 @@
 import type { IMessageIPFSWithCID } from '@pushprotocol/restapi';
 
-import {
-  getAccountFromProfile,
-  getProfileIdFromDID
-} from '@components/Messages/Push/helper';
 import { createSocketConnection, EVENTS } from '@pushprotocol/socket';
 
 
@@ -14,6 +10,8 @@ import usePushHooks from './usePush';
 import { useAppStore } from 'src/store/useAppStore';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 import { PUSH_ENV } from '@lensshare/data/constants';
+import { getAccountFromProfile, getProfileIdFromDID } from './helper2';
+
 
 
 const usePushSocket = () => {

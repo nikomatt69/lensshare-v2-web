@@ -1,8 +1,7 @@
-
 import { VideoCallStatus } from '@pushprotocol/restapi';
 import { useEffect } from 'react';
 import { usePushChatStore } from 'src/store/push-chat';
-import { Modal, Image} from '@lensshare/ui';
+import { Modal, Image } from '@lensshare/ui';
 import usePushVideoCall from './usePushVideoCall';
 import ProfileInfo from './ProfileInfo';
 import { getProfileFromDID } from './helper';

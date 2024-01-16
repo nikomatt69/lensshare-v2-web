@@ -7,8 +7,7 @@ import imageKit from '@lensshare/lib/imageKit';
 import { Button, Card, Image, LightBox } from '@lensshare/ui';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
 import { type FC, useEffect, useState } from 'react';
-import {usePushChatStore} from 'src/store/persisted/usePushChatStore';
-
+import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 
 interface AttachmentProps {
   message: IMessageIPFS | IMessageIPFSWithCID;
@@ -119,7 +118,7 @@ const Attachment: FC<AttachmentProps> = ({ message }) => {
     if (contentType?.startsWith('image/')) {
       return renderImage();
     }
-    return <Oembed  url={attachmentURI} />;
+    return <Oembed url={attachmentURI} />;
   };
 
   const renderers = {

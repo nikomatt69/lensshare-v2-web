@@ -17,7 +17,7 @@ import type { InfiniteData } from '@tanstack/react-query';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import useMessageStore from 'src/store/useMessageStore2';
+import useMessageStore from 'src/store/useMessageStore';
 import { useAccount, useWalletClient } from 'wagmi';
 
 import ChatListItemContainer from './ChatContainer';
@@ -130,7 +130,6 @@ const ChatView = () => {
           messages: [data as any],
           pgpPrivateKey: pgpPvtKey,
           pgpHelper: PGPHelper
-
         });
 
         if (!decrypted) {
@@ -197,7 +196,7 @@ const ChatView = () => {
         {isChatsLoading ? (
           <Loading />
         ) : (
-          <div className="rounded-xl bg-slate-200 p-2">
+          <div className="rounded-xl bg-gray-600/80 p-2">
             <SearchUser
               onChange={(event) => setSearchValue(event.target.value)}
               inputRef={inputRef}
@@ -222,7 +221,7 @@ const ChatView = () => {
               </div>
             )}
             <Collapsible.Root
-              className="inline-flex-col m-1 mx-auto w-[300px] items-center justify-between"
+              className="inline-flex-col m-1 mx-auto w-[360px] items-center justify-between"
               open={open}
               onOpenChange={setOpen}
             >
@@ -234,7 +233,7 @@ const ChatView = () => {
                 }}
               >
                 <span
-                  className="text-violet11 text-[15px] leading-[25px]"
+                  className="text-brand-500 text-[15px] leading-[25px]"
                   style={{ color: 'white' }}
                 />
                 <Collapsible.Trigger asChild>
@@ -255,7 +254,7 @@ const ChatView = () => {
                     };
                     return (
                       <div
-                        className="bg  cursor-pointer p-0.5"
+                        className="cursor-pointer   p-0.5"
                         key={chat.chatId}
                         onClick={() => {
                           if (

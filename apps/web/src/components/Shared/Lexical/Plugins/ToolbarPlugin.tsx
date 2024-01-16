@@ -1,3 +1,4 @@
+import cn from '@lensshare/ui/cn';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   $getSelection,
@@ -41,29 +42,32 @@ const ToolbarPlugin: FC = () => {
   return (
     <div className="toolbar-icons divider flex items-center space-x-1 px-5 py-2">
       <button
-        className={isBold ? 'bg-brand-100' : ''}
-        title="Bold"
+        className={cn(isBold && 'bg-brand-100', 'outline-brand-500')}
         onClick={() => {
           activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
         }}
+        title="Bold"
+        type="button"
       >
-        <i className="toolbar-icon bold text-brand" />
+        <i className="toolbar-icon bold text-brand-500" />
       </button>
       <button
-        className={isItalic ? 'bg-brand-100' : ''}
-        title="Italic"
+        className={cn(isItalic && 'bg-brand-100', 'outline-brand-500')}
         onClick={() => {
           activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
         }}
+        title="Italic"
+        type="button"
       >
         <i className="toolbar-icon italic" />
       </button>
       <button
-        className={isCode ? 'bg-brand-100' : ''}
-        title="Code"
+        className={cn(isCode && 'bg-brand-100', 'outline-brand-500')}
         onClick={() => {
           activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
         }}
+        title="Code"
+        type="button"
       >
         <i className="toolbar-icon code" />
       </button>

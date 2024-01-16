@@ -46,7 +46,8 @@ import TbaBadge from './TbaBadge';
 import IsVerified from '@components/Shared/IsVerified';
 import router from 'next/router';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
-import Message from '@components/Messages/Push/Header/Message';
+import Message from './Message';
+
 
 interface DetailsProps {
   profile: Profile;
@@ -189,10 +190,10 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
             )
           ) : null}
 
-          {currentProfile && <Message onClick={onMessageClick} />}
+
           <ProfileMenu profile={profile} />
           <div className="text-brand-500">{<MeetingIcon />}</div>
-          <Link href={`/messages2`}>
+          <Link href={`/messages`}>
             <EnvelopeIcon className="h-6 w-6" />
           </Link>
           {currentProfile?.id !== profile.id && (

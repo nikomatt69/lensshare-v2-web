@@ -4,7 +4,7 @@ import type {
   QueryFunction
 } from '@tanstack/react-query';
 import { PGPHelper } from '@pushprotocol/restapi/src/lib/chat/helpers';
-import { getAccountFromProfile } from '@components/Messages/Push/helper';
+
 import * as PushAPI from '@pushprotocol/restapi';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 
@@ -14,6 +14,7 @@ import { useProfileStore } from 'src/store/persisted/useProfileStore';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 import { PUSH_ENV } from '@lensshare/data/constants';
 import { useAppStore } from 'src/store/useAppStore';
+import { getAccountFromProfile } from './helper2';
 
 export const MAX_CHAT_ITEMS = 30;
 

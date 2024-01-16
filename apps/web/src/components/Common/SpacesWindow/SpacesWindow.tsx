@@ -2,7 +2,7 @@
 
 import type { FC } from 'react';
 import React, { createRef, useState } from 'react';
-import { useAppStore } from 'src/store/app';
+import { useAppStore } from 'src/store/useAppStore';
 
 import SpaceWindowHeader from './SpaceWindowHeader';
 import { HTMLAudioElementWithSetSinkId } from './SpacesTypes';

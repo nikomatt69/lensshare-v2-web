@@ -1,11 +1,11 @@
-
 import { Image } from '@lensshare/ui';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
-import Video from '@components/Shared/Video';
 import type {
   DisplayedMessage,
   ParentMessage
 } from '@lib/mapReactionsToMessages';
+import Attachment from './Attachment';
+import type { IMessageIPFSWithCID } from '@pushprotocol/restapi';
 const RenderMessage = ({
   message
 }: {
@@ -23,9 +23,9 @@ const RenderMessage = ({
   if (message.messageType === MessageType.TEXT) {
     return message.messageContent;
   }
-  if (message.messageType === MessageType.VIDEO) {
+  if (message.messageType === MessageType.MEDIA_EMBED) {
     return (
-      <Video src={message.messageContent} poster={message.messageContent} />
+      <Attachment message={message.messageContent as unknown as IMessageIPFSWithCID} />
     );
   }
 

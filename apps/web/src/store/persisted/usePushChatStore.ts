@@ -1,11 +1,12 @@
-import type { IFeeds, IMessageIPFSWithCID, IUser } from '@pushprotocol/restapi';
+import type { IFeeds, IMessageIPFSWithCID, IUser,  video as PushVideo,
+  VideoCallData } from '@pushprotocol/restapi';
 
 import { IS_MAINNET } from '@lensshare/data/constants';
 import { Localstorage } from '@lensshare/data/storage';
 import { ENV } from '@pushprotocol/restapi/src/lib/constants';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
+import { initVideoCallData } from '@pushprotocol/restapi/src/lib/video';
 export const PUSH_TABS = {
   CHATS: 'CHATS',
   REQUESTS: 'REQUESTS'
@@ -52,6 +53,10 @@ interface IPushChatStore {
   setRecipientProfile: (profile: Profile) => void;
   setReplyToMessage: (message: IMessageIPFSWithCID | null) => void;
   updateRequestsFeed: (requestsFeed: IFeeds[]) => void;
+  videoCallObject: PushVideo.Video | null;
+  setVideoCallObject: (videoCallObject: PushVideo.Video | null) => void;
+  videoCallData: VideoCallData;
+  setVideoCallData: (fn: (data: VideoCallData) => VideoCallData) => void;
 }
 
 export const usePushChatStore = create(
@@ -97,6 +102,11 @@ export const usePushChatStore = create(
             [uri]: contentType
           }
         })),
+        videoCallObject: null,
+  setVideoCallObject: (videoCallObject) => set(() => ({ videoCallObject })),
+  videoCallData: initVideoCallData,
+  setVideoCallData: (fn) =>
+    set((state) => ({ videoCallData: fn(state.videoCallData) })),
       setPgpPassword: (pgpPassword) => set(() => ({ pgpPassword })),
       setPgpPrivateKey: (pgpPrivateKey) => set(() => ({ pgpPrivateKey })),
       setRecipientChat: (chat: IMessageIPFSWithCID[], replaceId?: string) =>

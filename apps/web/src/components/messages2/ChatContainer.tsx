@@ -12,7 +12,7 @@ import { PUSH_ENV, STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import formatAddress from '@lensshare/lib/formatAddress';
 import { Card, Image } from '@lensshare/ui';
 import { transformMessages } from '@lib/mapReactionsToMessages';
-import { chat } from '@pushprotocol/restapi';
+import { VideoCallStatus, chat } from '@pushprotocol/restapi';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
 import {
   useInfiniteQuery,
@@ -23,7 +23,7 @@ import clsx from 'clsx';
 import { formatRelative } from 'date-fns';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
-import useMessageStore from 'src/store/useMessageStore2';
+import useMessageStore from 'src/store/useMessageStore';
 import { useWalletClient } from 'wagmi';
 
 import ChatReactionPopover from './ChatReactionPopover';
@@ -48,6 +48,11 @@ import { useDisplayName } from '@huddle01/react/app-utils';
 import { useTheme } from 'next-themes';
 import { useMeetPersistStore } from 'src/store/meet';
 import Link from 'next/link';
+import OngoingCall from './Video/OngoingCall';
+import { usePushChatStore } from 'src/store/push-chat';
+
+import OutgoingCallModal from './Video/OutgoingCallModal';
+import IncomingCallModal from './Video/IncomingCallModal';
 
 type SavedQueryData = {
   pageParams: string[];
@@ -322,7 +327,8 @@ const ChatListItemContainer = ({
 
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const [following, setFollowing] = useState(true);
-
+  const videoCallData = usePushChatStore((state) => state.videoCallData);
+  const currentStatus = videoCallData.incoming[0].status;
   const [show, setShow] = useState(false);
   const [meetingUrl, setMeetingUrl] = useState('');
 
@@ -334,9 +340,11 @@ const ChatListItemContainer = ({
   );
 
   const { setRequestVideoCall } = usePushVideoCall();
-
+  if (currentStatus >= VideoCallStatus.CONNECTED) {
+    return <OngoingCall />;
+  }
   return (
-    <div className="border-brand-700 mt-3 flex h-[-webkit-calc(86vh-5.5rem)] w-full flex-col justify-between rounded-xl border-2 dark:bg-gray-800 md:h-[-webkit-calc(100vh-5.5rem)] lg:h-[-webkit-calc(100vh-5.5rem)]">
+    <div className="mt-3 flex h-[-webkit-calc(86vh-5.5rem)] w-full flex-col justify-between rounded-xl border-2 border-gray-700/80 dark:bg-gray-800 md:h-[-webkit-calc(100vh-5.5rem)] lg:h-[-webkit-calc(100vh-5.5rem)]">
       <div className="m-3 flex items-center justify-between bg-white dark:bg-gray-800">
         <Image
           className="mr-4 h-10 w-10 cursor-pointer rounded-full border dark:border-gray-700"
@@ -397,6 +405,30 @@ const ChatListItemContainer = ({
             </Card>
           )}
         </div>
+        {profile && (
+          <>
+            <img
+              onClick={() =>
+                setRequestVideoCall({
+                  selectedChatId: messageContainerref.current?.id || ''
+                })
+              }
+              className="hidden cursor-pointer dark:flex"
+              src="/push/videobtndarkmode.svg"
+              alt="video icon"
+            />
+            <img
+              onClick={() =>
+                setRequestVideoCall({
+                  selectedChatId: messageContainerref.current?.id || ''
+                })
+              }
+              className="flex cursor-pointer dark:hidden"
+              src="/push/video.svg"
+              alt="video icon"
+            />
+          </>
+        )}
         {profile.address ? (
           <div>
             {!following ? (
@@ -536,6 +568,8 @@ const ChatListItemContainer = ({
         onSendAttachment={onSendAttachment}
         replyMessage={replyMessage}
       />
+      <OutgoingCallModal />
+      <IncomingCallModal />
     </div>
   );
 };

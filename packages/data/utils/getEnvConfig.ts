@@ -11,10 +11,10 @@ const getEnvConfig = (): {
   switch (LENS_NETWORK) {
     case 'testnet':
       return {
-        apiEndpoint: LensEndpoint.Testnet,
-        lensHubProxyAddress: TestnetContracts.LensHubProxy,
-        defaultCollectToken: TestnetContracts.DefaultToken,
-        litProtocolEnvironment: 'mumbai'
+        apiEndpoint: LensEndpoint.Mainnet,
+        lensHubProxyAddress: MainnetContracts.LensHubProxy,
+        defaultCollectToken: MainnetContracts.DefaultToken,
+        litProtocolEnvironment: 'polygon'
       };
     default:
       return {

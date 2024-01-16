@@ -69,12 +69,12 @@ const Editor: FC = () => {
         contentEditable={
           <ContentEditable className="my-4 block min-h-[65px] overflow-auto px-5" />
         }
+        ErrorBoundary={() => <div>{Errors.SomethingWentWrong}</div>}
         placeholder={
           <div className="pointer-events-none absolute top-[65px] whitespace-nowrap px-5 text-gray-400">
             {showPollEditor ? 'Ask a question...' : "What's happening?"}
           </div>
         }
-        ErrorBoundary={() => <div>{Errors.SomethingWentWrong}</div>}
       />
       <OnChangePlugin
         onChange={(editorState) => {

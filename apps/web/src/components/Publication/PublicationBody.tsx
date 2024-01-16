@@ -10,13 +10,12 @@ import getURLs from '@lensshare/lib/getURLs';
 import isPublicationMetadataTypeAllowed from '@lensshare/lib/isPublicationMetadataTypeAllowed';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import removeUrlAtEnd from '@lensshare/lib/removeUrlAtEnd';
-import type { OG } from '@lensshare/types/misc';
+import type { OG, SpaceMetadata } from '@lensshare/types/misc';
 import cn from '@lensshare/ui/cn';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { memo, useState } from 'react';
 import { isIOS, isMobile } from 'react-device-detect';
-
 
 import Embed from './HeyOpenActions/Embed';
 import Nft from './HeyOpenActions/Nft';
@@ -24,6 +23,7 @@ import NotSupportedPublication from './NotSupportedPublication';
 import getSnapshotProposalId from '@lib/getSnapshotProposalId';
 import Snapshot from './HeyOpenActions/Snapshot';
 import EncryptedPublication from './EncryptedPublication';
+
 
 interface PublicationBodyProps {
   publication: AnyPublication;
@@ -57,16 +57,19 @@ const PublicationBody: FC<PublicationBodyProps> = ({
     }
   }
 
+ 
+
   const [content, setContent] = useState(rawContent);
 
   if (targetPublication.isEncrypted) {
     return <EncryptedPublication publication={targetPublication} />;
   }
 
-
   if (!isPublicationMetadataTypeAllowed(metadata.__typename)) {
     return <NotSupportedPublication type={metadata.__typename} />;
   }
+
+ 
 
   // Show NFT if it's there
   const showNft = metadata.__typename === 'MintMetadataV3';
@@ -82,12 +85,11 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   // Show oembed if no NFT, no attachments, no quoted publication
   // Show oembed if no NFT, no attachments, no snapshot, no quoted publication
   const showOembed =
-  !showSharingLink &&
+    !showSharingLink &&
     hasURLs &&
     !showNft &&
     !showLive &&
     !showSnapshot &&
-    !showEmbed &&
     !showAttachments &&
     !quoted;
 
@@ -123,7 +125,6 @@ const PublicationBody: FC<PublicationBodyProps> = ({
         <Attachments attachments={filteredAttachments} asset={filteredAsset} />
       ) : null}
       {/* Open actions */}
-      {showEmbed ? <Embed embed={metadata.embed} /> : null}
       {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
       {showNft ? (
         <Nft mintLink={metadata.mintLink} publication={publication} />
@@ -133,15 +134,11 @@ const PublicationBody: FC<PublicationBodyProps> = ({
           <Video src={metadata.liveURL || metadata.playbackURL} />
         </div>
       ) : null}
-       {showSharingLink ? (
+      {showSharingLink ? (
         <Oembed publicationId={publication.id} url={metadata.sharingLink} />
       ) : null}
       {showOembed ? (
-        <Oembed
-          url={urls[0]}
-          publicationId={publication.id}
-
-        />
+        <Oembed url={urls[0]} publicationId={publication.id} />
       ) : null}
       {targetPublication.__typename === 'Quote' && (
         <Quote publication={targetPublication.quoteOn} />
@@ -151,4 +148,3 @@ const PublicationBody: FC<PublicationBodyProps> = ({
 };
 
 export default memo(PublicationBody);
-

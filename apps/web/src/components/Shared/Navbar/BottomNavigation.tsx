@@ -40,8 +40,8 @@ const BottomNavigation = () => {
           )}
         </Link>
 
-        <Link href="/messages2" className="mx-auto my-2">
-          {isActivePath('/messages2') ? (
+        <Link href="/messages" className="mx-auto my-2">
+          {isActivePath('/messages') ? (
             <EnvelopeIcon className="text-brand h-6 w-6" />
           ) : (
             <EnvelopeIcon className=" h-6 w-6" />

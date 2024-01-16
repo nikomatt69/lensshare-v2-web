@@ -1,3 +1,4 @@
+import usePushNotificationSocket from '@components/messages2/Video/usePushNotificationSocket';
 import {
   type Notification,
   useNewNotificationSubscriptionSubscription,
@@ -36,7 +37,6 @@ const LensSubscriptionsProvider: FC = () => {
     useNewNotificationSubscriptionSubscription({
       variables: { for: currentSessionProfileId },
       skip: !canUseSubscriptions || isAddress(currentSessionProfileId)
-     
     });
 
   useUpdateEffect(() => {

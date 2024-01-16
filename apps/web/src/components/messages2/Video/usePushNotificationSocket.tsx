@@ -3,7 +3,7 @@ import { ADDITIONAL_META_TYPE } from '@pushprotocol/restapi/src/lib/payloads/con
 import { createSocketConnection, EVENTS } from '@pushprotocol/socket';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useAppStore } from 'src/store/app';
+import { useAppStore } from 'src/store/useAppStore';
 import { PUSH_ENV } from 'src/store/push-chat';
 
 import type { VideoCallMetaDataType } from './usePushVideoCall';

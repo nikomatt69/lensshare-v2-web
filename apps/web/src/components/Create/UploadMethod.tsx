@@ -16,7 +16,7 @@ const UploadMethod = () => {
 
   useEffect(() => {
     if (!isUnderFreeLimit) {
-      setUploadedMedia({ isUploadToIpfs: true });
+      setUploadedMedia({ isUploadToIpfs: false });
     }
   }, [isUnderFreeLimit, setUploadedMedia]);
 

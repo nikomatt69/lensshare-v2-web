@@ -9,6 +9,7 @@ import getProfile from '@lensshare/lib/getProfile';
 import logger from '@lensshare/lib/logger';
 import { headers } from 'next/headers';
 import React from 'react';
+import defaultMetadata from 'src/app/defaultMetadata';
 
 type Props = {
   params: { handle: string };
@@ -26,9 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 
   if (!data.profile) {
-    return {
-      title: 'Profile not found'
-    };
+    return defaultMetadata;
   }
 
   const profile = data.profile as Profile;
@@ -46,9 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'profile'
     },
     title: title,
-    twitter: {
-      card: 'summary'
-    }
+    twitter: { card: 'summary' }
   };
 }
 

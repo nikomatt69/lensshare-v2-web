@@ -1,3 +1,4 @@
+import usePushNotificationSocket from '@components/messages2/Video/usePushNotificationSocket';
 import { API_URL } from '@lensshare/data/constants';
 import type { UserSigNonces, Notification } from '@lensshare/lens';
 import { useApolloClient } from '@lensshare/lens/apollo';
@@ -36,6 +37,8 @@ const SubscriptionProvider = () => {
     sendJsonMessage({ type: 'connection_init' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+
 
   useEffect(() => {
     if (readyState === 1 && currentSessionProfileId) {

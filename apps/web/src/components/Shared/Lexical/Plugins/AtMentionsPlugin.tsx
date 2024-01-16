@@ -30,7 +30,7 @@ import { $createMentionNode } from '../Nodes/MentionsNode';
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
-const NAME = '\\b[A-Z][^\\s' + PUNCTUATION + ']';
+const NAME = `\\b[A-Z][^\\s${PUNCTUATION}]`;
 
 const DocumentMentionsRegex = {
   NAME,
@@ -39,37 +39,18 @@ const DocumentMentionsRegex = {
 
 const PUNC = DocumentMentionsRegex.PUNCTUATION;
 const TRIGGERS = ['@'].join('');
-const VALID_CHARS = '[^' + TRIGGERS + PUNC + '\\s]';
-const VALID_JOINS = '(?:' + '\\.[ |$]|' + ' |' + '[' + PUNC + ']|' + ')';
+const VALID_CHARS = `[^${TRIGGERS}${PUNC}\\s]`;
+const VALID_JOINS = `(?:\\.[ |$]| |[${PUNC}]|)`;
 const LENGTH_LIMIT = 32;
 const ALIAS_LENGTH_LIMIT = 50;
 const SUGGESTION_LIST_LENGTH_LIMIT = 5;
 
 const AtSignMentionsRegex = new RegExp(
-  '(^|\\s|\\()(' +
-    '[' +
-    TRIGGERS +
-    ']' +
-    '((?:' +
-    VALID_CHARS +
-    VALID_JOINS +
-    '){0,' +
-    LENGTH_LIMIT +
-    '})' +
-    ')$'
+  `(^|\\s|\\()([${TRIGGERS}]((?:${VALID_CHARS}${VALID_JOINS}){0,${LENGTH_LIMIT}}))$`
 );
 
 const AtSignMentionsRegexAliasRegex = new RegExp(
-  '(^|\\s|\\()(' +
-    '[' +
-    TRIGGERS +
-    ']' +
-    '((?:' +
-    VALID_CHARS +
-    '){0,' +
-    ALIAS_LENGTH_LIMIT +
-    '})' +
-    ')$'
+  `(^|\\s|\\()([${TRIGGERS}]((?:${VALID_CHARS}){0,${ALIAS_LENGTH_LIMIT}}))$`
 );
 
 const checkForAtSignMentions = (
@@ -103,10 +84,10 @@ const getPossibleQueryMatch = (text: string): MenuTextMatch | null => {
 };
 
 class MentionTypeaheadOption extends MenuOption {
+  displayHandle: string;
+  handle: string;
   id: string;
   name: string;
-  handle: string;
-  displayHandle: string;
   picture: string;
 
   constructor(
@@ -141,15 +122,12 @@ const MentionsTypeaheadMenuItem: FC<MentionsTypeaheadMenuItemProps> = ({
 }) => {
   return (
     <li
-      key={option.key}
-      tabIndex={-1}
       className="cursor-pointer"
-      ref={option.setRefElement}
-      role="option"
-      onMouseEnter={onMouseEnter}
+      key={option.key}
       onClick={onClick}
-      aria-selected={isSelected}
-      aria-hidden="true"
+      onMouseEnter={onMouseEnter}
+      ref={option.setRefElement}
+      tabIndex={-1}
     >
       <div
         className={cn(
@@ -158,17 +136,17 @@ const MentionsTypeaheadMenuItem: FC<MentionsTypeaheadMenuItemProps> = ({
         )}
       >
         <img
+          alt={option.handle}
           className="h-7 w-7 rounded-full"
           height="32"
-          width="32"
           src={option.picture}
-          alt={option.handle}
+          width="32"
         />
         <div className="flex flex-col truncate">
           <div className="flex items-center space-x-1 text-sm">
             <span>{option.name}</span>
             {isVerified(option.id) ? (
-              <CheckBadgeIcon className="text-brand h-4 w-4" />
+              <CheckBadgeIcon className="text-brand-500 h-4 w-4" />
             ) : null}
             {hasMisused(option.id) ? (
               <ExclamationCircleIcon className="h-4 w-4 text-red-500" />
@@ -182,7 +160,7 @@ const MentionsTypeaheadMenuItem: FC<MentionsTypeaheadMenuItemProps> = ({
 };
 
 const MentionsPlugin: FC = () => {
-  const [queryString, setQueryString] = useState<string | null>(null);
+  const [queryString, setQueryString] = useState<null | string>(null);
   const [results, setResults] = useState<Record<string, string>[]>([]);
   const [editor] = useLexicalComposerContext();
   const [searchUsers] = useSearchProfilesLazyQuery();
@@ -191,26 +169,22 @@ const MentionsPlugin: FC = () => {
     if (queryString) {
       // Variables
       const request: ProfileSearchRequest = {
-        where: { customFilters: [CustomFiltersType.Gardeners] },
+        limit: LimitType.Ten,
         query: queryString,
-        limit: LimitType.Ten
+        where: { customFilters: [CustomFiltersType.Gardeners] }
       };
 
       searchUsers({ variables: { request } }).then(({ data }) => {
         const search = data?.searchProfiles;
         const profileSearchResult = search;
-        const profiles = (
-          search && search.hasOwnProperty('items')
-            ? profileSearchResult?.items
-            : []
-        ) as Profile[];
-        const profilesResults = profiles.map(
+        const profiles = profileSearchResult?.items as Profile[];
+        const profilesResults = profiles?.map(
           (user) =>
             ({
+              displayHandle: getProfile(user).slugWithPrefix,
+              handle: user.handle?.fullHandle,
               id: user?.id,
               name: getProfile(user).displayName,
-              handle: user.handle?.fullHandle,
-              displayHandle: getProfile(user).slugWithPrefix,
               picture: getAvatar(user)
             }) as Record<string, string>
         );
@@ -226,10 +200,10 @@ const MentionsPlugin: FC = () => {
   const options = useMemo(
     () =>
       results
-        .map(({ id, name, handle, displayHandle, picture }) => {
+        .map(({ displayHandle, handle, id, name, picture }) => {
           return new MentionTypeaheadOption(
             id,
-            name ?? handle,
+            name || handle,
             handle,
             displayHandle,
             picture
@@ -242,7 +216,7 @@ const MentionsPlugin: FC = () => {
   const onSelectOption = useCallback(
     (
       selectedOption: MentionTypeaheadOption,
-      nodeToReplace: TextNode | null,
+      nodeToReplace: null | TextNode,
       closeMenu: () => void
     ) => {
       editor.update(() => {
@@ -268,10 +242,6 @@ const MentionsPlugin: FC = () => {
 
   return (
     <LexicalTypeaheadMenuPlugin<MentionTypeaheadOption>
-      onQueryChange={setQueryString}
-      onSelectOption={onSelectOption}
-      triggerFn={checkForMentionMatch}
-      options={options}
       menuRenderFn={(
         anchorElementRef,
         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }
@@ -284,6 +254,7 @@ const MentionsPlugin: FC = () => {
                     <MentionsTypeaheadMenuItem
                       index={i}
                       isSelected={selectedIndex === i}
+                      key={option.key}
                       onClick={() => {
                         setHighlightedIndex(i);
                         selectOptionAndCleanUp(option);
@@ -291,7 +262,6 @@ const MentionsPlugin: FC = () => {
                       onMouseEnter={() => {
                         setHighlightedIndex(i);
                       }}
-                      key={option.key}
                       option={option}
                     />
                   ))}
@@ -301,6 +271,10 @@ const MentionsPlugin: FC = () => {
             )
           : null
       }
+      onQueryChange={setQueryString}
+      onSelectOption={onSelectOption}
+      options={options}
+      triggerFn={checkForMentionMatch}
     />
   );
 };

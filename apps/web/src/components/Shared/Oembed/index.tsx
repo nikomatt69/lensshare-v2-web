@@ -12,26 +12,33 @@ import getFavicon from 'src/utils/oembed/getFavicon';
 
 interface OembedProps {
   className?: string;
+  onData?: (data: OG) => void;
   publicationId?: string;
   url?: string;
 }
 
-const Oembed: FC<OembedProps> = ({ className = '', publicationId, url }) => {
+const Oembed: FC<OembedProps> = ({
+  className = '',
+  onData,
+  publicationId,
+  url
+}) => {
   const { data, error, isLoading } = useQuery({
     enabled: Boolean(url),
     queryFn: async () => {
-      const response = await axios.get(`api/oembed`, {
+      const response = await axios.get(`/api/oembed`, {
         params: { url }
       });
       return response.data.oembed;
     },
-    queryKey: ['oembed', url],
-    refetchOnMount: false
+    queryKey: ['oembed', url]
   });
 
   if (isLoading || error || !data) {
     return null;
   }
+
+  onData?.(data);
 
   const og: OG = {
     description: data?.description,
@@ -44,7 +51,7 @@ const Oembed: FC<OembedProps> = ({ className = '', publicationId, url }) => {
     url: url as string
   };
 
-  if (!og.title && !og.html) {
+  if (!og.title) {
     return null;
   }
 

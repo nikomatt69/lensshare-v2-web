@@ -7,7 +7,7 @@ import axios from 'axios';
 import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { hydrateAuthTokens } from 'src/store/useAuthPersistStore';
+import { hydrateAuthTokens } from 'src/store/persisted/useAuthStore';
 
 const Wrapper = ({
   children,

@@ -15,9 +15,9 @@ import * as ReactDOM from 'react-dom';
 import { useEffectOnce } from 'usehooks-ts';
 
 class EmojiOption extends MenuOption {
-  title: string;
   emoji: string;
   keywords: string[];
+  title: string;
 
   constructor(
     title: string,
@@ -48,23 +48,20 @@ const EmojiMenuItem: FC<EmojiMenuItemProps> = ({
   onMouseEnter,
   option
 }) => {
-  const { key, title, emoji, setRefElement } = option;
+  const { emoji, key, setRefElement, title } = option;
 
   return (
     <li
-      key={key}
-      tabIndex={-1}
       className={cn(
         { 'dropdown-active': isSelected },
         'm-2 cursor-pointer rounded-lg p-2 outline-none'
       )}
-      ref={setRefElement}
-      role="option"
       id={`typeahead-item-${index}`}
-      onMouseEnter={onMouseEnter}
+      key={key}
       onClick={onClick}
-      aria-selected={isSelected}
-      aria-hidden="true"
+      onMouseEnter={onMouseEnter}
+      ref={setRefElement}
+      tabIndex={-1}
     >
       <div className="flex items-center space-x-2">
         <span className="text-base">{emoji}</span>
@@ -78,7 +75,7 @@ const MAX_EMOJI_SUGGESTION_COUNT = 5;
 
 const EmojiPickerPlugin: FC = () => {
   const [editor] = useLexicalComposerContext();
-  const [queryString, setQueryString] = useState<string | null>(null);
+  const [queryString, setQueryString] = useState<null | string>(null);
   const [emojis, setEmojis] = useState<Emoji[]>([]);
 
   const fetchEmojis = async () => {
@@ -95,7 +92,7 @@ const EmojiPickerPlugin: FC = () => {
     () =>
       emojis !== null
         ? emojis.map(
-            ({ emoji, aliases, tags }) =>
+            ({ aliases, emoji, tags }) =>
               new EmojiOption(aliases[0], emoji, {
                 keywords: [...aliases, ...tags]
               })
@@ -126,7 +123,7 @@ const EmojiPickerPlugin: FC = () => {
   const onSelectOption = useCallback(
     (
       selectedOption: EmojiOption,
-      nodeToRemove: TextNode | null,
+      nodeToRemove: null | TextNode,
       closeMenu: () => void
     ) => {
       editor.update(() => {
@@ -150,10 +147,6 @@ const EmojiPickerPlugin: FC = () => {
 
   return (
     <LexicalTypeaheadMenuPlugin
-      onQueryChange={setQueryString}
-      onSelectOption={onSelectOption}
-      triggerFn={checkForTriggerMatch}
-      options={options}
       menuRenderFn={(
         anchorElementRef,
         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }
@@ -186,6 +179,10 @@ const EmojiPickerPlugin: FC = () => {
             )
           : null;
       }}
+      onQueryChange={setQueryString}
+      onSelectOption={onSelectOption}
+      options={options}
+      triggerFn={checkForTriggerMatch}
     />
   );
 };

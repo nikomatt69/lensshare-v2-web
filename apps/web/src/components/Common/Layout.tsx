@@ -7,7 +7,8 @@ import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import getToastOptions from '@lib/getToastOptions';
 import Head from 'next/head';
 import { useTheme } from 'next-themes';
-import type { FC, ReactNode } from 'react';
+import { useEffect, type FC, type ReactNode } from 'react';
+import usePushSocket from 'src/hooks/messaging/push/usePushSocket';
 import { Toaster } from 'react-hot-toast';
 import { useAppStore } from 'src/store/useAppStore';
 import { hydrateAuthTokens, signOut } from 'src/store/useAuthPersistStore';
@@ -23,6 +24,7 @@ import Script from 'next/script';
 import { useRoom } from '@huddle01/react/hooks';
 import SpacesWindow from './SpacesWindow/SpacesWindow';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
+import usePushNotificationSocket from '@components/messages2/Video/usePushNotificationSocket';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -39,7 +41,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     (state) => state.setLensHubOnchainSigNonce
   );
 
-
   const resetPushChatStore = usePushChatStore(
     (state) => state.resetPushChatStore
   );
@@ -52,7 +53,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   const logout = (reload = false) => {
     resetPreferences();
-    resetPushChatStore();
     signOut();
     disconnect?.();
     if (reload) {
@@ -68,6 +68,9 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       setLensHubOnchainSigNonce(userSigNonces.lensHubOnchainSigNonce);
     }
   });
+
+  
+
 
   useEffectOnce(() => {
     // Listen for switch account in wallet and logout
@@ -85,7 +88,9 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     validateAuthentication();
   });
 
+
   
+
   const profileLoading = !currentProfile && loading;
 
   if (profileLoading || !isMounted()) {
@@ -98,14 +103,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <meta
           name="theme-color"
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
-        />
-        <link
-          rel="manifest"
-          href="https://progressier.app/UyYlhOtlyHyST7enRwK8/progressier.json"
-        />
-        <Script
-          defer
-          src="https://progressier.app/UyYlhOtlyHyST7enRwK8/script.js"
         />
       </Head>
       <Toaster

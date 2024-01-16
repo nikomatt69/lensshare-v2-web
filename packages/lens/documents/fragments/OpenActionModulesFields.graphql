@@ -32,21 +32,65 @@ fragment OpenActionModulesFields on OpenActionModule {
   }
   ... on LegacyFreeCollectModuleSettings {
     type
+    contract {
+      ...NetworkAddressFields
+    }
+    followerOnly
   }
   ... on LegacyFeeCollectModuleSettings {
     type
+    contract {
+      ...NetworkAddressFields
+    }
+    amount {
+      ...AmountFields
+    }
+    followerOnly
+    recipient
+    referralFee
   }
   ... on LegacyLimitedFeeCollectModuleSettings {
     type
+    contract {
+      ...NetworkAddressFields
+    }
+    amount {
+      ...AmountFields
+    }
+    collectLimit
+    followerOnly
+    recipient
+    referralFee
   }
   ... on LegacyLimitedTimedFeeCollectModuleSettings {
     type
+    contract {
+      ...NetworkAddressFields
+    }
+    amount {
+      ...AmountFields
+    }
+    collectLimit
+    followerOnly
+    recipient
+    referralFee
+    endTimestamp
   }
   ... on LegacyRevertCollectModuleSettings {
     type
   }
   ... on LegacyTimedFeeCollectModuleSettings {
     type
+    contract {
+      ...NetworkAddressFields
+    }
+    amount {
+      ...AmountFields
+    }
+    followerOnly
+    recipient
+    referralFee
+    endTimestamp
   }
   ... on LegacyMultirecipientFeeCollectModuleSettings {
     type
@@ -90,6 +134,8 @@ fragment OpenActionModulesFields on OpenActionModule {
     contract {
       ...NetworkAddressFields
     }
+    initializeResultData
+    initializeCalldata
     openActionModuleReturnData
   }
 }

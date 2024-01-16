@@ -4,12 +4,13 @@ import type { Metadata } from 'next';
 import { APP_NAME, LENSSHARE_EMBED_URL } from '@lensshare/data/constants';
 import { PublicationDocument } from '@lensshare/lens';
 import { apolloClient } from '@lensshare/lens/apollo';
-import getAvatar from '@lensshare/lib/getAvatar';
+import getPublicationData from '@lensshare/lib/getPublicationData';
 import getProfile from '@lensshare/lib/getProfile';
 import logger from '@lensshare/lib/logger';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import { headers } from 'next/headers';
 import React from 'react';
+import defaultMetadata from 'src/app/defaultMetadata';
 
 type Props = {
   params: { id: string };
@@ -27,38 +28,64 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 
   if (!data.publication) {
-    return {
-      title: 'Publication not found'
-    };
+    return defaultMetadata;
   }
 
   const publication = data.publication as AnyPublication;
   const targetPublication = isMirrorPublication(publication)
     ? publication.mirrorOn
     : publication;
-  const profile = targetPublication.by;
+  const { by: profile, metadata } = targetPublication;
+  const filteredContent = getPublicationData(metadata)?.content || '';
+  const filteredAttachments = getPublicationData(metadata)?.attachments || [];
+  const filteredAsset = getPublicationData(metadata)?.asset;
+
+  const assetIsImage = filteredAsset?.type === 'Image';
+  const assetIsVideo = filteredAsset?.type === 'Video';
+  const assetIsAudio = filteredAsset?.type === 'Audio';
+
+  const getOGImages = () => {
+    if (assetIsImage) {
+      if (filteredAttachments.length > 0) {
+        return filteredAttachments.map((attachment) => attachment.uri);
+      }
+
+      return [filteredAsset?.uri];
+    }
+
+    if (assetIsVideo) {
+      if (filteredAttachments.length > 0) {
+        return filteredAttachments.map((attachment) => attachment.uri);
+      }
+
+      return [filteredAsset?.cover];
+    }
+
+    if (assetIsAudio) {
+      if (filteredAttachments.length > 0) {
+        return filteredAttachments.map((attachment) => attachment.uri);
+      }
+
+      return [filteredAsset?.cover];
+    }
+
+    return [];
+  };
 
   const title = `${targetPublication.__typename} by ${
     getProfile(profile).slugWithPrefix
   } • ${APP_NAME}`;
 
-  const embedUrl = `${LENSSHARE_EMBED_URL}/${targetPublication.id}`;
   return {
-    description: profile?.metadata?.bio,
-    metadataBase: new URL(
-      `https://lenshareapp.xyz/posts/${targetPublication.id}`
-    ),
+    description: filteredContent,
+    metadataBase: new URL(`https://lenshareapp.xyz/posts/${targetPublication.id}`),
     openGraph: {
-      images: [getAvatar(profile)],
+      images: getOGImages() as any,
       siteName: 'LensShare',
-      type: 'article',
-      videos: [embedUrl],
-
+      type: 'article'
     },
     title: title,
-    twitter: {
-      card: 'summary',
-    }
+    twitter: { card: assetIsAudio ? 'summary' : 'summary_large_image' }
   };
 }
 

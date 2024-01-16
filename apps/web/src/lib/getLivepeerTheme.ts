@@ -5,7 +5,7 @@ import heyFont from './heyFont';
 
 const getLivepeerTheme: ThemeConfig = {
   colors: {
-    accent: '#fff',
+    accent: '#ffff',
     progressLeft: BRAND_COLOR,
     loading: BRAND_COLOR
   },

@@ -6,7 +6,8 @@ const knownSites = [
   'open.spotify.com',
   'soundcloud.com',
   'oohlala.xyz',
-  'kick.com'
+  'kick.com',
+  'lvpr.tv'
 ];
 
 const pickUrlSites = ['open.spotify.com', 'kick.com'];
@@ -23,10 +24,9 @@ const youtubeRegex =
   /^https?:\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w-]+)(?:\?.*)?$/;
 const tapeRegex =
   /^https?:\/\/tape\.xyz\/watch\/[\dA-Za-z-]+(\?si=[\dA-Za-z]+)?$/;
-const twitchRegex =
- /^https?:\/\/www\.twitch\.tv\/[\dA-Za-z-]+$/;
-const kickRegex =
- /^https?:\/\/kick\.com\/[\dA-Za-z-]+$/;
+const twitchRegex = /^https?:\/\/www\.twitch\.tv\/[\dA-Za-z-]+$/;
+const kickRegex = /^https?:\/\/kick\.com\/[\dA-Za-z-]+$/;
+const livepeerUrlRegex = /^https?:\/\/lvpr\.tv\/\?v=[\da-z]{16}$/;
 
 const generateIframe = (
   embedUrl: string | null,
@@ -67,6 +67,11 @@ const generateIframe = (
         return `<iframe src="${spotifyUrl}" ${spotifySize} height="380" allow="encrypted-media"></iframe>`;
       }
 
+      return null;
+    case 'lvpr.tv':
+      if (livepeerUrlRegex.test(url)) {
+        return `<iframe src="${pickedUrl}" ${universalSize}></iframe>`;
+      }
       return null;
     case 'soundcloud.com':
       if (soundCloudRegex.test(url)) {

@@ -5,7 +5,7 @@ import { Button } from '@lensshare/ui';
 import { chat, type Message } from '@pushprotocol/restapi';
 import { useMutation } from '@tanstack/react-query';
 import { Fragment } from 'react';
-import useMessageStore from 'src/store/useMessageStore2';
+import useMessageStore from 'src/store/useMessageStore';
 import { useWalletClient } from 'wagmi';
 
 const emojis = [
@@ -65,7 +65,7 @@ const ChatReactionPopover = ({
         <>
           <Popover.Button
             className={`
-            group inline-flex items-center rounded-full bg-gray-500 bg-opacity-25 p-1 text-base font-medium focus:outline-none`}
+            group mx-auto inline-flex items-center rounded-full bg-gray-500 bg-opacity-25 p-0.5 text-base font-medium focus:outline-none`}
           >
             <FaceSmileIcon
               aria-hidden="true"

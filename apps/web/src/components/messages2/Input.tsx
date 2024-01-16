@@ -4,7 +4,6 @@ import { PaperAirplaneIcon, PaperClipIcon } from '@heroicons/react/20/solid';
 import { FaceSmileIcon } from '@heroicons/react/24/outline';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import { Button, HeyPopover } from '@lensshare/ui';
-import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
 import EmojiPicker, { EmojiStyle } from 'emoji-picker-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMessageContent } from '@lib/useMessageContent';
@@ -33,7 +32,6 @@ const ChatMessageInput = ({
     inputRef.current?.focus();
   }, [replyMessage]);
   const replyContent = useMessageContent(replyMessage);
-
   return (
     <div className="mx-4 my-2 flex space-x-4">
       <div className="min-w-0 flex-1">
