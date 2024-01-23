@@ -1,6 +1,7 @@
 import type {
   AnyPublication,
   ExplorePublicationRequest,
+  Post,
   PrimaryPublication
 } from '@lensshare/lens';
 import {
@@ -58,7 +59,7 @@ const ListenFeed = () => {
         request
       },
       onCompleted: ({ explorePublications }) => {
-        const items = explorePublications?.items as unknown as AnyPublication[];
+        const items = explorePublications?.items as Post[];
         const publicationId = router.query.id;
         if (!publicationId && items[0]?.id) {
           const nextUrl = `${location.origin}/listen/${items[0]?.id}`;

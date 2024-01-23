@@ -1,34 +1,42 @@
+import type { PrimaryPublication } from '@lensshare/lens';
+import { getPublicationData } from 'src/hooks/getPublicationData';
+import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 
-import { PrimaryPublication } from '@lensshare/lens'
-import {getPublicationData} from 'src/hooks/getPublicationData'
-import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl'
+import type { FC } from 'react';
+import React, { useRef, useState } from 'react';
 
-import { IconButton } from '@radix-ui/themes'
-
-import type { FC } from 'react'
-import React, { useState } from 'react'
-import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl'
-import { imageCdn } from 'src/hooks/imageCdn'
-import getProfile from '@lensshare/lib/getProfile'
-
-import { getTimeFromSeconds } from 'src/hooks/formatTime2'
-import { getProfilePicture } from 'src/hooks/getProfilePicture'
-import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline'
-import HoverableProfile from './HoverableProfile'
-import AudioPlayer from './AudioPlayer'
+import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
+import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
+import { imageCdn } from 'src/hooks/imageCdn';
+import Player from '@components/Shared/Audio/Player';
+import type { APITypes } from 'plyr-react';
+import UserProfile from '@components/Shared/UserProfile';
 
 type Props = {
-  audio: PrimaryPublication
-}
+  audio: PrimaryPublication;
+};
 
 const Audio: FC<Props> = ({ audio }) => {
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [playing, setPlaying] = useState(false);
+  const playerRef = useRef<APITypes>(null);
   const coverUrl = imageCdn(
-    sanitizeDStorageUrl(getThumbnailUrl(audio?.metadata, true)),
-    'SQUARE'
-  )
-  const metadata = getPublicationData(audio?.metadata)
-  const duration = metadata?.asset?.duration
+    sanitizeDStorageUrl(getThumbnailUrl(audio.metadata))
+  );
+  const metadata = getPublicationData(audio.metadata);
+  const duration = metadata?.asset?.duration;
+
+  const handlePlayPause = () => {
+    if (!playerRef.current) {
+      return;
+    }
+    if (playerRef.current?.plyr.paused && !playing) {
+      setPlaying(true);
+
+      return playerRef.current?.plyr.play();
+    }
+    setPlaying(false);
+    playerRef.current?.plyr.pause();
+  };
 
   return (
     <div>
@@ -42,54 +50,36 @@ const Audio: FC<Props> = ({ audio }) => {
             width={500}
             draggable={false}
           />
-          <div className="absolute inset-0 flex items-end justify-end space-x-1 p-3">
-            <IconButton
-              onClick={() => setIsPlaying(!isPlaying)}
-              size="3"
-              highContrast
-            >
-              {isPlaying ? (
-                <PauseIcon className="h-5 w-5" />
-              ) : (
-                <PlayIcon className="h-5 w-5" />
-              )}
-            </IconButton>
-          </div>
+          <div className="absolute inset-0 flex items-end justify-end space-x-1 p-3" />
         </div>
         <div className="flex w-full flex-col items-center space-y-4 text-white lg:items-start">
-          <h1 className="line-clamp-1 text-4xl font-bold leading-normal">
+          <h1 className="line-clamp-1 text-xl font-bold leading-normal text-white">
             {metadata?.title}
           </h1>
-          <div className="flex items-center space-x-1">
-            <div>
-              <HoverableProfile
-                profile={audio.by}
-                fontSize="3"
-                pfp={
-                  <img
-                    src={getProfilePicture(audio.by, 'AVATAR')}
-                    className="h-5 w-5 rounded-full"
-                    draggable={false}
-                    alt={getProfile(audio.by)?.displayName}
-                  />
-                }
-              />
-            </div>
-            <span className="middot" />
-            <span className="text-sm">
-              {getTimeFromSeconds(String(duration))}
-            </span>
-          </div>
+          <button type="button" onClick={handlePlayPause}>
+            {playing && !playerRef.current?.plyr.paused ? (
+              <PauseIcon className="h-[50px] w-[50px] text-gray-100 hover:text-white" />
+            ) : (
+              <PlayIcon className="h-[50px] w-[50px] text-gray-100 hover:text-white" />
+            )}
+          </button>
         </div>
       </div>
       <div className="pb-4">
-        <AudioPlayer
-          isPlaying={isPlaying}
-          url={getPublicationData(audio.metadata)?.asset?.uri ?? ''}
+        <Player
+          playerRef={playerRef}
+          src={getPublicationData(audio.metadata)?.asset?.uri ?? ''}
         />
       </div>
-    </div>
-  )
-}
 
-export default Audio
+      <h1 className="laptop:text-2xl bg-trasparent mb-3 ml-4 text-xl font-bold">
+        Artist
+      </h1>
+      <div className="center-items bg-trasparent ml-4 mt-2 ">
+        <UserProfile profile={audio.by} />
+      </div>
+    </div>
+  );
+};
+
+export default Audio;

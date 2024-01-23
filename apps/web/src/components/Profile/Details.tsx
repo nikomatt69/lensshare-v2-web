@@ -73,7 +73,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
       },
       threadHash: null
     });
-    router.push(`/messages/${conversationKey}`);
+    router.push(`/xmtp/${conversationKey}`);
   };
 
   const MetaDetails = ({
@@ -193,9 +193,10 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
 
           <ProfileMenu profile={profile} />
           <div className="text-brand-500">{<MeetingIcon />}</div>
-          <Link href={`/messages`}>
+          <Link href={`/xmtp`}>
             <EnvelopeIcon className="h-6 w-6" />
           </Link>
+           
           {currentProfile?.id !== profile.id && (
             <SuperfluidSubscribe profile={profile} />
           )}

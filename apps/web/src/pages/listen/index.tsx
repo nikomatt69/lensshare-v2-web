@@ -1,3 +1,3 @@
-import ListenFeed from '@components/Listen/Curated';
+import Listen from '@components/Listen'
 
-export default ListenFeed;
+export default Listen

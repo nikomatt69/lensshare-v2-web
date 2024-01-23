@@ -33,7 +33,7 @@ const BottomOverlay: FC<Props> = ({ video }) => {
             className="backdrop-brightness-25 backdrop-contrast-20 flex flex-none cursor-pointer items-center space-x-2 px-2 backdrop-blur-sm"
           >
             <img
-              src={getAvatar(profile, 'AVATAR')}
+              src={getAvatar(profile)}
               className="h-9 w-9 rounded-full"
               draggable={false}
               alt={getProfile(video.by)?.slug}

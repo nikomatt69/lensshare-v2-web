@@ -7,8 +7,7 @@ import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import getToastOptions from '@lib/getToastOptions';
 import Head from 'next/head';
 import { useTheme } from 'next-themes';
-import { useEffect, type FC, type ReactNode } from 'react';
-import usePushSocket from 'src/hooks/messaging/push/usePushSocket';
+import { type FC, type ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useAppStore } from 'src/store/useAppStore';
 import { hydrateAuthTokens, signOut } from 'src/store/useAuthPersistStore';
@@ -20,11 +19,12 @@ import GlobalModals from '../Shared/GlobalModals';
 import Loading from '../Shared/Loading';
 import Navbar from '../Shared/Navbar';
 import { isAddress } from 'viem';
-import Script from 'next/script';
 import { useRoom } from '@huddle01/react/hooks';
 import SpacesWindow from './SpacesWindow/SpacesWindow';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
-import usePushNotificationSocket from '@components/messages2/Video/usePushNotificationSocket';
+import { useRouter } from 'next/router';
+import { useDisconnectXmtp } from 'src/hooks/useXmtpClient';
+import { useSpacesStore } from 'src/store/persisted/spaces';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -36,6 +36,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const resetPreferences = usePreferencesStore(
     (state) => state.resetPreferences
   );
+  const { pathname } = useRouter();
 
   const setLensHubOnchainSigNonce = useNonceStore(
     (state) => state.setLensHubOnchainSigNonce
@@ -48,12 +49,13 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const isMounted = useIsMounted();
   const { connector } = useAccount();
   const { disconnect } = useDisconnect();
-
+  const disconnectXmtp = useDisconnectXmtp();
   const currentSessionProfileId = getCurrentSessionProfileId();
 
   const logout = (reload = false) => {
     resetPreferences();
     signOut();
+    disconnectXmtp();
     disconnect?.();
     if (reload) {
       location.reload();
@@ -69,9 +71,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     }
   });
 
-  
-
-
   useEffectOnce(() => {
     // Listen for switch account in wallet and logout
     connector?.addListener('change', () => logout());
@@ -83,13 +82,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       logout();
     }
   };
-
+  const { showSpacesLobby, showSpacesWindow } = useSpacesStore();
   useEffectOnce(() => {
     validateAuthentication();
   });
-
-
-  
 
   const profileLoading = !currentProfile && loading;
 
@@ -104,6 +100,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           name="theme-color"
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
+        <script src="https://unpkg.com/wavesurfer.js@7" />
       </Head>
       <Toaster
         position="bottom-right"

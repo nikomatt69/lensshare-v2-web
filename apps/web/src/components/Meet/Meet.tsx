@@ -137,10 +137,10 @@ const Meet: FC = () => {
         <div
           className={cn(
             Object.values(peers).length === 0
-              ? 'my-10 h-[14vh] w-[14vw]'
-              : 'h-[40vh] w-[38vw] xl:h-[30vh]',
+              ? 'my-10 h-[16vh] w-[16vw]'
+              : 'h-[50vh] w-[36vw]',
             resolvedTheme == 'dark' ? 'bg-gray-900' : 'bg-white-100',
-            'relative mt-2 flex flex-shrink-0 items-center justify-center rounded-xl '
+            'max-w-screen relative mt-2 flex flex-shrink-0 items-center justify-center rounded-xl '
           )}
         >
           {!isCamOff ? (
@@ -182,7 +182,7 @@ const Meet: FC = () => {
             )}
           >
             {cam ? (
-              <VideoElem track={cam} key={peerId}/>
+              <VideoElem track={cam} key={peerId} />
             ) : (
               <img
                 key={peerId}

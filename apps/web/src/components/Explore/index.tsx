@@ -56,19 +56,17 @@ const Explore: NextPage = () => {
         <div className="flex flex-col">
           <HorizantalScroller
             sectionRef={sectionRef}
-            heading="Today"
-            subheading="New & Trending"
+            heading="Trending Bytes"
           />
           <div
             ref={sectionRef}
-            className="no-scrollbar rounded-xl laptop:pt-6 relative flex items-start space-x-4 overflow-x-auto overflow-y-hidden scroll-smooth pt-4"
+            className="no-scrollbar laptop:pt-6 relative flex items-start space-x-4 overflow-x-auto overflow-y-hidden scroll-smooth rounded-xl pt-4"
           >
             <LatestBytes />
           </div>
         </div>
 
         <Tab.Group
-      
           defaultIndex={Number(router.query.tab)}
           onChange={(index) => {
             router.replace(

@@ -8,6 +8,7 @@ import useMessageStore from 'src/store/useMessageStore';
 import { useAppStore } from 'src/store/useAppStore';
 import { useUpdateEffect } from 'usehooks-ts';
 import { useWalletClient } from 'wagmi';
+import RefreshButton from '@components/Home/Refresh';
 
 
 const ChatPage = () => {
@@ -44,6 +45,7 @@ const ChatPage = () => {
   if (!pgpPvtKey || isLoading) {
     return (
       <div className="page-center flex-col">
+        <div><RefreshButton/> </div>
         <Loader message="Connecting..." />
       </div>
     );

@@ -1,4 +1,4 @@
-import { FALLBACK_COVER_URL, TAPE_APP_ID } from '@lensshare/data/constants';
+import { APP_ID, APP_NAME, FALLBACK_COVER_URL, TAPE_APP_ID } from '@lensshare/data/constants';
 import type {
   ExplorePublicationRequest,
   PrimaryPublication
@@ -25,7 +25,7 @@ const request: ExplorePublicationRequest = {
 
     metadata: {
       mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo],
-      publishedOn: [TAPE_APP_ID]
+      publishedOn: [TAPE_APP_ID, APP_ID, APP_NAME]
     }
   },
   orderBy: ExplorePublicationsOrderByType.LensCurated,
@@ -80,7 +80,7 @@ const LatestBytes = () => {
               >
                 <img
                   className="h-4 w-4 rounded-full bg-gray-200 dark:bg-gray-800"
-                  src={getAvatar(byte.by, 'AVATAR')}
+                  src={getAvatar(byte.by)}
                   height={50}
                   width={50}
                   alt={`${getProfile(byte.by)?.slug}'s PFP`}

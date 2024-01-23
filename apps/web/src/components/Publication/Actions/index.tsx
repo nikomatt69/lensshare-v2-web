@@ -16,6 +16,7 @@ import { useImpressionsStore } from 'src/store/useImpressionsStore';
 import getPublicationViewCountById from '@lib/getPublicationViewCountById';
 import { ADMIN_ADDRESS } from '@lensshare/data/constants';
 import EmbedMedia from '../EmbedMedia';
+import { VerifiedOpenActionModules } from 'src/hooks/verified-openaction-modules';
 
 interface PublicationActionsProps {
   publication: AnyPublication;
@@ -44,7 +45,6 @@ const PublicationActions: FC<PublicationActionsProps> = ({
     publicationViews,
     targetPublication
   );
-
 
   return (
     <span

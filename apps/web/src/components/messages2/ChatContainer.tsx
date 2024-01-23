@@ -339,6 +339,26 @@ const ChatListItemContainer = ({
     [setFollowing]
   );
 
+  async function sendNotification(title: any, body: any, toAddress: any) {
+    const response = await fetch('/api/sendnotification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ title, body, toAddress }),
+    });
+  
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Notification sent:', data);
+      // Handle success
+    } else {
+      console.error('Failed to send notification');
+      // Handle error
+    }
+  }
+  sendNotification
+
   const { setRequestVideoCall } = usePushVideoCall();
   if (currentStatus >= VideoCallStatus.CONNECTED) {
     return <OngoingCall />;
@@ -405,30 +425,6 @@ const ChatListItemContainer = ({
             </Card>
           )}
         </div>
-        {profile && (
-          <>
-            <img
-              onClick={() =>
-                setRequestVideoCall({
-                  selectedChatId: messageContainerref.current?.id || ''
-                })
-              }
-              className="hidden cursor-pointer dark:flex"
-              src="/push/videobtndarkmode.svg"
-              alt="video icon"
-            />
-            <img
-              onClick={() =>
-                setRequestVideoCall({
-                  selectedChatId: messageContainerref.current?.id || ''
-                })
-              }
-              className="flex cursor-pointer dark:hidden"
-              src="/push/video.svg"
-              alt="video icon"
-            />
-          </>
-        )}
         {profile.address ? (
           <div>
             {!following ? (
@@ -564,6 +560,8 @@ const ChatListItemContainer = ({
             align: 'end',
             index: messages.length + 1
           });
+          sendNotification
+          
         }}
         onSendAttachment={onSendAttachment}
         replyMessage={replyMessage}

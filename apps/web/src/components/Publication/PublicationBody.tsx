@@ -10,20 +10,18 @@ import getURLs from '@lensshare/lib/getURLs';
 import isPublicationMetadataTypeAllowed from '@lensshare/lib/isPublicationMetadataTypeAllowed';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import removeUrlAtEnd from '@lensshare/lib/removeUrlAtEnd';
-import type { OG, SpaceMetadata } from '@lensshare/types/misc';
+import type { OG } from '@lensshare/types/misc';
 import cn from '@lensshare/ui/cn';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { memo, useState } from 'react';
 import { isIOS, isMobile } from 'react-device-detect';
 
-import Embed from './HeyOpenActions/Embed';
 import Nft from './HeyOpenActions/Nft';
 import NotSupportedPublication from './NotSupportedPublication';
 import getSnapshotProposalId from '@lib/getSnapshotProposalId';
 import Snapshot from './HeyOpenActions/Snapshot';
 import EncryptedPublication from './EncryptedPublication';
-
 
 interface PublicationBodyProps {
   publication: AnyPublication;
@@ -57,8 +55,6 @@ const PublicationBody: FC<PublicationBodyProps> = ({
     }
   }
 
- 
-
   const [content, setContent] = useState(rawContent);
 
   if (targetPublication.isEncrypted) {
@@ -68,8 +64,6 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   if (!isPublicationMetadataTypeAllowed(metadata.__typename)) {
     return <NotSupportedPublication type={metadata.__typename} />;
   }
-
- 
 
   // Show NFT if it's there
   const showNft = metadata.__typename === 'MintMetadataV3';
@@ -122,12 +116,16 @@ const PublicationBody: FC<PublicationBodyProps> = ({
       ) : null}
       {/* Attachments and Quotes */}
       {showAttachments ? (
-        <Attachments attachments={filteredAttachments} asset={filteredAsset} />
+        <Attachments
+          publication={publication}
+          attachments={filteredAttachments}
+          asset={filteredAsset}
+        />
       ) : null}
       {/* Open actions */}
       {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
       {showNft ? (
-        <Nft mintLink={metadata.mintLink} publication={publication} />
+        <Nft mintLink={metadata.mintLink} publication={publication.id} />
       ) : null}
       {showLive ? (
         <div className="mt-3">

@@ -23,6 +23,7 @@ import FeaturedGroupsProvider from './FeaturedGroupsProvider';
 import TbaStatusProvider from './TbaStatusProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ThemeProvider from './ThemeProvider';
+import PushNotiProvider from './PushProvider';
 
 const lensApolloClient = apolloClient(authLink);
 const livepeerClient = createReactClient({
@@ -43,8 +44,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
         <ApolloProvider client={lensApolloClient}>
           <LensSubscriptionsProvider />
           <QueryClientProvider client={queryClient}>
-            <PreferencesProvider />
-            <FeaturedGroupsProvider />
             <LivepeerConfig client={livepeerClient} theme={getLivepeerTheme}>
               <ThemeProvider>
                 <Layout>{children}</Layout>

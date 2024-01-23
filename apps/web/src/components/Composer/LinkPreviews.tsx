@@ -3,10 +3,10 @@ import type { FC } from 'react';
 import Oembed from '@components/Shared/Oembed';
 import getURLs from '@lensshare/lib/getURLs';
 import getNft from '@lensshare/lib/nft/getNft';
-import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
+import { usePublicationStore } from 'src/store/usePublicationStore';
 import Nft from '@components/Publication/HeyOpenActions/Nft';
 import { ZERO_PUBLICATION_ID } from '@lensshare/data/constants';
-import type { AnyPublication } from '@lensshare/lens';
+import type { AnyPublication, MirrorablePublication, Post } from '@lensshare/lens';
 
 const LinkPreviews: FC = () => {
   const publicationContent = usePublicationStore(

@@ -25,10 +25,10 @@ const CleanupSettings: NextPage = () => {
   if (!currentProfile) {
     return <Custom404 />;
   }
- 
+
   const cleanup = (key: string) => {
     localStorage.removeItem(key);
-    indexedDB.deleteDatabase(key)
+    indexedDB.deleteDatabase(key);
     toast.success(`Cleared ${key}`);
     disconnectXmtp;
   };
@@ -82,7 +82,13 @@ const CleanupSettings: NextPage = () => {
               </div>
               <Button
                 onClick={() => {
-                  cleanup(IndexDB.MessageStore && Localstorage.PushStore ), resetPushChatStore();
+                  cleanup(
+                    IndexDB.MessageStore &&
+                      Localstorage.PushStore &&
+                      Localstorage.MessageStore
+                  ),
+                    resetPushChatStore(),
+                    disconnectXmtp();
                   toast.success(`Cleared DM keys`);
                 }}
               >

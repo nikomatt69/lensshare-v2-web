@@ -1,56 +1,49 @@
-import MetaTags from '@components/Common/MetaTags'
+import MetaTags from '@components/Common/MetaTags';
 
-import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
-import Custom404 from 'src/pages/404'
-import Custom500 from 'src/pages/500'
+import { useRouter } from 'next/router';
+import React from 'react';
+import Custom500 from 'src/pages/500';
 
-import Audio from './Audio'
-import Background from './Background'
-import Details from './Details'
-import { AnyPublication, usePublicationQuery } from '@lensshare/lens'
-import Loader from '@components/Shared/Loader'
-import { getPublication } from 'src/hooks/getPublication'
-import { getPublicationData } from 'src/hooks/getPublicationData'
+import Audio from './Audio';
+import Background from './Background';
+import Details from './Details';
+import type { AnyPublication } from '@lensshare/lens';
+import { usePublicationQuery } from '@lensshare/lens';
+import Loader from '@components/Shared/Loader';
+import { getPublication } from 'src/hooks/getPublication';
 
 const Listen = () => {
   const {
     query: { id }
-  } = useRouter()
-
-
+  } = useRouter();
 
   const { data, error, loading } = usePublicationQuery({
     variables: {
       request: { forId: id }
     },
     skip: !id
-  })
+  });
 
   if (loading || !data) {
     return (
       <div className="grid h-[80vh] place-items-center">
         <Loader />
       </div>
-    )
+    );
   }
 
   if (error) {
-    return <Custom500 />
+    return <Custom500 />;
   }
 
-  const publication = data?.publication as AnyPublication
-  const audio = getPublication(publication)
-
- 
+  const publication = data?.publication as AnyPublication;
+  const audio = getPublication(publication);
 
   return (
     <>
-      <MetaTags
-        title={getPublicationData(audio?.metadata)?.title || `Listen`}
-      />
+      <MetaTags />
       {audio ? (
-        <div>
+        <div className="m-1">
           <Background audio={audio}>
             <Audio audio={audio} />
           </Background>
@@ -60,7 +53,7 @@ const Listen = () => {
         </div>
       ) : null}
     </>
-  )
-}
+  );
+};
 
-export default Listen
+export default Listen;

@@ -123,7 +123,7 @@ const SpaceWindowHeader: FC<SpacesWindowProps> = ({
             onClick={async (event) => {
               stopEventPropagation(event);
               await navigator.clipboard.writeText(
-                `${location.origin}/post/${spacesPublicationId}`
+                `${location}`
               );
               toast.success(`Copied to clipboard!`);
             }}
@@ -161,7 +161,7 @@ const SpaceWindowHeader: FC<SpacesWindowProps> = ({
               className="h-4 w-4 rounded-full bg-violet-500"
             />
             <Slug
-              slug={`@${hostProfile.handle?.localName}`}
+              slug={`@${hostProfile?.handle?.localName}`}
               className="text-sm font-normal"
             />
           </div>

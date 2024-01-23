@@ -4,20 +4,18 @@ import imageKit from '@lensshare/lib/imageKit';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import type { OG } from '@lensshare/types/misc';
 import { Card, Image } from '@lensshare/ui';
-import cn from '@lensshare/ui/cn';
 import { Leafwatch } from '@lib/leafwatch';
 import Link from 'next/link';
 import type { FC } from 'react';
 
 interface EmbedProps {
-  className?: string;
   og: OG;
   publicationId?: string;
 }
 
-const Embed: FC<EmbedProps> = ({ className, og, publicationId }) => {
+const Embed: FC<EmbedProps> = ({ og, publicationId }) => {
   return (
-    <div className={cn('mt-4 text-sm sm:w-4/6', className)}>
+    <div className="mt-4 w-full text-xs md:w-4/6">
       <Link
         href={og.url}
         onClick={(event) => {
@@ -45,7 +43,7 @@ const Embed: FC<EmbedProps> = ({ className, og, publicationId }) => {
             {!og.isLarge && og.image ? (
               <Image
                 alt="Thumbnail"
-                className="size-28 rounded-l-xl border-r md:size-36 dark:border-gray-700"
+                className="md:h-30 md:w-30 h-26 w-26 rounded-l-xl border-r dark:border-gray-700"
                 height={144}
                 onError={({ currentTarget }) => {
                   currentTarget.src = og.image as string;
@@ -57,19 +55,19 @@ const Embed: FC<EmbedProps> = ({ className, og, publicationId }) => {
             <div className="truncate p-5">
               <div className="space-y-1.5">
                 {og.title ? (
-                  <div className="truncate font-bold">{og.title}</div>
+                  <div className="truncate text-xs font-bold">{og.title}</div>
                 ) : null}
                 {og.description ? (
-                  <div className="ld-text-gray-500 line-clamp-1 whitespace-break-spaces">
+                  <div className="ld-text-gray-500 line-clamp-1 whitespace-break-spaces text-xs">
                     {og.description}
                   </div>
                 ) : null}
                 {og.site ? (
-                  <div className="hidden items-center space-x-2 pt-1.5 md:flex">
+                  <div className="flex items-center space-x-2 pt-1.5 text-xs">
                     {og.favicon ? (
                       <img
                         alt="Favicon"
-                        className="size-4 rounded-full"
+                        className="h-4 w-4 rounded-full"
                         height={16}
                         src={og.favicon}
                         width={16}
@@ -87,4 +85,4 @@ const Embed: FC<EmbedProps> = ({ className, og, publicationId }) => {
   );
 };
 
-export default Embed
+export default Embed;

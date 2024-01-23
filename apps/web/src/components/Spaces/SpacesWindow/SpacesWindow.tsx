@@ -148,16 +148,6 @@ const SpacesWindow: FC = () => {
     }
   }, [requestedPeerId, requestedPeers]);
 
-  useEffect(() => {
-    if (setDisplayName.isCallable) {
-      setDisplayName(currentProfile?.handle?.fullHandle);
-    }
-  }, [
-    currentProfile?.handle?.fullHandle,
-    setDisplayName,
-    setDisplayName.isCallable
-  ]);
-
   const handleAcceptInvitation = (requestType: string) => {
     const peerIds = Object.values(peers)
       .filter(({ role }) => role === 'host' || role === 'coHost')
@@ -181,12 +171,12 @@ const SpacesWindow: FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 top-auto z-[100] mx-auto flex h-fit w-full grow">
+    <div className="fixed inset-0 bottom-20 top-auto z-[100] mx-auto flex h-fit w-full grow rounded-xl xl:bottom-14">
       {musicTrack !== MusicTrack.DEFAULT && isMusicPlaying && (
         <audio ref={audioRef} src={musicTrack} loop />
       )}
-      <div className="relative mx-auto max-w-screen-xl grow">
-        <div className="absolute bottom-0 right-0 ml-auto rounded-xl rounded-b-none border-[1.5px] border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+      <div className="max-w-screen relative mx-auto grow">
+        <div className="absolute bottom-0 right-0 ml-auto rounded-xl  border-[1.5px] border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
           <div className="flex justify-center">
             {showAcceptRequest && isExpanded && (
               <InvitationModal
@@ -216,7 +206,7 @@ const SpacesWindow: FC = () => {
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}
           />
-          <div className="min-w-[28rem]">
+          <div className="max-w-[22rem]">
             {isExpanded ? (
               <div className="relative mt-4">
                 <div className="absolute bottom-12 right-0 z-10 h-fit">

@@ -3,6 +3,7 @@ import getNft from '@lensshare/lib/nft/getNft';
 import type {
   BasePaintCanvasMetadata,
   BasicNftMetadata,
+  SoundReleaseMetadata,
   UnlonelyChannelMetadata,
   UnlonelyNfcMetadata
 } from '@lensshare/types/nft';
@@ -12,6 +13,9 @@ import BasePaintCanvas from './BasePaintCanvas';
 import UnlonelyChannel from './UnlonelyChannel';
 import UnlonelyNfc from './UnlonelyNfc';
 import ZoraNft from './ZoraNft';
+import SoundRelease from './SoundRelease';
+
+
 
 interface NftProps {
   mintLink: string;
@@ -45,6 +49,11 @@ const Nft: FC<NftProps> = ({ mintLink, publication }) => {
   ) : provider === 'unlonely-nfc' ? (
     <UnlonelyNfc
       nftMetadata={nftMetadata as UnlonelyNfcMetadata}
+      publication={publication}
+    />
+  ) :  provider === 'sound-release' ? (
+    <SoundRelease
+      nftMetadata={nftMetadata as SoundReleaseMetadata}
       publication={publication}
     />
   ) : null;

@@ -12,13 +12,12 @@ import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import { useState } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
 
 import MenuItems from './MenuItems';
 import MoreNavItems from './MoreNavItems';
 import Search from './Search';
 import PlusOutline from '@components/Icons/PlusOutline';
-import { ADMIN_ADDRESS2, ADMIN_ADDRESS3 } from '@lensshare/data/constants';
+import { ADMIN_ADDRESS2 } from '@lensshare/data/constants';
 
 const Navbar: FC = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
@@ -68,9 +67,10 @@ const Navbar: FC = () => {
         />
         <NavItem
           current={pathname === '/messages'}
-          name="Messages"
+          name="PushChats"
           url="/messages"
         />
+        <NavItem current={pathname === '/xmtp'} name="Messages" url="/xmtp" />
         {currentProfile?.ownedBy.address === ADMIN_ADDRESS2 ? (
           <NavItem current={pathname === '/staff'} name="Staff" url="/staff" />
         ) : null}

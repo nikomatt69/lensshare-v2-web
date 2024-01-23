@@ -7,7 +7,7 @@
     "build:sw": "node script/build-sw.mjs",
     "buildVercel": "next build",
     "build": "yarn run build:sw;next build",
-    "dev": "next dev --port 4783",
+    "dev": "next dev --port 4783 --experimental-https",
     "export": "yarn run build:sw; next build",
     "start": "next start --port 4783",
     "typecheck": "tsc --pretty"
@@ -81,6 +81,7 @@
     "uuid": "^9.0.1",
     "viem": "^1.18.0",
     "wagmi": "^1.4.12",
+    "wavesurfer.js": "^7.6.4",
     "zod": "^3.22.4",
     "zustand": "^4.4.6"
   },

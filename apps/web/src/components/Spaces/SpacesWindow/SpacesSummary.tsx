@@ -39,7 +39,7 @@ const SpacesSummary: FC = () => {
           className="aspect-square h-4 w-4 rounded-full"
         />
         <div className="text-sm font-normal leading-none">
-          {hostProfile.handle?.localName}
+          {hostProfile?.handle?.localName}
         </div>
       </div>
       <div className="flex items-center text-xs font-normal leading-none text-gray-500 text-opacity-60 dark:text-white">

@@ -50,6 +50,8 @@ class LensShareDocument extends Document {
             href="/favicon-16x16.png"
           />
 
+          <script src="https://unpkg.com/wavesurfer.js@7" />
+
           {/* PWA config */}
 
           <link rel="manifest" href="/manifest.json" />

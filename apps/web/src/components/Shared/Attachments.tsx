@@ -1,16 +1,17 @@
 import { ATTACHMENT } from '@lensshare/data/constants';
-import { PUBLICATION } from '@lensshare/data/tracking';
 import imageKit from '@lensshare/lib/imageKit';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import type { MetadataAsset } from '@lensshare/types/misc';
 import { Image, LightBox } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
-import { Leafwatch } from '@lib/leafwatch';
 import type { FC } from 'react';
 import { memo, useState } from 'react';
 
 import Audio from './Audio';
 import Video from './Video';
+import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
+import type { AnyPublication } from '@lensshare/lens';
+import Link from 'next/link';
 
 const getClass = (attachments: number) => {
   if (attachments === 1) {
@@ -39,9 +40,15 @@ interface MetadataAttachment {
 interface AttachmentsProps {
   attachments: MetadataAttachment[];
   asset?: MetadataAsset;
+  publication: AnyPublication
 }
 
-const Attachments: FC<AttachmentsProps> = ({ attachments, asset }) => {
+const Attachments: FC<AttachmentsProps> = ({
+  attachments,
+  asset,
+  publication
+  
+}) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const processedAttachments = attachments.slice(0, 4);
 
@@ -52,6 +59,10 @@ const Attachments: FC<AttachmentsProps> = ({ attachments, asset }) => {
   const attachmentsHasImage = processedAttachments.some(
     (attachment) => attachment.type === 'Image'
   );
+  const targetPublication = isMirrorPublication(publication)
+    ? publication.mirrorOn
+    : publication;
+  const { id, metadata } = targetPublication;
 
   const determineDisplay = ():
     | 'displayVideoAsset'
@@ -89,7 +100,6 @@ const Attachments: FC<AttachmentsProps> = ({ attachments, asset }) => {
       }}
       onClick={() => {
         setExpandedImage(uri);
-      
       }}
       src={imageKit(uri, ATTACHMENT)}
       alt={imageKit(uri, ATTACHMENT)}
@@ -136,6 +146,7 @@ const Attachments: FC<AttachmentsProps> = ({ attachments, asset }) => {
         <Video src={asset?.uri as string} poster={asset?.cover} />
       )}
       {displayDecision === 'displayAudioAsset' && (
+        <Link href={`/listen/${publication.id}`}>
         <Audio
           src={asset?.uri as string}
           poster={asset?.cover as string}
@@ -143,6 +154,7 @@ const Attachments: FC<AttachmentsProps> = ({ attachments, asset }) => {
           title={asset?.title}
           expandCover={setExpandedImage}
         />
+        </Link>
       )}
       <LightBox
         show={Boolean(expandedImage)}

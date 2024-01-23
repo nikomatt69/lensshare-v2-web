@@ -16,7 +16,7 @@ const BottomNavigation = () => {
   const isActivePath = (path: string) => router.pathname === path;
 
   return (
-    <div className="pb-safe fixed inset-x-0 bottom-0 z-[5] border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-black md:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-[5] border-t border-gray-200 bg-white pb-3.5 dark:border-gray-800 dark:bg-black md:hidden">
       <div className="grid grid-cols-4">
         <Link href="/" className="mx-auto my-2">
           {isActivePath('/') ? (
@@ -40,8 +40,8 @@ const BottomNavigation = () => {
           )}
         </Link>
 
-        <Link href="/messages" className="mx-auto my-2">
-          {isActivePath('/messages') ? (
+        <Link href="/xmtp" className="mx-auto my-2">
+          {isActivePath('/xmtp') ? (
             <EnvelopeIcon className="text-brand h-6 w-6" />
           ) : (
             <EnvelopeIcon className=" h-6 w-6" />

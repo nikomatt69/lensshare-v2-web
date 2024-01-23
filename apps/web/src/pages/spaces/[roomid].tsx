@@ -1,3 +1,3 @@
-import Spaces from '@components/Spaces';
+import SpacesPage from '@components/Spaces';
 
-export default Spaces;
+export default SpacesPage;

@@ -5,7 +5,7 @@ import React, { createRef, useState } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
 
 import SpaceWindowHeader from './SpaceWindowHeader';
-import { HTMLAudioElementWithSetSinkId } from './SpacesTypes';
+import type { HTMLAudioElementWithSetSinkId } from './SpacesTypes';
 import Meet from '@components/Meet/Meet';
 import { DynamicIsland } from '@lensshare/ui';
 
@@ -27,8 +27,7 @@ const SpacesWindow: FC = () => {
   const [musicTrack, setMusicTrack] = useState('');
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = createRef<HTMLAudioElementWithSetSinkId>();
-  
-  
+
   const handleAcceptInvitation = (requestType: string) => {
     const peerIds = Object.values(peers)
       .filter(({ role }) => role === 'host' || role === 'coHost')
@@ -43,7 +42,6 @@ const SpacesWindow: FC = () => {
   const handleAccept = () => {
     if (me.role == 'host' || me.role == 'coHost') {
       changePeerRole(requestedPeerId, 'speaker');
-      ;
     }
     if (requestType) {
       handleAcceptInvitation(requestType);
@@ -52,9 +50,8 @@ const SpacesWindow: FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 bottom-20 top-auto z-[100] mx-auto flex h-fit w-full grow rounded-xl xl:bottom-14">
-      <div className="relative mx-auto max-w-screen-xl grow rounded-xl">
-      
+    <div className="fixed inset-0 bottom-20 top-auto z-[100] mx-auto flex h-fit w-screen grow rounded-xl xl:bottom-14">
+      <div className="max-w-screen relative mx-auto grow rounded-xl">
         <div className="absolute bottom-0 right-0 ml-auto rounded-xl  border-[1.5px] border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
           <div className="flex justify-center" />
           <SpaceWindowHeader

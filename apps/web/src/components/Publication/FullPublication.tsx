@@ -31,7 +31,7 @@ const FullPublication: FC<FullPublicationProps> = ({ publication }) => {
   const [views, setViews] = useState<number | null>(null);
 
   return (
-    <article className="p-5">
+    <article className="p-4">
       <PublicationType publication={targetPublication} showType />
       <div>
         <PublicationHeader publication={targetPublication} />
@@ -42,7 +42,7 @@ const FullPublication: FC<FullPublicationProps> = ({ publication }) => {
             <>
               <PublicationBody publication={targetPublication} />
               <div className="flex items-center gap-x-3">
-                <div className="lt-text-gray-500 my-3 text-sm">
+                <div className="lt-text-gray-500 my-2 text-sm">
                   <span>
                     {formatDate(new Date(createdAt), 'hh:mm A · MMM D, YYYY')}
                   </span>

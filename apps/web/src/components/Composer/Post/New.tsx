@@ -1,5 +1,6 @@
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import getAvatar from '@lensshare/lib/getAvatar';
+import getLennyURL from '@lensshare/lib/getLennyURL';
 import getProfile from '@lensshare/lib/getProfile';
 import { Card, Image } from '@lensshare/ui';
 import { useRouter } from 'next/router';
@@ -10,7 +11,7 @@ import { usePublicationStore } from 'src/store/usePublicationStore';
 import { useEffectOnce } from 'usehooks-ts';
 
 const NewPost: FC = () => {
-  const { query, isReady, push } = useRouter();
+  const { isReady, push, query } = useRouter();
   const currentProfile = useAppStore((state) => state.currentProfile);
   const setShowNewPostModal = useGlobalModalStateStore(
     (state) => state.setShowNewPostModal
@@ -25,7 +26,7 @@ const NewPost: FC = () => {
 
   useEffectOnce(() => {
     if (isReady && query.text) {
-      const { text, url, via, hashtags } = query;
+      const { hashtags, text, url, via } = query;
       let processedHashtags;
 
       if (hashtags) {
@@ -39,7 +40,7 @@ const NewPost: FC = () => {
         processedHashtags ? ` ${processedHashtags} ` : ''
       }${url ? `\n\n${url}` : ''}${via ? `\n\nvia @${via}` : ''}`;
 
-      setShowNewPostModal(true);
+      openModal();
       setPublicationContent(content);
     }
   });
@@ -48,15 +49,18 @@ const NewPost: FC = () => {
     <Card className="space-y-3 p-5">
       <div className="flex items-center space-x-3">
         <Image
-          src={getAvatar(currentProfile)}
+          alt={currentProfile?.id}
           className="h-9 w-9 cursor-pointer rounded-full border bg-gray-200 dark:border-gray-700"
           onClick={() => push(getProfile(currentProfile).link)}
-          alt={currentProfile?.id}
+          onError={({ currentTarget }) => {
+            currentTarget.src = getLennyURL(currentProfile?.id);
+          }}
+          src={getAvatar(currentProfile)}
         />
         <button
-          className="flex w-full items-center space-x-2 rounded-xl border bg-gray-100 px-4 py-2 dark:border-gray-700 dark:bg-gray-900"
-          type="button"
+          className="outline-brand-500 flex w-full items-center space-x-2 rounded-xl border bg-gray-100 px-4 py-2 dark:border-gray-700 dark:bg-gray-900"
           onClick={() => openModal()}
+          type="button"
         >
           <PencilSquareIcon className="h-5 w-5" />
           <span>What's happening?</span>
@@ -65,5 +69,4 @@ const NewPost: FC = () => {
     </Card>
   );
 };
-
 export default NewPost;
