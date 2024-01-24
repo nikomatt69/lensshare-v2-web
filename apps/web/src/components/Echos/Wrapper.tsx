@@ -1,34 +1,42 @@
-import Audio from '@components/Shared/Audio';
-import type { MetadataAsset } from '@lensshare/types/misc';
+import Player from '@components/Shared/Audio/Player';
+import type { PrimaryPublication } from '@lensshare/lens';
 import type { APITypes } from 'plyr-react';
-import { useState, type FC, type Ref } from 'react';
+import type { FC } from 'react';
+import React, { useRef, useState } from 'react';
 import useEchoStore from 'src/store/echos';
-
-interface MetadataAttachment {
-  uri: string;
-  type: 'Audio';
-}
+import { Image } from '@lensshare/ui';
+import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
+import imageKit from '@lensshare/lib/imageKit';
+import getAvatar from '@lensshare/lib/getAvatar';
 type Props = {
-
-  asset?: MetadataAsset;
+  children: React.ReactNode;
+  audio: PrimaryPublication;
 };
 
-const Wrapper: FC<Props> = ({  asset }) => {
+const Wrapper: FC<Props> = ({ children, audio }) => {
+  const [playing, setPlaying] = useState(false);
+  const playerRef = useRef<APITypes>(null);
   const selectedTrack = useEchoStore((state) => state.selectedTrack);
-  const [expandedImage, setExpandedImage] = useState<string | null>(null);
+
   return (
     <>
       {' '}
       <div className="xs:mb-22 sm:mb-22 display:absolute mx-auto mb-10 h-full max-w-[100rem] md:mb-10 lg:mb-10">
- 
+        {children}
         {selectedTrack && (
           <div className="z-999 xs:max-h-10 fixed bottom-14 left-0 right-0 z-[5] m-auto flex  items-center justify-around overflow-hidden rounded-lg  border-2 border-b-0 border-l border-r border-t border-blue-700 bg-white px-4 py-3 dark:bg-gray-800 lg:w-[1100px] xl:w-[1200px]">
-            <Audio
-              src={asset?.uri as string}
-              poster={asset?.cover as string}
-              artist={asset?.artist}
-              title={asset?.title}
-              expandCover={setExpandedImage}
+            <div className="h-16 w-16 flex-none">
+              <Image
+                src={getAvatar(selectedTrack?.id?.metadata)}
+                width={500}
+                height={500}
+                className="h-full w-full"
+             
+              />
+            </div>
+            <Player
+              playerRef={playerRef}
+              src={selectedTrack.id}
             />
           </div>
         )}

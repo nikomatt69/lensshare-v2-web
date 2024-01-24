@@ -1,3 +1,3 @@
-import Listen from '@components/Listen'
+import ListenFeedRender from '@components/Listen/MusicPage'
 
-export default Listen
+export default ListenFeedRender

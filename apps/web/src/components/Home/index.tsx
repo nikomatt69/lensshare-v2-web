@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 /* eslint-disable react/jsx-no-useless-fragment */
 import MetaTags from '@components/Common/MetaTags';
 import NewPost from '@components/Composer/Post/New';
@@ -20,11 +21,10 @@ import SetProfile from './SetProfile';
 import Timeline from './Timeline';
 import Waitlist from './Waitlist';
 import { useTheme } from 'next-themes';
-import EnableMessages from './EnableMessages';
-import RefreshButton from './Refresh';
 import Trending from './Trending';
 import RecommendedProfiles from './RecommendedProfiles';
 import Wrapper from '@components/Echos/Wrapper';
+import type { PrimaryPublication } from '@lensshare/lens';
 
 const Home: NextPage = (publication) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
@@ -40,7 +40,7 @@ const Home: NextPage = (publication) => {
     <>
       <MetaTags />
       {!currentProfile ? <Hero /> : null}
-      <Wrapper />
+
       <GridLayout>
         <GridItemEight>
           <>

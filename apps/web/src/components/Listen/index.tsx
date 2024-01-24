@@ -43,11 +43,11 @@ const Listen = () => {
     <>
       <MetaTags />
       {audio ? (
-        <div className="m-1">
+        <div className="m-1  mt-6">
           <Background audio={audio}>
             <Audio audio={audio} />
           </Background>
-          <div className="max-w-screen-laptop mx-auto">
+          <div className=" mx-auto">
             <Details audio={audio} />
           </div>
         </div>

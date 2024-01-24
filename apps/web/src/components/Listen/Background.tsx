@@ -2,10 +2,11 @@ import type { PrimaryPublication } from '@lensshare/lens';
 import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 import type { FC } from 'react';
 import React from 'react';
-import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
 import { imageCdn } from 'src/hooks/imageCdn';
 import { useAverageColor } from 'src/hooks/useAverageColor';
-
+import getVideoCoverUrl from '@lensshare/lib/getVideoCoverUrl';
+import { Image } from '@lensshare/ui';
+import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
 type Props = {
   children: React.ReactNode;
   audio: PrimaryPublication;
@@ -13,7 +14,7 @@ type Props = {
 
 const Background: FC<Props> = ({ audio, children }) => {
   const coverUrl = imageCdn(
-    sanitizeDStorageUrl(getThumbnailUrl(audio.metadata))
+    sanitizeDStorageUrl(getThumbnailUrl(audio?.metadata))
   );
   const { color: backgroundColor } = useAverageColor(coverUrl, true);
 
@@ -22,7 +23,7 @@ const Background: FC<Props> = ({ audio, children }) => {
       style={{ backgroundColor }}
       className="relative h-1/4 overflow-hidden rounded-3xl "
     >
-      <img
+      <Image
         src={coverUrl}
         className="absolute inset-0 w-full object-center"
         alt="audio cover"

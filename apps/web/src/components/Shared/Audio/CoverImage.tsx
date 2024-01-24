@@ -45,7 +45,7 @@ const CoverImage: FC<CoverImageProps> = ({
   };
 
   return (
-    <div className="group relative flex-none overflow-hidden">
+    <div className="group relative flex-none overflow-hidden rounded-xl">
       <button
         type="button"
         className="flex focus:outline-none"

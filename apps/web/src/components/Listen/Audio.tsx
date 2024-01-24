@@ -11,6 +11,9 @@ import { imageCdn } from 'src/hooks/imageCdn';
 import Player from '@components/Shared/Audio/Player';
 import type { APITypes } from 'plyr-react';
 import UserProfile from '@components/Shared/UserProfile';
+import useEchoStore from 'src/store/echos';
+import PublicationActions from '@components/Publication/Actions';
+import { Image } from '@lensshare/ui';
 
 type Props = {
   audio: PrimaryPublication;
@@ -20,10 +23,11 @@ const Audio: FC<Props> = ({ audio }) => {
   const [playing, setPlaying] = useState(false);
   const playerRef = useRef<APITypes>(null);
   const coverUrl = imageCdn(
-    sanitizeDStorageUrl(getThumbnailUrl(audio.metadata))
+    sanitizeDStorageUrl(getThumbnailUrl(audio?.metadata))
   );
   const metadata = getPublicationData(audio.metadata);
   const duration = metadata?.asset?.duration;
+  const setSelectedTrack = useEchoStore((state) => state.setSelectedTrack);
 
   const handlePlayPause = () => {
     if (!playerRef.current) {
@@ -40,11 +44,11 @@ const Audio: FC<Props> = ({ audio }) => {
 
   return (
     <div>
-      <div className="max-w-screen-laptop mx-auto grid place-items-center gap-6 py-10 md:grid-cols-2">
+      <div className="mx-auto grid place-items-center gap-6 py-10 md:grid-cols-2">
         <div className="relative flex aspect-[1/1] w-[250px] justify-center md:w-[350px]">
-          <img
+          <Image
             src={coverUrl}
-            className="rounded-small tape-border h-full w-full object-cover"
+            className="tape-border h-full w-full rounded-xl object-cover"
             alt="audio cover"
             height={500}
             width={500}
@@ -70,6 +74,9 @@ const Audio: FC<Props> = ({ audio }) => {
           playerRef={playerRef}
           src={getPublicationData(audio.metadata)?.asset?.uri ?? ''}
         />
+      </div>
+      <div className="m-4 ml-5 justify-center">
+        <PublicationActions publication={audio} />
       </div>
 
       <h1 className="laptop:text-2xl bg-trasparent mb-3 ml-4 text-xl font-bold">

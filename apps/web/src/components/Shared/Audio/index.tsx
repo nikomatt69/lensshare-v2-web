@@ -1,9 +1,6 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
-import { PUBLICATION } from '@lensshare/data/tracking';
 import type { AnyPublication, Profile } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
-import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
-import { Leafwatch } from '@lib/leafwatch';
 import type { APITypes } from 'plyr-react';
 import type { ChangeEvent, FC } from 'react';
 import { useRef, useState } from 'react';
@@ -12,6 +9,8 @@ import { object, string } from 'zod';
 
 import CoverImage from './CoverImage';
 import Player from './Player';
+import { Card } from '@lensshare/ui';
+import { useAverageColor } from 'src/hooks/useAverageColor';
 
 export const AudioPublicationSchema = object({
   title: string().trim().min(1, { message: 'Invalid audio title' }),
@@ -50,13 +49,11 @@ const Audio: FC<AudioProps> = ({
     }
     if (playerRef.current?.plyr.paused && !playing) {
       setPlaying(true);
-  
 
       return playerRef.current?.plyr.play();
     }
     setPlaying(false);
     playerRef.current?.plyr.pause();
-
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,38 +62,41 @@ const Audio: FC<AudioProps> = ({
       [e.target.name]: e.target.value
     });
   };
+  const { color: backgroundColor } = useAverageColor(poster, true);
 
   return (
-    <div
-      className="bg-brand-500 overflow-hidden rounded-xl border px-3.5 pt-3.5 dark:border-gray-700 md:p-0"
-      onClick={stopEventPropagation}
-    >
-      <div className="flex flex-wrap md:flex-nowrap md:space-x-2">
-        <CoverImage
-          isNew={isNew}
-          cover={isNew ? (newPreviewUri as string) : poster}
-          setCover={(previewUri, url) => {
-            setNewPreviewUri(previewUri);
-            setAudioPublication({ ...audioPublication, cover: url });
-          }}
-          imageRef={imageRef}
-          expandCover={expandCover}
-        />
-        <div className="flex w-full flex-col justify-between truncate py-1 md:px-3">
+    <Card className="divide-y-[1px] bg-black bg-opacity-40 dark:divide-gray-700">
+      <div
+        style={{ backgroundColor }}
+        className="flex flex-wrap rounded-xl bg-black bg-opacity-40 pb-4 md:flex-nowrap md:space-x-2"
+      >
+        <div className="rounded-xl">
+          <CoverImage
+            isNew={isNew}
+            cover={isNew ? (newPreviewUri as string) : poster}
+            setCover={(previewUri, url) => {
+              setNewPreviewUri(previewUri);
+              setAudioPublication({ ...audioPublication, cover: url });
+            }}
+            imageRef={imageRef}
+            expandCover={expandCover}
+          />
+        </div>
+        <div className=" flex flex-col justify-between truncate py-1 md:px-3">
           <div className="mt-3 flex justify-between md:mt-7">
             <div className="flex w-full items-center space-x-2.5 truncate">
               <button type="button" onClick={handlePlayPause}>
                 {playing && !playerRef.current?.plyr.paused ? (
-                  <PauseIcon className="h-[50px] w-[50px] text-gray-100 hover:text-white" />
+                  <PauseIcon className="h-[50px] w-[50px] hover:text-white dark:text-gray-100" />
                 ) : (
-                  <PlayIcon className="h-[50px] w-[50px] text-gray-100 hover:text-white" />
+                  <PlayIcon className="h-[50px] w-[50px] hover:text-white dark:text-gray-100" />
                 )}
               </button>
               <div className="w-full truncate pr-3">
                 {isNew ? (
                   <div className="flex w-full flex-col space-y-1">
                     <input
-                      className="border-none bg-transparent p-0 text-lg text-white placeholder:text-white focus:ring-0"
+                      className="border-none bg-transparent p-0 text-lg placeholder:text-white focus:ring-0 dark:text-white"
                       placeholder="Add title"
                       name="title"
                       value={audioPublication.title}
@@ -104,7 +104,7 @@ const Audio: FC<AudioProps> = ({
                       onChange={handleChange}
                     />
                     <input
-                      className="border-none bg-transparent p-0 text-white/70 placeholder:text-white/70 focus:ring-0"
+                      className="border-none bg-transparent p-0 placeholder:text-white/70 focus:ring-0 dark:text-white/70"
                       placeholder="Add artist"
                       name="artist"
                       value={audioPublication.artist}
@@ -114,8 +114,10 @@ const Audio: FC<AudioProps> = ({
                   </div>
                 ) : (
                   <>
-                    <h5 className="truncate text-lg text-white">{title}</h5>
-                    <h6 className="truncate text-white/70">
+                    <h5 className="truncate text-lg dark:text-white">
+                      {title}
+                    </h5>
+                    <h6 className="truncate dark:text-white/70">
                       {artist ??
                         getProfile(publication?.by as Profile).displayName}
                     </h6>
@@ -129,7 +131,7 @@ const Audio: FC<AudioProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

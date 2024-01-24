@@ -82,7 +82,7 @@ const ListenFeed = () => {
         request: { forId: publicationId }
       },
       onCompleted: () => fetchAllBytes(),
-      fetchPolicy: 'network-only'
+      
     });
   };
 
