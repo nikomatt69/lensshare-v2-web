@@ -115,7 +115,7 @@ const ProfileAnalytics: FC<ProfileAnalyticsProps> = ({ handle, profileId }) => {
   return (
     <Card>
       <div className="flex items-center space-x-2 px-6 py-5 text-lg font-bold">
-        <ChartBarSquareIcon className="text-brand-500 size-6" />
+        <ChartBarSquareIcon className="text-brand-500 h-4 w-4" />
         <span>Profile Analytics</span>
       </div>
       <div className="divider" />

@@ -1,6 +1,6 @@
 import Markup from '@components/Shared/Markup';
 import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
-import { QuoteNotification } from '@lensshare/lens';
+import type { QuoteNotification } from '@lensshare/lens';
 import getPublicationData from '@lensshare/lib/getPublicationData';
 import Link from 'next/link';
 import type { FC } from 'react';

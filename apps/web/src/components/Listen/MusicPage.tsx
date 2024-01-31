@@ -22,7 +22,7 @@ const ListenFeedRender: NextPage = () => {
   const [focus, setFocus] = useState<PublicationMetadataMainFocusType>();
 
   return (
-    <GridLayout>
+    <GridLayout className="mt-8">
       <MetaTags
         title={`Music • ${APP_NAME}`}
         description={`Explore top commented, collected and latest publications in the ${APP_NAME}.`}

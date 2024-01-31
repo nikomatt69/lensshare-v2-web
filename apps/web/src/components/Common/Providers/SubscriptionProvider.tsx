@@ -1,4 +1,4 @@
-import usePushNotificationSocket from '@components/messages2/Video/usePushNotificationSocket';
+
 import { API_URL } from '@lensshare/data/constants';
 import type { UserSigNonces, Notification } from '@lensshare/lens';
 import { useApolloClient } from '@lensshare/lens/apollo';

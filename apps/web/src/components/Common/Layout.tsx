@@ -25,11 +25,27 @@ import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 import { useRouter } from 'next/router';
 import { useDisconnectXmtp } from 'src/hooks/useXmtpClient';
 import { useSpacesStore } from 'src/store/persisted/spaces';
+import React from 'react';
+import {
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet
+} from 'react-native';
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: FC<LayoutProps> = ({ children }) => {
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   const { resolvedTheme } = useTheme();
   const setCurrentProfile = useAppStore((state) => state.setCurrentProfile);
   const currentProfile = useAppStore((state) => state.currentProfile);
@@ -82,6 +98,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       logout();
     }
   };
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1
+    },
+    scrollView: {
+      flex: 1
+    }
+  });
   const { showSpacesLobby, showSpacesWindow } = useSpacesStore();
   useEffectOnce(() => {
     validateAuthentication();
@@ -100,7 +125,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           name="theme-color"
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
-        <script src="https://unpkg.com/wavesurfer.js@7" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Toaster
         position="bottom-right"
@@ -108,16 +133,22 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         toastOptions={getToastOptions(resolvedTheme)}
       />
       <GlobalModals />
-
+      <GlobalBanners />
       <GlobalAlerts />
       <div className="flex min-h-screen  flex-col pb-14 md:pb-0">
-        <Navbar />
-        {isRoomJoined ? <SpacesWindow /> : null}
-        
-
-        <GlobalBanners />
-        <BottomNavigation />
-        {children}
+        <SafeAreaView style={styles.container}>
+          <Navbar />
+          <ScrollView
+            style={styles.scrollView}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            {children}
+          </ScrollView>
+          {isRoomJoined ? <SpacesWindow /> : null}
+          <BottomNavigation />
+        </SafeAreaView>
       </div>
     </>
   );

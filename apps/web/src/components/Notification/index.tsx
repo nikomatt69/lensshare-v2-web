@@ -9,7 +9,6 @@ import { useAppStore } from 'src/store/useAppStore';
 import FeedType from './FeedType';
 import List from './List';
 import Settings from './Settings';
-import Push from './Push';
 
 const Notification: FC = () => {
   const {
@@ -33,10 +32,9 @@ const Notification: FC = () => {
     <div className="flex grow justify-center px-0 py-8 sm:px-6 lg:px-8">
       <MetaTags title={`Notifications • ${APP_NAME}`} />
       <div className="w-full max-w-4xl space-y-3">
-        <div className="m-1 flex flex-wrap justify-between gap-3 pb-2">
+        <div className="m-1 mt-8 flex flex-wrap justify-between gap-3 pb-2">
           <FeedType setFeedType={setFeedType} feedType={feedType} />
           <Settings />
-         
         </div>
         <List feedType={feedType} />
       </div>

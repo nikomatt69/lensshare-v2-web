@@ -42,22 +42,7 @@ const Feed: FC<FeedProps> = ({ profile, type }) => {
     | []
   >([]);
 
-  const fetchAndStoreViews = async (ids: string[]) => {
-    console.log('fetchAndStoreViews', ids);
-    if (ids.length) {
-      const viewsResponse = await axios.post(
-        `${BASE_URL}/api/stats/publicationViews`,
-        { ids }
-      );
-      // push new views to state viewsResponse.data?.views
-      setViews((prev) => [...prev, ...viewsResponse.data?.views]);
-    }
-  };
-
-  const getViewCountById = (id: string) => {
-    return views.find((v) => v.id === id)?.views || 0;
-  };
-
+ 
 
   const getMediaFilters = () => {
     let filters: PublicationMetadataMainFocusType[] = [];
@@ -105,7 +90,7 @@ const Feed: FC<FeedProps> = ({ profile, type }) => {
         publications?.items?.map((p) => {
           return p.__typename === 'Mirror' ? p.mirrorOn?.id : p.id;
         }) || [];
-      await fetchAndStoreViews(ids);
+    
     }
   });
 
@@ -126,7 +111,7 @@ const Feed: FC<FeedProps> = ({ profile, type }) => {
         data?.publications?.items?.map((p) => {
           return p.__typename === 'Mirror' ? p.mirrorOn?.id : p.id;
         }) || [];
-      await fetchAndStoreViews(ids);
+    
     }
   });
 

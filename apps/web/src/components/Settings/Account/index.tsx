@@ -8,7 +8,7 @@ import { useAppStore } from 'src/store/useAppStore';
 
 import SettingsSidebar from '../Sidebar';
 import Verification from './Verification';
-import XMTPConnectButton from '@components/Shared/XmtpButton';
+
 
 const AccountSettings: NextPage = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
@@ -26,7 +26,6 @@ const AccountSettings: NextPage = () => {
       <GridItemEight className="space-y-5">
         <SuperFollow />
         <Verification />
-        <XMTPConnectButton />
       </GridItemEight>
     </GridLayout>
   );

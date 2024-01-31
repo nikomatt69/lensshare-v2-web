@@ -132,7 +132,7 @@ const Bookmark: FC<BookmarkProps> = ({ publication }) => {
           'm-2 block cursor-pointer rounded-lg px-2 py-1.5 text-sm'
         )
       }
-      onClick={(event) => {
+      onClick={(event: any) => {
         stopEventPropagation(event);
         togglePublicationProfileBookmark();
       }}

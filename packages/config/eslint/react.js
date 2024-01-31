@@ -12,7 +12,13 @@ module.exports = {
     'react/jsx-no-useless-fragment':'warn',
     'react/self-closing-comp': 'warn',
     'react/react-in-jsx-scope': 'off',
-    'jsx-a11y/role-supports-aria-props': 'off'
+    'jsx-a11y/role-supports-aria-props': 'off',
+    "react-hooks/exhaustive-deps": [
+      "error",
+      {
+        "additionalHooks": "(useAnimatedStyle|useDerivedValue|useAnimatedProps)"
+      }
+    ]
   },
   settings: {
     react: {

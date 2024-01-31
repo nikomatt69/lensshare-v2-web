@@ -8,6 +8,7 @@ import urlcat from 'urlcat';
 import Embed from './Embed';
 import Player from './Player';
 import getFavicon from 'src/utils/oembed/getFavicon';
+import Portal from './Portal/Portal index';
 
 
 interface OembedProps {
@@ -46,6 +47,7 @@ const Oembed: FC<OembedProps> = ({
     image: data?.image,
     isLarge: data?.isLarge,
     site: data?.site,
+    portal: data?.portal,
     title: data?.title,
     url: url as string
   };
@@ -58,6 +60,8 @@ const Oembed: FC<OembedProps> = ({
     <div className={className}>
       {og.html ? (
         <Player og={og} />
+      ) : og.portal ? (
+        <Portal portal={og.portal} publicationId={publicationId} />
       ) : (
         <Embed og={og} publicationId={publicationId} />
       )}

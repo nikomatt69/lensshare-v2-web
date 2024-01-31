@@ -8,7 +8,6 @@ import { useAppStore } from 'src/store/useAppStore';
 
 import SettingsSidebar from '../Sidebar';
 
-import XMTPConnectButton from '@components/Shared/XmtpButton';
 import { DynamicContextProvider, DynamicEmbeddedWidget } from '@dynamic-labs/sdk-react-core';
 import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';

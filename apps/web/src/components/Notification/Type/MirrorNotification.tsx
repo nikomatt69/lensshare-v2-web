@@ -1,6 +1,6 @@
 import Markup from '@components/Shared/Markup';
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/solid';
-import { MirrorNotification } from '@lensshare/lens';
+import type{ MirrorNotification } from '@lensshare/lens';
 import getPublicationData from '@lensshare/lib/getPublicationData';
 import Link from 'next/link';
 import plur from 'plur';

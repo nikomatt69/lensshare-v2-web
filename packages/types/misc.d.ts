@@ -14,6 +14,19 @@ export interface NewAttachment {
   file?: File;
 }
 
+export type ButtonType = 'redirect' | 'submit';
+
+export interface Portal {
+  buttons: {
+    action: string;
+    button: string;
+    type: ButtonType;
+  }[];
+  image: string;
+  version: string;
+}
+
+
 export interface UserSuggestion {
   uid: string;
   id: string;
@@ -38,6 +51,7 @@ export interface OG {
   favicon: string | null;
   isLarge: boolean | null;
   lastIndexedAt?: string;
+  portal: null | Portal;
   html: string | null;
 }
 

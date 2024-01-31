@@ -1,4 +1,4 @@
-import XMTPConnectButton from '@components/Shared/XmtpButton';
+
 import { EnvelopeOpenIcon } from '@heroicons/react/24/solid';
 import { Card } from '@lensshare/ui';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
@@ -47,7 +47,7 @@ const EnableMessages: FC = () => {
         Activate XMTP to start using LensShare to send end-to-end encrypted DMs
         to frens.
       </p>
-      <XMTPConnectButton />
+
     </Card>
   );
 };

@@ -3,7 +3,7 @@ import type { Nft } from '@lensshare/lens';
 import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 import { Card } from '@lensshare/ui';
 import type { FC } from 'react';
-import { CHAIN} from 'src/constants';
+import { CHAIN_ID} from 'src/constants';
 
 interface SingleNftProps {
   nft: Nft;
@@ -13,7 +13,7 @@ interface SingleNftProps {
 const SingleNft: FC<SingleNftProps> = ({ nft, linkToDetail = true }) => {
   const nftURL = linkToDetail
     ? `${RARIBLE_URL}/token/${
-        nft.contract.chainId === CHAIN.id ? 'polygon/' : ''
+        nft.contract.chainId === CHAIN_ID ? 'polygon/' : ''
       }${nft.contract.address}:${nft.tokenId}`.toLowerCase()
     : undefined;
 

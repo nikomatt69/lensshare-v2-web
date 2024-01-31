@@ -1,6 +1,6 @@
 import Markup from '@components/Shared/Markup';
 import { RectangleStackIcon } from '@heroicons/react/24/outline';
-import { ActedNotification } from '@lensshare/lens';
+import type { ActedNotification } from '@lensshare/lens';
 import getPublicationData from '@lensshare/lib/getPublicationData';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import Link from 'next/link';

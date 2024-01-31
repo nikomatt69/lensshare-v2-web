@@ -1,5 +1,5 @@
 import { UserPlusIcon } from '@heroicons/react/24/outline';
-import { FollowNotification } from '@lensshare/lens';
+import type { FollowNotification } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import plur from 'plur';
 import type { FC } from 'react';

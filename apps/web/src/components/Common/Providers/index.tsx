@@ -14,16 +14,15 @@ import type { ReactNode } from 'react';
 import ErrorBoundary from '../ErrorBoundary';
 import Layout from '../Layout';
 import LensSubscriptionsProvider from './LensSubscriptionsProvider';
-import PreferencesProvider from './PreferencesProvider';
 import Web3Provider from './Web3Provider';
 import { BASE_URL } from '@lensshare/data/constants';
-import LeafwatchProvider from './LeafwatchProvider';
 import SW from '@components/ServiceWorker';
-import FeaturedGroupsProvider from './FeaturedGroupsProvider';
-import TbaStatusProvider from './TbaStatusProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ThemeProvider from './ThemeProvider';
-import PushNotiProvider from './PushProvider';
+
+import HydrationZustand from './HydrationZustand';
+import FeaturedGroupsProvider from './FeaturedGroupsProvider';
+import PreferencesProvider from './PreferencesProvider';
 
 const lensApolloClient = apolloClient(authLink);
 const livepeerClient = createReactClient({
@@ -46,7 +45,9 @@ const Providers = ({ children }: { children: ReactNode }) => {
           <QueryClientProvider client={queryClient}>
             <LivepeerConfig client={livepeerClient} theme={getLivepeerTheme}>
               <ThemeProvider>
-                <Layout>{children}</Layout>
+                <HydrationZustand>
+                  <Layout>{children}</Layout>
+                </HydrationZustand>
               </ThemeProvider>
               <SpeedInsights />
               <Analytics />

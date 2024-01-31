@@ -16,7 +16,7 @@ export const GridLayout: FC<GridProps> = ({
   return (
     <div
       className={cn(
-        'container mx-auto max-w-screen-xl grow px-0 pb-2 pt-8 sm:px-5',
+        'container mx-auto mt-10 max-w-screen-xl grow px-0 pb-2 pt-8 sm:px-5',
         className
       )}
     >

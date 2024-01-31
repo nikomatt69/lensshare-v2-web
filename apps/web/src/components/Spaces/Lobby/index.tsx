@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useDisplayName } from '@huddle01/react/app-utils';
 import {
   useAudio,

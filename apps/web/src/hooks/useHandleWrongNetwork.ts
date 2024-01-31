@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { CHAIN } from 'src/constants';
+import { CHAIN_ID } from 'src/constants';
 import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
 import { useChainId } from 'wagmi';
 
@@ -10,7 +10,7 @@ const useHandleWrongNetwork = () => {
   const chain = useChainId();
 
   const handleWrongNetwork = useCallback(() => {
-    if (chain !== CHAIN.id) {
+    if (chain !== CHAIN_ID) {
       setShowWrongNetworkModal(true);
       return true;
     }

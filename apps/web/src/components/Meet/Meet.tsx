@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   useAudio,
   useEventListener,
@@ -19,8 +20,6 @@ import SwitchDeviceMenu from './SwitchDeviceMenu';
 import VideoElem from './Video';
 import { STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import { useAppStore } from 'src/store/useAppStore';
-import { Image } from '@lensshare/ui';
-import getAvatar from '@lensshare/lib/getAvatar';
 
 type HTMLAudioElementWithSetSinkId = HTMLAudioElement & {
   setSinkId: (id: string) => void;
@@ -140,7 +139,7 @@ const Meet: FC = () => {
               ? 'my-10 h-[16vh] w-[16vw]'
               : 'h-[50vh] w-[36vw]',
             resolvedTheme == 'dark' ? 'bg-gray-900' : 'bg-white-100',
-            'max-w-screen relative mt-2 flex flex-shrink-0 items-center justify-center rounded-xl '
+            'relative mt-2 flex flex-shrink-0 items-center justify-center rounded-xl '
           )}
         >
           {!isCamOff ? (
@@ -155,10 +154,10 @@ const Meet: FC = () => {
               style={{ transform: 'rotateY(180deg)' }}
             />
           ) : (
-            <Image
-              src={getAvatar(me.meId)}
+            <img
+              src={`${STATIC_ASSETS_URL}/images/default-avatar.svg`}
               alt="avatar"
-              className="mb-16 mt-16 h-10 w-10 rounded-full"
+              className="mb-16 mt-16  h-32 w-32"
             />
           )}
           <div

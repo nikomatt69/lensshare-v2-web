@@ -4,7 +4,6 @@ import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import type { FC } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
 
 import OpenAction from '../LensOpenActions';
 import Comment from './Comment';
@@ -15,8 +14,6 @@ import Views from './Views';
 import { useImpressionsStore } from 'src/store/useImpressionsStore';
 import getPublicationViewCountById from '@lib/getPublicationViewCountById';
 import { ADMIN_ADDRESS } from '@lensshare/data/constants';
-import EmbedMedia from '../EmbedMedia';
-import { VerifiedOpenActionModules } from 'src/hooks/verified-openaction-modules';
 
 interface PublicationActionsProps {
   publication: AnyPublication;
@@ -60,12 +57,10 @@ const PublicationActions: FC<PublicationActionsProps> = ({
       {canAct ? (
         <OpenAction publication={publication} showCount={showCount} />
       ) : null}
-      <EmbedMedia publicationId={publication.id}/>
       {views ? <Views views={views} showCount={showCount} /> : null}
       {currentProfile?.ownedBy.address === ADMIN_ADDRESS ? (
         <Mod publication={publication} isFullPublication={showCount} />
       ) : null}
-
     </span>
   );
 };

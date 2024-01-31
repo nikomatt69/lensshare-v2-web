@@ -11,7 +11,7 @@ import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
 import { toast } from 'react-hot-toast';
 import { VirtuosoGrid } from 'react-virtuoso';
-import { CHAIN } from 'src/constants';
+import { CHAIN_ID } from 'src/constants';
 import { useAppStore } from 'src/store/useAppStore';
 import type { NftGalleryItem } from 'src/store/useNftGalleryStore';
 import { useNftGalleryStore } from 'src/store/useNftGalleryStore';
@@ -29,7 +29,7 @@ const Picker: FC<PickerProps> = ({ onlyAllowOne }) => {
   // Variables
   const request: NftsRequest = {
     where: {
-      chainIds: IS_MAINNET ? [CHAIN.id, mainnet.id] : [CHAIN.id],
+      chainIds: IS_MAINNET ? [CHAIN_ID, mainnet.id] : [CHAIN_ID],
       forProfileId: currentProfile?.id
     },
     limit: LimitType.TwentyFive

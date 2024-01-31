@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 import Attachments from '@components/Shared/Attachments';
 import Quote from '@components/Shared/Embed/Quote';
 import Markup from '@components/Shared/Markup';
@@ -16,7 +17,7 @@ import Link from 'next/link';
 import type { FC } from 'react';
 import { memo, useState } from 'react';
 import { isIOS, isMobile } from 'react-device-detect';
-
+import { CardBody, CardContainer } from '@lensshare/ui/src/3DCard';
 import Nft from './HeyOpenActions/Nft';
 import NotSupportedPublication from './NotSupportedPublication';
 import getSnapshotProposalId from '@lib/getSnapshotProposalId';
@@ -114,33 +115,37 @@ const PublicationBody: FC<PublicationBodyProps> = ({
           <Link href={`/posts/${id}`}>Show more</Link>
         </div>
       ) : null}
-      {/* Attachments and Quotes */}
-      {showAttachments ? (
-        <Attachments
-          publication={publication}
-          attachments={filteredAttachments}
-          asset={filteredAsset}
-        />
-      ) : null}
-      {/* Open actions */}
-      {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
-      {showNft ? (
-        <Nft mintLink={metadata.mintLink} publication={publication.id} />
-      ) : null}
-      {showLive ? (
-        <div className="mt-3">
-          <Video src={metadata.liveURL || metadata.playbackURL} />
-        </div>
-      ) : null}
-      {showSharingLink ? (
-        <Oembed publicationId={publication.id} url={metadata.sharingLink} />
-      ) : null}
-      {showOembed ? (
-        <Oembed url={urls[0]} publicationId={publication.id} />
-      ) : null}
-      {targetPublication.__typename === 'Quote' && (
-        <Quote publication={targetPublication.quoteOn} />
-      )}
+      <CardContainer className="w-max-fit">
+        <CardBody className="group/card relative   rounded-xl  border-black/[0.1]   dark:border-white/[0.2]  dark:hover:shadow-emerald-500/[0.1]   ">
+          {/* Attachments and Quotes */}
+          {showAttachments ? (
+            <Attachments
+              publication={publication}
+              attachments={filteredAttachments}
+              asset={filteredAsset}
+            />
+          ) : null}
+          {/* Open actions */}
+          {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
+          {showNft ? (
+            <Nft mintLink={metadata.mintLink} publication={publication.id} />
+          ) : null}
+          {showLive ? (
+            <div className="mt-3">
+              <Video src={metadata.liveURL || metadata.playbackURL} />
+            </div>
+          ) : null}
+          {showSharingLink ? (
+            <Oembed publicationId={publication.id} url={metadata.sharingLink} />
+          ) : null}
+          {showOembed ? (
+            <Oembed url={urls[0]} publicationId={publication.id} />
+          ) : null}
+          {targetPublication.__typename === 'Quote' && (
+            <Quote publication={targetPublication.quoteOn} />
+          )}
+        </CardBody>
+      </CardContainer>
     </div>
   );
 };

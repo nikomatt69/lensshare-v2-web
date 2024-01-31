@@ -32,7 +32,7 @@ const PreviewSpacesHeader: FC = () => {
         <Slug slug={`@${hostProfile?.handle?.fullHandle}`} />
       </div>
       <div className="pt-2 text-base font-normal text-gray-500 dark:text-gray-300">
-        {space.title}
+        {space?.title}
       </div>
       <XMarkIcon
         className="absolute right-4 top-4 h-5 w-5 cursor-pointer"

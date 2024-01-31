@@ -22,7 +22,7 @@ const Share: FC<ShareProps> = ({ publication }) => {
           'm-2 block cursor-pointer rounded-lg px-2 py-1.5 text-sm'
         )
       }
-      onClick={async (event) => {
+      onClick={async (event: any) => {
         stopEventPropagation(event);
         await navigator.clipboard.writeText(
           `${location.origin}/posts/${publication?.id}`

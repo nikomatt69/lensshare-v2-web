@@ -1,8 +1,6 @@
 import { LENSSHARE_API_URL } from '@lensshare/data/constants';
 import getPreferences from '@lib/api/getPreferences';
 import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
-import getCurrentSession from '@lib/getCurrentSession';
-import { FeatureFlag } from '@lensshare/data/feature-flags';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { type FC } from 'react';
@@ -12,9 +10,10 @@ import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import { useProStore } from 'src/store/useProStore';
 import { isAddress } from 'viem';
 import { useMembershipNftStore } from 'src/store/useMembershipNftStore';
+import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 
 const PreferencesProvider: FC = () => {
-  const { id: sessionProfileId } = getCurrentSession();
+  const currentSessionProfileId = getCurrentSessionProfileId();
   const setVerifiedMembers = useAppStore((state) => state.setVerifiedMembers);
   const setPreferences = usePreferencesStore((state) => state.setPreferences);
   const setIsPro = useProStore((state) => state.setIsPro);
@@ -32,9 +31,12 @@ const PreferencesProvider: FC = () => {
   // Fetch preferences
   const fetchPreferences = async () => {
     try {
-      if (Boolean(sessionProfileId) && !isAddress(sessionProfileId)) {
+      if (
+        Boolean(currentSessionProfileId) &&
+        !isAddress(currentSessionProfileId)
+      ) {
         const preferences = await getPreferences(
-          sessionProfileId,
+          currentSessionProfileId,
           getAuthWorkerHeaders()
         );
 
@@ -44,17 +46,6 @@ const PreferencesProvider: FC = () => {
             preferences.preference?.highSignalNotificationFilter || false,
           isPride: preferences.preference?.isPride || false
         });
-
-        // Pro
-        setIsPro(preferences.pro.enabled);
-
-        // Feature flags
-        setFeatureFlags(preferences.features);
-        setStaffMode(preferences.features.includes(FeatureFlag.Spaces));
-        setGardenerMode(preferences?.features.includes(FeatureFlag.Spaces));
-
-        // Membership NFT
-        setDismissedOrMinted(preferences.membershipNft.dismissedOrMinted);
       }
       return true;
     } catch {
@@ -64,7 +55,7 @@ const PreferencesProvider: FC = () => {
 
   useQuery({
     queryFn: fetchPreferences,
-    queryKey: ['fetchPreferences', sessionProfileId || '']
+    queryKey: ['fetchPreferences', currentSessionProfileId || '']
   });
 
   // Fetch verified members

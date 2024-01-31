@@ -83,51 +83,57 @@ const SoundRelease: FC<SoundReleaseProps> = ({ nftMetadata, publication }) => {
       onClick={(event) => stopEventPropagation(event)}
     >
       <div
-        className="rounded-t-xl dark:border-gray-700"
+        className="rounded-t-xl  dark:border-gray-700"
         onClick={stopEventPropagation}
         style={{
           backgroundColor: coverImage.dominantColor,
           backgroundImage: `url(${coverImage.url})`
         }}
       >
-        <div className="!rounded-t-xl backdrop-blur-2xl backdrop-brightness-50">
+        <div className="!rounded-t-xl  backdrop-blur-2xl backdrop-brightness-50">
           <div className="flex p-5">
             <Image
               alt={`sound-release-cover-${coverImage.url}`}
-              className="size-40 rounded-xl object-cover"
+              className="h-28 w-28 rounded-xl object-cover"
               draggable={false}
               height={160}
               src={coverImage.url}
               width={160}
             />
-            <div className="flex w-full flex-col justify-between truncate px-3">
-              <div className="mt-3 flex justify-between md:mt-7">
-                <div className="flex w-full items-center space-x-2.5 truncate">
+            <div className="m-1 flex w-full flex-col justify-between truncate rounded-xl bg-gray-500/90 px-3">
+              <div className=" mt-3 flex-col justify-between md:mt-7">
+                <div className="w-full flex items-center space-x-2.5 truncate rounded-xl">
                   <button onClick={handlePlayPause} type="button">
                     {playing && !playerRef.current?.plyr.paused ? (
-                      <PauseIcon className="h-[50] w-[50px] text-gray-100 hover:text-white" />
+                      <PauseIcon className=" h-[40] w-[40px] rounded-3xl text-gray-100 hover:text-white" />
                     ) : (
-                      <PlayIcon className="h-[50] w-[50px] text-gray-100 hover:text-white" />
+                      <PlayIcon className=" h-[40] w-[40px] rounded-3xl text-gray-100 hover:text-white" />
                     )}
                   </button>
                   <div className="w-full space-y-1 truncate pr-3">
-                    <h5 className="truncate text-lg text-white">{title}</h5>
-                    <h6 className="flex items-center space-x-2 truncate text-white/70">
+                    <h5 className=" truncate rounded-3xl text-lg text-white">
+                      {title}
+                    </h5>
+                    <h6 className="flex items-center space-x-2 truncate  text-white/70">
                       <img
                         alt="Artist"
-                        className="size-4 rounded-full"
+                        className="h-4 w-4 rounded-full"
                         height={16}
                         src={artist.user.avatar.url}
                         width={16}
                       />
-                      <div>{artist.name}</div>
+                      <div className="  rounded-3xl text-gray-100 hover:text-white">
+                        {artist.name}
+                      </div>
                       <span>•</span>
-                      <b className="text-sm">{humanize(numSold)} Mints</b>
+                      <b className=" rounded-3xl text-sm">
+                        {humanize(numSold)} Mints
+                      </b>
                     </h6>
                   </div>
                 </div>
               </div>
-              <div className="md:pb-3">
+              <div className=" rounded-xl md:pb-3">
                 <Player playerRef={playerRef} src={track.audio.audio256k.url} />
               </div>
             </div>
@@ -149,9 +155,8 @@ const SoundRelease: FC<SoundReleaseProps> = ({ nftMetadata, publication }) => {
         <div className="mr-5 flex flex-wrap items-center gap-2">
           <Tooltip content="Sound Release" placement="right">
             <img
-              alt="Sound"
-              className="size-5 rounded-full"
-              src={`${STATIC_ASSETS_URL}/brands/sound.png`}
+              className="h-5 w-5 rounded-full"
+              src={`${STATIC_ASSETS_URL}/images/sound.png`}
             />
           </Tooltip>
           <div className="text-sm font-bold">{title}</div>
@@ -166,7 +171,7 @@ const SoundRelease: FC<SoundReleaseProps> = ({ nftMetadata, publication }) => {
         >
           <Button
             className="text-sm"
-            icon={<CursorArrowRaysIcon className="size-4" />}
+            icon={<CursorArrowRaysIcon className="h-4 w-4" />}
             size="md"
           >
             Open

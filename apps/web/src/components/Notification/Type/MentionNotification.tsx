@@ -1,6 +1,6 @@
 import Markup from '@components/Shared/Markup';
 import { AtSymbolIcon } from '@heroicons/react/24/outline';
-import { MentionNotification } from '@lensshare/lens';
+import type { MentionNotification } from '@lensshare/lens';
 import getPublicationData from '@lensshare/lib/getPublicationData';
 import Link from 'next/link';
 import type { FC } from 'react';

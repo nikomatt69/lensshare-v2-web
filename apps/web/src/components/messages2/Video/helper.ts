@@ -3,7 +3,7 @@ import type { IFeeds, IUser } from '@pushprotocol/restapi';
 
 import { ENV } from '@pushprotocol/restapi/src/lib/constants';
 import moment from 'moment';
-import { CHAIN } from 'src/constants';
+import { CHAIN_ID } from 'src/constants';
 
 export const HANDLE_SUFFIX = {
   LENS: '.lens',
@@ -11,7 +11,7 @@ export const HANDLE_SUFFIX = {
 } as const;
 
 export const isCAIP = (id: string) => {
-  const prefix = `nft:eip155:${CHAIN.id}:${LENSHUB_PROXY}:`;
+  const prefix = `nft:eip155:${CHAIN_ID}:${LENSHUB_PROXY}:`;
   return id?.startsWith(prefix);
 };
 
@@ -24,7 +24,7 @@ export const getProfileFromDID = (id: string) => {
 };
 
 export const getCAIPFromLensID = (id: string) => {
-  return `nft:eip155:${CHAIN.id}:${LENSHUB_PROXY}:${id}`;
+  return `nft:eip155:${CHAIN_ID}:${LENSHUB_PROXY}:${id}`;
 };
 
 export const isProfileExist = (connectedProfile: IUser | undefined) => {

@@ -10,6 +10,7 @@ import getIsLarge from './meta/getIsLarge';
 import getSite from './meta/getSite';
 import getTitle from './meta/getTitle';
 import getFavicon from './getFavicon';
+import getPortal from './meta/getPortal';
 
 
 const getMetadata = async (url: string): Promise<any> => {
@@ -32,6 +33,7 @@ const getMetadata = async (url: string): Promise<any> => {
     favicon: getFavicon(url),
     isLarge,
     lastIndexedAt: new Date().toISOString(),
+    portal: getPortal(document),
     html: generateIframe(getEmbedUrl(document), url)
   };
 

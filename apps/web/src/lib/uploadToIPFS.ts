@@ -3,14 +3,15 @@ import { Upload } from '@aws-sdk/lib-storage';
 import {
   EVER_API,
   S3_BUCKET,
-  STS_GENERATOR_WORKER_URL
+  STS_GENERATOR_WORKER_URL,
+  THIRDWEB_CLIENT_ID
 } from '@lensshare/data/constants';
 import type { IPFSResponse } from '@lensshare/types/misc';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
-
+import { ThirdwebStorage } from '@thirdweb-dev/storage';
 const FALLBACK_TYPE = 'image/jpeg';
-
+const FALLBACK_TO_THIRDWEB = true;
 /**
  * Returns an S3 client with temporary credentials obtained from the STS service.
  *
@@ -60,6 +61,24 @@ const uploadToIPFS = async (
 ): Promise<IPFSResponse[]> => {
   try {
     const files = Array.from(data);
+    if (FALLBACK_TO_THIRDWEB) {
+      const storage = new ThirdwebStorage({
+        clientId: THIRDWEB_CLIENT_ID,
+        secretKey: process.env.NEXT_PUBLIC_THIRDWEB_TOKEN
+      });
+      const allFiles = Array.from(data).map((blob: any) => {
+        const file = new File([blob], uuid(), { type: blob.type });
+        return file;
+      });
+
+      const uris = await storage.uploadBatch(allFiles);
+
+      return uris.map((uri: string) => ({
+        mimeType: data.type || FALLBACK_TYPE,
+        uri
+      }));
+    }
+
     const client = await getS3Client();
     const attachments = await Promise.all(
       files.map(async (_: any, i: number) => {

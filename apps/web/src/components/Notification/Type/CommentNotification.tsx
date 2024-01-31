@@ -1,7 +1,7 @@
 //million-ignore
 import Markup from '@components/Shared/Markup';
 import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline';
-import { CommentNotification } from '@lensshare/lens';
+import type { CommentNotification } from '@lensshare/lens';
 import getPublicationData from '@lensshare/lib/getPublicationData';
 import Link from 'next/link';
 import type { FC } from 'react';

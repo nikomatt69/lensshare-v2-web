@@ -1,18 +1,36 @@
+const { withExpo } = require('@expo/next-adapter');
+
+const withPlugins = require('next-compose-plugins');
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE_BUNDLE === '1'
+});
+
 const headers = [{ key: 'Cache-Control', value: 'public, max-age=3600' }];
+
 const allowedBots =
   '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
 
 /** @type {import('next').NextConfig} */
 
-const nextConfig = {
+const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: true
   },
-  transpilePackages: ['data'],
+  transpilePackages: [
+    'data',
+    'react-native-reanimated',
+    'react-native',
+    'expo'
+  ],
+
+
+
   experimental: {
-    scrollRestoration: true
+    scrollRestoration: true,
+    forceSwcTransforms: true
   },
   async rewrites() {
     return [
@@ -68,6 +86,6 @@ const nextConfig = {
       { source: '/thanks', headers }
     ];
   }
-};
+});
 
 module.exports = nextConfig;

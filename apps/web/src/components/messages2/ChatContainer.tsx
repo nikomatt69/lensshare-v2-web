@@ -15,6 +15,7 @@ import { transformMessages } from '@lib/mapReactionsToMessages';
 import { VideoCallStatus, chat } from '@pushprotocol/restapi';
 import { MessageType } from '@pushprotocol/restapi/src/lib/constants';
 import {
+  
   useInfiniteQuery,
   useMutation,
   useQueryClient
@@ -113,7 +114,7 @@ const ChatListItemContainer = ({
           limit: ITEM_LIMIT,
           threadhash: pageParam,
           toDecrypt: true
-        })) as unknown as IMessageIPFSWithCID[]) ?? [];
+        })) as IMessageIPFSWithCID[]) ?? [];
 
       return history;
     },
