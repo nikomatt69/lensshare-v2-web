@@ -9,6 +9,7 @@ import { number, object, string } from 'zod';
 import getPortal from 'src/utils/oembed/meta/getPortal';
 import validateLensAccount from 'src/utils/middlewares/validateLensAccount';
 import { error } from 'console';
+import allowCors from 'src/utils/allowCors';
 
 type ExtensionRequest = {
   buttonIndex: number;
@@ -22,10 +23,7 @@ const validationSchema = object({
   publicationId: string()
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).end(); // Method Not Allowed
   }
@@ -77,6 +75,8 @@ export default async function handler(
 
     return res.status(200).json({ portal: getPortal(document), success: true });
   } catch (error) {
-    return  error;
+    return error;
   }
 }
+
+export default allowCors(handler);

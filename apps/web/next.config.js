@@ -1,19 +1,12 @@
-const { withExpo } = require('@expo/next-adapter');
-
-const withPlugins = require('next-compose-plugins');
-
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE_BUNDLE === '1'
-});
 
 const headers = [{ key: 'Cache-Control', value: 'public, max-age=3600' }];
 
 const allowedBots =
-  '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
+  '.*(bot|telegram|baidu|bing|yandex|iframely|whatsapp|facebook).*';
 
 /** @type {import('next').NextConfig} */
 
-const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
+const nextConfig =  {
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
@@ -30,7 +23,6 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
 
   experimental: {
     scrollRestoration: true,
-    forceSwcTransforms: true
   },
   async rewrites() {
     return [
