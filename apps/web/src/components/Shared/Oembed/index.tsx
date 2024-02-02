@@ -13,7 +13,6 @@ import Portal from './Portal/Portal index';
 
 interface OembedProps {
   className?: string;
-  onData?: (data: OG) => void;
   publicationId?: string;
   url?: string;
 }
@@ -46,8 +45,8 @@ const Oembed: FC<OembedProps> = ({
     html: data?.html,
     image: data?.image,
     isLarge: data?.isLarge,
-    site: data?.site,
     portal: data?.portal,
+    site: data?.site,
     title: data?.title,
     url: url as string
   };

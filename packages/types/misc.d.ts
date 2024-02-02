@@ -18,13 +18,14 @@ export type ButtonType = 'redirect' | 'submit';
 
 export interface Portal {
   buttons: {
-    action: string;
     button: string;
     type: ButtonType;
   }[];
   image: string;
+  postUrl: string;
   version: string;
 }
+
 
 
 export interface UserSuggestion {
@@ -43,18 +44,17 @@ export interface InflowType {
 }
 
 export interface OG {
-  url: string;
-  title: string | null;
-  description: string | null;
-  site: string | null;
-  image: string | null;
-  favicon: string | null;
+  description: null | string;
+  favicon: null | string;
+  html: null | string;
+  image: null | string;
   isLarge: boolean | null;
   lastIndexedAt?: string;
   portal: null | Portal;
-  html: string | null;
+  site: null | string;
+  title: null | string;
+  url: string;
 }
-
 export interface ProfileInterest {
   category: { label: string; id: string };
   subCategories: { label: string; id: string }[];

@@ -13,11 +13,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     logger.info(`Oembed generated for ${url}`);
-    const metadata = await getMetadata(url as string);
-    return res.status(200).setHeader('Cache-Control', CACHE_AGE).json({
-      oembed: metadata,
-      success: true
-    });
+    return res
+      .status(200)
+      .setHeader('Cache-Control', CACHE_AGE)
+      .json({
+        oembed: await getMetadata(url as string),
+        success: true
+      });
   } catch (error) {
     logger.error(Errors.NoBody);
     return res.status(500).json({ error: 'Internal Server Error' });

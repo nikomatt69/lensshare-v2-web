@@ -254,8 +254,8 @@ export const WMATIC_TOKEN_ADDRESS = IS_MAINNET
   : '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889';
 
 export const BUNDLR_NODE_URL = IS_MAINNET
-  ? 'https://node1.bundlr.network'
-  : 'https://devnet.bundlr.network';
+  ? 'https://node2.irys.xyz'
+  : 'https://node2.irys.xyz';
 
 export const BUNDLR_CURRENCY = 'matic';
 export const BUNDLR_CONNECT_MESSAGE = 'Sign to initialize & estimate upload...';

@@ -29,7 +29,7 @@ const defaultMetadata: Metadata = {
     type: 'website'
   },
   title: APP_NAME,
-  twitter: { card: 'summary_large_image', site: '@lensshareappxyz' }
+  twitter: { card: 'summary_large_image' }
 };
 
 export default defaultMetadata;

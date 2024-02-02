@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     other: { 'lens:id': profile.id },
     publisher: displayName,
     title: title,
-    twitter: { card: 'summary', site: '@lenssharedotxyz' }
+    twitter: { card: 'summary'}
   };
 }
 

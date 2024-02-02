@@ -19,6 +19,7 @@ const MetaTags: FC<MetaTagsProps> = ({
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"
       />
+      <link href="https://lenshareapp.xyz" rel="canonical" />
 
       <meta property="og:url" content="https://lenshareapp.xyz" />
       <meta property="og:site_name" content={APP_NAME} />
@@ -28,14 +29,14 @@ const MetaTags: FC<MetaTagsProps> = ({
       <meta property="og:image:width" content="400" />
       <meta property="og:image:height" content="400" />
 
-      <meta property="twitter:card" content="summary" />
+      <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:site" content={APP_NAME} />
       <meta property="twitter:title" content={title} />
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content={DEFAULT_OG} />
       <meta property="twitter:image:width" content="400" />
       <meta property="twitter:image:height" content="400" />
-      <meta property="twitter:creator" content="lenshareappxyz" />
+      <meta property="twitter:creator" content="@lenshareappxyz" />
 
       <link
         rel="search"
@@ -43,6 +44,27 @@ const MetaTags: FC<MetaTagsProps> = ({
         href="/opensearch.xml"
         title={APP_NAME}
       />
+
+      {/* Prefetch and Preconnect */}
+      <link rel="preconnect" href="https://static-assets.lenshareapp.xyz" />
+      <link rel="dns-prefetch" href="https://static-assets.lenshareapp.xyz" />
+      <link rel="preconnect" href="https://asset.lenshareapp.xyz" />
+      <link rel="dns-prefetch" href="https://asset.lenshareapp.xyz" />
+      <link rel="preconnect" href="https://prerender.lenshareapp.xyz" />
+      <link rel="dns-prefetch" href="https://prerender.lenshareapp.xyz" />
+      <link rel="preconnect" href="https://og.lenshareapp.xyz" />
+      <link rel="dns-prefetch" href="https://og.lenshareapp.xyz" />
+
+      {/* PWA config */}
+
+      <link rel="manifest" href="/manifest.json" />
+
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      <meta name="apple-mobile-web-app-title" content="LensShare" />
+      <link rel="icon" href="/images/icon.png" />
+      <meta name="theme-color" content="#000" />
     </Head>
   );
 };

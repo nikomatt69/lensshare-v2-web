@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     alternates: {
-      canonical: `https://lenshareapp.xyz/posts/${targetPublication.id}`
+      canonical: `https://lenshareapp.xyz/meet/${targetPublication.id}`
     },
     applicationName: APP_NAME,
     authors: {
@@ -74,14 +74,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       slugWithPrefix
     ],
     metadataBase: new URL(
-      `https://lenshareapp.xyz/posts/${targetPublication.id}`
+      `https://lenshareapp.xyz/meet/${targetPublication.id}`
     ),
     openGraph: {
       description: description,
       images: getPublicationOGImages(metadata) as any,
       siteName: 'LensShare',
       type: 'article',
-      url: `https://lenshareapp.xyz/posts/${targetPublication.id}`
+      url: `https://lenshareapp.xyz/meet/${targetPublication.id}`
     },
     other: {
       'count:actions': targetPublication.stats.countOpenActions,
@@ -96,7 +96,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: title,
     twitter: {
       card: assetIsAudio ? 'summary' : 'summary_large_image',
-      site: '@lensshareappxyz'
+      
     }
   };
 }
@@ -148,7 +148,7 @@ export default async function Page({ params }: Props) {
 
             return (
               <li key={publication.id}>
-                <a href={`https://lenshareapp.xyz/posts/${publication.id}`}>
+                <a href={`https://lenshareapp.xyz/meet/${publication.id}`}>
                   {filteredContent}
                 </a>
               </li>
