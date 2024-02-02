@@ -1,8 +1,6 @@
 {
   "extends": "@lensshare/config/react.tsconfig.json",
   "compilerOptions": {
-    "jsx": "preserve",
-    "esModuleInterop": true,
     "baseUrl": ".",
     "lib": [
       "DOM",

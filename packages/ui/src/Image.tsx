@@ -1,4 +1,4 @@
-import { PLACEHOLDER_IMAGE } from '@lensshare/data/constants';
+import { DEFAULT_OG, PLACEHOLDER_IMAGE } from '@lensshare/data/constants';
 import type {
   DetailedHTMLProps,
   ImgHTMLAttributes,
@@ -36,7 +36,7 @@ export const Image = forwardRef(function Image(
   return (
     <img
       {...props}
-      src={imageLoadFailed ? PLACEHOLDER_IMAGE : props.src}
+      src={imageLoadFailed ? DEFAULT_OG : props.src}
       onError={handleError}
       alt={props.alt || ''}
       ref={ref}
