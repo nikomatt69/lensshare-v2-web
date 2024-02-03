@@ -26,7 +26,7 @@ const EncryptedPublication: FC<EncryptedPublicationProps> = ({
           </div>
           <Beta />
         </div>
-        <Criteria publication={publication.id} />
+        <Criteria publication={publication} />
       </div>
     </Card>
   );

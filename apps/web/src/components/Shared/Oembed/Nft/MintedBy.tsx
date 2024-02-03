@@ -3,7 +3,6 @@ import type { FC } from 'react';
 import type { Address } from 'viem';
 
 import SmallUserProfile from '@components/Shared/SmallUserProfile';
-import { useProfileQuery } from '@lensshare/lens';
 import { useDefaultProfileQuery } from '@lensshare/lens/generated2';
 
 interface MintedByProps {
@@ -26,11 +25,7 @@ const MintedBy: FC<MintedByProps> = ({ address }) => {
 
   return (
     <div className="absolute left-3 top-3 rounded-lg bg-gray-950/70 px-2 py-1 text-sm text-white">
-      <SmallUserProfile
-      
-        profile={data.defaultProfile as Profile}
-        smallAvatar
-      />
+      <SmallUserProfile profile={data.defaultProfile as Profile} smallAvatar />
     </div>
   );
 };

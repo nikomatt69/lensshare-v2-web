@@ -20,7 +20,6 @@ class LensShareDocument extends Document {
           <link rel="dns-prefetch" href="https://prerender.lenshareapp.xyz" />
           <link rel="preconnect" href="https://og.lenshareapp.xyz" />
           <link rel="dns-prefetch" href="https://og.lenshareapp.xyz" />
-
           {/* Misc */}
           <meta name="application-name" content="LensShare" />
           <meta name="mobile-web-app-capable" content="yes" />
