@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 
 import { APP_NAME, DESCRIPTION } from '@lensshare/data/constants';
 import React from 'react';
-import defaultMetadata from './defaultMetadata';
+import defaultMetadata from 'defaultMetadata';
+
 
 
 export const metadata: Metadata = defaultMetadata;

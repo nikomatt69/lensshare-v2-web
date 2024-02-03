@@ -9,6 +9,7 @@ import Embed from './Embed';
 import Player from './Player';
 import getFavicon from 'src/utils/oembed/getFavicon';
 import Portal from './Portal/Portal index';
+import Nft from './Nft';
 
 
 interface OembedProps {
@@ -44,6 +45,7 @@ const Oembed: FC<OembedProps> = ({
     favicon: getFavicon(data.url),
     html: data?.html,
     image: data?.image,
+    nft: data?.nft,
     isLarge: data?.isLarge,
     portal: data?.portal,
     site: data?.site,
@@ -59,6 +61,8 @@ const Oembed: FC<OembedProps> = ({
     <div className={className}>
       {og.html ? (
         <Player og={og} />
+      ) : og.nft ? (
+        <Nft nft={og.nft} publicationId={publicationId} />
       ) : og.portal ? (
         <Portal portal={og.portal} publicationId={publicationId} />
       ) : (

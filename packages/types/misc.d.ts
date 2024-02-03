@@ -26,6 +26,19 @@ export interface Portal {
   version: string;
 }
 
+export interface Nft {
+  chain: null | string;
+  collectionName: string;
+  contractAddress: `0x${string}`;
+  creatorAddress: `0x${string}`;
+  endTime: null | string;
+  mediaUrl: string;
+  mintCount: null | string;
+  mintStatus: 'closed' | 'live' | null | string;
+  mintUrl: null | string;
+  schema: 'erc1155' | 'erc721' | string;
+  sourceUrl: string;
+}
 
 
 export interface UserSuggestion {
@@ -51,6 +64,7 @@ export interface OG {
   isLarge: boolean | null;
   lastIndexedAt?: string;
   portal: null | Portal;
+  nft: Nft | null;
   site: null | string;
   title: null | string;
   url: string;

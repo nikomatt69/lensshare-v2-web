@@ -9,9 +9,10 @@ import getProfile from '@lensshare/lib/getProfile';
 import logger from '@lensshare/lib/logger';
 import { headers } from 'next/headers';
 import React from 'react';
-import defaultMetadata from 'src/app/defaultMetadata';
+
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import getPublicationData from '@lensshare/lib/getPublicationData';
+import defaultMetadata from 'defaultMetadata';
 
 interface Props {
   params: { handle: string };

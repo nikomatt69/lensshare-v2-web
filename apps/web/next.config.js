@@ -1,12 +1,19 @@
+const { withExpo } = require('@expo/next-adapter');
+
+const withPlugins = require('next-compose-plugins');
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE_BUNDLE === '1'
+});
 
 const headers = [{ key: 'Cache-Control', value: 'public, max-age=3600' }];
 
 const allowedBots =
-  '.*(bot|telegram|baidu|bing|yandex|iframely|whatsapp|facebook).*';
+  '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
 
 /** @type {import('next').NextConfig} */
 
-const nextConfig =  {
+const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
@@ -23,6 +30,7 @@ const nextConfig =  {
 
   experimental: {
     scrollRestoration: true,
+    forceSwcTransforms: true
   },
   async rewrites() {
     return [
@@ -39,7 +47,18 @@ const nextConfig =  {
         destination: `https://og.lenshareapp.xyz/posts/:match*`,
         has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
         source: '/posts/:match*'
-      }
+      },
+      {
+        destination: `https://og.lenshareapp.xyz/meet/:match*`,
+        has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
+        source: '/meet/:match*'
+      },
+      {
+        destination: `https://og.lenshareapp.xyz/:match*`,
+        has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
+        source: '/:match*'
+      },
+
     ];
   },
   async redirects() {

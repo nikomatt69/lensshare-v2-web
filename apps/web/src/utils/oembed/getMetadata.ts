@@ -11,6 +11,7 @@ import getSite from './meta/getSite';
 import getTitle from './meta/getTitle';
 import getFavicon from './getFavicon';
 import getPortal from './meta/getPortal';
+import getNft from './meta/getNft';
 
 
 const getMetadata = async (url: string): Promise<any> => {
@@ -32,6 +33,7 @@ const getMetadata = async (url: string): Promise<any> => {
     site: getSite(document),
     favicon: getFavicon(url),
     isLarge,
+    nft: getNft(document, url),
     lastIndexedAt: new Date().toISOString(),
     portal: getPortal(document),
     html: generateIframe(getEmbedUrl(document), url)

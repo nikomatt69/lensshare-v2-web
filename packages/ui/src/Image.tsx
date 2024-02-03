@@ -36,7 +36,7 @@ export const Image = forwardRef(function Image(
   return (
     <img
       {...props}
-      src={imageLoadFailed ? DEFAULT_OG : props.src}
+      src={imageLoadFailed ? PLACEHOLDER_IMAGE : props.src}
       onError={handleError}
       alt={props.alt || ''}
       ref={ref}

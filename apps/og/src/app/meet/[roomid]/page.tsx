@@ -11,10 +11,10 @@ import { apolloClient } from '@lensshare/lens/apollo';
 import getPublicationData from '@lensshare/lib/getPublicationData';
 import getProfile from '@lensshare/lib/getProfile';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
-import React from 'react';
-import defaultMetadata from 'src/app/defaultMetadata';
+
 import getCollectModuleMetadata from '@lib/getCollect';
 import getPublicationOGImages from '@lib/getPublication';
+import defaultMetadata from 'defaultMetadata';
 
 interface Props {
   params: { id: string };

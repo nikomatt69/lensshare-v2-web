@@ -12,9 +12,10 @@ import getPublicationData from '@lensshare/lib/getPublicationData';
 import getProfile from '@lensshare/lib/getProfile';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import React from 'react';
-import defaultMetadata from 'src/app/defaultMetadata';
+
 import getCollectModuleMetadata from '@lib/getCollect';
 import getPublicationOGImages from '@lib/getPublication';
+import defaultMetadata from 'defaultMetadata';
 
 interface Props {
   params: { id: string };
@@ -56,8 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     creator: displayName,
     description: description,
     keywords: [
-      'hey',
-      'hey.xyz',
+    
       'social media post',
       'social media',
       'lenster',
@@ -96,7 +96,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: title,
     twitter: {
       card: assetIsAudio ? 'summary' : 'summary_large_image',
-      site: '@lensshareappxyz'
+      
     }
   };
 }

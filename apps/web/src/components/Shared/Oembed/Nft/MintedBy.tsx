@@ -1,0 +1,38 @@
+import type { Profile } from '@lensshare/lens';
+import type { FC } from 'react';
+import type { Address } from 'viem';
+
+import SmallUserProfile from '@components/Shared/SmallUserProfile';
+import { useProfileQuery } from '@lensshare/lens';
+import { useDefaultProfileQuery } from '@lensshare/lens/generated2';
+
+interface MintedByProps {
+  address: Address;
+}
+
+const MintedBy: FC<MintedByProps> = ({ address }) => {
+  const { data, loading } = useDefaultProfileQuery({
+    skip: !address,
+    variables: { request: { for: address } }
+  });
+
+  if (!address && loading) {
+    return null;
+  }
+
+  if (!data?.defaultProfile) {
+    return null;
+  }
+
+  return (
+    <div className="absolute left-3 top-3 rounded-lg bg-gray-950/70 px-2 py-1 text-sm text-white">
+      <SmallUserProfile
+      
+        profile={data.defaultProfile as Profile}
+        smallAvatar
+      />
+    </div>
+  );
+};
+
+export default MintedBy;
