@@ -2,12 +2,15 @@ import type { AnyPublication, Profile } from '@lensshare/lens';
 import type { Metadata } from 'next';
 
 import { APP_NAME, HANDLE_PREFIX } from '@lensshare/data/constants';
-import { LimitType, ProfileDocument, PublicationType, PublicationsDocument } from '@lensshare/lens';
+import {
+  LimitType,
+  ProfileDocument,
+  PublicationType,
+  PublicationsDocument
+} from '@lensshare/lens';
 import { apolloClient } from '@lensshare/lens/apollo';
 import getAvatar from '@lensshare/lib/getAvatar';
 import getProfile from '@lensshare/lib/getProfile';
-import logger from '@lensshare/lib/logger';
-import { headers } from 'next/headers';
 import React from 'react';
 
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
@@ -64,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     other: { 'lens:id': profile.id },
     publisher: displayName,
     title: title,
-    twitter: { card: 'summary'}
+    twitter: { card: 'summary' }
   };
 }
 

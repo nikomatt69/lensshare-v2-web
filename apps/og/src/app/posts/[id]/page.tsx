@@ -17,7 +17,6 @@ import getCollectModuleMetadata from '@lib/getCollect';
 import getPublicationOGImages from '@lib/getPublication';
 import defaultMetadata from 'defaultMetadata';
 
-
 interface Props {
   params: { id: string };
 }
@@ -58,7 +57,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     creator: displayName,
     description: description,
     keywords: [
-    
       'social media post',
       'social media',
       'lenster',
@@ -96,8 +94,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     publisher: displayName,
     title: title,
     twitter: {
-      card: assetIsAudio ? 'summary' : 'summary_large_image',
-      
+      card: assetIsAudio ? 'summary' : 'summary_large_image'
     }
   };
 }

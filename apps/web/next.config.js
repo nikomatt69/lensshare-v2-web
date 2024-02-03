@@ -26,8 +26,6 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
     'expo'
   ],
 
-
-
   experimental: {
     scrollRestoration: true,
     forceSwcTransforms: true
@@ -52,8 +50,7 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
         destination: `https://og.lenshareapp.xyz/meet/:match*`,
         has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
         source: '/meet/:match*'
-      },
-
+      }
     ];
   },
   async redirects() {
