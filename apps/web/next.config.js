@@ -25,7 +25,7 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
     'react-native',
     'expo'
   ],
-
+  reactStrictMode: false,
   experimental: {
     scrollRestoration: true,
     forceSwcTransforms: true
