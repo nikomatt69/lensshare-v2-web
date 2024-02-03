@@ -19,7 +19,6 @@ const MetaTags: FC<MetaTagsProps> = ({
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"
       />
-      <link href="https://lenshareapp.xyz" rel="canonical" />
 
       <meta property="og:url" content="https://lenshareapp.xyz" />
       <meta property="og:site_name" content={APP_NAME} />
@@ -29,14 +28,14 @@ const MetaTags: FC<MetaTagsProps> = ({
       <meta property="og:image:width" content="400" />
       <meta property="og:image:height" content="400" />
 
-      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:card" content="summary" />
       <meta property="twitter:site" content={APP_NAME} />
       <meta property="twitter:title" content={title} />
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content={DEFAULT_OG} />
       <meta property="twitter:image:width" content="400" />
       <meta property="twitter:image:height" content="400" />
-      <meta property="twitter:creator" content="@lenshareappxyz" />
+      <meta property="twitter:creator" content="lenshareappxyz" />
 
       <link
         rel="search"
@@ -44,10 +43,9 @@ const MetaTags: FC<MetaTagsProps> = ({
         href="/opensearch.xml"
         title={APP_NAME}
       />
-
-
     </Head>
   );
 };
 
 export default MetaTags;
+
