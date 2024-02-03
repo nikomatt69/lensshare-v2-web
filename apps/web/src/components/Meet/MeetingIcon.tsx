@@ -13,7 +13,7 @@ const MeetingIcon: FC = () => {
 
   return (
     <div>
-      <div className="mx-1 mt-3 flex">
+      <div className="mx-1 mt-3 flex text-black dark:text-white">
         <img
           src={`${STATIC_ASSETS_URL}/push/callacceptbtn.svg`}
           onClick={async () => {
@@ -41,7 +41,7 @@ const MeetingIcon: FC = () => {
             setMeetingUrl(meetingUrl);
             router.push(`${url}/spaces/${roomId}`);
           }}
-          className="text-brand-500 mb-1 mr-1 inline h-7 w-7 cursor-pointer"
+          className="mb-1 mr-1 inline h-7 w-7 cursor-pointer text-black dark:text-white"
         />
       </div>
       <div className="mx-1 mt-2 ">

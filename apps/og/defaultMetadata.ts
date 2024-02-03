@@ -1,8 +1,6 @@
 import { APP_NAME, DEFAULT_OG, DESCRIPTION } from '@lensshare/data/constants';
 import type { Metadata } from 'next';
 
-
-
 const defaultMetadata: Metadata = {
   alternates: { canonical: 'https://lenshareapp.xyz' },
   applicationName: APP_NAME,

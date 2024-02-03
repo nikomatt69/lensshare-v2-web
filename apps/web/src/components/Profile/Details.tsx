@@ -192,7 +192,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
 
 
           <ProfileMenu profile={profile} />
-          <div className="text-brand-500">{<MeetingIcon />}</div>
+          <div className="text-black dark:text-white">{<MeetingIcon />}</div>
           <Link href={`/xmtp`}>
             <EnvelopeIcon className="h-6 w-6" />
           </Link>

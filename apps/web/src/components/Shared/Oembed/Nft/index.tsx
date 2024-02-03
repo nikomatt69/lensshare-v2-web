@@ -16,11 +16,11 @@ interface NftProps {
 
 const Nft: FC<NftProps> = ({ nft, publicationId }) => {
   return (
-    <Card className="mt-3" forceRounded onClick={stopEventPropagation}>
+    <Card className="mt-3  w-full " forceRounded onClick={stopEventPropagation}>
       <div className="relative">
         <img
           alt={nft.collectionName}
-          className="h-[350px] max-h-[350px] w-full rounded-t-xl object-cover"
+          className="h-[350px] max-h-[350px]  w-full rounded-t-xl object-cover "
           src={nft.mediaUrl}
         />
         {nft.creatorAddress ? <MintedBy address={nft.creatorAddress} /> : null}

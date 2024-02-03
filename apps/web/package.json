@@ -7,7 +7,7 @@
     "build:sw": "node script/build-sw.mjs",
     "buildVercel": "next build",
     "build": "yarn run build:sw;next build",
-    "dev": "next dev --port 4783 --experimental-https",
+    "dev": "next dev --port 4788 --experimental-https",
     "export": "yarn run build:sw; next build",
     "start": "next start --port 4783",
     "typecheck": "tsc --pretty",

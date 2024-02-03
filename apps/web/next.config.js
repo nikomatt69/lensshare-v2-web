@@ -53,11 +53,6 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
         has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
         source: '/meet/:match*'
       },
-      {
-        destination: `https://og.lenshareapp.xyz/:match*`,
-        has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
-        source: '/:match*'
-      },
 
     ];
   },

@@ -17,6 +17,7 @@ import getCollectModuleMetadata from '@lib/getCollect';
 import getPublicationOGImages from '@lib/getPublication';
 import defaultMetadata from 'defaultMetadata';
 
+
 interface Props {
   params: { id: string };
 }
