@@ -1,3 +1,4 @@
+importScripts("https://progressier.app/B5LgRYtk8D553Rd2UvFW/sw.js" );
 import { ServiceWorkerCache } from './cache';
 
 declare let self: ServiceWorkerGlobalScope;
