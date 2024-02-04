@@ -126,8 +126,14 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
 
-<link rel="manifest" href="https://progressier.app/B5LgRYtk8D553Rd2UvFW/progressier.json"/>
-<script defer src="https://progressier.app/B5LgRYtk8D553Rd2UvFW/script.js"></script>
+        <link
+          rel="manifest"
+          href="https://progressier.app/B5LgRYtk8D553Rd2UvFW/progressier.json"
+        />
+        <script
+          defer
+          src="https://progressier.app/B5LgRYtk8D553Rd2UvFW/script.js"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Toaster

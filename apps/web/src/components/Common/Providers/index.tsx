@@ -20,10 +20,6 @@ import SW from '@components/ServiceWorker';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ThemeProvider from './ThemeProvider';
 
-import HydrationZustand from './HydrationZustand';
-import FeaturedGroupsProvider from './FeaturedGroupsProvider';
-import PreferencesProvider from './PreferencesProvider';
-
 const lensApolloClient = apolloClient(authLink);
 const livepeerClient = createReactClient({
   provider: studioProvider({
@@ -45,9 +41,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
           <QueryClientProvider client={queryClient}>
             <LivepeerConfig client={livepeerClient} theme={getLivepeerTheme}>
               <ThemeProvider>
-                <HydrationZustand>
-                  <Layout>{children}</Layout>
-                </HydrationZustand>
+                <Layout>{children}</Layout>
               </ThemeProvider>
               <SpeedInsights />
               <Analytics />
