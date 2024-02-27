@@ -54,7 +54,7 @@
     "@vercel/speed-insights": "^1.0.1",
     "@wagmi/connectors": "^3.1.10",
     "alchemy-sdk": "^3.1.1",
-    "axios": "^1.6.2",
+    "axios": "^1.6.3",
     "babel-plugin-module-resolver": "^5.0.0",
     "child-process": "1.0.2",
     "dayjs": "^1.11.10",
