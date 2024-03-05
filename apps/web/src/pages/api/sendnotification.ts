@@ -27,11 +27,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         type: 3,
         identityType: 2,
         notification: {
-          title: `LensShare`,
+          title: `MyCrumbs`,
           body: `New Notification`
         },
         payload: {
-          title: `LensShare`,
+          title: `MyCrumbs`,
           body: `New Notification`,
           cta: '',
           img: ''
@@ -42,7 +42,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       // apiResponse?.status === 204, if sent successfully!
       console.log('API repsonse: ', apiResponse);
       if (apiResponse?.status === 204) {
-        res.status(200).json('sent');
+        res.status(200).setHeader('Access-Control-Allow-Origin', '*').json('sent');
       }
     } catch (error) {
       res.status(500).json('error');

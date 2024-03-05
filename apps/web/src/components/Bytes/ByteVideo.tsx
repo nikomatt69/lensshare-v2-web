@@ -5,19 +5,20 @@ import React, { useEffect, useRef } from 'react';
 
 import TopOverlay from './TopOverlay';
 import { useAppStore } from 'src/store/useAppStore';
-import type { AnyPublication, MirrorablePublication } from '@lensshare/lens';
+import type { AnyPublication, MirrorablePublication, PrimaryPublication } from '@lensshare/lens';
 import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 import VideoPlayer from 'src/utils/VideoPlayer';
-import { getPublication } from 'src/hooks/getPublication';
-import { getPublicationMediaUrl } from 'src/hooks/getPublicationMediaUrl';
+
+import { getPublicationMediaCid, getPublicationMediaUrl } from 'src/hooks/getPublicationMediaUrl';
 import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
 import { imageCdn } from 'src/hooks/imageCdn';
 import BottomOverlay from './BottomOverlay';
 import ByteActions from './ByteActions';
 import { getPublicationData } from 'src/hooks/getPublicationData';
+import { getPublication } from 'src/hooks/getPublication';
 
 type Props = {
-  publication: AnyPublication;
+  publication: PrimaryPublication;
   currentViewingId: string;
   intersectionCallback: (id: string) => void;
 };
@@ -118,7 +119,7 @@ const ByteVideo: FC<Props> = ({
           />
         </div>
         <TopOverlay onClickVideo={onClickVideo} />
-        <BottomOverlay video={publication as MirrorablePublication} />
+        <BottomOverlay video={publication as PrimaryPublication} />
         <div className="absolute bottom-[36%] right-2 z-[1]">
           <ByteActions video={publication} />
         </div>

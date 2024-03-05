@@ -1,6 +1,6 @@
 import MetaTags from '@components/Common/MetaTags';
 import RecommendedProfiles from '@components/Home/RecommendedProfiles';
-import Trending from '@components/Home/Trending';
+
 import FeedFocusType from '@components/Shared/FeedFocusType';
 import Footer from '@components/Shared/Footer';
 import NotLoggedIn from '@components/Shared/NotLoggedIn';
@@ -29,7 +29,7 @@ const Bookmarks: NextPage = () => {
         <Feed focus={focus} />
       </GridItemEight>
       <GridItemFour>
-        {currentProfile && <Trending />}
+
         {currentProfile ? <RecommendedProfiles /> : null}
         <Footer />
       </GridItemFour>

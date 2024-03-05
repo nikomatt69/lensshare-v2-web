@@ -6,7 +6,7 @@ import {
   IS_MAINNET,
   STATIC_ASSETS_URL
 } from '@lensshare/data/constants';
-import type { AnyPublication, Post, Profile } from '@lensshare/lens';
+import type { Post, Profile } from '@lensshare/lens';
 import { FollowModuleType, useProfileQuery } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import { GridItemEight, GridItemFour, GridLayout, Modal } from '@lensshare/ui';
@@ -25,11 +25,8 @@ import Details from './Details';
 import Feed from './Feed';
 import FeedType from './FeedType';
 import FollowDialog from './FollowDialog';
-import NftGallery from './NftGallery';
 import ProfilePageShimmer from './Shimmer';
-import SubscribersFeed from './SubscribersFeed';
 import StoriesRender from '@components/Composer/Stories (1)';
-import ProfileBytesLast from './ProfileBytesLast';
 import ProfileBytes from './ProfileBytes';
 
 const ViewProfile: NextPage = (publication) => {
@@ -45,7 +42,6 @@ const ViewProfile: NextPage = (publication) => {
     ProfileFeedType.Collects.toLowerCase(),
     ProfileFeedType.Gallery.toLowerCase(),
     ProfileFeedType.Stats.toLowerCase(),
-    ProfileFeedType.Subscribers.toLowerCase(),
     ProfileFeedType.Bytes.toLowerCase()
   ];
   const [feedType, setFeedType] = useState(
@@ -153,19 +149,12 @@ const ViewProfile: NextPage = (publication) => {
           feedType === ProfileFeedType.Collects ? (
             <Feed profile={profile as Profile} type={feedType} />
           ) : null}
-          {feedType === ProfileFeedType.Gallery ? (
-            <NftGallery profile={profile as Profile} />
-          ) : null}
-          {feedType === ProfileFeedType.Subscribers && (
-            <SubscribersFeed profile={profile as Profile} />
-          )}
+
           {feedType === ProfileFeedType.Stats && IS_MAINNET ? (
             <Achievements profile={profile as Profile} />
           ) : null}
           {feedType === ProfileFeedType.Bytes && (
-            <ProfileBytes
-              profileId={profile.id}
-            />
+            <ProfileBytes profileId={profile.id} />
           )}
         </GridItemEight>
       </GridLayout>

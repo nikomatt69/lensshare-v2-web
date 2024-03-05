@@ -33,7 +33,7 @@ const PWAInstallPrompt = () => {
                   alt="logo"
                 />
               )}
-              Install LensShare as a Pwa, tap the LensShare icon at the bottom
+              Install MyCrumbs as a Pwa, tap the MyCrumbs icon at the bottom
             </div>
           </div>
         </div>

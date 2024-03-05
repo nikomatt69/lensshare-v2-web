@@ -12,7 +12,7 @@ describe('imageKit', () => {
     expect(result).toEqual('');
   });
 
-  test('should return the same url if it includes static-assets.lenshareapp.xyz', () => {
+  test('should return the same url if it includes static-assets.mycrumbs.xyz', () => {
     const url = PLACEHOLDER_IMAGE;
     const result = imageKit(url);
     expect(result).toEqual(url);

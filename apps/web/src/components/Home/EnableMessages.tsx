@@ -44,7 +44,7 @@ const EnableMessages: FC = () => {
         <p>Direct messages are here!</p>
       </div>
       <p className="mr-10 text-sm leading-[22px]">
-        Activate XMTP to start using LensShare to send end-to-end encrypted DMs
+        Activate XMTP to start using MyCrumbs to send end-to-end encrypted DMs
         to frens.
       </p>
 

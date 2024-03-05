@@ -20,7 +20,7 @@ const Nft: FC<NftProps> = ({ nft, publicationId }) => {
       <div className="relative">
         <img
           alt={nft.collectionName}
-          className="h-[350px] max-h-[350px]  w-full rounded-t-xl object-cover "
+          className="object-fit   h-[full] w-full rounded-t-xl "
           src={nft.mediaUrl}
         />
         {nft.creatorAddress ? <MintedBy address={nft.creatorAddress} /> : null}
@@ -34,7 +34,7 @@ const Nft: FC<NftProps> = ({ nft, publicationId }) => {
             >
               <img
                 alt={getNftChainInfo(nft.chain).name}
-                className="size-5"
+                className="h-6 w-6"
                 src={getNftChainInfo(nft.chain).logo}
               />
             </Tooltip>
@@ -44,7 +44,7 @@ const Nft: FC<NftProps> = ({ nft, publicationId }) => {
         <Link href={nft.sourceUrl} rel="noopener noreferrer" target="_blank">
           <Button
             className="text-sm"
-            icon={<CursorArrowRaysIcon className="size-4" />}
+            icon={<CursorArrowRaysIcon className="h-4 w-4" />}
             size="md"
           >
             Mint

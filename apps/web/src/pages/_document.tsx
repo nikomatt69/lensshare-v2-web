@@ -9,19 +9,19 @@ class LensShareDocument extends Document {
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
           {/* Prefetch and Preconnect */}
-          <link rel="preconnect" href="https://static-assets.lenshareapp.xyz" />
+          <link rel="preconnect" href="https://static-assets.mycrumbs.xyz" />
           <link
             rel="dns-prefetch"
-            href="https://static-assets.lenshareapp.xyz"
+            href="https://static-assets.mycrumbs.xyz"
           />
-          <link rel="preconnect" href="https://asset.lenshareapp.xyz" />
-          <link rel="dns-prefetch" href="https://asset.lenshareapp.xyz" />
-          <link rel="preconnect" href="https://prerender.lenshareapp.xyz" />
-          <link rel="dns-prefetch" href="https://prerender.lenshareapp.xyz" />
-          <link rel="preconnect" href="https://og.lenshareapp.xyz" />
-          <link rel="dns-prefetch" href="https://og.lenshareapp.xyz" />
+          <link rel="preconnect" href="https://asset.mycrumbs.xyz" />
+          <link rel="dns-prefetch" href="https://asset.mycrumbs.xyz" />
+          <link rel="preconnect" href="https://prerender.mycrumbs.xyz" />
+          <link rel="dns-prefetch" href="https://prerender.mycrumbs.xyz" />
+          <link rel="preconnect" href="https://og.mycrumbs.xyz" />
+          <link rel="dns-prefetch" href="https://og.mycrumbs.xyz" />
           {/* Misc */}
-          <meta name="application-name" content="LensShare" />
+          <meta name="application-name" content="MyCrumbs" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
 
@@ -29,7 +29,7 @@ class LensShareDocument extends Document {
             name="apple-mobile-web-app-status-bar-style"
             content="default"
           />
-          <meta name="apple-mobile-web-app-title" content="LensShare" />
+          <meta name="apple-mobile-web-app-title" content="MyCrumbs" />
 
           {/* Icons */}
           <link
@@ -65,7 +65,7 @@ class LensShareDocument extends Document {
             name="apple-mobile-web-app-status-bar-style"
             content="default"
           />
-          <meta name="apple-mobile-web-app-title" content="LensShare" />
+          <meta name="apple-mobile-web-app-title" content="MyCrumbs" />
           <link rel="icon" href="/images/icon.png" />
           <meta name="theme-color" content="#000" />
         </Head>

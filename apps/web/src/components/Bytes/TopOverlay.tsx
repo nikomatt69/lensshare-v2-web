@@ -1,9 +1,9 @@
-import type { FC } from 'react'
-import React from 'react'
+import type { FC } from 'react';
+import React from 'react';
 
 type Props = {
-  onClickVideo: () => void
-}
+  onClickVideo: () => void;
+};
 
 const TopOverlay: FC<Props> = ({ onClickVideo }) => {
   return (
@@ -13,7 +13,7 @@ const TopOverlay: FC<Props> = ({ onClickVideo }) => {
       onClick={() => onClickVideo()}
       className="absolute inset-0 z-[1] w-full cursor-default outline-none"
     />
-  )
-}
+  );
+};
 
-export default TopOverlay
+export default TopOverlay;

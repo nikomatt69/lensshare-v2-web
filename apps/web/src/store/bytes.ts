@@ -34,8 +34,6 @@ export const UPLOADED_VIDEO_FORM_DEFAULTS: UploadedMedia = {
   uploadingThumbnail: false,
   buttonText: 'Post Now',
   durationInSeconds: 1,
-  mediaCategory: CREATOR_VIDEO_CATEGORIES[0],
-  mediaLicense: MetadataLicenseType.CC_BY,
   isByteVideo: false,
   collectModule: {
     followerOnlyCollect: false,
@@ -72,10 +70,10 @@ interface AppState {
 
 export const POLYGON_RPC_URL = IS_MAINNET
   ? 'https://rpc.ankr.com/polygon'
-  : 'https://rpc.ankr.com/polygon_mumbai';
+  : 'https://rpc.ankr.com/polygon';
 export const IRYS_NODE_URL = IS_MAINNET
-? 'https://node1.bundlr.network'
-: 'https://devnet.bundlr.network';
+  ? 'https://node2.irys.xyz'
+  : 'https://node2.irys.xyz';
 export const IRYS_CURRENCY = 'matic';
 
 export const useBytesStore = create<AppState>((set) => ({

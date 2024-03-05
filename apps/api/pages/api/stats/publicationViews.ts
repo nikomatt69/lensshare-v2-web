@@ -23,7 +23,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const validation = validationSchema.safeParse(body);
 
   if (!validation.success) {
-    return res.status(400).json({ success: false, error: Errors.SomethingWentWrong });
+    return res
+      .status(400)
+      .json({ success: false, error: Errors.SomethingWentWrong });
   }
 
   const { ids } = body as ExtensionRequest;
@@ -50,6 +52,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res
       .status(200)
+      .setHeader('Access-Control-Allow-Origin', '*')
       .setHeader('Cache-Control', CACHE_AGE)
       .json({ success: true, views: viewCounts });
   } catch (error) {

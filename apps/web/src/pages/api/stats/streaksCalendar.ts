@@ -6,7 +6,6 @@ import createClickhouseClient from 'src/utils/createClickhouseClient';
 import filteredEvents from 'src/utils/stats/filteredEvents';
 import generateDateRangeDict from 'src/utils/stats/generateDateRangeDict';
 
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
 
@@ -40,10 +39,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const allDatesData = { ...generateDateRangeDict(), ...eventData };
 
-    return res.status(200).setHeader('Cache-Control', CACHE_AGE).json({
-      success: true,
-      data: allDatesData
-    });
+    return res
+      .status(200)
+      .setHeader('Cache-Control', CACHE_AGE)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .json({
+        success: true,
+        data: allDatesData
+      });
   } catch (error) {
     throw error;
   }

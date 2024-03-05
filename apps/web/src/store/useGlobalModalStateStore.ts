@@ -1,9 +1,14 @@
 import type { AnyPublication, Profile } from '@lensshare/lens';
 import { create } from 'zustand';
-
+export type AuthModalType = 'login' | 'signup';
 interface GlobalModalState {
+  authModalType: AuthModalType;
+
   showAuthModal: boolean;
-  setShowAuthModal: (showAuthModal: boolean) => void;
+  setShowAuthModal: (
+    showAuthModal: boolean,
+    authModalType?: AuthModalType
+  ) => void;
   showWrongNetworkModal: boolean;
   setShowWrongNetworkModal: (showWrongNetworkModal: boolean) => void;
   showNewPostModal: boolean;
@@ -32,7 +37,10 @@ interface GlobalModalState {
 
 export const useGlobalModalStateStore = create<GlobalModalState>((set) => ({
   showAuthModal: false,
-  setShowAuthModal: (showAuthModal) => set(() => ({ showAuthModal })),
+  authModalType: 'login',
+  setShowAuthModal: (showAuthModal, authModalType) => {
+    set(() => ({ authModalType, showAuthModal }));
+  },
   showWrongNetworkModal: false,
   setShowWrongNetworkModal: (showWrongNetworkModal) =>
     set(() => ({ showWrongNetworkModal })),

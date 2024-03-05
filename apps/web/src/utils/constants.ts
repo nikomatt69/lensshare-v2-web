@@ -10,3 +10,17 @@ export const GARDENER_MODE_FEATURE_ID = '9f66a465-e1d7-4123-b329-ddd14fd85510';
 
 // Cache
 export const CACHE_AGE = 'public, s-maxage=1, stale-while-revalidate=59';
+// Cache
+// Cache for 1 minute, stale for 30 days
+export const SWR_CACHE_AGE_1_MIN_30_DAYS =
+  'public, s-maxage=1, stale-while-revalidate=2592000';
+// Cache for 10 minutes, stale for 30 days
+export const SWR_CACHE_AGE_10_MINS_30_DAYS =
+  'public, s-maxage=600, stale-while-revalidate=2592000';
+// Cache for 30 days
+export const CACHE_AGE_30_DAYS = 'public, s-maxage=2592000';
+// Cache indefinitely
+export const CACHE_AGE_INDEFINITE = 'public, max-age=31536000, immutable';
+// Cache indefinitely on Disk
+export const CACHE_AGE_INDEFINITE_ON_DISK =
+  'public, s-maxage=31536000, max-age=31536000, must-revalidate';

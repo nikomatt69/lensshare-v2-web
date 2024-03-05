@@ -72,13 +72,7 @@ const FeedType: FC<FeedTypeProps> = ({ setFeedType, feedType }) => {
             onClick={() => switchTab(ProfileFeedType.Stats)}
           />
         ) : null}
-        <TabButton
-          name={`Subscribers`}
-          icon={<CurrencyDollarIcon className="h-4 w-4" />}
-          active={feedType === ProfileFeedType.Subscribers}
-          type={ProfileFeedType.Subscribers.toLowerCase()}
-          onClick={() => switchTab(ProfileFeedType.Subscribers)}
-        />
+       
         <TabButton
           name={`Bytes`}
           icon={<BytesOutline className="h-4 w-4" />}

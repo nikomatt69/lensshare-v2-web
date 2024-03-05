@@ -65,15 +65,15 @@ const InputMentions: FC<Props> = ({
   };
 
   return (
-    <label className="w-full" htmlFor={id}>
+    <label className="aspect-h-10 w-full" htmlFor={id}>
       {label && (
-        <div className="mb-1 flex items-center space-x-1.5">
-          <Text size="2" weight="medium">
+        <div className="m-3 flex items-center space-x-1.5">
+          <Text size="4" weight="medium">
             {label}
           </Text>
         </div>
       )}
-      <div className="mx-1 my-2 flex-grow">
+      <div className=" flex-grow p-3">
         <MentionsInput
           id={id}
           className={mentionsSelector}

@@ -12,8 +12,6 @@ import type { z } from 'zod';
 import { boolean, object, string } from 'zod';
 
 import DropZone from './DropZone';
-import MediaCategory from './MediaCategory';
-import MediaLicense from './MediaLicense';
 
 import SelectedMedia from './SelectedMedia';
 import { checkIsBytesVideo } from 'src/hooks/checkIsBytesVideo';
@@ -47,7 +45,6 @@ const Details: FC<Props> = ({ onUpload, onCancel }) => {
 
   const {
     handleSubmit,
-    getValues,
     formState: { errors },
     setValue,
     watch,
@@ -86,21 +83,21 @@ const Details: FC<Props> = ({ onUpload, onCancel }) => {
             {uploadedMedia.file ? <SelectedMedia /> : <DropZone />}
           </div>
           <div className="flex flex-1  justify-between">
-            <div className='flex-col'>
+            <div className="flex-col p-3">
               <div className="relative">
                 <InputMentions
                   label="Title"
-                  placeholder="Title that describes your content"
-                  
+                  placeholder="Title"
                   validationError={errors.title?.message}
                   value={watch('title')}
                   onContentChange={(value) => {
                     setValue('title', value);
                     clearErrors('title');
                   }}
+                  rows={5}
                   mentionsSelector="input-mentions-single"
                 />
-                <div className="absolute right-1 top-0 mt-1 flex items-center justify-end">
+                <div className="absolute right-1 top-0 flex items-center justify-end">
                   <span
                     className={clsx(
                       'text-xs',
@@ -116,8 +113,7 @@ const Details: FC<Props> = ({ onUpload, onCancel }) => {
               <div className="relative mt-4">
                 <InputMentions
                   label="Description"
-                  placeholder="Describe more about your content, can also be @profile, #hashtags or chapters (00:20 - Intro)"
-                  
+                  placeholder="Description"
                   validationError={errors.description?.message}
                   value={watch('description')}
                   onContentChange={(value) => {
@@ -140,36 +136,6 @@ const Details: FC<Props> = ({ onUpload, onCancel }) => {
                     {watch('description')?.length}/5000
                   </span>
                 </div>
-              </div>
-
-              <div className="mt-4">
-                <Flex gap="2">
-                  <MediaCategory />
-                </Flex>
-              </div>
-
-              <div className="mt-2">
-                <MediaLicense />
-              </div>
-
-              <div className="mt-4">
-                <Text as="label">
-                  <Flex gap="2" align="center">
-                    <Switch
-                      highContrast
-                      checked={!uploadedMedia.collectModule.isRevertCollect}
-                      onCheckedChange={(canCollect) =>
-                        setUploadedMedia({
-                          collectModule: {
-                            ...uploadedMedia.collectModule,
-                            isRevertCollect: !canCollect
-                          }
-                        })
-                      }
-                    />
-                    Collectible
-                  </Flex>
-                </Text>
               </div>
 
               {uploadedMedia.file && uploadedMedia.type === 'VIDEO' ? (

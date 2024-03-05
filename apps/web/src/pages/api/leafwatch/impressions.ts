@@ -1,6 +1,7 @@
 import { Errors } from '@lensshare/data/errors';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import allowCors from 'src/utils/allowCors';
+import { CACHE_AGE_30_DAYS } from 'src/utils/constants';
 import createClickhouseClient from 'src/utils/createClickhouseClient';
 
 import { array, object, string } from 'zod';
@@ -43,7 +44,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       format: 'JSONEachRow'
     });
 
-    return res.status(200).json({ success: true, id: result.query_id });
+    return res
+      .status(200)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .json({ success: true, id: result.query_id });
   } catch (error) {
     throw error;
   }

@@ -17,7 +17,7 @@ export const BrowserPush = {
 
     browserPushWorker.onmessage = function (event: MessageEvent) {
       const response = event.data;
-      new self.Notification('LensShare', {
+      new self.Notification('MyCrumbs', {
         body: response.title,
         icon: '/logo.png'
       });

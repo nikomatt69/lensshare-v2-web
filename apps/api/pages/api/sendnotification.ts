@@ -27,11 +27,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         type: 3,
         identityType: 2,
         notification: {
-          title: `LensShare`,
+          title: `MyCrumbs`,
           body: `New Notification`
         },
         payload: {
-          title: `LensShare`,
+          title: `MyCrumbs`,
           body: `New Notification`,
           cta: '',
           img: ''

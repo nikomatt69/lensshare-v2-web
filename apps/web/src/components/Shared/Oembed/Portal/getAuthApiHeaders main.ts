@@ -8,7 +8,7 @@ import { hydrateAuthTokens } from 'src/store/persisted/useAuthStore';
 const getAuthApiHeaders = () => {
   return {
     'X-Access-Token': hydrateAuthTokens().accessToken,
-    'X-Lens-Network': IS_MAINNET ? 'mainnet' : 'testnet'
+    'X-Lens-Network': IS_MAINNET ? 'mainnet' : 'mainnet'
   };
 };
 

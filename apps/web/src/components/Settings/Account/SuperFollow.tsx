@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StarIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { LensHub } from '@lensshare/abis';
 import {
@@ -13,14 +15,16 @@ import {
   LimitType,
   useBroadcastOnchainMutation,
   useCreateSetFollowModuleTypedDataMutation,
-  useEnabledCurrenciesQuery
+
 } from '@lensshare/lens';
 import checkDispatcherPermissions from '@lensshare/lib/checkDispatcherPermissions';
 import getSignature from '@lensshare/lib/getSignature';
 import getTokenImage from '@lensshare/lib/getTokenImage';
-import { Button, Card, Form, Input, Spinner, useZodForm } from '@lensshare/ui';
+import { Button, Card, Form, Input, Select, Spinner, useZodForm } from '@lensshare/ui';
+import getAllTokens from '@lib/api/getAllTokens';
 import errorToast from '@lib/errorToast';
 import { Leafwatch } from '@lib/leafwatch';
+import { useQuery } from '@tanstack/react-query';
 import type { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -74,9 +78,11 @@ const SuperFollow: FC = () => {
   const { signTypedDataAsync } = useSignTypedData({
     onError
   });
-  const { data: currencyData, loading } = useEnabledCurrenciesQuery({
-    variables: { request: { limit: LimitType.TwentyFive } }
+  const { data: allowedTokens, isLoading: allowedTokensLoading } = useQuery({
+    queryFn: () => getAllTokens(),
+    queryKey: ['getAllTokens']
   });
+
 
   const { write } = useContractWrite({
     address: LENSHUB_PROXY,
@@ -154,17 +160,16 @@ const SuperFollow: FC = () => {
     }
   };
 
-  if (loading) {
+  if (allowedTokensLoading) {
     return (
       <Card>
         <div className="space-y-2 p-5 py-10 text-center">
-          <Spinner size="md" className="mx-auto" />
+          <Spinner className="mx-auto" size="md" />
           <div>Loading Super follow settings</div>
         </div>
       </Card>
     );
   }
-
   const followType = currentProfile?.followModule?.type;
 
   return (
@@ -184,23 +189,19 @@ const SuperFollow: FC = () => {
         </p>
         <div className="pt-2">
           <div className="label">Select currency</div>
-          <select
-            className="focus:border-brand-500 focus:ring-brand-400 w-full rounded-xl border border-gray-300 bg-white outline-none dark:border-gray-700 dark:bg-gray-800"
-            onChange={(e) => {
-              const currency = e.target.value.split('-');
-              setSelectedCurrency(currency[0]);
-              setSelectedCurrencySymbol(currency[1]);
-            }}
-          >
-            {currencyData?.currencies.items?.map((currency: Erc20) => (
-              <option
-                key={currency.contract.address}
-                value={`${currency.contract.address}-${currency.symbol}`}
-              >
-                {currency.name}
-              </option>
-            ))}
-          </select>
+          <Select
+            defaultValue={
+              currentProfile?.followModule?.__typename ===
+              'FeeFollowModuleSettings'
+                ? currentProfile?.followModule?.amount.asset.contract.address
+                : undefined
+            }
+            onChange={(e) => setSelectedCurrency(e.target.value)}
+            options={allowedTokens?.map((token) => ({
+              label: token.name,
+              value: token.contractAddress
+            }))}
+          />
         </div>
         <Input
           label="Follow amount"

@@ -91,51 +91,51 @@ const SoundRelease: FC<SoundReleaseProps> = ({ nftMetadata, publication }) => {
         }}
       >
         <div className="!rounded-t-xl  backdrop-blur-2xl backdrop-brightness-50">
-          <div className="flex p-5">
+          <div className="flex justify-center p-5">
             <Image
               alt={`sound-release-cover-${coverImage.url}`}
-              className="h-28 w-28 rounded-xl object-cover"
+              className="h-30 w-30 rounded-xl object-cover"
               draggable={false}
               height={160}
               src={coverImage.url}
               width={160}
             />
-            <div className="m-1 flex w-full flex-col justify-between truncate rounded-xl bg-gray-500/90 px-3">
-              <div className=" mt-3 flex-col justify-between md:mt-7">
-                <div className="w-full flex items-center space-x-2.5 truncate rounded-xl">
-                  <button onClick={handlePlayPause} type="button">
-                    {playing && !playerRef.current?.plyr.paused ? (
-                      <PauseIcon className=" h-[40] w-[40px] rounded-3xl text-gray-100 hover:text-white" />
-                    ) : (
-                      <PlayIcon className=" h-[40] w-[40px] rounded-3xl text-gray-100 hover:text-white" />
-                    )}
-                  </button>
-                  <div className="w-full space-y-1 truncate pr-3">
-                    <h5 className=" truncate rounded-3xl text-lg text-white">
-                      {title}
-                    </h5>
-                    <h6 className="flex items-center space-x-2 truncate  text-white/70">
-                      <img
-                        alt="Artist"
-                        className="h-4 w-4 rounded-full"
-                        height={16}
-                        src={artist.user.avatar.url}
-                        width={16}
-                      />
-                      <div className="  rounded-3xl text-gray-100 hover:text-white">
-                        {artist.name}
-                      </div>
-                      <span>•</span>
-                      <b className=" rounded-3xl text-sm">
-                        {humanize(numSold)} Mints
-                      </b>
-                    </h6>
-                  </div>
+          </div>
+          <div className="m-1 flex w-[full] flex-col justify-between truncate rounded-xl bg-gray-500/90 px-3">
+            <div className=" mt-3 flex-col justify-between md:mt-7">
+              <div className="flex w-full items-center space-x-2.5 truncate rounded-xl">
+                <button onClick={handlePlayPause} type="button">
+                  {playing && !playerRef.current?.plyr.paused ? (
+                    <PauseIcon className=" h-[40] w-[40px] rounded-3xl text-gray-100 hover:text-white" />
+                  ) : (
+                    <PlayIcon className=" h-[40] w-[40px] rounded-3xl text-gray-100 hover:text-white" />
+                  )}
+                </button>
+                <div className="w-full space-y-1 truncate pr-3">
+                  <h5 className=" truncate rounded-3xl text-md text-white">
+                    {title}
+                  </h5>
+                  <h6 className="flex items-center space-x-2 truncate  text-white/70">
+                    <img
+                      alt="Artist"
+                      className="h-4 w-4 rounded-full"
+                      height={16}
+                      src={artist.user.avatar.url}
+                      width={16}
+                    />
+                    <div className="  rounded-3xl text-gray-100 hover:text-white">
+                      {artist.name}
+                    </div>
+                    
+                  </h6>
+                  <b className=" rounded-3xl text-sm">
+                      {humanize(numSold)} Mints
+                    </b>
                 </div>
               </div>
-              <div className=" rounded-xl md:pb-3">
-                <Player playerRef={playerRef} src={track.audio.audio256k.url} />
-              </div>
+            </div>
+            <div className=" rounded-xl md:pb-3">
+              <Player playerRef={playerRef} src={track.audio.audio256k.url} />
             </div>
           </div>
           <div className="flex items-end space-x-1">

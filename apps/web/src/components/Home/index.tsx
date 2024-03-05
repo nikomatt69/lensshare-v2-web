@@ -21,12 +21,10 @@ import SetProfile from './SetProfile';
 import Timeline from './Timeline';
 import Waitlist from './Waitlist';
 import { useTheme } from 'next-themes';
-import Trending from './Trending';
-import RecommendedProfiles from './RecommendedProfiles';
-import Wrapper from '@components/Echos/Wrapper';
-import type { PrimaryPublication } from '@lensshare/lens';
 
-const Home: NextPage = (publication) => {
+import RecommendedProfiles from './RecommendedProfiles';
+
+const Home: NextPage = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
   const [feedType, setFeedType] = useState<HomeFeedType>(
     HomeFeedType.FOLLOWING
@@ -88,7 +86,7 @@ const Home: NextPage = (publication) => {
           {/* Onboarding steps */}
           {loggedIn && (
             <>
-              <Trending />
+              
               <RecommendedProfiles />
               <EnableLensManager />
               <SetProfile />

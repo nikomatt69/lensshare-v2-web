@@ -50,7 +50,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       views: Number(row.count)
     }));
 
-    return res.status(200).json({ success: true, views: viewCounts });
+    return res
+      .status(200)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .json({ success: true, views: viewCounts });
   } catch (error) {
     throw error;
   }

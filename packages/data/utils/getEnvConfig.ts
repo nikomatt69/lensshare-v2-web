@@ -7,6 +7,7 @@ const getEnvConfig = (): {
   lensHubProxyAddress: `0x${string}`;
   defaultCollectToken: string;
   litProtocolEnvironment: string;
+  heyLensSignup: `0x${string}`;
 } => {
   switch (LENS_NETWORK) {
     case 'testnet':
@@ -14,14 +15,16 @@ const getEnvConfig = (): {
         apiEndpoint: LensEndpoint.Mainnet,
         lensHubProxyAddress: MainnetContracts.LensHubProxy,
         defaultCollectToken: MainnetContracts.DefaultToken,
-        litProtocolEnvironment: 'polygon'
+        litProtocolEnvironment: 'polygon',
+        heyLensSignup: TestnetContracts.HeyLensSignup,
       };
     default:
       return {
         apiEndpoint: LensEndpoint.Mainnet,
         lensHubProxyAddress: MainnetContracts.LensHubProxy,
         defaultCollectToken: MainnetContracts.DefaultToken,
-        litProtocolEnvironment: 'polygon'
+        litProtocolEnvironment: 'polygon',
+        heyLensSignup: TestnetContracts.HeyLensSignup,
       };
   }
 };

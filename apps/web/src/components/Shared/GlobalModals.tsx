@@ -15,6 +15,8 @@ import WrongNetwork from './Login/WrongNetwork';
 import Invites from './Modal/Invites';
 import ReportProfile from './Modal/ReportProfile';
 import SwitchProfiles from './SwitchProfiles';
+import { useSignupStore } from './Auth/Signup';
+import Auth from './Auth';
 
 const GlobalModals: FC = () => {
   // Report modal state
@@ -35,7 +37,8 @@ const GlobalModals: FC = () => {
     showReportProfileModal,
     reportingProfile,
     setShowReportProfileModal,
-    setShowDiscardModal
+    setShowDiscardModal,
+
   } = useGlobalModalStateStore();
 
   const {
@@ -49,7 +52,12 @@ const GlobalModals: FC = () => {
     showPollEditor,
     pollConfig
   } = usePublicationStore();
+  const authModalType = useGlobalModalStateStore(
+    (state) => state.authModalType
+  );
+  const signupScreen = useSignupStore((state) => state.screen);
 
+  const showSignupModalTitle = signupScreen === 'choose';
   const checkIfPublicationNotDrafted = () => {
     if (
       publicationContent === '' &&
@@ -96,12 +104,18 @@ const GlobalModals: FC = () => {
         <SwitchProfiles />
       </Modal>
       <Modal
-        title="Login"
-        icon={<ArrowRightCircleIcon className="text-brand h-5 w-5" />}
+        icon={<ArrowRightCircleIcon className="text-brand-500 h-5 w-5" />}
+        onClose={() => setShowAuthModal(false, authModalType)}
         show={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
+        title={
+          showSignupModalTitle
+            ? authModalType === 'signup'
+              ? 'Signup'
+              : 'Login'
+            : null
+        }
       >
-        <Login />
+        <Auth />
       </Modal>
       <Modal
         title="Wrong Network"

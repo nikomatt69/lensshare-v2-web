@@ -14,6 +14,7 @@ import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 import useProfileStore from 'src/store/persisted/useProfileStore';
 import { useContractWrite, useSignTypedData } from 'wagmi';
 import { useAppStore } from 'src/store/useAppStore';
+import { useState } from 'react';
 
 interface CreatePublicationProps {
   onCompleted: (status?: any) => void;
@@ -31,10 +32,15 @@ const useActOnUnknownOpenAction = ({
   const setLensHubOnchainSigNonce = useNonceStore(
     (state) => state.setLensHubOnchainSigNonce
   );
-
+  const [isLoading, setIsLoading] = useState(false);
   const { canBroadcast, canUseLensManager } =
     checkDispatcherPermissions(currentProfile);
+  /*   const { canBroadcast, canUseLensManager } =
+    checkDispatcherPermissions(currentProfile);
+ */
 
+  // TODO: Investigate signed transaction flow
+  
   const { signTypedDataAsync } = useSignTypedData({ onError });
   const { write } = useContractWrite({
     abi: LensHub,

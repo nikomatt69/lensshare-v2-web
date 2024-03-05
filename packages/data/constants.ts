@@ -4,11 +4,11 @@ import { CONSTANTS } from '@pushprotocol/restapi';
 export const IS_MAINNET = process.env.NEXT_PUBLIC_LENS_NETWORK === 'mainnet';
 export const IS_PRODUCTION = process.env.NEXT_PUBLIC_IS_PRODUCTION === 'true';
 export const HANDLE_PREFIX = IS_MAINNET ? 'lens/' : 'lens/';
-export const LENSSHARE_API_URL = 'https://api.lenshareapp.xyz';
-export const HEY_API_URL = 'https://api.lenshareapp.xyz';
+export const LENSSHARE_API_URL = 'https://api.mycrumbs.xyz';
+export const HEY_API_URL = 'https://api.mycrumbs.xyz';
 
 export const APP_ID = 'lensshare';
-export const APP_NAME = 'LensShare';
+export const APP_NAME = 'MyCrumbs';
 export const APP_VERSION = '0.0.1';
 export const LENSTOK_URL = process.env.NEXT_PUBLIC_LENSTOK_URL;
 export const DESCRIPTION = 'Decentralized Social Platform';
@@ -18,7 +18,10 @@ export const LENS_MEDIA_SNAPSHOT_URL =
 export const GIT_COMMIT_SHA =
   process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7);
 
+export const HEY_LENS_SIGNUP = getEnvConfig().heyLensSignup;
 export const API_URL = getEnvConfig().apiEndpoint;
+export const SIGNUP_PRICE = 1; // in MATIC
+export const ADDRESS_PLACEHOLDER = '0x03Ba3...7EF';
 export const ADMIN_ADDRESS = '0x38B2b78246B9b162f3B365f3970ac77FB07AbF90';
 export const ADMIN_ADDRESS2 = '0xD47904193219374AcBe05fD0D6c42F5bC6349028';
 export const ADMIN_ADDRESS3 = '0x64979cA4449b9Db7aaB4052d96E42D3A5EAF4513';
@@ -35,7 +38,7 @@ export const SUPERFLUID_SUBGRAPH =
 export const OLD_LENS_RELAYER_ADDRESS =
   '0xD1FecCF6881970105dfb2b654054174007f0e07E';
 
-export const LENSSHARE_TAIL_INGEST_URL = 'https://tail.lenshareapp.xyz';
+export const LENSSHARE_TAIL_INGEST_URL = 'https://tail.mycrumbs.xyz';
 export const HEY_POLLS_SPACE = 'nikoemme.eth';
 export const SNAPSHOT_HUB_URL = IS_MAINNET
   ? 'https://hub.snapshot.org'
@@ -70,8 +73,8 @@ export const LIVEPEER_API_KEY = '9e17a7ab-3370-4e31-85c3-43072da2315e';
 
 export const PUSH_ENV = IS_MAINNET ? CONSTANTS.ENV.PROD : CONSTANTS.ENV.PROD;
 export const BASE_URL = IS_MAINNET
-  ? 'https://lenshareapp.xyz'
-  : 'https://lenshareapp.xyz';
+  ? 'https://mycrumbs.xyz'
+  : 'https://mycrumbs.xyz';
 
 export const ALCHEMY_KEY = 'ko67M7MTbwy-pJHRMi7VdhHemweoRzY_';
 export const BRAND_COLOR = '#000fff';
@@ -80,66 +83,66 @@ export const REQUESTING_SIGNATURE_MESSAGE = 'Requesting signature...';
 export const PINSTA_SERVER_URL = 'https://lensshare.4everland.store';
 
 export const STS_GENERATOR_WORKER_URL = IS_MAINNET
-  ? 'https://sts.lenshareapp.xyz'
-  : 'https://sts.lenshareapp.xyz';
+  ? 'https://sts.mycrumbs.xyz'
+  : 'https://sts.mycrumbs.xyz';
 export const METADATA_WORKER_URL = IS_MAINNET
-  ? 'https://metadata.lenshareapp.xyz'
-  : 'https://metadata.lenshareapp.xyz';
+  ? 'https://metadata.mycrumbs.xyz'
+  : 'https://metadata.mycrumbs.xyz';
 export const FRESHDESK_WORKER_URL = IS_MAINNET
-  ? 'https://freshdesk.lenshareapp.xyz'
+  ? 'https://freshdesk.mycrumbs.xyz'
   : 'https://freshdesk.lensshare.xyz';
 export const SNAPSHOR_RELAY_WORKER_URL = IS_MAINNET
-  ? 'https://snapshot-relay.lenshareapp.xyz'
-  : 'https://snapshot-relay.lenshareapp.xyz';
+  ? 'https://snapshot-relay.mycrumbs.xyz'
+  : 'https://snapshot-relay.mycrumbs.xyz';
 export const ENS_RESOLVER_WORKER_URL = IS_MAINNET
-  ? 'https://ens-resolver.lenshareapp.xyz'
-  : 'https://ens-resolver.lenshareapp.xyz';
+  ? 'https://ens-resolver.mycrumbs.xyz'
+  : 'https://ens-resolver.mycrumbs.xyz';
 export const OEMBED_WORKER_URL = IS_MAINNET
-  ? 'https://oembed.lenshareapp.xyz'
-  : 'https://oembed.lenshareapp.xyz';
+  ? 'https://oembed.mycrumbs.xyz'
+  : 'https://oembed.mycrumbs.xyz';
 export const SPACES_WORKER_URL = IS_MAINNET
-  ? 'https://spaces.lenshareapp.xyz'
-  : 'https://spaces.lenshareapp.xyz';
+  ? 'https://spaces.mycrumbs.xyz'
+  : 'https://spaces.mycrumbs.xyz';
 export const STATS_WORKER_URL = IS_PRODUCTION
   ? 'https://stats.lenshaerapp.xyz'
   : 'https://stats.lenshaerapp.xyz';
 export const LEAFWATCH_WORKER_URL = IS_MAINNET
-  ? 'https://leafwatch.lenshareapp.xyz'
-  : 'https://leafwatch.lenshareapp.xyz';
+  ? 'https://leafwatch.mycrumbs.xyz'
+  : 'https://leafwatch.mycrumbs.xyz';
 export const ENS_WORKER_URL = IS_MAINNET
-  ? 'https://ens.lenshareapp.xyz'
-  : 'https://ens.lenshareapp.xyz';
+  ? 'https://ens.mycrumbs.xyz'
+  : 'https://ens.mycrumbs.xyz';
 export const NFT_WORKER_URL = IS_MAINNET
-  ? 'https://nft.lenshareapp.xyz'
-  : 'https://nft.lenshareapp.xyz';
+  ? 'https://nft.mycrumbs.xyz'
+  : 'https://nft.mycrumbs.xyz';
 export const GROUPS_WORKER_URL = IS_MAINNET
-  ? 'https://groups.lenshareapp.xyz'
-  : 'https://groups.lenshareapp.xyz';
+  ? 'https://groups.mycrumbs.xyz'
+  : 'https://groups.mycrumbs.xyz';
 export const CHANNELS_WORKER_URL = IS_MAINNET
-  ? 'https://channels.lenshareapp.xyz'
+  ? 'https://channels.mycrumbs.xyz'
   : 'http://localhost:8093';
 export const COMMUNITIES_WORKER_URL = IS_MAINNET
-  ? 'https://communities.lenshareapp.xyz'
+  ? 'https://communities.mycrumbs.xyz'
   : 'http://localhost:8091';
 export const LIVE_WORKER_URL = IS_MAINNET
-  ? 'https://live.lenshareapp.xyz'
-  : 'https://live.lenshareapp.xyz';
+  ? 'https://live.mycrumbs.xyz'
+  : 'https://live.mycrumbs.xyz';
 export const STAFF_PICKS_WORKER_URL = IS_MAINNET
-  ? 'https://staff-picks.lenshareapp.xyz'
-  : 'https://staff-picks.lenshareapp.xyz';
+  ? 'https://staff-picks.mycrumbs.xyz'
+  : 'https://staff-picks.mycrumbs.xyz';
 export const PREFERENCES_WORKER_URL = IS_MAINNET
-  ? 'https://preferences.lenshareapp.xyz'
-  : 'https://preferences.lenshareapp.xyz';
+  ? 'https://preferences.mycrumbs.xyz'
+  : 'https://preferences.mycrumbs.xyz';
 export const IMPRESSIONS_WORKER_URL = IS_MAINNET
-  ? 'https://impressions.lenshareapp.xyz'
-  : 'https://impressions.lenshareapp.xyz';
-export const ACHIEVEMENTS_WORKER_URL = 'https://achievements.lenshareapp.xyz';
+  ? 'https://impressions.mycrumbs.xyz'
+  : 'https://impressions.mycrumbs.xyz';
+export const ACHIEVEMENTS_WORKER_URL = 'https://achievements.mycrumbs.xyz';
 export const FEEDS_WORKER_URL = IS_MAINNET
-  ? 'https://feeds.lenshareapp.xyz'
-  : 'https://feeds.lenshareapp.xyz';
+  ? 'https://feeds.mycrumbs.xyz'
+  : 'https://feeds.mycrumbs.xyz';
 export const PRO_WORKER_URL = IS_PRODUCTION
-  ? 'https://pro.lenshareapp.xyz'
-  : 'https://pro.lenshareapp.xyz';
+  ? 'https://pro.mycrumbs.xyz'
+  : 'https://pro.mycrumbs.xyz';
 export const S3_BUCKET = {
   LENSSHARE: 'lensshare'
 };
@@ -225,11 +228,11 @@ export const WRONG_NETWORK = IS_MAINNET
 export const SIGN_ERROR = 'Failed to sign data';
 export const RELAYER_ENABLED = true;
 
-export const LIVEPEER_VIEWS_URL = 'https://views.lenshareapp.xyz';
+export const LIVEPEER_VIEWS_URL = 'https://views.mycrumbs.xyz';
 
-export const LENSSHARE_EMBED_URL = 'https://embed.lenshareapp.xyz';
+export const LENSSHARE_EMBED_URL = 'https://embed.mycrumbs.xyz';
 
-export const STATIC_ASSETS_URL = 'https://asset.lenshareapp.xyz';
+export const STATIC_ASSETS_URL = 'https://asset.mycrumbs.xyz';
 
 export const FALLBACK_COVER_URL = `${STATIC_ASSETS_URL}/images/logo.png`;
 
@@ -266,7 +269,7 @@ export const IMAGEPROXY_URL = IS_MAINNET
   ? 'https://img.lenstube.xyz'
   : 'https://img.lenstube.xyz';
 
-export const API_ORIGINS = 'https://lenshareapp.xyz/';
+export const API_ORIGINS = 'https://mycrumbs.xyz/';
 
 export const ARWEAVE_WEBSITE_URL = 'https://arweave.net';
 export const ARWEAVE_GATEWAY = 'https://arweave.net';

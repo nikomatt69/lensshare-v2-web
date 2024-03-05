@@ -47,12 +47,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     alternates: {
-      canonical: `https://lenshareapp.xyz/posts/${targetPublication.id}`
+      canonical: `https://mycrumbs.xyz/posts/${targetPublication.id}`
     },
     applicationName: APP_NAME,
     authors: {
       name: displayName,
-      url: `https://lenshareapp.xyz${link}`
+      url: `https://mycrumbs.xyz${link}`
     },
     creator: displayName,
     description: description,
@@ -73,14 +73,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       slugWithPrefix
     ],
     metadataBase: new URL(
-      `https://lenshareapp.xyz/posts/${targetPublication.id}`
+      `https://mycrumbs.xyz/posts/${targetPublication.id}`
     ),
     openGraph: {
       description: description,
       images: getPublicationOGImages(metadata) as any,
-      siteName: 'LensShare',
+      siteName: 'MyCrumbs',
       type: 'article',
-      url: `https://lenshareapp.xyz/posts/${targetPublication.id}`
+      url: `https://mycrumbs.xyz/posts/${targetPublication.id}`
     },
     other: {
       'count:actions': targetPublication.stats.countOpenActions,
@@ -146,7 +146,7 @@ export default async function Page({ params }: Props) {
 
             return (
               <li key={publication.id}>
-                <a href={`https://lenshareapp.xyz/posts/${publication.id}`}>
+                <a href={`https://mycrumbs.xyz/posts/${publication.id}`}>
                   {filteredContent}
                 </a>
               </li>

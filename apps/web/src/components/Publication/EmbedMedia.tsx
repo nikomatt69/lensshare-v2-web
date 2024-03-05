@@ -42,7 +42,7 @@ const EmbedMedia: FC<Props> = ({ publicationId }) => {
         <Card className="rounded-xl border-0 p-3">
           <div className=" w-full rounded-xl border-0">
             <iframe
-              sandbox="allow-scripts origin-when-cross-origin"
+              sandbox="allow-scripts strict-origin"
               className={cn('w-full', 'aspect-[16/9] rounded-xl')}
               src={`${LENSSHARE_EMBED_URL}/${publicationId}`}
               title={`${APP_NAME} player`}
@@ -63,7 +63,7 @@ const EmbedMedia: FC<Props> = ({ publicationId }) => {
                 onClick={() => onCopyCode()}
                 className="absolute right-2 top-2"
               >
-                <CopyOutline className="size-4" />
+                <CopyOutline className="h-4 w-4" />
               </IconButton>
             </Tooltip>
           </Card>

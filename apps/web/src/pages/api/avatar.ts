@@ -31,7 +31,11 @@ export default async function handler(
     const base64Image = jsonData.image.split(';base64,').pop();
     const svgImage = Buffer.from(base64Image, 'base64').toString('utf-8');
 
-    res.status(200).setHeader('Cache-Control', CACHE_AGE).send(svgImage);
+    res
+      .status(200)
+      .setHeader('Cache-Control', CACHE_AGE)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .send(svgImage);
   } catch {
     const url =
       'https://i.seadn.io/s/raw/files/b7a5afa354adaf5f988acd8b0ba2409e.jpg';

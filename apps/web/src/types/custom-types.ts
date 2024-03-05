@@ -52,7 +52,7 @@ type FileReaderStreamType = NodeJS.ReadableStream & {
 };
 
 export type UploadedMedia = {
-  type: 'VIDEO' | 'AUDIO';
+  type: 'VIDEO';
   stream: FileReaderStreamType | null;
   preview: string;
   mediaType: string;
@@ -61,8 +61,6 @@ export type UploadedMedia = {
   description: string;
   thumbnail: string;
   thumbnailType: string;
-  mediaCategory: { tag: string; name: string };
-  mediaLicense: MetadataLicenseType;
   percent: number;
   isSensitiveContent: boolean;
   isUploadToIpfs: boolean;

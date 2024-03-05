@@ -1,6 +1,5 @@
 import MetaTags from '@components/Common/MetaTags';
 import RecommendedProfiles from '@components/Home/RecommendedProfiles';
-import Trending from '@components/Home/Trending';
 import Footer from '@components/Shared/Footer';
 import { APP_NAME } from '@lensshare/data/constants';
 import type { PublicationMetadataMainFocusType } from '@lensshare/lens';
@@ -43,7 +42,7 @@ const ListenFeedRender: NextPage = () => {
         <ListenFeed />
       </GridItemEight>
       <GridItemFour>
-        {currentProfile ? <Trending /> : null}
+       
         {currentProfile ? <RecommendedProfiles /> : null}
         <Footer />
       </GridItemFour>

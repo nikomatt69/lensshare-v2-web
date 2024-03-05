@@ -82,7 +82,7 @@ const generateIframe = (
     case 'twitch.tv': {
       const twitchEmbedUrl = pickedUrl.replace(
         '&player=facebook&autoplay=true&parent=meta.tag',
-        '&player=lensshare&autoplay=false&parent=lenshareapp.xyz'
+        '&player=lensshare&autoplay=false&parent=mycrumbs.xyz'
       );
       if (twitchRegex.test(url)) {
         return `<iframe src="${twitchEmbedUrl}" ${universalSize} allowfullscreen></iframe>`;

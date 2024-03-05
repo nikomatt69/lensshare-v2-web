@@ -19,7 +19,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         spam: true
       });
       console.log(allNoti);
-      res.status(200).json(allNoti);
+      res
+        .status(200)
+        .setHeader('Access-Control-Allow-Origin', '*')
+        .json(allNoti);
     } catch (error) {
       res.status(500).json('error');
       console.error('Error: ', error);

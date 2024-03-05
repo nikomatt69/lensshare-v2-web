@@ -1,1 +1,1 @@
-export const TEST_URL = 'https://oembed.lenshareapp.xyz';
+export const TEST_URL = 'https://oembed.mycrumbs.xyz';

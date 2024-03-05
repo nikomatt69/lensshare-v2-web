@@ -1,21 +1,18 @@
 import ToggleWithHelper from '@components/Shared/ToggleWithHelper';
-import {
-  CollectOpenActionModuleType,
-  LimitType,
-  useEnabledCurrenciesQuery
-} from '@lensshare/lens';
+import { CollectOpenActionModuleType } from '@lensshare/lens';
 import isValidEthAddress from '@lensshare/lib/isValidEthAddress';
 import type { CollectModuleType } from '@lensshare/types/hey';
-import { Button, ErrorMessage, Spinner } from '@lensshare/ui';
+import { Button } from '@lensshare/ui';
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { useCollectModuleStore } from 'src/store/useCollectModuleStore';
-
+import getAllTokens from 'src/lib/api/getAllTokens';
 import AmountConfig from './AmountConfig';
 import CollectLimitConfig from './CollectLimitConfig';
 import FollowersConfig from './FollowersConfig';
 import ReferralConfig from './ReferralConfig';
 import SplitConfig from './SplitConfig';
 import TimeLimitConfig from './TimeLimitConfig';
+import { useQuery } from '@tanstack/react-query';
 
 interface CollectFormProps {
   setShowModal: Dispatch<SetStateAction<boolean>>;
@@ -52,28 +49,10 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
     });
   };
 
-  const { data, loading, error } = useEnabledCurrenciesQuery({
-    variables: { request: { limit: LimitType.TwentyFive } }
+  const { data, error, isLoading } = useQuery({
+    queryFn: () => getAllTokens(),
+    queryKey: ['getAllTokens']
   });
-
-  if (loading) {
-    return (
-      <div className="space-y-2 px-5 py-3.5 text-center font-bold">
-        <Spinner size="md" className="mx-auto" />
-        <div>Loading collect settings</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <ErrorMessage
-        title="Failed to load modules"
-        error={error}
-        className="m-5"
-      />
-    );
-  }
 
   const toggleCollect = () => {
     if (!collectModule.type) {
@@ -92,10 +71,7 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
       />
       {collectModule.type !== null ? (
         <div className="ml-5">
-          <AmountConfig
-            enabledModuleCurrencies={data?.currencies.items}
-            setCollectType={setCollectType}
-          />
+          <AmountConfig allowedTokens={data} setCollectType={setCollectType} />
           {collectModule.amount?.value ? (
             <>
               <ReferralConfig setCollectType={setCollectType} />

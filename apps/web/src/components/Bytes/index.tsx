@@ -66,7 +66,7 @@ const Bytes = () => {
         request
       },
       onCompleted: ({ explorePublications }) => {
-        const items = explorePublications?.items as unknown as AnyPublication[];
+        const items = explorePublications?.items as PrimaryPublication[];
         const publicationId = router.query.id;
         if (!publicationId && items[0]?.id) {
           const nextUrl = `${location.origin}/bytes/${items[0]?.id}`;
@@ -75,7 +75,7 @@ const Bytes = () => {
       }
     });
 
-  const bytes = data?.explorePublications?.items as unknown as AnyPublication[];
+  const bytes = data?.explorePublications?.items as PrimaryPublication[];
   const pageInfo = data?.explorePublications?.pageInfo;
   const singleByte = singleByteData?.publication as PrimaryPublication;
 

@@ -64,7 +64,7 @@ const Portal: FC<PortalProps> = ({ portal, publicationId }) => {
     <Card className="mt-3" forceRounded onClick={stopEventPropagation}>
       <img
         alt={image}
-        className="h-[350px] max-h-[350px] w-full rounded-t-xl object-cover"
+        className="object-fit h-[full] w-[full] rounded-t-xl"
         src={image}
       />
       <div
@@ -94,6 +94,7 @@ const Portal: FC<PortalProps> = ({ portal, publicationId }) => {
             }}
             outline
             size="lg"
+            className="flex-grow"
             type={type === 'submit' ? 'submit' : 'button'}
             variant="secondary"
           >

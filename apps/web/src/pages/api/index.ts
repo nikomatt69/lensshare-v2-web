@@ -4,7 +4,7 @@ import allowCors from 'src/utils/allowCors';
 const handler = (_req: NextApiRequest, res: NextApiResponse) => {
   try {
     res.status(200).json({
-      message: 'LensShare API ✨'
+      message: 'MyCrumbs API ✨'
     });
   } catch {
     res.status(500).json({ success: false });

@@ -1,14 +1,11 @@
 import MetaTags from '@components/Common/MetaTags';
 
 import type {
-  AudioOptions,
-  MediaAudioMimeType,
   MediaVideoMimeType,
   MetadataAttribute,
   VideoOptions
 } from '@lens-protocol/metadata';
 import {
-  audio,
   MetadataAttributeType,
   PublicationContentWarning,
   shortVideo,
@@ -22,7 +19,6 @@ import type {
   ReferenceModuleInput
 } from '@lensshare/lens';
 import {
-  ReferenceModuleType,
   useBroadcastOnchainMutation,
   useBroadcastOnMomokaMutation,
   useCreateMomokaPostTypedDataMutation,
@@ -86,12 +82,6 @@ const CreateSteps = () => {
 
   const degreesOfSeparation = uploadedMedia.referenceModule
     ?.degreesOfSeparationReferenceModule?.degreesOfSeparation as number;
-  const enabledReferenceModule = uploadedMedia.referenceModule
-    ?.degreesOfSeparationReferenceModule
-    ? ReferenceModuleType.DegreesOfSeparationReferenceModule
-    : uploadedMedia.referenceModule.followerOnlyReferenceModule
-    ? ReferenceModuleType.FollowerOnlyReferenceModule
-    : null;
 
   const resetToDefaults = () => {
     setUploadedMedia(UPLOADED_VIDEO_FORM_DEFAULTS);
@@ -102,16 +92,14 @@ const CreateSteps = () => {
     router.push(
       uploadedMedia.isByteVideo
         ? `/u/${getProfile(currentProfile)?.slug}?type=bytes`
-        : `/u/${getProfile(currentProfile)?.slug}`
+        : `/u/${getProfile(currentProfile)?.slug}?type=bytes`
     );
   };
 
   const redirectToWatchPage = (pubId: string) => {
     resetToDefaults();
-    if (uploadedMedia.type === 'AUDIO') {
-      return router.push(`/listen/${pubId}`);
-    }
-    router.push(`/posts/${pubId}`);
+
+    router.push(`/bytes/${pubId}`);
   };
 
   const setToQueue = (txn: { txnId?: string; txnHash?: string }) => {
@@ -346,11 +334,6 @@ const CreateSteps = () => {
     const attributes: MetadataAttribute[] = [
       {
         type: MetadataAttributeType.STRING,
-        key: 'category',
-        value: uploadedMedia.mediaCategory.tag
-      },
-      {
-        type: MetadataAttributeType.STRING,
         key: 'creator',
         value: `${getProfile(currentProfile)?.slug}`
       },
@@ -370,20 +353,18 @@ const CreateSteps = () => {
         altTag: trimify(uploadedMedia.title),
         attributes,
         cover: uploadedMedia.thumbnail,
-        duration: uploadedMedia.durationInSeconds,
-        license: uploadedMedia.mediaLicense
+        duration: uploadedMedia.durationInSeconds
       },
       appId: APP_NAME,
       id: uuidv4(),
       attributes,
       content: trimify(uploadedMedia.description),
-      tags: [uploadedMedia.mediaCategory.tag],
       locale: getUserLocale(),
       title: uploadedMedia.title,
       marketplace: {
         attributes,
         animation_url: uploadedMedia.dUrl,
-        external_url: `https://lenshareapp.xyz${getProfile(currentProfile)
+        external_url: `https://mycrumbs.xyz${getProfile(currentProfile)
           ?.slug}`,
         image: uploadedMedia.thumbnail,
         name: uploadedMedia.title,
@@ -403,63 +384,6 @@ const CreateSteps = () => {
     await createPost(metadataUri);
   };
 
-  const constructAudioMetadata = async () => {
-    const attributes: MetadataAttribute[] = [
-      {
-        type: MetadataAttributeType.STRING,
-        key: 'category',
-        value: uploadedMedia.mediaCategory.tag
-      },
-      {
-        type: MetadataAttributeType.STRING,
-        key: 'creator',
-        value: `${getProfile(currentProfile)?.slug}`
-      },
-      {
-        type: MetadataAttributeType.STRING,
-        key: 'app',
-        value: BASE_URL
-      }
-    ];
-
-    const audioMetadata: AudioOptions = {
-      audio: {
-        item: uploadedMedia.dUrl,
-        type: getUploadedMediaType(
-          uploadedMedia.mediaType
-        ) as MediaAudioMimeType,
-        artist: `${getProfile(currentProfile)?.slug}`,
-        attributes,
-        cover: uploadedMedia.thumbnail,
-        duration: uploadedMedia.durationInSeconds,
-        license: uploadedMedia.mediaLicense
-      },
-      appId: APP_NAME,
-      id: uuidv4(),
-      attributes,
-      content: trimify(uploadedMedia.description),
-      tags: [uploadedMedia.mediaCategory.tag],
-      locale: getUserLocale(),
-      title: uploadedMedia.title,
-      marketplace: {
-        attributes,
-        animation_url: uploadedMedia.dUrl,
-        external_url: `https://lenshareapp.xyz${getProfile(currentProfile)
-          ?.slug}`,
-        image: uploadedMedia.thumbnail,
-        name: uploadedMedia.title,
-        description: trimify(uploadedMedia.description)
-      }
-    };
-
-    if (uploadedMedia.isSensitiveContent) {
-      audioMetadata.contentWarning = PublicationContentWarning.SENSITIVE;
-    }
-
-    const metadataUri = await uploadToAr(audio(audioMetadata));
-    await createPost(metadataUri);
-  };
-
   const create = async ({ dUrl }: { dUrl: string }) => {
     try {
       setUploadedMedia({
@@ -467,9 +391,7 @@ const CreateSteps = () => {
         loading: true
       });
       uploadedMedia.dUrl = dUrl;
-      if (uploadedMedia.type === 'AUDIO') {
-        return await constructAudioMetadata();
-      }
+
       await constructVideoMetadata();
     } catch (error) {
       logger.error('[Create Publication]');
@@ -526,7 +448,6 @@ const CreateSteps = () => {
         // ANS-110 standard
         { name: 'Title', value: trimify(uploadedMedia.title) },
         { name: 'Type', value: uploadedMedia.type.toLowerCase() },
-        { name: 'Topic', value: uploadedMedia.mediaCategory.name },
         {
           name: 'Description',
           value: trimify(uploadedMedia.description)
@@ -597,9 +518,9 @@ const CreateSteps = () => {
   };
 
   return (
-    <div className="mx-10 my-6 gap-5">
+    <div className="mx-10  my-6 gap-5">
       <MetaTags title="Create" />
-      <div className="container  mx-auto max-w-screen-xl md:mt-10">
+      <div className="container mx-auto mt-16 max-w-screen-xl md:mt-10">
         <Details onCancel={resetToDefaults} onUpload={onUpload} />
       </div>
     </div>

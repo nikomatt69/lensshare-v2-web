@@ -46,9 +46,7 @@ const FullPublication: FC<FullPublicationProps> = ({ publication }) => {
                   <span>
                     {formatDate(new Date(createdAt), 'hh:mm A · MMM D, YYYY')}
                   </span>
-                  {metadata.appId ? (
-                    <span> · Posted via {getAppName(metadata.appId)}</span>
-                  ) : null}
+                 
                 </div>
                 <FeaturedGroup tags={metadata.tags} />
               </div>

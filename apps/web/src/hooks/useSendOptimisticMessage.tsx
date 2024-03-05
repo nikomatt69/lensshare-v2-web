@@ -29,7 +29,9 @@ function makePromise<T = void>() {
   };
 }
 
-type PreparedMessage = Awaited<ReturnType<Conversation['prepareMessage']>>;
+export type PreparedMessage = Awaited<
+  ReturnType<Conversation['prepareMessage']>
+>;
 
 export type SendMessageOptions = {
   fallback?: string;
@@ -56,7 +58,8 @@ export type FailedMessage = Omit<PendingMessage, 'status'> & {
   cancel: () => void;
 };
 
-type PendingQueueItem = {
+export type MessageQueue = (PendingMessage | FailedMessage)[];
+export type PendingQueueItem = {
   message: PendingMessage;
   resolve: (value: boolean) => void;
 };
@@ -111,7 +114,7 @@ const useSendOptimisticMessage = (
 
       addConversation(conversationId, conversation);
     } else {
-      conversation = existingConversation;
+      conversation = conversations.get(conversationKey);
     }
 
     if (!conversation) {
@@ -159,8 +162,8 @@ const useSendOptimisticMessage = (
       // prepare message to be sent
       prepared = await conversation.prepareMessage(preparedContent, {
         contentType,
-       
-      });
+        contentFallback: sendOptions?.fallback?.toString() ?? undefined
+      } as any);
     } else {
       // message is already prepared, use existing
       prepared = sendOptions.preparedMessage;
@@ -199,7 +202,9 @@ const useSendOptimisticMessage = (
     try {
       // send prepared message
       await prepared.send();
-    } catch {
+    } catch (error) {
+      console.error('Failed to send message', error);
+
       // update message externally
       options?.onUpdate?.(id, {
         status: 'failed',

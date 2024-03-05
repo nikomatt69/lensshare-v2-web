@@ -137,6 +137,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res
       .status(200)
       .setHeader('Cache-Control', CACHE_AGE)
+      .setHeader('Access-Control-Allow-Origin', '*')
       .json({ success: true, result: combinedResult });
   } catch (error) {
     throw error;

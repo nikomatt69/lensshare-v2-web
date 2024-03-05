@@ -70,6 +70,10 @@ export const PUBLICATION = {
     }
   },
   OPEN_ACTIONS: {
+    DECENT: {
+      OPEN_DECENT: 'Open decent.xyz open action modal',
+      TIP: 'Execute decent.xyz open action'
+    },
     ZORA_NFT: {
       OPEN_LINK: 'Open Zora link',
       OPEN_MINT: 'Open Zora mint modal',

@@ -43,13 +43,13 @@ const Embed: FC<EmbedProps> = ({ og, publicationId }) => {
             {!og.isLarge && og.image ? (
               <Image
                 alt="Thumbnail"
-                className="md:h-30 md:w-30 h-26 w-26 rounded-l-xl border-r dark:border-gray-700"
-                height={144}
+                className="h-25 w-25 md:h-30 md:w-30 rounded-l-xl border-r dark:border-gray-700"
+                height={120}
                 onError={({ currentTarget }) => {
                   currentTarget.src = og.image as string;
                 }}
                 src={imageKit(og.image, ATTACHMENT)}
-                width={144}
+                width={120}
               />
             ) : null}
             <div className="truncate p-5">

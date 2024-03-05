@@ -386,7 +386,7 @@ const ChatListItemContainer = ({
               mode: 'no-cors',
               method: 'POST',
               body: JSON.stringify({
-                title: 'LensShare-Space'
+                title: 'MyCrumbs-Space'
               }),
               headers: {
                 'Content-Type': 'application/json',
@@ -400,7 +400,7 @@ const ChatListItemContainer = ({
             const currentUrl = window.location.href;
             const url = currentUrl.match(/^https?:\/\/([^/]+)/)?.[0];
             const meetingUrl = `${url}/meet/${roomId}`;
-            onSendMessage(`https://lenshareapp.xyz/meet/${roomId}`);
+            onSendMessage(`https://mycrumbs.xyz/meet/${roomId}`);
 
             // Instead of sending a message, set the meeting URL in the state
 

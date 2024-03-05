@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'User-agent': 'LensShare.xyz',
+        'User-agent': 'MyCrumbs.xyz',
         'X-Sound-Client-Key': '91f01600-9b59-4dbb-a55d-e391a9f5f7c4'
 
       },

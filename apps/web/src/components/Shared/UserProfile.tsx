@@ -95,8 +95,8 @@ const UserProfile: FC<UserProfileProps> = ({
   const UserInfo: FC = () => {
     return (
       <UserPreview
-        handle={profile.handle?.fullHandle}
-        id={profile.id}
+        handle={profile?.handle?.fullHandle}
+        id={profile?.id}
         showUserPreview={showUserPreview}
       >
         <div className="mr-8 flex items-center space-x-3">
@@ -126,7 +126,7 @@ const UserProfile: FC<UserProfileProps> = ({
 
   return (
     <div className="flex items-center justify-between">
-      {linkToProfile && profile.id ? (
+      {linkToProfile && profile?.id ? (
         <Link href={getProfile(profile).link}>
           <UserInfo />
         </Link>

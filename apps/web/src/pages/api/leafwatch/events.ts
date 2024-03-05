@@ -109,7 +109,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       format: 'JSONEachRow'
     });
 
-    return res.status(200).json({ success: true, id: result.query_id });
+    return res
+      .status(200)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .json({ success: true, id: result.query_id });
   } catch (error) {
     throw error;
   }

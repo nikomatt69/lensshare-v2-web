@@ -32,7 +32,7 @@ const PushWc: FC<RequestBody> = ({}) => {
         body: JSON.stringify({
           notification: {
             type: '97ec975f-2c15-483e-9da0-99dca1d6249d',
-            title: 'LensShare',
+            title: 'MyCrumbs',
             body: 'New Notification',
             url: 'https://lensshareapp.xyz/notifications'
           },

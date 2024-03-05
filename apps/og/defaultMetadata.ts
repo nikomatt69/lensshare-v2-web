@@ -2,12 +2,12 @@ import { APP_NAME, DEFAULT_OG, DESCRIPTION } from '@lensshare/data/constants';
 import type { Metadata } from 'next';
 
 const defaultMetadata: Metadata = {
-  alternates: { canonical: 'https://lenshareapp.xyz' },
+  alternates: { canonical: 'https://mycrumbs.xyz' },
   applicationName: APP_NAME,
   description: DESCRIPTION,
   keywords: [
     'lensshare',
-    'lenshareapp.xyz',
+    'mycrumbs.xyz',
     'social media',
     'lenster',
     'like',
@@ -20,10 +20,10 @@ const defaultMetadata: Metadata = {
     'decentralized',
     'web3'
   ],
-  metadataBase: new URL(`https://lenshareapp.xyz`),
+  metadataBase: new URL(`https://mycrumbs.xyz`),
   openGraph: {
     images: [DEFAULT_OG],
-    siteName: 'LensShare',
+    siteName: 'MyCrumbs',
     type: 'website'
   },
   title: APP_NAME,

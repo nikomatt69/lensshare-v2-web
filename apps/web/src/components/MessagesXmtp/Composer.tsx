@@ -4,7 +4,7 @@ import { MIN_WIDTH_DESKTOP } from '@lensshare/data/constants';
 
 import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 import { Button, Input } from '@lensshare/ui';
-import { uploadFileToIPFS } from '@lib/uploadToIPFS';
+import { uploadToIPFS } from 'src/hooks/uploadToIPFS';
 import type { ContentTypeId } from '@xmtp/xmtp-js';
 import { ContentTypeText } from '@xmtp/xmtp-js';
 import type { ChangeEvent, FC } from 'react';
@@ -147,8 +147,8 @@ const Composer: FC<ComposerProps> = ({
             }
           );
 
-          const uploadedAttachment = await uploadFileToIPFS(file);
-          const url = sanitizeDStorageUrl(uploadedAttachment.uri);
+          const uploadedAttachment = await uploadToIPFS(file);
+          const url = sanitizeDStorageUrl(uploadedAttachment.url);
 
           const remoteAttachment: RemoteAttachment = {
             url,

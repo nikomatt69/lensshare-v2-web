@@ -10,7 +10,7 @@ describe('getAttachmentsData', () => {
   });
 
   test('should return an array with a single mention', () => {
-    const text = 'LensShare @lens/johnsmith! How are you?';
+    const text = 'MyCrumbs @lens/johnsmith! How are you?';
     const result = getMentions(text);
     expect(result).toEqual([
       {

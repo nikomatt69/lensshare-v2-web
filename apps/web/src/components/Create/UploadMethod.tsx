@@ -1,26 +1,29 @@
-import { Text } from '@radix-ui/themes';
 
-import React, { useEffect } from 'react';
+import { Text } from '@radix-ui/themes'
 
-import IrysInfo from './IrysInfo';
-import useBytesStore from 'src/store/bytes';
-import { canUploadedToIpfs } from 'src/hooks/canUploadedToIpfs';
-import { formatMB } from 'src/hooks/formatMB';
-import { IPFS_FREE_UPLOAD_LIMIT } from '@lensshare/data/constants';
+import React, { useEffect } from 'react'
+
+import IrysInfo from './IrysInfo'
+import useBytesStore from 'src/store/bytes'
+import { canUploadedToIpfs } from 'src/hooks/canUploadedToIpfs'
+import { formatMB } from 'src/hooks/formatMB'
+import { IPFS_FREE_UPLOAD_LIMIT } from '@lensshare/data/constants'
 
 const UploadMethod = () => {
-  const uploadedMedia = useBytesStore((state) => state.uploadedMedia);
-  const setUploadedMedia = useBytesStore((state) => state.setUploadedMedia);
+  const uploadedMedia = useBytesStore((state) => state.uploadedMedia)
+  const setUploadedMedia = useBytesStore((state) => state.setUploadedMedia)
 
-  const isUnderFreeLimit = canUploadedToIpfs(uploadedMedia.file?.size);
+  const isUnderFreeLimit = canUploadedToIpfs(uploadedMedia.file?.size)
 
   useEffect(() => {
     if (!isUnderFreeLimit) {
-      setUploadedMedia({ isUploadToIpfs: false });
+      setUploadedMedia({ isUploadToIpfs: false })
     }
-  }, [isUnderFreeLimit, setUploadedMedia]);
+  }, [isUnderFreeLimit, setUploadedMedia])
 
-  
+  if (isUnderFreeLimit) {
+    return null
+  }
 
   return (
     <div className="pt-4">
@@ -31,7 +34,7 @@ const UploadMethod = () => {
       </Text>
       <IrysInfo />
     </div>
-  );
-};
+  )
+}
 
-export default UploadMethod;
+export default UploadMethod

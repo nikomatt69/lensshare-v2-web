@@ -48,7 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } = await sheetsResponse.json();
     const handles = json.values.map((row) => row[0]);
     const entries: Url[] = handles.map((handle) => ({
-      loc: `https://lenshareapp.xyz/u/${handle}`,
+      loc: `https://mycrumbs.xyz/u/${handle}`,
       changefreq: 'weekly',
       priority: '1.0'
     }));

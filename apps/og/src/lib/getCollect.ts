@@ -35,7 +35,7 @@ const getCollectModuleMetadata = (publication: MirrorablePublication) => {
     'eth:nft:creator_address': publication.by.ownedBy.address,
     'eth:nft:media_url': getPublicationOGImages(publication.metadata)[0],
     'eth:nft:mint_count': publication.stats.countOpenActions,
-    'eth:nft:mint_url': `https://lenshareapp.xyz/posts/${publication.id}`,
+    'eth:nft:mint_url': `https://mycrumbs.xyz/posts/${publication.id}`,
     'eth:nft:schema': 'ERC721'
   };
 };

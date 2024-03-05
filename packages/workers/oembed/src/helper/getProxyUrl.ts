@@ -17,8 +17,8 @@ const getProxyUrl = (url: string, isLarge: boolean, env: Env) => {
 
   const isProduction = env.WORKER_ENV === 'production';
   const workerUrl = isProduction
-    ? 'https://oembed.lenshareapp.xyz'
-    : 'https://oembed.lenshareapp.xyz';
+    ? 'https://oembed.mycrumbs.xyz'
+    : 'https://oembed.mycrumbs.xyz';
 
   return `${workerUrl}/image?hash=${encode(url)}&transform=${
     isLarge ? 'large' : 'square'

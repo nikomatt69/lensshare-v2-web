@@ -14,12 +14,12 @@ if (typeof Worker !== 'undefined') {
  */
 export const Leafwatch = {
   track: (name: string, properties?: Record<string, unknown>) => {
-    const { id: sessionProfileId } = getCurrentSession();
+    const currentSessionProfileId = getCurrentSessionProfileId();
     const { referrer } = document;
     const referrerDomain = referrer ? new URL(referrer).hostname : null;
 
     worker.postMessage({
-      actor: sessionProfileId,
+      actor: currentSessionProfileId,
       name,
       platform: 'web',
       properties,
@@ -30,7 +30,7 @@ export const Leafwatch = {
     worker.onmessage = (event: MessageEvent) => {
       const response = event.data;
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', `${LENSSHARE_API_URL}/leafwatch/events`);
+      xhr.open('POST', `/api/leafwatch/events`);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(response));
     };

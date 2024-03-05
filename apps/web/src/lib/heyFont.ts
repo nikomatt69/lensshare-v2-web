@@ -18,6 +18,7 @@ const heyFont = localFont({
       style: 'bold'
     }
   ],
+  style: 'normal',
   fallback: ['sans-serif'],
   preload: true,
   display: 'swap'

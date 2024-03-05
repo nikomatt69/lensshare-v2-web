@@ -21,7 +21,7 @@ const MeetingIcon: FC = () => {
               mode: 'no-cors',
               method: 'POST',
               body: JSON.stringify({
-                title: 'LensShare-Space'
+                title: 'MyCrumbs-Space'
               }),
               headers: {
                 'Content-Type': 'application/json',

@@ -34,6 +34,7 @@ export default async function handler(
     return res
       .status(200)
       .setHeader('Cache-Control', CACHE_AGE)
+      .setHeader('Access-Control-Allow-Origin', '*')
       .json({ deployed, success: true });
   } catch (error) {
     return res.status(500).json({ error: 'Something went wrong' }); // Return a 500 error if an error occurs

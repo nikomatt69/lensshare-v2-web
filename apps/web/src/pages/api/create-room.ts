@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { data } = await axios.post(
       'https://api.huddle01.com/api/v1/create-room',
       {
-        title: 'LensShare-Meet',
+        title: 'MyCrumbs-Meet',
         roomLock: false
       },
       {

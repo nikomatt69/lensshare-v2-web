@@ -1,10 +1,11 @@
 import { BellIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
 import { useNotificationPersistStore } from 'src/store/useNotificationPersistStore';
-import type { Notification } from '@lensshare/lens';
+
+import React, { useEffect, useState } from 'react';
+import { sendNotification } from 'src/utils/webPushUtils';
 const NotificationIcon: FC = () => {
   const latestNotificationId = useNotificationPersistStore(
     (state) => state.latestNotificationId
@@ -16,39 +17,13 @@ const NotificationIcon: FC = () => {
   const setLastOpenedNotificationId = useNotificationPersistStore(
     (state) => state.setLastOpenedNotificationId
   );
-  const pushNotification = (latestNotificationId: any) => {
+
+  const [hasNewNotifications, setHasNewNotifications] = useState(false);
+  useEffect(() => {
     if (latestNotificationId) {
-      const fetchNotifications = async (userAddress: Notification) => {
-        try {
-          const response = await axios.post('/api/getnotification', {
-            userAddress
-          });
-          return response.data;
-        } catch (error) {
-          console.error('Error fetching notifications:', error);
-          throw error;
-        }
-      };
-
-      // Usage example
-      const userAddress = currentProfile?.id.ownedBy.address;
-      fetchNotifications(userAddress)
-        .then((notifications) => {
-          console.log('Received notifications:', notifications);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      const notification = fetchNotifications(latestNotificationId); // Assuming getNoti is a function to retrieve notification details
-      // Push notification logic using retrieved notification
-      console.log('Notification pushed:', notification);
+      setHasNewNotifications(true);
     }
-  };
-
-
-
-  
-
+  }, [latestNotificationId]);
   return (
     <Link
       href="/notifications"
@@ -56,9 +31,7 @@ const NotificationIcon: FC = () => {
       onClick={() => {
         if (latestNotificationId) {
           setLastOpenedNotificationId(latestNotificationId);
-          pushNotification(latestNotificationId);
-
-         
+          sendNotification(currentProfile?.id, latestNotificationId);
         }
       }}
     >
@@ -66,6 +39,9 @@ const NotificationIcon: FC = () => {
       {lastOpenedNotificationId !== latestNotificationId ? (
         <span className="h-2 w-2 rounded-full bg-red-500" />
       ) : null}
+      {hasNewNotifications && (
+        <span className="h-2 w-2 rounded-full bg-red-500" />
+      )}
     </Link>
   );
 };

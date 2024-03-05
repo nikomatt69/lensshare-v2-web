@@ -110,17 +110,7 @@ const Contact: FC = () => {
                 placeholder="gavin@hooli.com"
                 {...form.register('email')}
               />
-              <Select
-                label="Category"
-                values={[
-                  'Support',
-                  'Bug report',
-                  'Feature request',
-                  'Report copyright infringement',
-                  'Other'
-                ]}
-                {...form.register('category')}
-              />
+              
               <Input
                 label="Subject"
                 placeholder="What happened?"

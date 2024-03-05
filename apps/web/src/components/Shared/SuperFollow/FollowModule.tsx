@@ -30,13 +30,14 @@ import type { Dispatch, FC, SetStateAction } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
-import { useAppStore } from 'src/store/useAppStore';
-import { useNonceStore } from 'src/store/useNonceStore';
-import { useBalance, useContractWrite, useSignTypedData } from 'wagmi';
 
+import {useNonceStore} from 'src/store/non-persisted/useNonceStore';
+import { useBalance, useContractWrite, useSignTypedData } from 'wagmi';
+import {useProfileStore} from 'src/store/persisted/useProfileStore';
 import Loader from '../Loader';
 import NoBalanceError from '../NoBalanceError';
 import Slug from '../Slug';
+import { useAppStore } from 'src/store/useAppStore';
 
 interface FollowModuleProps {
   profile: Profile;

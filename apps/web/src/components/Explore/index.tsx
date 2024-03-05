@@ -1,6 +1,6 @@
 import MetaTags from '@components/Common/MetaTags';
 import RecommendedProfiles from '@components/Home/RecommendedProfiles';
-import Trending from '@components/Home/Trending';
+
 import FeedFocusType from '@components/Shared/FeedFocusType';
 import Footer from '@components/Shared/Footer';
 import { Tab } from '@headlessui/react';
@@ -106,7 +106,7 @@ const Explore: NextPage = () => {
         </Tab.Group>
       </GridItemEight>
       <GridItemFour>
-        {currentProfile ? <Trending /> : null}
+     
         {currentProfile ? <RecommendedProfiles /> : null}
         <Footer />
       </GridItemFour>

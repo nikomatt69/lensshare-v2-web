@@ -20,14 +20,14 @@ describe('truncateUrl', () => {
     expect(truncateUrl(shortUrl, 20)).toEqual('example.com/foo');
   });
 
-  test('should not truncate *.lenshareapp.xyz urls', () => {
-    const mainnetUrl = 'https://lenshareapp.xyz/long/pathname/test';
-    const testnetUrl = 'https://testnet.lenshareapp.xyz/long/pathname/test';
+  test('should not truncate *.mycrumbs.xyz urls', () => {
+    const mainnetUrl = 'https://mycrumbs.xyz/long/pathname/test';
+    const testnetUrl = 'https://testnet.mycrumbs.xyz/long/pathname/test';
     expect(truncateUrl(mainnetUrl, 20)).toEqual(
-      'lenshareapp.xyz/long/pathname/test'
+      'mycrumbs.xyz/long/pathname/test'
     );
     expect(truncateUrl(testnetUrl, 20)).toEqual(
-      'testnet.lenshareapp.xyz/long/pathname/test'
+      'testnet.mycrumbs.xyz/long/pathname/test'
     );
   });
 });

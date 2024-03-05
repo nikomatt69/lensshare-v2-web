@@ -1,11 +1,11 @@
-import usePushNotificationSocket from '@components/messages2/Video/usePushNotificationSocket';
 import {
   type Notification,
-  useNewNotificationSubscriptionSubscription,
-  useUserSigNoncesSubscriptionSubscription,
-  useAuthorizationRecordRevokedSubscriptionSubscription,
-  useUserSigNoncesQuery
-} from '@lensshare/lens/generated2';
+  useNewNotificationSubscription,
+  useUserSigNoncesSubscription,
+  useAuthorizationRecordRevokedSubscription
+} from '@lensshare/lens';
+import { useUserSigNoncesQuery } from '@lensshare/lens/generated3';
+
 import { BrowserPush } from '@lib/browserPush';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import getPushNotificationData from '@lib/getPushNotificationData';
@@ -33,11 +33,10 @@ const LensSubscriptionsProvider: FC = () => {
   const canUseSubscriptions = Boolean(currentSessionProfileId) && address;
 
   // Begin: New Notification
-  const { data: newNotificationData } =
-    useNewNotificationSubscriptionSubscription({
-      variables: { for: currentSessionProfileId },
-      skip: !canUseSubscriptions || isAddress(currentSessionProfileId)
-    });
+  const { data: newNotificationData } = useNewNotificationSubscription({
+    variables: { for: currentSessionProfileId },
+    skip: !canUseSubscriptions || isAddress(currentSessionProfileId)
+  });
 
   useUpdateEffect(() => {
     const notification = newNotificationData?.newNotification as Notification;
@@ -53,7 +52,7 @@ const LensSubscriptionsProvider: FC = () => {
   // End: New Notification
 
   // Begin: User Sig Nonces
-  const { data: userSigNoncesData } = useUserSigNoncesSubscriptionSubscription({
+  const { data: userSigNoncesData } = useUserSigNoncesSubscription({
     variables: { address },
     skip: !canUseSubscriptions
   });
@@ -64,7 +63,7 @@ const LensSubscriptionsProvider: FC = () => {
     if (userSigNonces) {
       setLensHubOnchainSigNonce(userSigNonces.lensHubOnchainSigNonce);
       setLensPublicActProxyOnchainSigNonce(
-        userSigNonces.lensPublicActProxyOnchainSigNonce
+        userSigNonces.lensHubOnchainSigNonce
       );
     }
   }, [userSigNoncesData]);
@@ -72,7 +71,7 @@ const LensSubscriptionsProvider: FC = () => {
 
   // Begin: Authorization Record Revoked
   const { data: authorizationRecordRevokedData } =
-    useAuthorizationRecordRevokedSubscriptionSubscription({
+    useAuthorizationRecordRevokedSubscription({
       variables: { authorizationId: currentSessionProfileId },
       skip: !canUseSubscriptions
     });
@@ -92,7 +91,7 @@ const LensSubscriptionsProvider: FC = () => {
   useUserSigNoncesQuery({
     onCompleted: (data) => {
       setLensPublicActProxyOnchainSigNonce(
-        data.userSigNonces.lensPublicActProxyOnchainSigNonce
+        data.userSigNonces.lensHubOnChainSigNonce
       );
     },
     skip: Boolean(currentSessionProfileId)

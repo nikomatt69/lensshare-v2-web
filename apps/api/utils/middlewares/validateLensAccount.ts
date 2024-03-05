@@ -27,7 +27,10 @@ const validateLensAccount = async (request: NextApiRequest) => {
       `
     },
     {
-      headers: { 'Content-Type': 'application/json', 'User-agent': 'LensShare.xyz' },
+      headers: {
+        'Content-Type': 'application/json',
+        'User-agent': 'MyCrumbs.xyz'
+      },
       withCredentials: true
     }
   );

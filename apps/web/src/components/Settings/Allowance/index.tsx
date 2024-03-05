@@ -9,7 +9,7 @@ import {
   LimitType,
   OpenActionModuleType,
   useApprovedModuleAllowanceAmountQuery,
-  useEnabledCurrenciesQuery
+
 } from '@lensshare/lens';
 import { Card, GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import { Leafwatch } from '@lib/leafwatch';
@@ -116,3 +116,7 @@ const AllowanceSettings: NextPage = () => {
 };
 
 export default AllowanceSettings;
+function useEnabledCurrenciesQuery(arg0: { variables: { request: { limit: LimitType; }; }; }): { data: any; loading: any; error: any; } {
+  throw new Error('Function not implemented.');
+}
+

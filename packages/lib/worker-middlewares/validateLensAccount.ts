@@ -23,7 +23,7 @@ const validateLensAccount = async (request: Request) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'User-agent': 'LensShare.xyz'
+        'User-agent': 'MyCrumbs.xyz'
       },
       body: JSON.stringify({
         query: `

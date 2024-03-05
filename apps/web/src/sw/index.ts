@@ -1,45 +1,73 @@
-importScripts('https://progressier.app/B5LgRYtk8D553Rd2UvFW/sw.js');
-import { ServiceWorkerCache } from './cache';
-
 declare let self: ServiceWorkerGlobalScope;
 
-const preCachedAssets = (process.env.STATIC_ASSETS ?? []) as string[];
-const CACHEABLE_PATHS = ['/', '/contact', '/explore'];
-const CACHEABLE_DOMAINS = [
-  'https://static-assets.lenshareapp.xyz',
-  'https://prerender.lenshareapp.xyz',
-  'https://og.lenshareapp.xyz',
-  'https://asset.lenshareapp.xyz'
-];
+const impressionsEndpoint = 'https://mycrumbs.xyz/api/leafwatch/impressions';
+const publicationsVisibilityInterval = 5000;
+let viewerId: null | string = null;
+const visiblePublicationsSet = new Set();
 
-const cache = new ServiceWorkerCache({
-  cachePrefix: 'SWCache',
-  cacheableRoutes: [...CACHEABLE_PATHS, ...CACHEABLE_DOMAINS],
-  staticAssets: preCachedAssets
-});
+const sendVisiblePublicationsToServer = () => {
+  const publicationsToSend = Array.from(visiblePublicationsSet);
 
-async function handleInstall(): Promise<void> {
-  void self.skipWaiting();
-  await cache.cacheStaticAssets();
-}
+  if (publicationsToSend.length > 0 && viewerId) {
+    visiblePublicationsSet.clear();
+    fetch(impressionsEndpoint, {
+      body: JSON.stringify({
+        ids: publicationsToSend,
+        viewer_id: viewerId
+      }),
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
+      method: 'POST'
+    })
+      .then(() => {})
+      .catch(() => {});
+  }
+};
 
 const handleActivate = async (): Promise<void> => {
   await self.clients.claim();
-  await cache.invalidatePreviousCache();
 };
+function displayNotification() {
+  const notifTitle = 'MyCrumbs';
+  const notifBody = 'New Notification';
+  const notifImg = `/icons/icon-192x192.png`;
+  const options = {
+    body: notifBody,
+    icon: notifImg
+  };
+  new Notification(notifTitle, options);
+}
 
-const handleFetch = (event: FetchEvent): void => {
-  const request = event.request.clone();
-  const { origin } = new URL(request.url);
+displayNotification();
+if ('setAppBadge' in navigator) {
+  navigator.setAppBadge(1);
+}
 
-  if (self.location.origin === origin || CACHEABLE_DOMAINS.includes(origin)) {
-    event.respondWith(cache.get(event));
+self.addEventListener('message', (event) => {
+  // Impression tracking
+  if (event.data && event.data.type === 'PUBLICATION_VISIBLE') {
+    visiblePublicationsSet.add(event.data.id);
+    viewerId = event.data.viewerId;
   }
-  return;
-};
+});
 
-self.addEventListener('fetch', handleFetch);
-self.addEventListener('install', (event) => event.waitUntil(handleInstall()));
+self.addEventListener('push', (event) => {
+  event.waitUntil(
+    self.registration.showNotification('MyCrumbs', {
+      body: 'New Notification',
+      icon: '/icons/icon-192x192.png'
+    })
+  );
+});
+
+self.addEventListener('push', (event) => {
+  const data = event.data?.json();
+  self.registration.showNotification(data.title, {
+    body: data.message,
+    icon: '/icons/icon-192x192.png'
+  });
+});
+
 self.addEventListener('activate', (event) => event.waitUntil(handleActivate()));
-
+setInterval(sendVisiblePublicationsToServer, publicationsVisibilityInterval);
 export {};

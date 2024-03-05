@@ -37,10 +37,8 @@ const DropZone = () => {
           preview,
           mediaType: file?.type,
           file,
-          type: isAudio ? 'AUDIO' : 'VIDEO',
-          mediaCategory: isAudio
-            ? CREATOR_VIDEO_CATEGORIES[1]
-            : CREATOR_VIDEO_CATEGORIES[0],
+          type:  'VIDEO',
+         
           isUploadToIpfs: isUnderFreeLimit
         })
       }

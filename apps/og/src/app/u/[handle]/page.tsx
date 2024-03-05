@@ -38,13 +38,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = (profile?.metadata?.bio || title).slice(0, 155);
 
   return {
-    alternates: { canonical: `https://lenshareapp.xyz${link}` },
+    alternates: { canonical: `https://mycrumbs.xyz${link}` },
     applicationName: APP_NAME,
     creator: displayName,
     description: description,
     keywords: [
       'lensshare',
-      'lenshareapp.xyz',
+      'mycrumbs.xyz',
       'social media profile',
       'social media',
       'lenster',
@@ -56,13 +56,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       displayName,
       slugWithPrefix
     ],
-    metadataBase: new URL(`https://lenshareapp.xyz${link}`),
+    metadataBase: new URL(`https://mycrumbs.xyz${link}`),
     openGraph: {
       description: description,
       images: [getAvatar(profile)],
-      siteName: 'LensShare',
+      siteName: 'MyCrumbs',
       type: 'profile',
-      url: `https://lenshareapp.xyz${link}`
+      url: `https://mycrumbs.xyz${link}`
     },
     other: { 'lens:id': profile.id },
     publisher: displayName,
@@ -110,7 +110,7 @@ export default async function Page({ params }: Props) {
 
             return (
               <li key={publication.id}>
-                <a href={`https://lenshareapp.xyz/posts/${publication.id}`}>
+                <a href={`https://mycrumbs.xyz/posts/${publication.id}`}>
                   {filteredContent}
                 </a>
               </li>
