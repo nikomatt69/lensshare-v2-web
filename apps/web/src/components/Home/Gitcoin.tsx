@@ -22,7 +22,7 @@ const Gitcoin: FC = () => {
         </div>
         <div>
           <Link
-            href="https://lenshareapp.xyz/gitcoin"
+            href="https://mycrumbs.xyz/gitcoin"
             className="font-bold underline"
             target="_blank"
         

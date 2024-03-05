@@ -13,28 +13,28 @@ const Footer: FC = () => {
         <Link href="/terms">Terms</Link>
         <Link href="/privacy">Privacy</Link>
         <Link
-          href="https://lenshareapp.xyz/discord"
+          href="https://mycrumbs.xyz/discord"
           target="_blank"
           rel="noreferrer noopener"
         >
           Discord
         </Link>
         <Link
-          href="https://lenshareapp.xyz/donate"
+          href="https://mycrumbs.xyz/donate"
           target="_blank"
           rel="noreferrer noopener"
         >
           Donate
         </Link>
         <Link
-          href="https://status.lenshareapp.xyz"
+          href="https://status.mycrumbs.xyz"
           target="_blank"
           rel="noreferrer noopener"
         >
           Status
         </Link>
         <Link
-          href="https://feedback.lenshareapp.xyz"
+          href="https://feedback.mycrumbs.xyz"
           target="_blank"
           rel="noreferrer noopener"
         >
@@ -49,7 +49,7 @@ const Footer: FC = () => {
           GitHub
         </Link>
         <Link
-          href="https://translate.lenshareapp.xyz"
+          href="https://translate.mycrumbs.xyz"
           target="_blank"
           rel="noreferrer noopener"
         >

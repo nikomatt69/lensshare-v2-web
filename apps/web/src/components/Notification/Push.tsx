@@ -31,7 +31,7 @@ const Push: FC<Props> = ({ trigger }) => {
   const isReady = useInitWeb3InboxClient({
     // The project ID and domain you setup in the Domain Setup section
     projectId: `${WALLETCONNECT_PROJECT_ID}`,
-    domain: 'lenshareapp.xyz',
+    domain: 'mycrumbs.xyz',
 
     // Allow localhost development with "unlimited" mode.
     // This authorizes this dapp to control notification subscriptions for all domains (including `app.example.com`), not just `window.location.host`

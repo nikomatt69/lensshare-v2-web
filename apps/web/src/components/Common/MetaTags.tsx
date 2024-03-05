@@ -20,7 +20,7 @@ const MetaTags: FC<MetaTagsProps> = ({
         content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"
       />
 
-      <meta property="og:url" content="https://lenshareapp.xyz" />
+      <meta property="og:url" content="https://mycrumbs.xyz" />
       <meta property="og:site_name" content={APP_NAME} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />

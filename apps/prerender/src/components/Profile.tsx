@@ -71,7 +71,7 @@ const Profile: FC<ProfileProps> = ({ profile, publications }) => {
                     userInteractionCount: profile.stats.posts
                   }
                 ],
-                url: `https://lenshareapp.xyz/${getProfile(profile).slug}}`
+                url: `https://mycrumbs.xyz/${getProfile(profile).slug}}`
               }
             }}
           />

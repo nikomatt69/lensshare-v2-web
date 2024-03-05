@@ -39,7 +39,7 @@ const Terms: FC = () => {
               </div>
               <div className="space-y-5 leading-7">
                 <p>
-                  The website lenshareapp.xyz” (the “Site”) offers information,
+                  The website mycrumbs.xyz” (the “Site”) offers information,
                   tools and services to you to allow you to interact with the
                   Lens Protocol - a composable and decentralised social graph
                   protocol.

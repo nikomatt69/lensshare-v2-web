@@ -343,7 +343,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           name: title,
           description: processedPublicationContent,
           animation_url: getAnimationUrl() || textNftImageUrl,
-          external_url: `https://lenshareapp.xyz${
+          external_url: `https://mycrumbs.xyz${
             getProfile(currentProfile).link
           }`
         }
