@@ -34,15 +34,15 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
     return [
       {
         source: '/sitemaps/:match*',
-        destination: 'https://lenshareapp.xyz/api/sitemap/:match*'
+        destination: 'https://mycrumbs.xyz/api/sitemap/:match*'
       },
       {
-        destination: `https://og.lenshareapp.xyz/u/:match*`,
+        destination: `https://og.mycrumbs.xyz/u/:match*`,
         has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
         source: '/u/:match*'
       },
       {
-        destination: `https://og.lenshareapp.xyz/posts/:match*`,
+        destination: `https://og.mycrumbs.xyz/posts/:match*`,
         has: [{ key: 'user-agent', type: 'header', value: allowedBots }],
         source: '/posts/:match*'
       }

@@ -2,7 +2,6 @@ import MentionsPlugin from '@components/Shared/Lexical/Plugins/AtMentionsPlugin'
 import LexicalAutoLinkPlugin from '@components/Shared/Lexical/Plugins/AutoLinkPlugin';
 import EmojiPickerPlugin from '@components/Shared/Lexical/Plugins/EmojiPicker';
 import ImagesPlugin from '@components/Shared/Lexical/Plugins/ImagesPlugin';
-import ToolbarPlugin from '@components/Shared/Lexical/Plugins/ToolbarPlugin';
 import { Errors } from '@lensshare/data/errors';
 import {
   $convertToMarkdownString,
@@ -21,10 +20,13 @@ import {
   INSERT_PARAGRAPH_COMMAND
 } from 'lexical';
 import type { FC } from 'react';
+import { Image } from '@lensshare/ui';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import useUploadAttachments from 'src/hooks/useUploadAttachments';
+import { useAppStore } from 'src/store/useAppStore';
 import { usePublicationStore } from 'src/store/usePublicationStore';
+import getAvatar from '@lensshare/lib/getAvatar';
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS];
 
@@ -32,6 +34,7 @@ const Editor: FC = () => {
   const setPublicationContent = usePublicationStore(
     (state) => state.setPublicationContent
   );
+  const currentProfile = useAppStore((state) => state.currentProfile);
   const showPollEditor = usePublicationStore((state) => state.showPollEditor);
   const attachments = usePublicationStore((state) => state.attachments);
   const { handleUploadAttachments } = useUploadAttachments();
@@ -62,34 +65,40 @@ const Editor: FC = () => {
   }, [editor]);
 
   return (
-    <div className="relative">
-      <EmojiPickerPlugin />
-      <ToolbarPlugin />
-      <RichTextPlugin
-        contentEditable={
-          <ContentEditable className="my-4 block min-h-[65px] overflow-auto px-5" />
-        }
-        ErrorBoundary={() => <div>{Errors.SomethingWentWrong}</div>}
-        placeholder={
-          <div className="pointer-events-none absolute top-[65px] whitespace-nowrap px-5 text-gray-400">
-            {showPollEditor ? 'Ask a question...' : "What's happening?"}
-          </div>
-        }
+    <div className="item flex p-5">
+      <Image
+        alt={currentProfile?.id}
+        className="mr-3 h-11 w-11 rounded-full border bg-gray-200 dark:border-gray-700"
+        src={getAvatar(currentProfile)}
       />
-      <OnChangePlugin
-        onChange={(editorState) => {
-          editorState.read(() => {
-            const markdown = $convertToMarkdownString(TRANSFORMERS);
-            setPublicationContent(markdown);
-          });
-        }}
-      />
-      <LexicalAutoLinkPlugin />
-      <HistoryPlugin />
-      <HashtagPlugin />
-      <MentionsPlugin />
-      <ImagesPlugin onPaste={handlePaste} />
-      <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+      <div className="relative w-full">
+        <EmojiPickerPlugin />
+        <RichTextPlugin
+          contentEditable={
+            <ContentEditable className="mt-[8.5px] min-h-[80px] overflow-auto leading-6 sm:leading-[26px]" />
+          }
+          ErrorBoundary={() => <div>{Errors.SomethingWentWrong}</div>}
+          placeholder={
+            <div className="ld-text-gray-500 pointer-events-none absolute top-2.5 text-gray-500">
+              {showPollEditor ? 'Ask a question...' : "What's new?!"}
+            </div>
+          }
+        />
+        <OnChangePlugin
+          onChange={(editorState) => {
+            editorState.read(() => {
+              const markdown = $convertToMarkdownString(TRANSFORMERS);
+              setPublicationContent(markdown);
+            });
+          }}
+        />
+        <LexicalAutoLinkPlugin />
+        <HistoryPlugin />
+        <HashtagPlugin />
+        <MentionsPlugin />
+        <ImagesPlugin onPaste={handlePaste} />
+        <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+      </div>
     </div>
   );
 };

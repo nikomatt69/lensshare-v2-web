@@ -1,7 +1,4 @@
-import { BASE_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
-
 import getCurrentSessionProfileId from './getCurrentSessionProfileId';
-import getCurrentSession from './getCurrentSession';
 
 let worker: Worker;
 

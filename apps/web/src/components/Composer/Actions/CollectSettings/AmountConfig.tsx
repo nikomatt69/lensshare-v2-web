@@ -3,18 +3,17 @@ import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
 import type { Erc20 } from '@lensshare/lens';
 import { OpenActionModuleType } from '@lensshare/lens';
-import { AllowedToken } from '@lensshare/types/hey';
-import { Input, Select } from '@lensshare/ui';
+import { Input } from '@lensshare/ui';
 import type { FC } from 'react';
 import { useCollectModuleStore } from 'src/store/useCollectModuleStore';
 
 interface AmountConfigProps {
-  allowedTokens?: AllowedToken[];
+  enabledModuleCurrencies?: Erc20[];
   setCollectType: (data: any) => void;
 }
 
 const AmountConfig: FC<AmountConfigProps> = ({
-  allowedTokens,
+  enabledModuleCurrencies,
   setCollectType
 }) => {
   const collectModule = useCollectModuleStore((state) => state.collectModule);
@@ -59,9 +58,9 @@ const AmountConfig: FC<AmountConfigProps> = ({
               }}
             />
             <div>
-            <div className="w-5/6">
               <div className="label">Select currency</div>
-              <Select
+              <select
+                className="focus:border-brand-500 focus:ring-brand-400 w-full rounded-xl border border-gray-300 bg-white outline-none dark:border-gray-700 dark:bg-gray-800"
                 onChange={(e) => {
                   setCollectType({
                     amount: {
@@ -70,13 +69,21 @@ const AmountConfig: FC<AmountConfigProps> = ({
                     }
                   });
                 }}
-                options={allowedTokens?.map((token) => ({
-                  label: token.name,
-                  value: token.contractAddress
-                }))}
-              />
+              >
+                {enabledModuleCurrencies?.map((currency: Erc20) => (
+                  <option
+                    key={currency.contract.address}
+                    value={currency.contract.address}
+                    selected={
+                      currency.contract.address ===
+                      collectModule.amount?.currency
+                    }
+                  >
+                    {currency.name}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
           </div>
         </div>
       ) : null}

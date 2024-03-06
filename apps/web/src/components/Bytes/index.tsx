@@ -22,7 +22,9 @@ import {
 } from '@lensshare/lens';
 import {
   APP_ID,
+  LENSTER_APP_ID,
   LENSTUBE_BYTES_APP_ID,
+  ORB_APP_ID,
   SCROLL_ROOT_MARGIN,
   TAPE_APP_ID
 } from '@lensshare/data/constants';
@@ -30,6 +32,7 @@ import Loader from '@components/Shared/Loader';
 import { EmptyState } from '@lensshare/ui';
 import ChevronUpOutline from '@components/Icons/ChevronUpOutline';
 import ChevronDownOutline from '@components/Icons/ChevronDownOutline';
+import { getUnixTimestampForDaysAgo } from '@lib/formatTime';
 
 const request: ExplorePublicationRequest = {
   where: {
@@ -44,6 +47,27 @@ const request: ExplorePublicationRequest = {
 };
 
 const Bytes = () => {
+  const since = getUnixTimestampForDaysAgo(30);
+
+  const request: ExplorePublicationRequest = {
+    where: {
+      publicationTypes: [ExplorePublicationType.Post],
+      metadata: {
+        mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo],
+        publishedOn: [
+          TAPE_APP_ID,
+          ORB_APP_ID,
+          APP_ID,
+          LENSTER_APP_ID,
+          LENSTUBE_BYTES_APP_ID
+        ]
+      },
+
+      since
+    },
+    orderBy: ExplorePublicationsOrderByType.Latest,
+    limit: LimitType.Fifty
+  };
   const router = useRouter();
   const [currentViewingId, setCurrentViewingId] = useState('');
 
@@ -66,7 +90,7 @@ const Bytes = () => {
         request
       },
       onCompleted: ({ explorePublications }) => {
-        const items = explorePublications?.items as PrimaryPublication[];
+        const items = explorePublications?.items as unknown as AnyPublication[];
         const publicationId = router.query.id;
         if (!publicationId && items[0]?.id) {
           const nextUrl = `${location.origin}/bytes/${items[0]?.id}`;
@@ -75,7 +99,7 @@ const Bytes = () => {
       }
     });
 
-  const bytes = data?.explorePublications?.items as PrimaryPublication[];
+  const bytes = data?.explorePublications?.items as unknown as AnyPublication[];
   const pageInfo = data?.explorePublications?.pageInfo;
   const singleByte = singleByteData?.publication as PrimaryPublication;
 
@@ -149,7 +173,7 @@ const Bytes = () => {
           (video, index) =>
             singleByte?.id !== video.id && (
               <ByteVideo
-                publication={video}
+                publication={video as PrimaryPublication}
                 currentViewingId={currentViewingId}
                 intersectionCallback={(id) => setCurrentViewingId(id)}
                 key={`${video?.id}_${index}`}

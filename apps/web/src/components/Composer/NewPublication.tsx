@@ -343,9 +343,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           name: title,
           description: processedPublicationContent,
           animation_url: getAnimationUrl() || textNftImageUrl,
-          external_url: `https://mycrumbs.xyz${
-            getProfile(currentProfile).link
-          }`
+          external_url: `https://mycrumbs.xyz${getProfile(currentProfile).link}`
         }
       };
 
@@ -512,10 +510,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   return (
     <Card
       onClick={() => setShowEmojiPicker(false)}
-      className={cn(
-        { '!rounded-b-xl !rounded-t-none border-none': !isComment },
-        'pb-3'
-      )}
+      className={cn({ 'border-none': !isComment })}
     >
       {error ? (
         <ErrorMessage
@@ -541,7 +536,8 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         </Wrapper>
       ) : null}
       <LinkPreviews />
-      <div className="block items-center px-5 sm:flex">
+      <div className="divider mx-5" />
+      <div className="mx-5 my-3 block items-center sm:flex">
         <div className="flex items-center space-x-4">
           <Attachment />
           <EmojiPicker

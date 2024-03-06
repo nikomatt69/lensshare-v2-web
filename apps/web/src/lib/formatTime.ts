@@ -56,3 +56,8 @@ export const getTimetoNow = (date: Date) => {
 export const getTwitterFormat = (date: Date | string) => {
   return dayjs(new Date(date)).twitter();
 };
+
+
+export const getUnixTimestampForDaysAgo = (days: number) => {
+  return dayjs().subtract(days, 'day').unix()
+}
