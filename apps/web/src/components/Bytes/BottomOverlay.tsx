@@ -20,7 +20,7 @@ const BottomOverlay: FC<Props> = ({ video }) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
   const [following, setFollowing] = useState(false);
   return (
-    <div className="from-trasparent absolute bottom-0 left-0 right-0 z-[1] mb-5 rounded-b-xl bg-gradient-to-t to-transparent px-3 pb-3 pt-5 text-gray-400">
+    <div className="from-trasparent absolute bottom-0 left-0 right-0 z-[1] mb-4 rounded-b-xl bg-gradient-to-t to-transparent px-3 pb-3 pt-5 text-gray-400">
       <Link href={`/posts/${video?.id}`} key={video.id}>
         <h1 className="backdrop-brightness-25 backdrop-contrast-20 line-clamp-2 break-all pb-2 font-bold text-gray-200 backdrop-blur-sm">
           {getPublicationData(video.metadata)?.title}

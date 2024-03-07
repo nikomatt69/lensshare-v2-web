@@ -20,28 +20,31 @@ import MirrorOutline from '@components/Icons/MirrorOutline';
 import ExploreOutline from '@components/Icons/ExploreOutline';
 import LatestBytes from '@components/Bytes/LatestBytes';
 import HorizantalScroller from './HorizantalScroller';
+import PreviewList from '@components/MessagesXmtp/PreviewList';
+import SpacesWindow from '@components/Common/SpacesWindow/SpacesWindow';
+import { useRoom } from '@huddle01/react/hooks';
 
 const Explore: NextPage = () => {
   const router = useRouter();
   const sectionRef = useRef<HTMLDivElement>(null);
   const currentProfile = useAppStore((state) => state.currentProfile);
   const [focus, setFocus] = useState<PublicationMetadataMainFocusType>();
-
+  const { isRoomJoined } = useRoom();
   const tabs = [
     {
-      icon: <SparklesIcon className="h-6 w-6 text-blue-700" />,
+      icon: <SparklesIcon className="h-5 w-5 text-blue-700" />,
       type: ExplorePublicationsOrderByType.LensCurated
     },
     {
-      icon: <LightBulbIcon className="h-6 w-6 text-blue-700" />,
+      icon: <LightBulbIcon className="h-5 w-5 text-blue-700" />,
       type: ExplorePublicationsOrderByType.TopCommented
     },
     {
-      icon: <ExploreOutline className="h-6 w-6 text-blue-700" />,
+      icon: <ExploreOutline className="h-5 w-5 text-blue-700" />,
       type: ExplorePublicationsOrderByType.TopCollectedOpenAction
     },
     {
-      icon: <MirrorOutline className="h-6 w-6 text-blue-700" />,
+      icon: <MirrorOutline className="h-5 w-5 text-blue-700" />,
       type: ExplorePublicationsOrderByType.TopMirrored
     }
   ];
@@ -106,7 +109,9 @@ const Explore: NextPage = () => {
         </Tab.Group>
       </GridItemEight>
       <GridItemFour>
-     
+        {currentProfile ? ( isRoomJoined &&
+          <SpacesWindow />
+        ) : null}
         {currentProfile ? <RecommendedProfiles /> : null}
         <Footer />
       </GridItemFour>

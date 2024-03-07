@@ -3,7 +3,7 @@ export enum MainnetContracts {
   LensHubProxy = '0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d',
   PublicActProxy = '0x53582b1b7BE71622E7386D736b6baf87749B7a2B',
   TokenHandleRegistry = '0xD4F2F33680FCCb36748FA9831851643781608844',
-  HeyLensSignup = '0x3Aa209873a349B7251771028F051C21b95a19dE6',
+  HeyLensSignup = '0x4b8845ACb8148dE64D1D99Cf27A3890a91F55E53',
 }
 
 export enum TestnetContracts {
@@ -11,7 +11,7 @@ export enum TestnetContracts {
   LensHubProxy = '0x4fbffF20302F3326B20052ab9C217C44F6480900',
   PublicActProxy = '0x4ed64Eb32C96Df0eA60BB8934798F4DFd3098Ba1',
   TokenHandleRegistry = '0x66cA05cAc4e8D543028192dD28C0570a0b6e3413',
-  HeyLensSignup = '0x8388d868574675F209dDBeD027b2D6dEaEd04E97',
+  HeyLensSignup = '0x4b8845ACb8148dE64D1D99Cf27A3890a91F55E53',
 }
 
 export const BASEPAINT_CONTRACT = '0xba5e05cb26b78eda3a2f8e3b3814726305dcac83';

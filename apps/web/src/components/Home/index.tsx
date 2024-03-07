@@ -82,7 +82,7 @@ const Home: NextPage = () => {
         </GridItemEight>
         <GridItemFour>
           {/* <Gitcoin /> */}
-          {loggedOut && <Waitlist />}
+          
           {/* Onboarding steps */}
           {loggedIn && (
             <>

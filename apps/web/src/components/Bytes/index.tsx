@@ -13,6 +13,7 @@ import type {
   PrimaryPublication
 } from '@lensshare/lens';
 import {
+  CustomFiltersType,
   ExplorePublicationType,
   ExplorePublicationsOrderByType,
   LimitType,
@@ -22,9 +23,7 @@ import {
 } from '@lensshare/lens';
 import {
   APP_ID,
-  LENSTER_APP_ID,
   LENSTUBE_BYTES_APP_ID,
-  ORB_APP_ID,
   SCROLL_ROOT_MARGIN,
   TAPE_APP_ID
 } from '@lensshare/data/constants';
@@ -32,41 +31,20 @@ import Loader from '@components/Shared/Loader';
 import { EmptyState } from '@lensshare/ui';
 import ChevronUpOutline from '@components/Icons/ChevronUpOutline';
 import ChevronDownOutline from '@components/Icons/ChevronDownOutline';
-import { getUnixTimestampForDaysAgo } from '@lib/formatTime';
-
-const request: ExplorePublicationRequest = {
-  where: {
-    publicationTypes: [ExplorePublicationType.Post],
-    metadata: {
-      mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo],
-      publishedOn: [APP_ID, LENSTUBE_BYTES_APP_ID, TAPE_APP_ID]
-    }
-  },
-  orderBy: ExplorePublicationsOrderByType.LensCurated,
-  limit: LimitType.Fifty
-};
 
 const Bytes = () => {
-  const since = getUnixTimestampForDaysAgo(30);
-
   const request: ExplorePublicationRequest = {
     where: {
       publicationTypes: [ExplorePublicationType.Post],
       metadata: {
         mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo],
-        publishedOn: [
-          TAPE_APP_ID,
-          ORB_APP_ID,
-          APP_ID,
-          LENSTER_APP_ID,
-          LENSTUBE_BYTES_APP_ID
-        ]
+        publishedOn: [TAPE_APP_ID, APP_ID, LENSTUBE_BYTES_APP_ID]
       },
-
-      since
+      customFilters: [CustomFiltersType.Gardeners],
     },
+    
     orderBy: ExplorePublicationsOrderByType.Latest,
-    limit: LimitType.Fifty
+    limit: LimitType.TwentyFive
   };
   const router = useRouter();
   const [currentViewingId, setCurrentViewingId] = useState('');
@@ -188,13 +166,13 @@ const Bytes = () => {
       )}
       <div className="laptop:right-6 ultrawide:right-8 bottom-2 right-4 hidden flex-col space-y-2 md:absolute md:flex">
         <button
-          className="bg-gallery rounded-full p-3 focus:outline-none dark:bg-gray-800"
+          className="bg-gallery rounded-full bg-gray-800 p-3 focus:outline-none"
           onClick={() => slider?.prev()}
         >
           <ChevronUpOutline className="h-5 w-5" />
         </button>
         <button
-          className="bg-gallery rounded-full p-3 focus:outline-none dark:bg-gray-800"
+          className="bg-gallery rounded-full bg-gray-800 p-3 focus:outline-none"
           onClick={() => slider?.next()}
         >
           <ChevronDownOutline className="h-5 w-5" />

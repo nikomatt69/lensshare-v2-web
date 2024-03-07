@@ -1,4 +1,10 @@
-import { APP_ID, APP_NAME, FALLBACK_COVER_URL, TAPE_APP_ID } from '@lensshare/data/constants';
+import {
+  APP_ID,
+  APP_NAME,
+  FALLBACK_COVER_URL,
+  LENSTUBE_BYTES_APP_ID,
+  TAPE_APP_ID
+} from '@lensshare/data/constants';
 import type {
   ExplorePublicationRequest,
   PrimaryPublication
@@ -7,6 +13,7 @@ import {
   ExplorePublicationsOrderByType,
   ExplorePublicationType,
   LimitType,
+  CustomFiltersType,
   PublicationMetadataMainFocusType,
   useExplorePublicationsQuery
 } from '@lensshare/lens';
@@ -25,11 +32,13 @@ const request: ExplorePublicationRequest = {
 
     metadata: {
       mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo],
-      publishedOn: [TAPE_APP_ID, APP_ID, APP_NAME]
-    }
+      publishedOn: [TAPE_APP_ID, APP_ID, APP_NAME, LENSTUBE_BYTES_APP_ID]
+    },
+    customFilters: [CustomFiltersType.Gardeners]
   },
-  orderBy: ExplorePublicationsOrderByType.LensCurated,
-  limit: LimitType.Ten
+
+  orderBy: ExplorePublicationsOrderByType.TopCommented,
+  limit: LimitType.TwentyFive
 };
 
 const LatestBytes = () => {
