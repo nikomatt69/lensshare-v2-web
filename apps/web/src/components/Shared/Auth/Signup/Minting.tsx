@@ -41,7 +41,7 @@ const Minting: FC = () => {
           target="_blank"
         >
           <span>View transaction</span>
-          <ArrowTopRightOnSquareIcon className="size-4" />
+          <ArrowTopRightOnSquareIcon className="w-4 h-4" />
         </Link>
       )}
     </div>

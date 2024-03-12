@@ -14,6 +14,7 @@ import Views from './Views';
 import { useImpressionsStore } from 'src/store/useImpressionsStore';
 import getPublicationViewCountById from '@lib/getPublicationViewCountById';
 import { ADMIN_ADDRESS } from '@lensshare/data/constants';
+import CommentModal from '@components/Bytes/CommentModal';
 
 interface PublicationActionsProps {
   publication: AnyPublication;
@@ -49,7 +50,7 @@ const PublicationActions: FC<PublicationActionsProps> = ({
       onClick={stopEventPropagation}
       aria-hidden="true"
     >
-      <Comment publication={publication} showCount={showCount} />
+      <CommentModal publication={publication} />
       {canMirror ? (
         <ShareMenu publication={publication} showCount={showCount} />
       ) : null}

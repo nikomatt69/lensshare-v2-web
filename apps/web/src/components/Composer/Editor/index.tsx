@@ -71,7 +71,7 @@ const Editor: FC = () => {
         className="mr-3 h-11 w-11 rounded-full border bg-gray-200 dark:border-gray-700"
         src={getAvatar(currentProfile)}
       />
-      <div className="relative w-full">
+      <div className="relative w-full rounded-lg border px-2 dark:border-gray-700 dark:bg-gray-800">
         <EmojiPickerPlugin />
         <RichTextPlugin
           contentEditable={

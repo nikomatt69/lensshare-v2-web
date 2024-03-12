@@ -1,4 +1,7 @@
-import type { ActOnOpenActionLensManagerRequest } from '@lensshare/lens';
+import type {
+  ActOnOpenActionLensManagerRequest,
+  BroadcastOnchainMutation
+} from '@lensshare/lens';
 import type { Address } from 'viem';
 
 import { LensHub } from '@lensshare/abis';
@@ -13,19 +16,21 @@ import getSignature from '@lensshare/lib/getSignature';
 import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 import useProfileStore from 'src/store/persisted/useProfileStore';
 import { useContractWrite, useSignTypedData } from 'wagmi';
-import { useAppStore } from 'src/store/useAppStore';
 import { useState } from 'react';
+import useHandleWrongNetwork from './useHandleWrongNetwork';
+import toast from 'react-hot-toast';
+import errorToast from '@lib/errorToast';
 
 interface CreatePublicationProps {
-  onCompleted: (status?: any) => void;
-  onError: (error: any) => void;
+  signlessApproved?: boolean;
+  successToast?: string;
 }
 
 const useActOnUnknownOpenAction = ({
-  onCompleted,
-  onError
+  signlessApproved = false,
+  successToast
 }: CreatePublicationProps) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const currentProfile = useProfileStore((state) => state.currentProfile);
   const lensHubOnchainSigNonce = useNonceStore(
     (state) => state.lensHubOnchainSigNonce
   );
@@ -33,14 +38,34 @@ const useActOnUnknownOpenAction = ({
     (state) => state.setLensHubOnchainSigNonce
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
+  const [relayStatus, setRelayStatus] = useState<
+    BroadcastOnchainMutation | undefined
+  >();
+  const handleWrongNetwork = useHandleWrongNetwork();
+
   const { canBroadcast, canUseLensManager } =
     checkDispatcherPermissions(currentProfile);
-  /*   const { canBroadcast, canUseLensManager } =
-    checkDispatcherPermissions(currentProfile);
- */
 
-  // TODO: Investigate signed transaction flow
-  
+  const onError = (error?: any) => {
+    setIsLoading(false);
+    errorToast(error);
+  };
+
+  const onCompleted = (
+    __typename?: 'LensProfileManagerRelayError' | 'RelayError' | 'RelaySuccess'
+  ) => {
+    if (
+      __typename === 'RelayError' ||
+      __typename === 'LensProfileManagerRelayError'
+    ) {
+      return;
+    }
+
+    setIsLoading(false);
+    toast.success(successToast || 'Success!');
+  };
+
   const { signTypedDataAsync } = useSignTypedData({ onError });
   const { write } = useContractWrite({
     abi: LensHub,
@@ -61,6 +86,7 @@ const useActOnUnknownOpenAction = ({
       onCompleted(broadcastOnchain.__typename)
   });
 
+
   const [createActOnOpenActionTypedData] =
     useCreateActOnOpenActionTypedDataMutation({
       onCompleted: async ({ createActOnOpenActionTypedData }) => {
@@ -72,14 +98,20 @@ const useActOnUnknownOpenAction = ({
             variables: { request: { id, signature } }
           });
           if (data?.broadcastOnchain.__typename === 'RelayError') {
-            return write({ args: [typedData.value] });
+            const txResult = await write({ args: [typedData.value] });
+            
           }
           setLensHubOnchainSigNonce(lensHubOnchainSigNonce + 1);
 
+          console.log('Broadcast Status');
+          console.log(data);
+          if (data) {
+            setRelayStatus(data);
+          }
           return;
         }
 
-        return write({ args: [typedData.value] });
+        const txResult = await write({ args: [typedData.value] });
       },
       onError
     });
@@ -118,24 +150,30 @@ const useActOnUnknownOpenAction = ({
     data: string;
     publicationId: string;
   }) => {
-    const actOnRequest: ActOnOpenActionLensManagerRequest = {
-      actOn: { unknownOpenAction: { address, data } },
-      for: publicationId
-    };
+    try {
+      setIsLoading(true);
 
-    if (canUseLensManager) {
-      return await actViaLensManager(actOnRequest);
-    }
+      const actOnRequest: ActOnOpenActionLensManagerRequest = {
+        actOn: { unknownOpenAction: { address, data } },
+        for: publicationId
+      };
 
-    return await createActOnOpenActionTypedData({
-      variables: {
-        options: { overrideSigNonce: lensHubOnchainSigNonce },
-        request: actOnRequest
+      if (canUseLensManager && signlessApproved) {
+        return await actViaLensManager(actOnRequest);
       }
-    });
+
+      return await createActOnOpenActionTypedData({
+        variables: {
+          options: { overrideSigNonce: lensHubOnchainSigNonce },
+          request: actOnRequest
+        }
+      });
+    } catch (error) {
+      onError(error);
+    }
   };
 
-  return { actOnUnknownOpenAction };
+  return { actOnUnknownOpenAction, isLoading, relayStatus, txHash };
 };
 
 export default useActOnUnknownOpenAction;

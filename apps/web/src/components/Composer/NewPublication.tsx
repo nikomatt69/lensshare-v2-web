@@ -40,7 +40,7 @@ import { useUnmountEffect } from 'framer-motion';
 import { $getRoot } from 'lexical';
 import dynamic from 'next/dynamic';
 import type { FC } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import useCreatePoll from 'src/hooks/useCreatePoll';
 import useCreatePublication from 'src/hooks/useCreatePublication';
@@ -53,14 +53,17 @@ import { useNonceStore } from 'src/store/useNonceStore';
 import { usePublicationStore } from 'src/store/usePublicationStore';
 import { useReferenceModuleStore } from 'src/store/useReferenceModuleStore';
 import { useEffectOnce, useUpdateEffect } from 'usehooks-ts';
-
+import { NftOpenActionKit } from 'nft-openaction-kit';
 import LivestreamSettings from './Actions/LivestreamSettings';
 import LivestreamEditor from './Actions/LivestreamSettings/LivestreamEditor';
 import PollEditor from './Actions/PollSettings/PollEditor';
 import Editor from './Editor';
 import Discard from './Post/Discard';
 import LinkPreviews from './LinkPreviews';
-
+import getURLs from '@lensshare/lib/getURLs';
+import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
+import Shimmer from '@components/Nft/Shimmer';
+import { useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
 const Attachment = dynamic(
   () => import('@components/Composer/Actions/Attachment'),
   {
@@ -89,6 +92,18 @@ const PollSettings = dynamic(
   }
 );
 
+const OpenActionSettings = dynamic(
+  () => import('@components/Composer/Actions/OpenActionSettings'),
+  {
+    loading: () => <div className="shimmer mb-1 h-5 w-5 rounded-lg" />
+  }
+);
+const nftOpenActionKit = new NftOpenActionKit({
+  decentApiKey: process.env.NEXT_PUBLIC_DECENT_API_KEY || '',
+  openSeaApiKey: process.env.NEXT_PUBLIC_OPENSEA_API_KEY || '',
+  raribleApiKey: process.env.NEXT_PUBLIC_RARIBLE_API_KEY || ''
+});
+
 interface NewPublicationProps {
   publication: AnyPublication;
 }
@@ -96,7 +111,9 @@ interface NewPublicationProps {
 const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
-
+  const [openActionEmbedLoading, setOpenActionEmbedLoading] =
+  useState<boolean>(false);
+const [openActionEmbed, setOpenActionEmbed] = useState<any | undefined>();
   const targetPublication = isMirrorPublication(publication)
     ? publication?.mirrorOn
     : publication;
@@ -129,11 +146,41 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     setShowPollEditor,
     resetPollConfig,
     pollConfig,
-    showLiveVideoEditor,
+    showLiveVideoEditor,  
     setShowLiveVideoEditor,
     resetLiveVideoConfig
   } = usePublicationStore();
 
+  
+  useEffect(() => {
+    const fetchOpenActionEmbed = async () => {
+      setOpenActionEmbedLoading(true);
+      const publicationContentUrls = getURLs(publicationContent);
+
+      try {
+        const calldata = await nftOpenActionKit.detectAndReturnCalldata(
+          publicationContentUrls[0]
+        );
+        if (calldata) {
+          setOpenActionEmbed({
+            unknownOpenAction: {
+              address: VerifiedOpenActionModules.DecentNFT,
+              data: calldata
+            }
+          });
+        } else {
+          setOpenActionEmbed(undefined);
+        }
+      } catch (error_) {
+        setOpenActionEmbed(undefined);
+        setOpenActionEmbedLoading(false);
+      }
+      setOpenActionEmbedLoading(false);
+    };
+
+    fetchOpenActionEmbed();
+  }, [publicationContent]);
+  const { openAction, reset: resetOpenActionSettings } = useOpenActionStore();
   // Collect module store
   const { collectModule, reset: resetCollectSettings } =
     useCollectModuleStore();
@@ -158,7 +205,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   const isQuote = Boolean(quotedPublication);
   const hasAudio = attachments[0]?.type === 'Audio';
   const hasVideo = attachments[0]?.type === 'Video';
-
+  const noOpenAction = !openAction;
   const noCollect = !collectModule.type;
   // Use Momoka if the profile the comment or quote has momoka proof and also check collect module has been disabled
   const useMomoka = isComment
@@ -203,6 +250,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       uploading: false
     });
     resetCollectSettings();
+    resetOpenActionSettings();
 
     if (!isComment) {
       setShowNewPostModal(false);
@@ -221,6 +269,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           : null,
       publication_has_attachments: attachments.length > 0,
       publication_has_poll: showPollEditor,
+      publication_open_action: openAction?.address,
       publication_is_live: showLiveVideoEditor,
       comment_on: isComment ? targetPublication.id : null,
       quote_on: isQuote ? quotedPublication?.id : null
@@ -351,12 +400,24 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       const arweaveId = await uploadToArweave(metadata);
 
       // Payload for the open action module
-      let openActionModules = [];
+      const openActionModules = [];
+
+      if (openActionEmbed) {
+        openActionModules.push(openActionEmbed);
+      }
+
       if (collectModule.type) {
         openActionModules.push({
           collectOpenAction: collectModuleParams(collectModule, currentProfile)
         });
       }
+
+      if (openAction) {
+        openActionModules.push({ unknownOpenAction: openAction });
+      }
+
+
+      
 
       // Payload for the Momoka post/comment/quote
       const momokaRequest:
@@ -368,7 +429,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         contentURI: `ar://${arweaveId}`
       };
 
-      if (useMomoka) {
+      if (useMomoka && !openActionEmbed) {
         if (canUseLensManager) {
           if (isComment) {
             return await createCommentOnMomka(
@@ -504,13 +565,14 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       type: '',
       uploading: false
     });
+    resetOpenActionSettings();
     resetCollectSettings();
   });
 
   return (
     <Card
       onClick={() => setShowEmojiPicker(false)}
-      className={cn({ 'border-none': !isComment })}
+      className={cn({ 'border-none dark:bg-gray-800/80': !isComment })}
     >
       {error ? (
         <ErrorMessage
@@ -535,10 +597,13 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           />
         </Wrapper>
       ) : null}
-      <LinkPreviews />
+      <LinkPreviews
+        openActionEmbed={!!openActionEmbed}
+        openActionEmbedLoading={openActionEmbedLoading}
+      />
       <div className="divider mx-5" />
       <div className="mx-5 my-3 block items-center sm:flex">
-        <div className="flex items-center space-x-4">
+        <div className="mx-1.5 flex items-center space-x-4">
           <Attachment />
           <EmojiPicker
             emojiClassName="text-brand"
@@ -564,6 +629,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           {!publication?.momoka?.proof ? (
             <>
               <CollectSettings />
+               <OpenActionSettings />
               <ReferenceSettings />
             </>
           ) : null}

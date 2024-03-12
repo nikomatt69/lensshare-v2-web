@@ -13,16 +13,16 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
-import { LightBulbIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline';
 
 import Feed from './Feed';
 import MirrorOutline from '@components/Icons/MirrorOutline';
-import ExploreOutline from '@components/Icons/ExploreOutline';
 import LatestBytes from '@components/Bytes/LatestBytes';
 import HorizantalScroller from './HorizantalScroller';
-import PreviewList from '@components/MessagesXmtp/PreviewList';
 import SpacesWindow from '@components/Common/SpacesWindow/SpacesWindow';
 import { useRoom } from '@huddle01/react/hooks';
+import FireOutline from '@components/Icons/FireOutline';
+import CollectOutline from '@components/Icons/CollectOutline';
 
 const Explore: NextPage = () => {
   const router = useRouter();
@@ -32,20 +32,24 @@ const Explore: NextPage = () => {
   const { isRoomJoined } = useRoom();
   const tabs = [
     {
-      icon: <SparklesIcon className="h-5 w-5 text-blue-700" />,
+      icon: <FireOutline className="h-5 w-5 text-blue-700" />,
       type: ExplorePublicationsOrderByType.LensCurated
     },
+
     {
-      icon: <LightBulbIcon className="h-5 w-5 text-blue-700" />,
+      icon: (
+        <ChatBubbleOvalLeftEllipsisIcon className="h-5 w-5 text-blue-700" />
+      ),
       type: ExplorePublicationsOrderByType.TopCommented
     },
-    {
-      icon: <ExploreOutline className="h-5 w-5 text-blue-700" />,
-      type: ExplorePublicationsOrderByType.TopCollectedOpenAction
-    },
+
     {
       icon: <MirrorOutline className="h-5 w-5 text-blue-700" />,
       type: ExplorePublicationsOrderByType.TopMirrored
+    },
+    {
+      icon: <CollectOutline className="h-5 w-5 text-blue-700" />,
+      type: ExplorePublicationsOrderByType.TopCollectedOpenAction
     }
   ];
 
@@ -109,9 +113,7 @@ const Explore: NextPage = () => {
         </Tab.Group>
       </GridItemEight>
       <GridItemFour>
-        {currentProfile ? ( isRoomJoined &&
-          <SpacesWindow />
-        ) : null}
+        {currentProfile ? isRoomJoined && <SpacesWindow /> : null}
         {currentProfile ? <RecommendedProfiles /> : null}
         <Footer />
       </GridItemFour>

@@ -23,7 +23,7 @@ const Audio: FC<Props> = ({ audio }) => {
   const [playing, setPlaying] = useState(false);
   const playerRef = useRef<APITypes>(null);
   const coverUrl = imageCdn(
-    sanitizeDStorageUrl(getThumbnailUrl(audio?.metadata))
+    sanitizeDStorageUrl(getThumbnailUrl(audio.metadata))
   );
   const metadata = getPublicationData(audio.metadata);
   const duration = metadata?.asset?.duration;

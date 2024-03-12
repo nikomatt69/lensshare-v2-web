@@ -1,5 +1,4 @@
 import type {
-  AnyPublication,
   ExplorePublicationRequest,
   Post,
   PrimaryPublication
@@ -69,7 +68,7 @@ const ListenFeed = () => {
     });
 
   const pageInfo = data?.explorePublications?.pageInfo;
-  const audio = data?.explorePublications?.items as unknown as AnyPublication[];
+  const audio = data?.explorePublications?.items as PrimaryPublication[];
   const singleAudio = singleAudioData?.publication as PrimaryPublication;
 
   const fetchSingleByte = async () => {
@@ -81,8 +80,7 @@ const ListenFeed = () => {
       variables: {
         request: { forId: publicationId }
       },
-      onCompleted: () => fetchAllBytes(),
-      
+      onCompleted: () => fetchAllBytes()
     });
   };
 
@@ -126,14 +124,11 @@ const ListenFeed = () => {
             <h1 className="text-xl font-semibold">Music</h1>
           </div>
           <div className="desktop:grid-cols-6 ultrawide:grid-cols-7 laptop:grid-cols-4 mx-auto mt-4 grid grid-cols-2 place-items-center gap-2 md:grid-cols-3 md:gap-3">
-            {singleAudio && <Audio audio={singleAudio as PrimaryPublication} />}
+            {singleAudio && <Audio audio={singleAudio} />}
             {audio?.map(
               (audio, index) =>
                 singleAudio?.id !== audio.id && (
-                  <Audio
-                    audio={audio?.id as PrimaryPublication}
-                    key={`${audio?.id}_${index}`}
-                  />
+                  <Audio audio={audio?.id} key={`${audio?.id}_${index}`} />
                 )
             )}
           </div>

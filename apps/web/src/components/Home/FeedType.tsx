@@ -10,6 +10,8 @@ import Algorithms from './Algorithms';
 import FeedEventFilters from './FeedEventFilters';
 import SeeThroughLens from './SeeThroughLens';
 import RefreshButton from './Refresh';
+import GraphOutline from '@components/Icons/GraphOutline';
+import FireOutline from '@components/Icons/FireOutline';
 
 interface FeedTypeProps {
   setFeedType: Dispatch<SetStateAction<HomeFeedType>>;
@@ -38,13 +40,31 @@ const FeedType: FC<FeedTypeProps> = ({ setFeedType, feedType }) => {
      
           }}
         />
+        <TabButton
+          name="Most Viewed"
+          icon={<GraphOutline className="h-4 w-4" />}
+          active={feedType === HomeFeedType.HEY_MOSTVIEWED}
+          onClick={() => {
+            setFeedType(HomeFeedType.HEY_MOSTVIEWED);
+     
+          }}
+        />
+         <TabButton
+          name="Most Recommended"
+          icon={<FireOutline className="h-4 w-4" />}
+          active={feedType === HomeFeedType.K3L_RECOMMENDED}
+          onClick={() => {
+            setFeedType(HomeFeedType.K3L_RECOMMENDED);
+     
+          }}
+        />
       </div>
       <div className="flex items-center space-x-4">
         {feedType === HomeFeedType.FOLLOWING ||
         feedType === HomeFeedType.HIGHLIGHTS ? (
           <SeeThroughLens />
         ) : null}
-        {feedType === HomeFeedType.FOLLOWING ? <FeedEventFilters /> : null}
+        
         {IS_MAINNET ? <Algorithms /> : null}
       </div>
     </div>

@@ -23,7 +23,7 @@ const List: FC<ListProps> = ({ setEmoji }) => {
   const { isLoading, error, data } = useQuery({
     queryKey: ['emojisData'],
     queryFn: async () => {
-      const response = await axios.get(`${STATIC_ASSETS_URL}/emoji.json`);
+      const response = await axios.get(``);
       return response.data;
     }
   });

@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as PushAPI from '@pushprotocol/restapi';
 import * as ethers from 'ethers';
-const PK = '7c2d4d5a2acb052b3547280c19b18081b0edc37a4aaccb602cd6e0706f79ba6b';
-const Pkey = `0x${PK}`;
-const signer = new ethers.Wallet(Pkey);
+import walletClient from '@lib/walletClient';
+import { useWalletClient } from 'wagmi';
+
 
 /**
  * @params toAddress : user wallet address to whom send notificatioon
@@ -18,12 +19,13 @@ type SendNotificationPayload = {
 };
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { data: walletClient } = useWalletClient();
   const sendNoti = async () => {
     try {
       const { title, body, toAddress }: SendNotificationPayload = req.body;
 
       const apiResponse = await PushAPI.payloads.sendNotification({
-        signer,
+        signer:walletClient,
         type: 3,
         identityType: 2,
         notification: {

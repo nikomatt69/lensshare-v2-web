@@ -10,7 +10,6 @@ import PublicationMenu from '@components/Publication/Actions/Menu';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import { useAppStore } from 'src/store/useAppStore';
 import { useImpressionsStore } from 'src/store/useImpressionsStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import isOpenActionAllowed from '@lensshare/lib/isOpenActionAllowed';
 import getPublicationViewCountById from '@lib/getPublicationViewCountById';
 
@@ -59,15 +58,15 @@ const ByteActions: FC<Props> = ({ video }) => {
   );
 
   return (
-    <div className="w-12 flex-col items-center justify-between md:flex md:w-14">
+    <div className="w-12 flex-col items-center justify-between gap-5 md:flex md:w-14">
       <div className="flex justify-center space-y-4 p-2 md:flex-col" />
       <PublicationMenu publication={targetPublication as AnyPublication} />
       <div className="items-center space-y-1.5 pt-2.5 md:flex md:flex-col">
         <div className=" text-white md:text-inherit">
           <Like publication={targetPublication} showCount={false} />
         </div>
-        <div className=" pr-3 text-center text-white md:pl-6 md:text-inherit">
-          <CommentModal publication={targetPublication} trigger />
+        <div className="  text-center text-white md:pr-4  md:text-inherit">
+          <CommentModal publication={targetPublication} />
         </div>
         <button className="mt-0.5  dark:text-white ">
           <ShareMenu
@@ -82,7 +81,6 @@ const ByteActions: FC<Props> = ({ video }) => {
           />
         ) : null}
       </div>
-      
     </div>
   );
 };

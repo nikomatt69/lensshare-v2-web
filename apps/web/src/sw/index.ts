@@ -1,4 +1,6 @@
+import { Notification } from "@lensshare/lens";
 declare let self: ServiceWorkerGlobalScope;
+
 
 const impressionsEndpoint = 'https://mycrumbs.xyz/api/leafwatch/impressions';
 const publicationsVisibilityInterval = 5000;
@@ -27,21 +29,9 @@ const sendVisiblePublicationsToServer = () => {
 const handleActivate = async (): Promise<void> => {
   await self.clients.claim();
 };
-function displayNotification() {
-  const notifTitle = 'MyCrumbs';
-  const notifBody = 'New Notification';
-  const notifImg = `/icons/icon-192x192.png`;
-  const options = {
-    body: notifBody,
-    icon: notifImg
-  };
-  new Notification(notifTitle, options);
-}
 
-displayNotification();
-if ('setAppBadge' in navigator) {
-  navigator.setAppBadge(1);
-}
+
+
 
 self.addEventListener('message', (event) => {
   // Impression tracking

@@ -8,7 +8,6 @@ import { useInView } from 'react-cool-inview';
 import ByteVideo from './ByteVideo';
 import { KeyboardControls, WheelControls } from './SliderPlugin';
 import type {
-  AnyPublication,
   ExplorePublicationRequest,
   PrimaryPublication
 } from '@lensshare/lens';
@@ -23,6 +22,7 @@ import {
 } from '@lensshare/lens';
 import {
   APP_ID,
+  APP_NAME,
   LENSTUBE_BYTES_APP_ID,
   SCROLL_ROOT_MARGIN,
   TAPE_APP_ID
@@ -38,11 +38,11 @@ const Bytes = () => {
       publicationTypes: [ExplorePublicationType.Post],
       metadata: {
         mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo],
-        publishedOn: [TAPE_APP_ID, APP_ID, LENSTUBE_BYTES_APP_ID]
+        publishedOn: [TAPE_APP_ID, APP_ID, LENSTUBE_BYTES_APP_ID, APP_NAME]
       },
-      customFilters: [CustomFiltersType.Gardeners],
+      customFilters: [CustomFiltersType.Gardeners]
     },
-    
+
     orderBy: ExplorePublicationsOrderByType.Latest,
     limit: LimitType.TwentyFive
   };
@@ -68,7 +68,7 @@ const Bytes = () => {
         request
       },
       onCompleted: ({ explorePublications }) => {
-        const items = explorePublications?.items as unknown as AnyPublication[];
+        const items = explorePublications?.items as PrimaryPublication[];
         const publicationId = router.query.id;
         if (!publicationId && items[0]?.id) {
           const nextUrl = `${location.origin}/bytes/${items[0]?.id}`;
@@ -77,7 +77,7 @@ const Bytes = () => {
       }
     });
 
-  const bytes = data?.explorePublications?.items as unknown as AnyPublication[];
+  const bytes = data?.explorePublications?.items as PrimaryPublication[];
   const pageInfo = data?.explorePublications?.pageInfo;
   const singleByte = singleByteData?.publication as PrimaryPublication;
 
@@ -151,19 +151,20 @@ const Bytes = () => {
           (video, index) =>
             singleByte?.id !== video.id && (
               <ByteVideo
-                publication={video as PrimaryPublication}
+                publication={video}
                 currentViewingId={currentViewingId}
                 intersectionCallback={(id) => setCurrentViewingId(id)}
                 key={`${video?.id}_${index}`}
               />
             )
         )}
+        {pageInfo?.next && (
+          <span ref={observe} className="flex justify-center p-10">
+            <Loader />
+          </span>
+        )}
       </div>
-      {pageInfo?.next && (
-        <span ref={observe} className="flex justify-center p-10">
-          <Loader />
-        </span>
-      )}
+
       <div className="laptop:right-6 ultrawide:right-8 bottom-2 right-4 hidden flex-col space-y-2 md:absolute md:flex">
         <button
           className="bg-gallery rounded-full bg-gray-800 p-3 focus:outline-none"

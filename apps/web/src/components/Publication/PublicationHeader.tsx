@@ -10,6 +10,7 @@ import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import { usePublicationStore } from 'src/store/usePublicationStore';
 
 import PublicationMenu from './Actions/Menu';
+import Source from './Source';
 
 
 interface PublicationHeaderProps {
@@ -67,7 +68,7 @@ const PublicationHeader: FC<PublicationHeaderProps> = ({
         )}
       </span>
       <div className="!-mr-[7px] flex items-center space-x-1">
-        
+        {<Source publication={targetPublication} />}
         {!publication.isHidden && !quoted ? (
           <PublicationMenu publication={targetPublication} />
         ) : null}

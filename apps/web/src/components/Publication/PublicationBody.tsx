@@ -82,7 +82,6 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   const showOembed =
     !showSharingLink &&
     hasURLs &&
-    !showNft &&
     !showLive &&
     !showSnapshot &&
     !showAttachments &&
@@ -127,19 +126,17 @@ const PublicationBody: FC<PublicationBodyProps> = ({
           ) : null}
           {/* Open actions */}
           {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
-          {showNft ? (
-            <Nft mintLink={metadata.mintLink} publication={publication.id} />
-          ) : null}
+          
           {showLive ? (
             <div className="mt-3">
               <Video src={metadata.liveURL || metadata.playbackURL} />
             </div>
           ) : null}
           {showSharingLink ? (
-            <Oembed publicationId={publication.id} url={metadata.sharingLink} />
+            <Oembed publication={publication} url={metadata.sharingLink} />
           ) : null}
           {showOembed ? (
-            <Oembed url={urls[0]} publicationId={publication.id} />
+            <Oembed url={urls[0]} publication={publication} />
           ) : null}
           {targetPublication.__typename === 'Quote' && (
             <Quote publication={targetPublication.quoteOn} />

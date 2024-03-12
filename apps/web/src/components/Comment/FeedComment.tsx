@@ -1,6 +1,5 @@
 import QueuedPublication from '@components/Publication/QueuedPublication';
 import SinglePublication from '@components/Publication/SinglePublication';
-import PublicationsShimmer from '@components/Shared/Shimmer/PublicationsShimmer';
 import type {
   AnyPublication,
   Comment,
@@ -14,7 +13,7 @@ import {
 } from '@lensshare/lens';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import { OptmisticPublicationType } from '@lensshare/types/enums';
-import { Card, ErrorMessage } from '@lensshare/ui';
+import { Card, ErrorMessage, Spinner } from '@lensshare/ui';
 import type { FC } from 'react';
 import { useInView } from 'react-cool-inview';
 import { useTransactionPersistStore } from 'src/store/useTransactionPersistStore';
@@ -76,7 +75,11 @@ const Feed: FC<FeedProps> = ({ publication }) => {
   });
 
   if (loading) {
-    return <PublicationsShimmer />;
+    return (
+      <div className="mx-auto my-5">
+        <Spinner size="sm" variant="secondary" />
+      </div>
+    );
   }
 
   if (error) {
@@ -88,7 +91,7 @@ const Feed: FC<FeedProps> = ({ publication }) => {
       {queuedComments.map((txn) => (
         <QueuedPublication key={txn.id} txn={txn} />
       ))}
-      <Card className="border-trasparent w-full divide-y-[1px] dark:divide-gray-700">
+      <Card className="border-trasparent w-full divide-y-[1px] rounded-xl  p-0 dark:divide-gray-700">
         {comments?.map((comment, index) =>
           comment?.__typename !== 'Comment' || comment.isHidden ? null : (
             <SinglePublication

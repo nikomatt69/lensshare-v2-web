@@ -6,11 +6,11 @@ import Custom500 from 'src/pages/500';
 
 import Audio from './Audio';
 import Background from './Background';
-import Details from './Details';
 import type { AnyPublication } from '@lensshare/lens';
 import { usePublicationQuery } from '@lensshare/lens';
 import Loader from '@components/Shared/Loader';
 import { getPublication } from 'src/hooks/getPublication';
+import ListenModal from './SpacesWindow/ListenModal';
 
 const Listen = () => {
   const {
@@ -26,7 +26,7 @@ const Listen = () => {
 
   if (loading || !data) {
     return (
-      <div className="grid h-[80vh] place-items-center">
+      <div className="grid hidden h-[80vh] place-items-center">
         <Loader />
       </div>
     );
@@ -46,12 +46,12 @@ const Listen = () => {
         <div className="m-1  mt-16">
           <Background audio={audio}>
             <Audio audio={audio} />
+            <ListenModal publication={audio}/>
           </Background>
-          <div className=" mx-auto">
-            <Details audio={audio} />
-          </div>
         </div>
-      ) : null}
+      ) : (
+        <ListenModal publication={audio}/>
+      )}
     </>
   );
 };

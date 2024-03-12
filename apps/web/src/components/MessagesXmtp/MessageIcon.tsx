@@ -132,7 +132,7 @@ const MessageIcon: FC = () => {
 
   return (
     <Link
-      href="/xmtp"
+      href="/messages"
       className="  rounded-md  hover:bg-gray-300/20 "
       onClick={() => {
         currentProfile && clearMessagesBadge(currentProfile.handle?.id);

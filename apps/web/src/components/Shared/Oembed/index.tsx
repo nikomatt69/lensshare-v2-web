@@ -8,20 +8,25 @@ import urlcat from 'urlcat';
 import Embed from './Embed';
 import Player from './Player';
 import getFavicon from 'src/utils/oembed/getFavicon';
-import Portal from './Portal/Portal index';
+
 import Nft from './Nft';
+import { AnyPublication } from '@lensshare/lens';
+import Portal from './Portal';
 
 
 interface OembedProps {
   className?: string;
-  publicationId?: string;
+  openActionEmbed?: boolean;
+  openActionEmbedLoading?: boolean;
+  publication?: AnyPublication;
   url?: string;
 }
 
 const Oembed: FC<OembedProps> = ({
   className = '',
-
-  publicationId,
+  openActionEmbed,
+  openActionEmbedLoading,
+  publication,
   url
 }) => {
   const { data, error, isLoading } = useQuery({
@@ -45,15 +50,15 @@ const Oembed: FC<OembedProps> = ({
     favicon: getFavicon(data.url),
     html: data?.html,
     image: data?.image,
-    nft: data?.nft,
     isLarge: data?.isLarge,
+    nft: data?.nft,
     portal: data?.portal,
     site: data?.site,
     title: data?.title,
     url: url as string
   };
 
-  if (!og.title && !og.html) {
+  if (!og.title && !og.html && !og.nft && !og.portal) {
     return null;
   }
 
@@ -62,11 +67,16 @@ const Oembed: FC<OembedProps> = ({
       {og.html ? (
         <Player og={og} />
       ) : og.nft ? (
-        <Nft nft={og.nft} publicationId={publicationId} />
+        <Nft
+          nft={og.nft}
+          openActionEmbed={openActionEmbed}
+          openActionEmbedLoading={openActionEmbedLoading}
+          publication={publication}
+        />
       ) : og.portal ? (
-        <Portal portal={og.portal} publicationId={publicationId} />
+        <Portal portal={og.portal} publicationId={publication?.id} />
       ) : (
-        <Embed og={og} publicationId={publicationId} />
+        <Embed og={og} publicationId={publication?.id} />
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 import type {
   MirrorablePublication,
+  PrimaryPublication,
   SecondTierCondition as SecondTierConditionType
 } from '@lensshare/lens';
 import type { FC } from 'react';
@@ -7,7 +8,7 @@ import type { FC } from 'react';
 import SecondTierCondition from './SecondTierCondition';
 
 interface CriteriaProps {
-  publication: MirrorablePublication;
+  publication: PrimaryPublication;
 }
 
 const Criteria: FC<CriteriaProps> = ({ publication }) => {

@@ -1,10 +1,10 @@
+import { type Notification } from '@lensshare/lens';
 import {
-  type Notification,
-  useNewNotificationSubscription,
-  useUserSigNoncesSubscription,
-  useAuthorizationRecordRevokedSubscription
+  useAuthorizationRecordRevokedSubscriptionSubscription,
+  useNewNotificationSubscriptionSubscription,
+  useUserSigNoncesQuery,
+  useUserSigNoncesSubscriptionSubscription
 } from '@lensshare/lens';
-import { useUserSigNoncesQuery } from '@lensshare/lens/generated3';
 
 import { BrowserPush } from '@lib/browserPush';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
@@ -13,13 +13,13 @@ import type { FC } from 'react';
 import { isSupported, share } from 'shared-zustand';
 import { signOut } from 'src/store/useAuthPersistStore';
 import { useNonceStore } from 'src/store/useNonceStore';
-import { useNotificationPersistStore } from 'src/store/useNotificationPersistStore';
 import { useUpdateEffect } from 'usehooks-ts';
 import { isAddress } from 'viem';
 import { useAccount } from 'wagmi';
+import { useNotificationStore } from 'src/store/persisted/useNotificationStore';
 
 const LensSubscriptionsProvider: FC = () => {
-  const setLatestNotificationId = useNotificationPersistStore(
+  const setLatestNotificationId = useNotificationStore(
     (state) => state.setLatestNotificationId
   );
   const setLensHubOnchainSigNonce = useNonceStore(
@@ -33,10 +33,11 @@ const LensSubscriptionsProvider: FC = () => {
   const canUseSubscriptions = Boolean(currentSessionProfileId) && address;
 
   // Begin: New Notification
-  const { data: newNotificationData } = useNewNotificationSubscription({
-    variables: { for: currentSessionProfileId },
-    skip: !canUseSubscriptions || isAddress(currentSessionProfileId)
-  });
+  const { data: newNotificationData } =
+    useNewNotificationSubscriptionSubscription({
+      variables: { for: currentSessionProfileId },
+      skip: !canUseSubscriptions || isAddress(currentSessionProfileId)
+    });
 
   useUpdateEffect(() => {
     const notification = newNotificationData?.newNotification as Notification;
@@ -52,9 +53,9 @@ const LensSubscriptionsProvider: FC = () => {
   // End: New Notification
 
   // Begin: User Sig Nonces
-  const { data: userSigNoncesData } = useUserSigNoncesSubscription({
-    variables: { address },
-    skip: !canUseSubscriptions
+  const { data: userSigNoncesData } = useUserSigNoncesSubscriptionSubscription({
+    skip: !canUseSubscriptions,
+    variables: { address }
   });
 
   useUpdateEffect(() => {
@@ -63,7 +64,7 @@ const LensSubscriptionsProvider: FC = () => {
     if (userSigNonces) {
       setLensHubOnchainSigNonce(userSigNonces.lensHubOnchainSigNonce);
       setLensPublicActProxyOnchainSigNonce(
-        userSigNonces.lensHubOnchainSigNonce
+        userSigNonces.lensPublicActProxyOnchainSigNonce
       );
     }
   }, [userSigNoncesData]);
@@ -71,9 +72,9 @@ const LensSubscriptionsProvider: FC = () => {
 
   // Begin: Authorization Record Revoked
   const { data: authorizationRecordRevokedData } =
-    useAuthorizationRecordRevokedSubscription({
-      variables: { authorizationId: currentSessionProfileId },
-      skip: !canUseSubscriptions
+    useAuthorizationRecordRevokedSubscriptionSubscription({
+      skip: !canUseSubscriptions,
+      variables: { authorizationId: currentSessionProfileId  }
     });
 
   useUpdateEffect(() => {
@@ -91,12 +92,10 @@ const LensSubscriptionsProvider: FC = () => {
   useUserSigNoncesQuery({
     onCompleted: (data) => {
       setLensPublicActProxyOnchainSigNonce(
-        data.userSigNonces.lensHubOnChainSigNonce
+        data.userSigNonces.lensPublicActProxyOnchainSigNonce
       );
     },
-    skip: Boolean(currentSessionProfileId)
-      ? !isAddress(currentSessionProfileId)
-      : true
+    skip: currentSessionProfileId ? !isAddress(currentSessionProfileId) : true
   });
 
   // Sync zustand stores between tabs

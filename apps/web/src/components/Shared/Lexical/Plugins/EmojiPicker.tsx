@@ -79,7 +79,7 @@ const EmojiPickerPlugin: FC = () => {
   const [emojis, setEmojis] = useState<Emoji[]>([]);
 
   const fetchEmojis = async () => {
-    const res = await fetch(`${STATIC_ASSETS_URL}/emoji.json`);
+    const res = await fetch(``);
     const data = await res.json();
     setEmojis(data);
   };

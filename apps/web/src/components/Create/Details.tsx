@@ -18,6 +18,7 @@ import { checkIsBytesVideo } from 'src/hooks/checkIsBytesVideo';
 import useBytesStore from 'src/store/bytes';
 import TooltipBytes from './TooltipBytes';
 import InputMentions from './InputMentions';
+import CollectSettings from '@components/Composer/Actions/CollectSettings';
 
 const formSchema = object({
   title: string()
@@ -176,6 +177,12 @@ const Details: FC<Props> = ({ onUpload, onCancel }) => {
                     Sensitive content for a general audience
                   </Flex>
                 </Text>
+              </div>
+              <div className="my-auto mt-2 items-center justify-center">
+                <span className="mx-3">Collect Settings</span>
+                <span className="mt-3">
+                  <CollectSettings  />
+                </span>
               </div>
             </div>
           </div>

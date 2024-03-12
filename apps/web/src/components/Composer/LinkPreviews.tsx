@@ -8,7 +8,15 @@ import Nft from '@components/Publication/HeyOpenActions/Nft';
 import { ZERO_PUBLICATION_ID } from '@lensshare/data/constants';
 import type { AnyPublication, MirrorablePublication, Post } from '@lensshare/lens';
 
-const LinkPreviews: FC = () => {
+interface LinkPreviewProps {
+  openActionEmbed: boolean;
+  openActionEmbedLoading: boolean;
+}
+
+const LinkPreviews: FC<LinkPreviewProps> = ({
+  openActionEmbed,
+  openActionEmbedLoading
+}) => {
   const publicationContent = usePublicationStore(
     (state) => state.publicationContent
   );
@@ -36,7 +44,15 @@ const LinkPreviews: FC = () => {
     );
   }
 
-  return <Oembed className="m-5" url={urls[0]} />;
+return (
+    <Oembed
+      className="m-5"
+      openActionEmbed={openActionEmbed}
+      openActionEmbedLoading={openActionEmbedLoading}
+      url={urls[0]}
+    />
+  );
+;
 };
 
 export default LinkPreviews;

@@ -16,3 +16,8 @@ export const AlgorithmProvider = {
   K3L: 'k3l',
   HEY: 'hey'
 };
+
+
+export enum OpenAction {
+  Tip = 'Tip'
+}

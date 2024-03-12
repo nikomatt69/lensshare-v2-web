@@ -15,7 +15,11 @@ export const BrowserPush = {
   notify: ({ title }: { title: string }) => {
     browserPushWorker.postMessage({ title });
 
-    browserPushWorker.onmessage = function (event: MessageEvent) {
+    browserPushWorker.onmessage = (event: MessageEvent) => {
+      if (!('Notification' in window)) {
+        return;
+      }
+
       const response = event.data;
       new self.Notification('MyCrumbs', {
         body: response.title,

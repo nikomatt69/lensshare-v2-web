@@ -1,7 +1,7 @@
 import MenuTransition from '@components/Shared/MenuTransition';
 import { Menu } from '@headlessui/react';
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
-import type { AnyPublication, MirrorablePublication } from '@lensshare/lens';
+import type { AnyPublication } from '@lensshare/lens';
 import humanize from '@lensshare/lib/humanize';
 import nFormatter from '@lensshare/lib/nFormatter';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
@@ -14,7 +14,6 @@ import { useMirrorOrQuoteOptimisticStore } from 'src/store/OptimisticActions/use
 
 import Mirror from './Mirror';
 import Quote from './Quote';
-
 
 interface PublicationMenuProps {
   publication: AnyPublication;
@@ -87,7 +86,7 @@ const ShareMenu: FC<PublicationMenuProps> = ({ publication, showCount }) => {
         </Menu.Button>
         <MenuTransition>
           <Menu.Items
-            className="absolute z-[5] mt-1 w-max rounded-xl border bg-white shadow-sm focus:outline-none dark:border-gray-700 dark:bg-gray-900"
+            className="absolute right-0 z-[5] mt-1 w-max rounded-xl border bg-white shadow-sm focus:outline-none dark:border-gray-700 dark:bg-gray-900"
             static
           >
             <Mirror
@@ -96,7 +95,6 @@ const ShareMenu: FC<PublicationMenuProps> = ({ publication, showCount }) => {
               isLoading={isLoading}
             />
             <Quote publication={publication} />
-
           </Menu.Items>
         </MenuTransition>
       </Menu>

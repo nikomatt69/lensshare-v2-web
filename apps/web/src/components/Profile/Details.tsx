@@ -73,7 +73,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
       },
       threadHash: null
     });
-    router.push(`/xmtp/${conversationKey}`);
+    router.push(`/messages/${conversationKey}`);
   };
 
   const MetaDetails = ({
@@ -193,7 +193,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
 
           <ProfileMenu profile={profile} />
           <div className="text-black dark:text-white">{<MeetingIcon />}</div>
-          <Link href={`/xmtp`}>
+          <Link href={`/messages`}>
             <EnvelopeIcon className="h-6 w-6" />
           </Link>
            

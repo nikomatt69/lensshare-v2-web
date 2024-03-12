@@ -1,24 +1,21 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 
-import type { Address } from 'viem';
 import * as PushAPI from '@pushprotocol/restapi';
-import * as ethers from 'ethers';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { title } from 'process';
-const PK = '7c2d4d5a2acb052b3547280c19b18081b0edc37a4aaccb602cd6e0706f79ba6b';
-const Pkey = `0x${PK}`;
-const signer = new ethers.Wallet(Pkey);
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { useWalletClient } from 'wagmi';
+
 type SendNotificationPayload = {
   title: string;
   body: string;
   toAddress: string;
 };
-
+const { data: walletClient } = useWalletClient();
 const sendNoti = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { title, body, toAddress }: SendNotificationPayload = req.body;
 
     const apiResponse = await PushAPI.payloads.sendNotification({
-      signer,
+      signer: walletClient,
       type: 3,
       identityType: 2,
       notification: {
@@ -48,8 +45,7 @@ const sendNoti = async (req: NextApiRequest, res: NextApiResponse) => {
 const onBrowserPushWorkerMessage = (event: MessageEvent) => {
   const { data } = event;
   postMessage(data);
-  sendNoti
+  sendNoti;
 };
 
-self.addEventListener('message', onBrowserPushWorkerMessage)
- 
+self.addEventListener('message', onBrowserPushWorkerMessage);

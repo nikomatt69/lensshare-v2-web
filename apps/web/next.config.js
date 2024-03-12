@@ -6,10 +6,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE_BUNDLE === '1'
 });
 
-const headers = [{ key: 'Cache-Control', value: 'public, max-age=3600' }];
+
 
 const allowedBots =
-  '.*twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot.*';
+  '.*(bot|telegram|baidu|bing|yandex|iframely|whatsapp|facebook).*';
 
 /** @type {import('next').NextConfig} */
 

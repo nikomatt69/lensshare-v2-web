@@ -2,25 +2,28 @@ import type { Notification } from '@lensshare/lens';
 import getNoti from 'src/pages/api/getnotification';
 
 
+/**
+ * Get push notification data
+ * @param notification Notification
+ * @returns Push notification data
+ */
 const getPushNotificationData = (
   notification: Notification
 ): {
   title: string;
 } | null => {
   switch (notification?.__typename) {
-    case 'ActedNotification':
+    case 'ActedNotification': {
       const actedProfile = notification.actions[0].by;
       const actedHandle =
         actedProfile.handle?.suggestedFormatted.localName || actedProfile.id;
       const actedType = notification.publication.__typename?.toLowerCase();
 
       return {
-        title: `${actedHandle} acted on your ${actedType}  ${getNoti(
-          notification.id,
-          notification.publication.id
-        )}`
+        title: `${actedHandle} acted on your ${actedType}`
       };
-    case 'CommentNotification':
+    }
+    case 'CommentNotification': {
       const commentedProfile = notification.comment.by;
       const commentedHandle =
         commentedProfile.handle?.suggestedFormatted.localName ||
@@ -29,12 +32,10 @@ const getPushNotificationData = (
         notification.comment.commentOn.__typename?.toLowerCase();
 
       return {
-        title: `${commentedHandle} commented on your ${commentedType} && ${getNoti(
-          notification.id,
-          notification.comment.id
-        )}`
+        title: `${commentedHandle} commented on your ${commentedType}`
       };
-    case 'MirrorNotification':
+    }
+    case 'MirrorNotification': {
       const mirroredProfile = notification.mirrors[0].profile;
       const mirroredHandle =
         mirroredProfile.handle?.suggestedFormatted.localName ||
@@ -42,12 +43,10 @@ const getPushNotificationData = (
       const mirroredType = notification.publication.__typename?.toLowerCase();
 
       return {
-        title: `${mirroredHandle} mirrored your ${mirroredType}  ${getNoti(
-          notification.id,
-          notification.publication.id
-        )}`
+        title: `${mirroredHandle} mirrored your ${mirroredType}`
       };
-    case 'MentionNotification':
+    }
+    case 'MentionNotification': {
       const mentionedProfile = notification.publication.by;
       const mentionedHandle =
         mentionedProfile.handle?.suggestedFormatted.localName ||
@@ -55,24 +54,20 @@ const getPushNotificationData = (
       const mentionedType = notification.publication.__typename?.toLowerCase();
 
       return {
-        title: `${mentionedHandle} mentioned your on a ${mentionedType} ${getNoti(
-          notification.id,
-          notification.publication.id
-        )}`
+        title: `${mentionedHandle} mentioned your on a ${mentionedType}`
       };
-    case 'QuoteNotification':
+    }
+    case 'QuoteNotification': {
       const quotedProfile = notification.quote.by;
       const quotedHandle =
         quotedProfile.handle?.suggestedFormatted.localName || quotedProfile.id;
       const quotedType = notification.quote.quoteOn.__typename?.toLowerCase();
 
       return {
-        title: `${quotedHandle} quoted your ${quotedType} ${getNoti(
-          notification.id,
-          notification.quote.id
-        )}`
+        title: `${quotedHandle} quoted your ${quotedType}`
       };
-    case 'ReactionNotification':
+    }
+    case 'ReactionNotification': {
       const reactedProfile = notification.reactions[0].profile;
       const reactedHandle =
         reactedProfile.handle?.suggestedFormatted.localName ||
@@ -80,26 +75,23 @@ const getPushNotificationData = (
       const reactedType = notification.publication.__typename?.toLowerCase();
 
       return {
-        title: `${reactedHandle} liked your ${reactedType}  ${getNoti(
-          notification.id,
-          notification.publication.id
-        )}`
+        title: `${reactedHandle} liked your ${reactedType}`
       };
-    case 'FollowNotification':
+    }
+    case 'FollowNotification': {
       const followedProfile = notification.followers[0];
       const followedHandle =
         followedProfile.handle?.suggestedFormatted.localName ||
         followedProfile.id;
 
       return {
-        title: `${followedHandle} followed you  ${getNoti(
-          notification.id,
-          notification.id
-        )}`
+        title: `${followedHandle} followed you`
       };
+    }
     default:
       return null;
   }
 };
 
 export default getPushNotificationData;
+

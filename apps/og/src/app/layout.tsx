@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 import React from 'react';
-import defaultMetadata from 'defaultMetadata';
+import defaultMetadata from 'src/defaultMetadata';
 
 export const metadata: Metadata = defaultMetadata;
 

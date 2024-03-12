@@ -11,6 +11,7 @@ import CoverImage from './CoverImage';
 import Player from './Player';
 import { Card } from '@lensshare/ui';
 import { useAverageColor } from 'src/hooks/useAverageColor';
+import ListenModal from '@components/Listen/SpacesWindow/ListenModal';
 
 export const AudioPublicationSchema = object({
   title: string().trim().min(1, { message: 'Invalid audio title' }),
@@ -121,6 +122,7 @@ const Audio: FC<AudioProps> = ({
                       {artist ??
                         getProfile(publication?.by as Profile).displayName}
                     </h6>
+                    <ListenModal publication={publication?.id} />
                   </>
                 )}
               </div>

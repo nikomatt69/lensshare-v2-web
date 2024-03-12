@@ -1,8 +1,8 @@
-
 import LatestBytesShimmer from '@components/Bytes/LatestBytesShimmer';
 import Loader from '@components/Shared/Loader';
 import {
   APP_ID,
+  APP_NAME,
   FALLBACK_COVER_URL,
   LENSTUBE_BYTES_APP_ID,
   SCROLL_ROOT_MARGIN,
@@ -33,12 +33,12 @@ const ProfileBytes: FC<Props> = ({ profileId }) => {
     where: {
       metadata: {
         mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo],
-        publishedOn: [LENSTUBE_BYTES_APP_ID, APP_ID, TAPE_APP_ID]
+        publishedOn: [LENSTUBE_BYTES_APP_ID, APP_ID, APP_NAME, TAPE_APP_ID]
       },
       publicationTypes: [PublicationType.Post],
       from: [profileId]
     },
-    limit: LimitType.Fifty
+    limit: LimitType.TwentyFive
   };
 
   const { data, loading, error, fetchMore } = usePublicationsQuery({
