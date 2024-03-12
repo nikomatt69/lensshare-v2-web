@@ -76,11 +76,7 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
           { key: 'Referrer-Policy', value: 'strict-origin' }
         ],
         source: '/(.*)'
-      },
-
-      { source: '/about', headers },
-      { source: '/privacy', headers },
-      { source: '/thanks', headers }
+      }
     ];
   }
 });
