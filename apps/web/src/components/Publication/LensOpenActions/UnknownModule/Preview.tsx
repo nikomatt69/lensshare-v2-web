@@ -3,7 +3,7 @@ import type { FC } from 'react';
 
 import GetOpenActionModuleIcon from '@components/Shared/GetOpenActionModuleIcon';
 import { CheckBadgeIcon } from '@heroicons/react/24/solid';
-import { useModuleMetadataQuery } from '@lensshare/lens/generated';
+import { useModuleMetadataQuery } from '@lensshare/lens';
 import { Card, Tooltip } from '@lensshare/ui';
 
 interface UnknownModulePreviewProps {

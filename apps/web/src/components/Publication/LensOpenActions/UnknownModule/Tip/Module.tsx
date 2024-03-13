@@ -24,7 +24,7 @@ import { useAccount, useBalance } from 'wagmi';
 import TipAction from './TipAction';
 import { TipIcon } from './TipIcon';
 import { CHAIN } from '@lib/costantChain';
-import { useModuleMetadataQuery } from '@lensshare/lens/generated';
+import { useModuleMetadataQuery } from '@lensshare/lens';
 import { USD_ENABLED_TOKEN_SYMBOLS } from './tokens symbols';
 
 interface TipOpenActionModuleProps {

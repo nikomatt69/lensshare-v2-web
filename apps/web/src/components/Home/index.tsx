@@ -28,7 +28,7 @@ import { AnyPublication, usePublicationQuery } from '@lensshare/lens';
 import { getPublication } from 'src/hooks/getPublication';
 import { useRouter } from 'next/router';
 import Wrapper from '@components/Echos/Wrapper';
-import CuratedHome from '@components/Echos/CuratedHome';
+
 import SpacesWindowBottomBar from '@components/Spaces/SpacesWindow/SpacesWindowBottomBar';
 
 
