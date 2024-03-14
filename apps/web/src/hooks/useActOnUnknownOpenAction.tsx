@@ -1,7 +1,4 @@
-import type {
-  ActOnOpenActionLensManagerRequest,
-  BroadcastOnchainMutation
-} from '@lensshare/lens';
+import type { ActOnOpenActionLensManagerRequest } from '@lensshare/lens';
 import type { Address } from 'viem';
 
 import { LensHub } from '@lensshare/abis';
@@ -14,12 +11,12 @@ import {
 import checkDispatcherPermissions from '@lensshare/lib/checkDispatcherPermissions';
 import getSignature from '@lensshare/lib/getSignature';
 import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
-import useProfileStore from 'src/store/persisted/useProfileStore';
 import { useContractWrite, useSignTypedData } from 'wagmi';
 import { useState } from 'react';
 import useHandleWrongNetwork from './useHandleWrongNetwork';
 import toast from 'react-hot-toast';
 import errorToast from '@lib/errorToast';
+import { useAppStore } from 'src/store/useAppStore';
 
 interface CreatePublicationProps {
   signlessApproved?: boolean;
@@ -30,18 +27,13 @@ const useActOnUnknownOpenAction = ({
   signlessApproved = false,
   successToast
 }: CreatePublicationProps) => {
-  const currentProfile = useProfileStore((state) => state.currentProfile);
-  const lensHubOnchainSigNonce = useNonceStore(
-    (state) => state.lensHubOnchainSigNonce
-  );
-  const setLensHubOnchainSigNonce = useNonceStore(
-    (state) => state.setLensHubOnchainSigNonce
+  const { currentProfile } = useAppStore();
+  const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore(
+    (state) => state
   );
   const [isLoading, setIsLoading] = useState(false);
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
-  const [relayStatus, setRelayStatus] = useState<
-    BroadcastOnchainMutation | undefined
-  >();
+  const [relayStatus, setRelayStatus] = useState<string | undefined>();
   const handleWrongNetwork = useHandleWrongNetwork();
 
   const { canBroadcast, canUseLensManager } =
@@ -86,11 +78,11 @@ const useActOnUnknownOpenAction = ({
       onCompleted(broadcastOnchain.__typename)
   });
 
-
   const [createActOnOpenActionTypedData] =
     useCreateActOnOpenActionTypedDataMutation({
       onCompleted: async ({ createActOnOpenActionTypedData }) => {
         const { id, typedData } = createActOnOpenActionTypedData;
+        await handleWrongNetwork();
 
         if (canBroadcast) {
           const signature = await signTypedDataAsync(getSignature(typedData));
@@ -99,19 +91,20 @@ const useActOnUnknownOpenAction = ({
           });
           if (data?.broadcastOnchain.__typename === 'RelayError') {
             const txResult = await write({ args: [typedData.value] });
-            
+
+            return txResult;
+          }
+          if (data?.broadcastOnchain.__typename === 'RelaySuccess') {
+            setRelayStatus(data?.broadcastOnchain.txId);
           }
           setLensHubOnchainSigNonce(lensHubOnchainSigNonce + 1);
 
-          console.log('Broadcast Status');
-          console.log(data);
-          if (data) {
-            setRelayStatus(data);
-          }
           return;
         }
 
         const txResult = await write({ args: [typedData.value] });
+
+        return txResult;
       },
       onError
     });

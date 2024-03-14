@@ -1,58 +1,42 @@
-import type { NftMetadata } from '@lensshare/types/nft';
 
-import getBasePaintCanvas from './getBasePaintCanvas';
-import getUnlonelyChannel from './getUnlonelyChannel';
-import getUnlonelyNfc from './getUnlonelyNfc';
-import getZoraNFT from './getZoraNft';
-import getSoundRelease from './getSoundRelease';
-
-export const knownMintHostnames = new Set([
-  'zora.co',
-  'testnet.zora.co',
-  'basepaint.art',
-  'unlonely.app',
-  'sound.xyz'
-]);
-
-/**
- * Get NFT metadata from a list of URLs
- * @param urls List of URLs
- * @returns NFT metadata
- */
-const getNft = (urls: string[]): NftMetadata | null => {
-  if (!urls.length) {
+import { Nft } from '@lensshare/types/misc';
+import type { Document } from 'linkedom';
+import type { Address } from 'viem';
+// https://reflect.site/g/yoginth/hey-nft-extended-open-graph-spec/780502f3c8a3404bb2d7c39ec091602e
+const getNft = (document: Document, url: string): Nft | null => {
+  const getMeta = (key: string) => {
+    const selector = `meta[name="${key}"], meta[property="${key}"]`;
+    const metaTag = document.querySelector(selector);
+    return metaTag ? metaTag.getAttribute('content') : null;
+  };
+  const collectionName = getMeta('eth:nft:collection') as string;
+  const contractAddress = getMeta('eth:nft:contract_address') as Address;
+  const creatorAddress = getMeta('eth:nft:creator_address') as Address;
+  const chain = getMeta('eth:nft:chain') || getMeta('nft:chain');
+  const mediaUrl =
+    getMeta('og:image') || (getMeta('eth:nft:media_url') as string);
+  const description = getMeta('og:description') as string;
+  const mintCount = getMeta('eth:nft:mint_count') as string;
+  const mintStatus = getMeta('eth:nft:status');
+  const mintUrl = getMeta('eth:nft:mint_url') as string;
+  const schema = getMeta('eth:nft:schema') as string;
+  const endTime = getMeta('eth:nft:endtime');
+  if (!collectionName && !contractAddress && !creatorAddress && !schema) {
     return null;
   }
-
-  const knownUrls = urls.filter((url) => {
-    const parsedUrl = new URL(url);
-    const hostname = parsedUrl.hostname.replace('www.', '');
-    return knownMintHostnames.has(hostname);
-  });
-
-  if (!knownUrls.length) {
-    return null;
-  }
-
-  const url = knownUrls[0];
-  const hostname = new URL(url).hostname.replace('www.', '');
-  const path = new URL(url).pathname;
-
-  switch (true) {
-    case hostname === 'zora.co':
-    case hostname === 'testnet.zora.co':
-      return getZoraNFT(url);
-    case hostname === 'basepaint.art':
-      return getBasePaintCanvas(url);
-    case hostname === 'unlonely.app' && path.startsWith('/channels'):
-      return getUnlonelyChannel(url);
-    case hostname === 'unlonely.app' && path.startsWith('/nfc'):
-      return getUnlonelyNfc(url);
-      case hostname === 'sound.xyz':
-      return getSoundRelease(url);
-    default:
-      return null;
-  }
+  return {
+    chain,
+    collectionName,
+    contractAddress,
+    creatorAddress,
+    description,
+    endTime,
+    mediaUrl,
+    mintCount,
+    mintStatus,
+    mintUrl,
+    schema,
+    sourceUrl: url
+  };
 };
-
 export default getNft;

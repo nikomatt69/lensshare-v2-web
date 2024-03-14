@@ -48,7 +48,6 @@ const usePublicationMetadata = () => {
       const isImage = attachments[0]?.type === 'Image';
       const isAudio = attachments[0]?.type === 'Audio';
       const isVideo = attachments[0]?.type === 'Video';
-      const isMint = Boolean(getNft(urls)?.mintLink);
       const isEmbed = Boolean(getEmbed(urls)?.embed);
       const isLiveStream = Boolean(showLiveVideoEditor && liveVideoConfig.id);
 
@@ -65,13 +64,6 @@ const usePublicationMetadata = () => {
       }));
 
       switch (true) {
-        case isMint:
-          return mint({
-            ...baseMetadata,
-            ...localBaseMetadata,
-            ...(hasAttachments && { attachments: attachmentsToBeUploaded }),
-            mintLink: getNft(urls)?.mintLink
-          });
         case isEmbed:
           return embed({
             ...baseMetadata,

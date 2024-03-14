@@ -10,30 +10,28 @@ import getPublicationData from '@lensshare/lib/getPublicationData';
 import getURLs from '@lensshare/lib/getURLs';
 import isPublicationMetadataTypeAllowed from '@lensshare/lib/isPublicationMetadataTypeAllowed';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
-import removeUrlAtEnd from '@lensshare/lib/removeUrlAtEnd';
-import type { OG } from '@lensshare/types/misc';
 import cn from '@lensshare/ui/cn';
 import Link from 'next/link';
 import type { FC } from 'react';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { isIOS, isMobile } from 'react-device-detect';
-import { CardBody, CardContainer } from '@lensshare/ui/src/3DCard';
-import Nft from './HeyOpenActions/Nft';
+import Snapshot from './HeyOpenActions/Snapshot';
 import NotSupportedPublication from './NotSupportedPublication';
 import getSnapshotProposalId from '@lib/getSnapshotProposalId';
-import Snapshot from './HeyOpenActions/Snapshot';
 import EncryptedPublication from './EncryptedPublication';
 
 interface PublicationBodyProps {
+  contentClassName?: string;
   publication: AnyPublication;
-  showMore?: boolean;
   quoted?: boolean;
+  showMore?: boolean;
 }
 
 const PublicationBody: FC<PublicationBodyProps> = ({
+  contentClassName = '',
   publication,
-  showMore = false,
-  quoted = false
+  quoted = false,
+  showMore = false
 }) => {
   const targetPublication = isMirrorPublication(publication)
     ? publication.mirrorOn
@@ -43,106 +41,80 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   const filteredContent = getPublicationData(metadata)?.content || '';
   const filteredAttachments = getPublicationData(metadata)?.attachments || [];
   const filteredAsset = getPublicationData(metadata)?.asset;
+
   const canShowMore = filteredContent?.length > 450 && showMore;
   const urls = getURLs(filteredContent);
   const hasURLs = urls.length > 0;
   const snapshotProposalId = getSnapshotProposalId(urls);
-  let rawContent = filteredContent;
+  let content = filteredContent;
 
   if (isIOS && isMobile && canShowMore) {
-    const truncatedRawContent = rawContent?.split('\n')?.[0];
-    if (truncatedRawContent) {
-      rawContent = truncatedRawContent;
+    const truncatedContent = content?.split('\n')?.[0];
+    if (truncatedContent) {
+      content = truncatedContent;
     }
   }
-
-  const [content, setContent] = useState(rawContent);
 
   if (targetPublication.isEncrypted) {
     return <EncryptedPublication publication={targetPublication} />;
   }
 
-  if (!isPublicationMetadataTypeAllowed(metadata.__typename)) {
-    return <NotSupportedPublication type={metadata.__typename} />;
+  if (!isPublicationMetadataTypeAllowed(metadata?.__typename)) {
+    return <NotSupportedPublication type={metadata?.__typename} />;
   }
 
-  // Show NFT if it's there
-  const showNft = metadata.__typename === 'MintMetadataV3';
-  const showSnapshot = snapshotProposalId;
   // Show live if it's there
-  const showLive = metadata.__typename === 'LiveStreamMetadataV3';
-  // Show embed if it's there
-  const showEmbed = metadata.__typename === 'EmbedMetadataV3';
+  const showLive = metadata?.__typename === 'LiveStreamMetadataV3';
   // Show attachments if it's there
   const showAttachments = filteredAttachments.length > 0 || filteredAsset;
-
-  const showSharingLink = metadata.__typename === 'LinkMetadataV3';
+  const showEmbed = metadata.__typename === 'EmbedMetadataV3';
+  const showSnapshot = snapshotProposalId;
+  // Show live if it's there
+  const showSharingLink = metadata?.__typename === 'LinkMetadataV3';
   // Show oembed if no NFT, no attachments, no quoted publication
-  // Show oembed if no NFT, no attachments, no snapshot, no quoted publication
   const showOembed =
-    !showSharingLink &&
-    hasURLs &&
-    !showLive &&
-    !showSnapshot &&
-    !showAttachments &&
-    !quoted;
-
-  // Remove URL at the end if oembed is there
-  const onOembedData = (data: OG) => {
-    if (showOembed && data?.title) {
-      const updatedContent = removeUrlAtEnd(urls, content);
-      if (updatedContent !== content) {
-        setContent(updatedContent);
-      }
-    }
-  };
+    !showSharingLink && hasURLs && !showLive && !showSnapshot && !showAttachments && !quoted;
 
   return (
     <div className="break-words">
       <Markup
         className={cn(
           { 'line-clamp-5': canShowMore },
-          'markup linkify break-words text-xs'
+          'markup linkify text-xs break-words',
+          contentClassName
         )}
         mentions={targetPublication.profilesMentioned}
       >
         {content}
       </Markup>
       {canShowMore ? (
-        <div className="lt-text-gray-500 mt-4 flex items-center space-x-1 text-sm font-bold">
-          <EyeIcon className="h-4 w-4" />
+        <div className="ld-text-gray-500 mt-4 flex items-center space-x-1 text-sm font-bold">
+          <EyeIcon className="w-4 h-4" />
           <Link href={`/posts/${id}`}>Show more</Link>
         </div>
       ) : null}
-      <CardContainer className="w-max-fit">
-        <CardBody className="group/card relative   rounded-xl  border-black/[0.1]   dark:border-white/[0.2]  dark:hover:shadow-emerald-500/[0.1]   ">
-          {/* Attachments and Quotes */}
-          {showAttachments ? (
-            <Attachments
-              publication={publication}
-              attachments={filteredAttachments}
-              asset={filteredAsset}
-            />
-          ) : null}
-          {/* Open actions */}
-          {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
-          
-          {showLive ? (
-            <div className="mt-3">
-              <Video src={metadata.liveURL || metadata.playbackURL} />
-            </div>
-          ) : null}
-          {showSharingLink ? (
-            <Oembed publication={publication} url={metadata.sharingLink} />
-          ) : null}
-          {showOembed ? (
-            <Oembed url={urls[0]} publication={publication} />
-          ) : null}
-          {targetPublication.__typename === 'Quote' && (
-            <Quote publication={targetPublication.quoteOn} />
-          )}
-        </CardBody>
-      </CardContainer>
+      {/* Attachments and Quotes */}
+      {showAttachments ? (
+        <Attachments
+          publication={publication}
+          asset={filteredAsset}
+          attachments={filteredAttachments}
+        />
+      ) : null}
+      {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
+
+      {showLive ? (
+        <div className="mt-3">
+          <Video src={metadata.liveURL || metadata.playbackURL} />
+        </div>
+      ) : null}
+      {showOembed ? <Oembed publication={publication} url={urls[0]} /> : null}
+      {showSharingLink ? (
+        <Oembed publication={publication} url={metadata.sharingLink} />
+      ) : null}
+      {targetPublication?.__typename === 'Quote' && (
+        <Quote publication={targetPublication.quoteOn} />
+      )}
     </div>
   );
 };

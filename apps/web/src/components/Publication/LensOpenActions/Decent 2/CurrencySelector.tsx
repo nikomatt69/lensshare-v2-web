@@ -45,21 +45,18 @@ const CurrencySelector: FC<CurrencySelectorProps> = ({ onSelectCurrency }) => {
   const { data: wmaticBalanceData } = useBalance({
     address,
     chainId: 137,
-    
     token: TokenContracts['WMATIC'] as Address
   });
 
   const { data: wethBalanceData } = useBalance({
     address,
     chainId: 137,
-   
     token: TokenContracts['WETH'] as Address
   });
 
   const { data: usdcBalanceData } = useBalance({
     address,
     chainId: 137,
-   
     token: TokenContracts['USDC'] as Address
   });
 
@@ -154,7 +151,7 @@ const CurrencySelector: FC<CurrencySelectorProps> = ({ onSelectCurrency }) => {
               <div className="relative">
                 <img
                   alt={currency.symbol}
-                  className="w-10 h-10"
+                  className="size-10"
                   height={40}
                   src={getTokenImage(currency.symbol)}
                   title={currency.name}

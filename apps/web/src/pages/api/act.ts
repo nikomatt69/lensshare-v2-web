@@ -66,7 +66,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { data } = await axios.post(
       postUrl,
       { trustedData: untrustedData, untrustedData },
-      { headers: { 'User-Agent': 'HeyBot/0.1 (like TwitterBot)' } }
+      { headers: { 'User-Agent': 'Mycrumbs.xyz' } }
     );
 
     const { document } = parseHTML(data);

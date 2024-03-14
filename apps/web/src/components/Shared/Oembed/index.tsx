@@ -12,6 +12,9 @@ import getFavicon from 'src/utils/oembed/getFavicon';
 import Nft from './Nft';
 import { AnyPublication } from '@lensshare/lens';
 import Portal from './Portal';
+import DecentOpenAction from '@components/Publication/LensOpenActions/Decent 2';
+import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
+import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 
 
 interface OembedProps {
@@ -62,17 +65,35 @@ const Oembed: FC<OembedProps> = ({
     return null;
   }
 
+  const targetPublication =
+    publication && isMirrorPublication(publication)
+      ? publication.mirrorOn
+      : publication;
+
+  // Check if the publication has an NFT minting open action module
+  const canPerformDecentAction: boolean =
+    !!targetPublication &&
+    targetPublication.openActionModules.some(
+      (module) =>
+        module.contract.address === VerifiedOpenActionModules.DecentNFT
+    );
+
+  const embedDecentOpenAction: boolean =
+    canPerformDecentAction || !!openActionEmbed;
+
   return (
     <div className={className}>
-      {og.html ? (
-        <Player og={og} />
-      ) : og.nft ? (
-        <Nft
-          nft={og.nft}
-          openActionEmbed={openActionEmbed}
-          openActionEmbedLoading={openActionEmbedLoading}
+      {embedDecentOpenAction && !!publication ? (
+        <DecentOpenAction
+          og={og}
+          openActionEmbed={!!openActionEmbed}
+          openActionEmbedLoading={!!openActionEmbedLoading}
           publication={publication}
         />
+      ) : og.html ? (
+        <Player og={og} />
+      ) : og.nft ? (
+        <Nft nft={og.nft} publicationId={publication?.id} />
       ) : og.portal ? (
         <Portal portal={og.portal} publicationId={publication?.id} />
       ) : (

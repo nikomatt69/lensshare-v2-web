@@ -1,33 +1,32 @@
 import { Errors } from '@lensshare/data/errors';
+import logger from '@lensshare/lib/logger';
 import { XMLBuilder } from 'fast-xml-parser';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import allowCors from 'src/utils/allowCors';
-import { CACHE_AGE } from 'src/utils/constants';
+import { CACHE_AGE, SWR_CACHE_AGE_1_MIN_30_DAYS } from 'src/utils/constants';
 
 export const config = {
   api: { responseLimit: '8mb' }
 };
 
 interface Url {
-  loc: string;
   changefreq: string;
+  loc: string;
   priority: string;
 }
 
 const buildSitemapXml = (url: Url[]): string => {
   const builder = new XMLBuilder({
-    suppressEmptyNode: true,
+    format: true,
     ignoreAttributes: false,
     processEntities: true,
-    format: true
+    suppressEmptyNode: true
   });
 
   return builder.build({
-    '?xml': { '@_version': '1.0', '@_encoding': 'UTF-8' },
-    urlset: { '@_xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9', url }
+    urlset: { '@_xmlns': 'https://www.sitemaps.org/schemas/sitemap/0.9', url }
   });
 };
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
 
@@ -48,21 +47,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } = await sheetsResponse.json();
     const handles = json.values.map((row) => row[0]);
     const entries: Url[] = handles.map((handle) => ({
-      loc: `https://mycrumbs.xyz/u/${handle}`,
       changefreq: 'weekly',
+      loc: `https://mycrumbs.xyz/u/${handle}`,
       priority: '1.0'
     }));
 
     const xml = buildSitemapXml(entries);
+    logger.info('Sitemap fetched from Google Sheets');
 
     return res
       .status(200)
       .setHeader('Content-Type', 'text/xml')
-      .setHeader('Cache-Control', CACHE_AGE)
+      .setHeader('Cache-Control', SWR_CACHE_AGE_1_MIN_30_DAYS)
       .send(xml);
   } catch (error) {
-    throw error;
+    return ( error);
   }
 };
-
-export default allowCors(handler);

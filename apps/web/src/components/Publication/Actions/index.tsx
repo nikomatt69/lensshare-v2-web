@@ -35,7 +35,7 @@ const PublicationActions: FC<PublicationActionsProps> = ({
     (state) => state.publicationViews
   );
   const canMirror = currentProfile
-    ? targetPublication.operations.canMirror
+    ? targetPublication?.operations?.canMirror
     : true;
   const canAct =
     hasOpenAction && isOpenActionAllowed(targetPublication.openActionModules);

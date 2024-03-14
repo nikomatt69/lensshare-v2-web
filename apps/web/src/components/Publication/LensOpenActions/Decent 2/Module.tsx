@@ -3,11 +3,15 @@ import type {
   Profile,
   UnknownOpenActionModuleSettings
 } from '@lensshare/lens';
-import type { AllowedToken } from '@lensshare/types/hey';
-import type { Nft } from '@lensshare/types/misc';
-import type { ActionData } from 'nft-openaction-kit';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
+import {
+  useApprovedModuleAllowanceAmountQuery,
+  useDefaultProfileQuery
+} from '@lensshare/lens';
+import { HelpTooltip, Modal } from '@lensshare/ui';
+import getCurrentSession from '@lib/getCurrentSession';
+import { useEffect, useState } from 'react';
 import {
   ArrowTopRightOnSquareIcon,
   ChevronDownIcon,
@@ -18,30 +22,21 @@ import {
   Squares2X2Icon,
   UserIcon
 } from '@heroicons/react/24/outline';
-import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
-import { useProfileQuery } from '@lensshare/lens';
-import getProfile from '@lensshare/lib/getProfile';
-
-import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
-import truncateByWords from '@lensshare/lib/truncateByWords';
-import { HelpTooltip, Modal } from '@lensshare/ui';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { CHAIN_ID } from 'src/constants';
 
-
+import truncateByWords from '@lensshare/lib/truncateByWords';
+import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
+import getProfile from '@lensshare/lib/getProfile';
 import CurrencySelector from './CurrencySelector';
-import DecentAction from './DecentAction';
-import getRedstonePrice from '@lib/getRedstonePrice';
+import type { AllowedToken } from '@lensshare/types/hey';
+import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
 import useActOnUnknownOpenAction from 'src/hooks/useActOnUnknownOpenAction';
+import type { ActionData } from 'nft-openaction-kit';
+import type { Nft } from '@lensshare/types/misc';
+import getRedstonePrice from '@lib/getRedstonePrice';
+import StepperApprovals from './Stepper Approvals';
 import { CHAIN } from '@lib/costantChain';
-
-
-// TODO: Get description from NFT Metadata
-const MOCK_DESCRIPTION =
-  "I moved to Williamsburg because I needed a place to stay, but I'm staying because it's the web3 hub of NYC.  If you need an activity that isn't drinking or eating in NYC and you're not a tourist, you're probably going to Williamsburg.  I'm a big fan of the area and I'm excited to share my favorite spots with you. I moved to Williamsburg because I needed a place to stay, but I'm staying because it's the web3 hub of NYC.  If you need an activity that isn't drinking or eating in NYC and you're not a tourist, you're probably going to Williamsburg.  I'm a big fan of the area and I'm excited to share my favorite spots with you.";
-
-// TODO: change copy
+import DecentAction from './DecentAction';
 const TOOLTIP_PRICE_HELP =
   'You don’t have enough native Zora ETH so we switched you to the next token with the lowest gas that you have enough of (lol)';
 interface DecentOpenActionModuleProps {
@@ -83,7 +78,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
 
   const { actOnUnknownOpenAction, isLoading, relayStatus, txHash } =
     useActOnUnknownOpenAction({
-      signlessApproved: true,
+      signlessApproved: module.signlessApproved,
       successToast: 'Initiated cross-chain NFT mint'
     });
 
@@ -97,9 +92,9 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
     }
   };
 
-  const { data: creatorProfileData } = useProfileQuery({
+  const { data: creatorProfileData } = useDefaultProfileQuery({
     skip: !actionData?.uiData.nftCreatorAddress,
-    variables: { request: { forHandle: actionData?.uiData.nftCreatorAddress } }
+    variables: { request: { for: actionData?.uiData.nftCreatorAddress } }
   });
 
   const formattedPrice = (
@@ -126,6 +121,44 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
 
   const [showCurrencySelector, setShowCurrencySelector] = useState(false);
 
+  const [isModalCollapsed, setIsModalCollapsed] = useState(false);
+
+  // TODO: fetch permit2 allowance status and update with useEffect depending on currency
+  const [permit2Allowed, setPermit2Allowed] = useState(false);
+
+  const approvePermit2 = (token: AllowedToken) => {
+    console.log(`${token} approved for permit2`);
+    setPermit2Allowed(true);
+  };
+
+  const [allowed, setAllowed] = useState(true);
+  const { id: sessionProfileId } = getCurrentSession();
+
+  const amount = parseInt(formattedTotalPrice) || 0;
+  const assetAddress = selectedCurrency.contractAddress;
+
+  const { data: allowanceData, loading: allowanceLoading } =
+    useApprovedModuleAllowanceAmountQuery({
+      fetchPolicy: 'no-cache',
+      onCompleted: ({ approvedModuleAllowanceAmount }) => {
+        if (!amount) {
+          return;
+        }
+
+        const allowedAmount = parseFloat(
+          approvedModuleAllowanceAmount[0]?.allowance.value
+        );
+        setAllowed(allowedAmount > amount);
+      },
+      skip: !amount || !sessionProfileId || !assetAddress,
+      variables: {
+        request: {
+          currencies: [assetAddress],
+          unknownOpenActionModules: [module.contract.address]
+        }
+      }
+    });
+
   return (
     <Modal
       icon={
@@ -133,16 +166,23 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
           <button onClick={() => setShowCurrencySelector(false)}>
             <ChevronLeftIcon className="mt-[2px] w-4" strokeWidth={3} />
           </button>
+        ) : isModalCollapsed ? (
+          <button onClick={() => setIsModalCollapsed(false)}>
+            <ChevronLeftIcon className="mt-[2px] w-4" strokeWidth={3} />
+          </button>
         ) : null
       }
-      onClose={onClose}
+      onClose={() => {
+        setIsModalCollapsed(false);
+        onClose();
+      }}
       show={show}
       title={
         showCurrencySelector
           ? 'Select token'
           : actionData?.uiData.platformName
-            ? `Mint on ${actionData?.uiData.platformName}`
-            : 'Mint NFT'
+          ? `Mint on ${actionData?.uiData.platformName}`
+          : 'Mint NFT'
       }
     >
       {' '}
@@ -153,6 +193,22 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
             setShowCurrencySelector(false);
           }}
         />
+      ) : isModalCollapsed ? (
+        <StepperApprovals
+          allowanceData={allowanceData}
+          approvePermit2={() => approvePermit2(selectedCurrency)}
+          nftDetails={{
+            creator: getProfile(creatorProfileData?.defaultProfile as Profile)
+              .slug,
+            name: actionData?.uiData.nftName ?? '',
+            price: formattedTotalPrice + selectedCurrency.symbol,
+            schema: formattedNftSchema,
+            uri: sanitizeDStorageUrl(actionData?.uiData.nftUri)
+          }}
+          selectedCurrencySymbol={selectedCurrency.symbol}
+          setAllowed={setAllowed}
+          step={!permit2Allowed ? 'Permit2' : 'Allowance'}
+        />
       ) : (
         <>
           <div className="space-y-2 p-5">
@@ -162,7 +218,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
                 <p className="text-black/50">
                   by{' '}
                   {
-                    getProfile(creatorProfileData.profile?.id as Profile)
+                    getProfile(creatorProfileData.defaultProfile as Profile)
                       .slug
                   }
                 </p>
@@ -174,17 +230,19 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
                 className="aspect-[1.5] max-h-[350px] w-full rounded-xl object-cover"
                 src={sanitizeDStorageUrl(actionData?.uiData.nftUri)}
               />
-              <p className="my-5">
-                {showLongDescription
-                  ? MOCK_DESCRIPTION
-                  : truncateByWords(MOCK_DESCRIPTION, 30)}
-                <button
-                  className="ml-1 text-black/50"
-                  onClick={() => setShowLongDescription((v) => !v)}
-                >
-                  {showLongDescription ? 'Show less' : 'read more'}
-                </button>
-              </p>
+              {nft.description && (
+                <p className="my-5">
+                  {showLongDescription
+                    ? nft.description
+                    : truncateByWords(nft.description, 30)}
+                  <button
+                    className="ml-1 text-black/50"
+                    onClick={() => setShowLongDescription((v) => !v)}
+                  >
+                    {showLongDescription ? 'Show less' : 'read more'}
+                  </button>
+                </p>
+              )}
             </div>
             <div className="ld-text-gray-500 flex items-center justify-between text-base">
               <div className="flex items-center gap-2">
@@ -279,10 +337,14 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
             </div>
             {selectedCurrency ? (
               <DecentAction
-                act={act}
+                act={
+                  permit2Allowed && allowed
+                    ? act
+                    : () => setIsModalCollapsed(!isModalCollapsed)
+                }
+                allowanceLoading={allowanceLoading}
                 className="w-full justify-center"
                 isLoading={isLoading}
-                module={module}
                 moduleAmount={{
                   asset: {
                     contract: {

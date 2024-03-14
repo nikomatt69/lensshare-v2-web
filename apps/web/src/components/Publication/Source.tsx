@@ -7,31 +7,28 @@ import { Tooltip } from '@lensshare/ui';
 import type { FC } from 'react';
 
 interface SourceProps {
-  publication: AnyPublication;
+  publishedOn: string;
 }
 
-const Source: FC<SourceProps> = ({ publication }) => {
-  const targetPublication = isMirrorPublication(publication)
-    ? publication.mirrorOn
-    : publication;
-  const { appId } = targetPublication?.metadata;
-  const show = apps.includes(appId);
+const Source: FC<SourceProps> = ({ publishedOn }) => {
+  const show = apps.includes(publishedOn);
 
   if (!show) {
     return null;
   }
 
-  const appName = getAppName(appId);
+  const appName = getAppName(publishedOn);
 
   return (
     <Tooltip content={appName} placement="top">
       <img
-        className="h-4 w-4 rounded-full"
-        src={`${STATIC_ASSETS_URL}/images/source/${appId}.jpg`}
         alt={appName}
+        className="w-4"
+        src={`${STATIC_ASSETS_URL}/source/${publishedOn}.jpeg`}
       />
     </Tooltip>
   );
 };
 
 export default Source;
+

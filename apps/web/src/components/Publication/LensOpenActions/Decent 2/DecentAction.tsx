@@ -1,51 +1,44 @@
-import type {
-  Amount,
-  ApprovedAllowanceAmountResult,
-  BroadcastOnchainMutation,
-  UnknownOpenActionModuleSettings
-} from '@lensshare/lens';
+import type { Amount } from '@lensshare/lens';
 import type { FC } from 'react';
+import { useTransactionStatus } from 'src/hooks/useIndexStatus';
 
-import AllowanceButton from '@components/Settings/Allowance/Button';
-import LoginButton from '@components/Shared/Navbar/LoginButton';
-import { useApprovedModuleAllowanceAmountQuery } from '@lensshare/lens';
 import { Button, Spinner } from '@lensshare/ui';
-import cn from '@lensshare/ui/cn';
 import getCurrentSession from '@lib/getCurrentSession';
 import { useEffect, useState } from 'react';
-import { formatUnits, isAddress } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
-import MetaDetails from '@components/StaffTools/Panels/MetaDetails';
 import { LinkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+
+import MetaDetails from '@components/StaffTools/Panels/MetaDetails';
+import cn from '@lensshare/ui/cn';
+import LoginButton from '@components/Shared/Navbar/LoginButton';
+import { formatUnits, isAddress } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
 import {
   getMessagesBySrcTxHash,
   MessageStatus
 } from '@layerzerolabs/scan-client';
-import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 interface DecentActionProps {
   act: () => void;
+  allowanceLoading?: boolean;
   className?: string;
   isLoading?: boolean;
-  module: UnknownOpenActionModuleSettings;
   moduleAmount?: Amount;
-  relayStatus?: BroadcastOnchainMutation;
+  relayStatus?: string;
   txHash?: string;
 }
 
 const DecentAction: FC<DecentActionProps> = ({
   act,
+  allowanceLoading,
   className = '',
   isLoading = false,
-  module,
   moduleAmount,
   relayStatus,
   txHash
 }) => {
-  const [allowed, setAllowed] = useState(true);
   const [pending, setPending] = useState(false);
-  const  currentSessionProfileId  = getCurrentSessionProfileId();
-  const isWalletUser = isAddress(currentSessionProfileId);
+  const { id: sessionProfileId } = getCurrentSession();
+  const isWalletUser = isAddress(sessionProfileId);
 
   const { address } = useAccount();
 
@@ -56,32 +49,15 @@ const DecentAction: FC<DecentActionProps> = ({
   const polygonLayerZeroChainId = 109;
   const loadingState: boolean = isLoading || pending;
 
-  const { data: allowanceData, loading: allowanceLoading } =
-    useApprovedModuleAllowanceAmountQuery({
-      fetchPolicy: 'no-cache',
-      onCompleted: ({ approvedModuleAllowanceAmount }) => {
-        if (!amount) {
-          return;
-        }
-
-        const allowedAmount = parseFloat(
-          approvedModuleAllowanceAmount[0]?.allowance.value
-        );
-        setAllowed(allowedAmount > amount);
-      },
-      skip: !amount || !currentSessionProfileId || !assetAddress,
-      variables: {
-        request: {
-          currencies: [assetAddress],
-          unknownOpenActionModules: [module.contract.address]
-        }
-      }
-    });
-
   const { data: balanceData } = useBalance({
     address,
-   
+
     token: assetAddress
+  });
+
+  const { data: transactionStatusData } = useTransactionStatus({
+    txHash: !!txHash ? (txHash as `0x${string}`) : undefined,
+    txId: relayStatus
   });
 
   let hasAmount = false;
@@ -96,15 +72,17 @@ const DecentAction: FC<DecentActionProps> = ({
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (txHash) {
+    if (
+      transactionStatusData &&
+      !!transactionStatusData.lensTransactionStatus &&
+      !!transactionStatusData.lensTransactionStatus.txHash
+    ) {
       setPending(true);
       const fetchCrossChainStatus = async () => {
         const { messages } = await getMessagesBySrcTxHash(
           polygonLayerZeroChainId,
-          txHash
+          transactionStatusData!.lensTransactionStatus!.txHash
         );
-        console.log('LZ Cross-Chain Status');
-        console.log(messages);
         const lastStatus = messages[messages.length - 1]?.status;
         if (lastStatus === MessageStatus.DELIVERED) {
           setPending(false);
@@ -115,9 +93,20 @@ const DecentAction: FC<DecentActionProps> = ({
       interval = setInterval(fetchCrossChainStatus, 10000);
     }
     return () => clearInterval(interval);
-  }, [txHash]);
+  }, [transactionStatusData]);
 
-  if (!currentSessionProfileId) {
+  // TODO: Remove test condition
+  // if (true) {
+  //   return (
+  //     <Button className={className} onClick={act}>
+  //       <div>
+  //         {`Mint for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
+  //       </div>
+  //     </Button>
+  //   );
+  // }
+
+  if (!sessionProfileId) {
     return (
       <div className="w-full">
         <LoginButton isBig />
@@ -147,20 +136,6 @@ const DecentAction: FC<DecentActionProps> = ({
     );
   }
 
-  if (!allowed) {
-    return (
-      <AllowanceButton
-        allowed={allowed}
-        module={
-          allowanceData
-            ?.approvedModuleAllowanceAmount[0] as ApprovedAllowanceAmountResult
-        }
-        setAllowed={setAllowed}
-        title={`Approve ${assetSymbol} Token Allowance`}
-      />
-    );
-  }
-
   return (
     <>
       <Button
@@ -172,13 +147,13 @@ const DecentAction: FC<DecentActionProps> = ({
         <div>
           {loadingState
             ? 'Pending'
-            : `Pay with ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
+            : `Mint for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
         </div>
       </Button>
       {txHash ? (
         <>
           <MetaDetails
-            icon={<LinkIcon className="ld-text-gray-500 w-4 h-4" />}
+            icon={<LinkIcon className="ld-text-gray-500 size-4" />}
             title="PolygonScan"
             value={`https://polygonscan.com/tx/${txHash}`}
           >
@@ -191,7 +166,7 @@ const DecentAction: FC<DecentActionProps> = ({
             </Link>
           </MetaDetails>
           <MetaDetails
-            icon={<LinkIcon className="ld-text-gray-500 w-4 h-4" />}
+            icon={<LinkIcon className="ld-text-gray-500 size-4" />}
             title="LayerZeroScan"
             value={`https://layerzeroscan.com/tx/${txHash}`}
           >

@@ -3,7 +3,7 @@ import type {
   MirrorablePublication,
   UnknownOpenActionModuleSettings
 } from '@lensshare/lens';
-import type { Nft } from '@lensshare/types/misc';
+import type { Nft, OG } from '@lensshare/types/misc';
 import type { ActionData, PublicationInfo } from 'nft-openaction-kit';
 
 import ActionInfo from '@components/Shared/Oembed/Nft/ActionInfo';
@@ -13,7 +13,7 @@ import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-m
 import getNftChainInfo from '@lensshare/lib/getNftChainInfo';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
-import { Button, Card, Tooltip } from '@lensshare/ui';
+import { Button, Card, Spinner, Tooltip } from '@lensshare/ui';
 import errorToast from '@lib/errorToast';
 import { Leafwatch } from '@lib/leafwatch';
 import { NftOpenActionKit } from 'nft-openaction-kit';
@@ -25,15 +25,16 @@ import DecentOpenActionShimmer from './Decent Open Action Shimmer';
 import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
 import type { AllowedToken } from '@lensshare/types/hey';
 
+const OPEN_ACTION_EMBED_TOOLTIP = 'Open action embedded';
+
 interface DecentOpenActionProps {
   isFullPublication?: boolean;
-  nft: Nft;
+  og: OG;
+  openActionEmbed: boolean;
+  openActionEmbedLoading: boolean;
   publication: AnyPublication;
 }
-interface ExtendedOpenActionModuleSettings
-  extends UnknownOpenActionModuleSettings {
-  initializeCalldata: string;
-}
+
 function formatPublicationData(
   targetPublication: MirrorablePublication
 ): PublicationInfo {
@@ -45,7 +46,7 @@ function formatPublicationData(
     (module) => module.contract.address
   ) as string[];
   const actionModulesInitDatas = unknownModules.map(
-    (module) => (module as ExtendedOpenActionModuleSettings).initializeCalldata
+    (module) => module.initializeCalldata
   ) as string[];
 
   return {
@@ -56,7 +57,12 @@ function formatPublicationData(
   };
 }
 
-const DecentOpenAction: FC<DecentOpenActionProps> = ({ nft, publication }) => {
+const DecentOpenAction: FC<DecentOpenActionProps> = ({
+  og,
+  openActionEmbed,
+  openActionEmbedLoading,
+  publication
+}) => {
   const [actionData, setActionData] = useState<ActionData>();
   const [showOpenActionModal, setShowOpenActionModal] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<AllowedToken>({
@@ -70,7 +76,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({ nft, publication }) => {
     ? publication?.mirrorOn
     : publication;
 
-  const module = targetPublication.openActionModules?.find(
+  const module = targetPublication.openActionModules.find(
     (module) => module.contract.address === VerifiedOpenActionModules.DecentNFT
   );
 
@@ -79,6 +85,23 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({ nft, publication }) => {
   const { address } = useAccount();
 
   const prevCurrencyRef = useRef(selectedCurrency);
+
+  const nft: Nft = og.nft
+    ? og.nft
+    : {
+        chain: null,
+        collectionName: '',
+        contractAddress: '0x0000000000000000000000000000000000000000',
+        creatorAddress: '0x0000000000000000000000000000000000000000',
+        description: og.description || '',
+        endTime: null,
+        mediaUrl: og.image || '',
+        mintCount: null,
+        mintStatus: null,
+        mintUrl: null,
+        schema: 'erc721',
+        sourceUrl: og.url
+      };
 
   useEffect(
     () => {
@@ -156,7 +179,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({ nft, publication }) => {
                 >
                   <img
                     alt={getNftChainInfo(nft.chain).name}
-                    className="w-5 h-5"
+                    className="size-5"
                     src={getNftChainInfo(nft.chain).logo}
                   />
                 </Tooltip>
@@ -169,18 +192,32 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({ nft, publication }) => {
                 />
               ) : null}
             </div>
-            <Button
-              className="text-base font-normal"
-              onClick={() => {
-                setShowOpenActionModal(true);
-                Leafwatch.track(PUBLICATION.OPEN_ACTIONS.DECENT.OPEN_DECENT, {
-                  publication_id: publication.id
-                });
-              }}
-              size="lg"
-            >
-              Mint
-            </Button>
+
+            {openActionEmbedLoading ? (
+              <Spinner size="xs" />
+            ) : openActionEmbed ? (
+              <Tooltip
+                content={<span>{OPEN_ACTION_EMBED_TOOLTIP}</span>}
+                placement="top"
+              >
+                <Button className="text-base font-normal" size="lg">
+                  Mint
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button
+                className="text-base font-normal"
+                onClick={() => {
+                  setShowOpenActionModal(true);
+                  Leafwatch.track(PUBLICATION.OPEN_ACTIONS.DECENT.OPEN_DECENT, {
+                    publication_id: publication.id
+                  });
+                }}
+                size="lg"
+              >
+                Mint
+              </Button>
+            )}
           </div>
         ) : (
           <DecentOpenActionShimmer />

@@ -40,8 +40,8 @@ const Like: FC<LikeProps> = ({ publication, showCount }) => {
 
   useEffect(() => {
     setReactionConfig(targetPublication.id, {
-      countReaction: targetPublication.stats.reactions,
-      reacted: targetPublication.operations.hasReacted
+      countReaction: targetPublication.stats?.reactions,
+      reacted: targetPublication?.operations?.hasReacted
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publication]);

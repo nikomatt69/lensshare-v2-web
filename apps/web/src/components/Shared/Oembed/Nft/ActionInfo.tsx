@@ -4,12 +4,11 @@ import type { FC } from 'react';
 import type { Address } from 'viem';
 
 import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
-import { useProfileQuery } from '@lensshare/lens';
+import { useDefaultProfileQuery, useProfileQuery } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import truncateByWords from '@lensshare/lib/truncateByWords';
 import { Image } from '@lensshare/ui';
 
-// TODO: take into account other currencies
 const defaultCurrency = {
   contractAddress: DEFAULT_COLLECT_TOKEN,
   decimals: 18,
@@ -29,9 +28,9 @@ const ActionInfo: FC<ActionInfoProps> = ({
   collectionName,
   creatorAddress
 }) => {
-  const { data, loading } = useProfileQuery({
+  const { data, loading } = useDefaultProfileQuery({
     skip: !creatorAddress,
-    variables: { request: { forProfileId: creatorAddress } }
+    variables: { request: { for: creatorAddress } }
   });
 
   const formattedPrice = (
@@ -43,7 +42,7 @@ const ActionInfo: FC<ActionInfoProps> = ({
     return null;
   }
 
-  if (!data?.profile) {
+  if (!data?.defaultProfile) {
     return null;
   }
 
@@ -52,7 +51,7 @@ const ActionInfo: FC<ActionInfoProps> = ({
       <div className="flex flex-col items-start justify-start">
         <Image
           alt={actionData.uiData.platformName}
-          className="w-6 h-6 rounded-full border bg-gray-200 dark:border-gray-700"
+          className="size-6 rounded-full border bg-gray-200 dark:border-gray-700"
           height={24}
           loading="lazy"
           // TODO: manage on platform image onError
@@ -67,7 +66,7 @@ const ActionInfo: FC<ActionInfoProps> = ({
             {truncateByWords(collectionName, 5)}
           </h2>
           <p className="text-black/50">
-            by {getProfile(data.profile as Profile).slug}
+            by {getProfile(data.defaultProfile as Profile).slug}
           </p>
         </span>
         <p className="text-black/50">

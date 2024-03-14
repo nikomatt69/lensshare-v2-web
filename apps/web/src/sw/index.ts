@@ -1,4 +1,3 @@
-import { Notification } from "@lensshare/lens";
 declare let self: ServiceWorkerGlobalScope;
 
 
@@ -26,12 +25,11 @@ const sendVisiblePublicationsToServer = () => {
   }
 };
 
+setInterval(sendVisiblePublicationsToServer, publicationsVisibilityInterval);
+
 const handleActivate = async (): Promise<void> => {
   await self.clients.claim();
 };
-
-
-
 
 self.addEventListener('message', (event) => {
   // Impression tracking
@@ -41,23 +39,6 @@ self.addEventListener('message', (event) => {
   }
 });
 
-self.addEventListener('push', (event) => {
-  event.waitUntil(
-    self.registration.showNotification('MyCrumbs', {
-      body: 'New Notification',
-      icon: '/icons/icon-192x192.png'
-    })
-  );
-});
-
-self.addEventListener('push', (event) => {
-  const data = event.data?.json();
-  self.registration.showNotification(data.title, {
-    body: data.message,
-    icon: '/icons/icon-192x192.png'
-  });
-});
-
 self.addEventListener('activate', (event) => event.waitUntil(handleActivate()));
-setInterval(sendVisiblePublicationsToServer, publicationsVisibilityInterval);
+
 export {};
