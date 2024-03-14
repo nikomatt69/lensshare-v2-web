@@ -68,7 +68,7 @@ const PublicationHeader: FC<PublicationHeaderProps> = ({
         )}
       </span>
       <div className="!-mr-[7px] flex items-center space-x-1">
-        {<Source publication={targetPublication} />}
+      {<Source publishedOn={targetPublication.publishedOn?.id} />}
         {!publication.isHidden && !quoted ? (
           <PublicationMenu publication={targetPublication} />
         ) : null}
