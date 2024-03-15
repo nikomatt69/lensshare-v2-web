@@ -5,9 +5,11 @@ import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import { Modal, Tooltip } from '@lensshare/ui';
 import { motion } from 'framer-motion';
 
-
 import OpenActionsList from './OpenActionsList';
-import { ScreenType, useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
+import {
+  ScreenType,
+  useOpenActionStore
+} from 'src/store/non-persisted/useOpenActionStore';
 
 const OpenActionSettings: FC = () => {
   const screen = useOpenActionStore((state) => state.screen);
@@ -29,13 +31,13 @@ const OpenActionSettings: FC = () => {
           type="button"
           whileTap={{ scale: 0.9 }}
         >
-          <SquaresPlusIcon className="text-brand-500 w-5 h-5" />
+          <SquaresPlusIcon className="text-brand h-5 w-5" />
         </motion.button>
       </Tooltip>
       <Modal
         icon={
           screen === ScreenType.List && (
-            <SquaresPlusIcon className="text-brand-500 w-5 h-5" />
+            <SquaresPlusIcon className="text-brand h-5 w-5" />
           )
         }
         onClose={() => {
@@ -54,7 +56,7 @@ const OpenActionSettings: FC = () => {
                 reset();
               }}
             >
-              <ChevronLeftIcon className="mt-0.5 w-4 h-4 stroke-black" />
+              <ChevronLeftIcon className="mt-0.5 h-4 w-4 stroke-black" />
               <div>{selectedOpenAction}</div>
             </button>
           )

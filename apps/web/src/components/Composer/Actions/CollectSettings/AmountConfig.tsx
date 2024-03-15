@@ -17,14 +17,14 @@ const AmountConfig: FC<AmountConfigProps> = ({
   allowedTokens,
   setCollectType
 }) => {
-  const collectModule = useCollectModuleStore((state) => state.collectModule);
+  const { collectModule } = useCollectModuleStore((state) => state);
 
   return (
     <div>
       <ToggleWithHelper
         description="Get paid whenever someone collects your post"
         heading="Charge for collecting"
-        icon={<CurrencyDollarIcon className="size-5" />}
+        icon={<CurrencyDollarIcon className="h-5 w-5" />}
         on={Boolean(collectModule.amount?.value)}
         setOn={() => {
           setCollectType({
@@ -71,6 +71,8 @@ const AmountConfig: FC<AmountConfigProps> = ({
                 }}
                 options={allowedTokens?.map((token) => ({
                   label: token.name,
+                  selected:
+                    token.contractAddress === collectModule.amount?.currency,
                   value: token.contractAddress
                 }))}
               />

@@ -7,7 +7,7 @@ import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import truncateByWords from '@lensshare/lib/truncateByWords';
 
 import { Button, Card, Spinner, Tooltip } from '@lensshare/ui';
-import DecentOpenAction from '@components/Publication/LensOpenActions/Decent 2';
+
 import MintedBy from './MintedBy';
 import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';
 import { Leafwatch } from '@lib/leafwatch';
@@ -41,7 +41,7 @@ const Nft: FC<NftProps> = ({ nft, publicationId }) => {
             >
               <img
                 alt={getNftChainInfo(nft.chain).name}
-                className="size-5"
+                className="h-5 w-5"
                 src={getNftChainInfo(nft.chain).logo}
               />
             </Tooltip>
@@ -51,7 +51,7 @@ const Nft: FC<NftProps> = ({ nft, publicationId }) => {
         <Link href={nft.sourceUrl} rel="noopener noreferrer" target="_blank">
           <Button
             className="text-sm"
-            icon={<CursorArrowRaysIcon className="size-4" />}
+            icon={<CursorArrowRaysIcon className="h-4 w-4" />}
             onClick={() =>
               Leafwatch.track(PUBLICATION.COLLECT_MODULE.OPEN_COLLECT, {
                 publication_id: publicationId

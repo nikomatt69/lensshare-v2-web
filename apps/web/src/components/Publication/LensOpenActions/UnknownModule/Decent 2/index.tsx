@@ -179,7 +179,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 >
                   <img
                     alt={getNftChainInfo(nft.chain).name}
-                    className="size-5"
+                    className="w-5 h-5"
                     src={getNftChainInfo(nft.chain).logo}
                   />
                 </Tooltip>
@@ -200,7 +200,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 content={<span>{OPEN_ACTION_EMBED_TOOLTIP}</span>}
                 placement="top"
               >
-                <Button className="text-base font-normal" size="lg">
+                <Button className="text-base font-normal" size="md">
                   Mint
                 </Button>
               </Tooltip>
@@ -213,7 +213,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                     publication_id: publication.id
                   });
                 }}
-                size="lg"
+                size="md"
               >
                 Mint
               </Button>

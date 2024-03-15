@@ -8,29 +8,30 @@ import { useCollectModuleStore } from 'src/store/useCollectModuleStore';
 import CollectForm from './CollectForm';
 
 const CollectSettings: FC = () => {
-  const reset = useCollectModuleStore((state) => state.reset);
+  const { reset } = useCollectModuleStore((state) => state);
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      <Tooltip placement="top" content="Collect">
+      <Tooltip content="Collect" placement="top">
         <motion.button
-          whileTap={{ scale: 0.9 }}
-          type="button"
-          onClick={() => setShowModal(!showModal)}
           aria-label="Choose Collect Module"
+          className="rounded-full outline-offset-8"
+          onClick={() => setShowModal(!showModal)}
+          type="button"
+          whileTap={{ scale: 0.9 }}
         >
-          <RectangleStackIcon className="text-brand h-5 w-5" />
+          <RectangleStackIcon className="h-5 w-5" />
         </motion.button>
       </Tooltip>
       <Modal
-        title="Collect settings"
-        icon={<RectangleStackIcon className="text-brand h-5 w-5" />}
-        show={showModal}
+        icon={<RectangleStackIcon className="h-5 w-5" />}
         onClose={() => {
           setShowModal(false);
           reset();
         }}
+        show={showModal}
+        title="Collect Settings"
       >
         <CollectForm setShowModal={setShowModal} />
       </Modal>

@@ -51,7 +51,7 @@ const ActionInfo: FC<ActionInfoProps> = ({
       <div className="flex flex-col items-start justify-start">
         <Image
           alt={actionData.uiData.platformName}
-          className="size-6 rounded-full border bg-gray-200 dark:border-gray-700"
+          className="h-6 w-6 rounded-full border bg-gray-200 dark:border-gray-700"
           height={24}
           loading="lazy"
           // TODO: manage on platform image onError

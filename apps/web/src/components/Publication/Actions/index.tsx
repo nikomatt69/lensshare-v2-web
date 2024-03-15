@@ -15,6 +15,8 @@ import { useImpressionsStore } from 'src/store/useImpressionsStore';
 import getPublicationViewCountById from '@lib/getPublicationViewCountById';
 import { ADMIN_ADDRESS } from '@lensshare/data/constants';
 import CommentModal from '@components/Bytes/CommentModal';
+import TipOpenAction from '../LensOpenActions/UnknownModule/Tip';
+import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
 
 interface PublicationActionsProps {
   publication: AnyPublication;
@@ -41,7 +43,10 @@ const PublicationActions: FC<PublicationActionsProps> = ({
     hasOpenAction && isOpenActionAllowed(targetPublication.openActionModules);
   const views = getPublicationViewCountById(
     publicationViews,
-    targetPublication
+    targetPublication.id
+  );
+  const canTip = targetPublication.openActionModules.some(
+    (module) => module.contract.address === VerifiedOpenActionModules.Tip
   );
 
   return (
@@ -54,9 +59,15 @@ const PublicationActions: FC<PublicationActionsProps> = ({
       {canMirror ? (
         <ShareMenu publication={publication} showCount={showCount} />
       ) : null}
-      <Like publication={publication} showCount={showCount} />
+      <Like publication={targetPublication} showCount={showCount} />
       {canAct ? (
         <OpenAction publication={publication} showCount={showCount} />
+      ) : null}
+      {canTip ? (
+        <TipOpenAction
+          isFullPublication={showCount}
+          publication={publication}
+        />
       ) : null}
       {views ? <Views views={views} showCount={showCount} /> : null}
       {currentProfile?.ownedBy.address === ADMIN_ADDRESS ? (

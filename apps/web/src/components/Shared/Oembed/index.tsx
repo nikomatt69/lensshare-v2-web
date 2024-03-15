@@ -12,9 +12,10 @@ import getFavicon from 'src/utils/oembed/getFavicon';
 import Nft from './Nft';
 import { AnyPublication } from '@lensshare/lens';
 import Portal from './Portal';
-import DecentOpenAction from '@components/Publication/LensOpenActions/Decent 2';
+
 import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
+import DecentOpenAction from '@components/Publication/LensOpenActions/UnknownModule/Decent 2';
 
 
 interface OembedProps {

@@ -181,8 +181,8 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
         showCurrencySelector
           ? 'Select token'
           : actionData?.uiData.platformName
-          ? `Mint on ${actionData?.uiData.platformName}`
-          : 'Mint NFT'
+            ? `Mint on ${actionData?.uiData.platformName}`
+            : 'Mint NFT'
       }
     >
       {' '}

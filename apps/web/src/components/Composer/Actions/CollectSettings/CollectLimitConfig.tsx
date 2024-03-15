@@ -11,35 +11,35 @@ interface CollectLimitConfigProps {
 const CollectLimitConfig: FC<CollectLimitConfigProps> = ({
   setCollectType
 }) => {
-  const collectModule = useCollectModuleStore((state) => state.collectModule);
+  const { collectModule } = useCollectModuleStore((state) => state);
 
   return (
-    <div className="pt-5">
+    <div className="mt-5">
       <ToggleWithHelper
+        description="Make collects limited edition"
+        heading="Exclusive content"
+        icon={<StarIcon className="h-5 w-5" />}
         on={Boolean(collectModule.collectLimit)}
         setOn={() =>
           setCollectType({
             collectLimit: collectModule.collectLimit ? null : '1'
           })
         }
-        heading="Limited edition"
-        description="Make the collects exclusive"
-        icon={<StarIcon className="h-4 w-4" />}
       />
       {collectModule.collectLimit ? (
-        <div className="pt-4 text-sm">
+        <div className="ml-8 mt-4 text-sm">
           <Input
             label="Collect limit"
-            type="number"
-            placeholder="5"
-            min="1"
             max="100000"
-            value={collectModule.collectLimit}
+            min="1"
             onChange={(event) => {
               setCollectType({
                 collectLimit: event.target.value ? event.target.value : '1'
               });
             }}
+            placeholder="5"
+            type="number"
+            value={collectModule.collectLimit}
           />
         </div>
       ) : null}

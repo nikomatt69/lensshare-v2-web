@@ -7,45 +7,26 @@ import { Spinner } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
 import { useState } from 'react';
+import { useTransactionStatus } from 'src/hooks/useIndexStatus';
 import type { Address } from 'viem';
 
 interface IndexStatusProps {
   message?: string;
+  reload?: boolean;
   txHash?: Address;
   txId?: string;
-  reload?: boolean;
 }
 
 const IndexStatus: FC<IndexStatusProps> = ({
   message = 'Transaction Indexing',
+  reload = false,
   txHash,
-  txId,
-  reload = false
+  txId
 }) => {
-  const [hide, setHide] = useState(false);
-  const [pollInterval, setPollInterval] = useState(500);
-  const { data, loading } = useLensTransactionStatusQuery({
-    variables: {
-      request: {
-        ...(txHash && { forTxHash: txHash }),
-        ...(txId && { forTxId: txId })
-      }
-    },
-    pollInterval,
-    notifyOnNetworkStatusChange: true,
-    onCompleted: ({ lensTransactionStatus }) => {
-      if (
-        lensTransactionStatus?.status === LensTransactionStatusType.Complete
-      ) {
-        setPollInterval(0);
-        if (reload) {
-          location.reload();
-        }
-        setTimeout(() => {
-          setHide(true);
-        }, 5000);
-      }
-    }
+  const { data, hide, loading } = useTransactionStatus({
+    reload,
+    txHash,
+    txId
   });
 
   return (

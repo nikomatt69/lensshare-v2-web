@@ -11,35 +11,35 @@ interface TimeLimitConfigProps {
 }
 
 const TimeLimitConfig: FC<TimeLimitConfigProps> = ({ setCollectType }) => {
-  const collectModule = useCollectModuleStore((state) => state.collectModule);
+  const { collectModule } = useCollectModuleStore((state) => state);
 
   return (
-    <div className="pt-5">
+    <div className="mt-5">
       <ToggleWithHelper
+        description="Limit collecting to specific period of time"
+        heading="Time limit"
+        icon={<ClockIcon className="h-5 w-5" />}
         on={Boolean(collectModule.endsAt)}
         setOn={() =>
           setCollectType({
-            endsAt: Boolean(collectModule.endsAt) ? null : getTimeAddedNDay(1)
+            endsAt: collectModule.endsAt ? null : getTimeAddedNDay(1)
           })
         }
-        heading="Time limit"
-        description="Limit collecting to specific period of time"
-        icon={<ClockIcon className="h-4 w-4" />}
       />
       {collectModule.endsAt ? (
-        <div className="pt-4 text-sm">
+        <div className="ml-8 mt-4 text-sm">
           <Input
             label="Number of days"
-            type="number"
-            placeholder="5"
-            min="1"
             max="100"
-            value={getNumberOfDaysFromDate(new Date(collectModule.endsAt))}
+            min="1"
             onChange={(event) => {
               setCollectType({
                 endsAt: getTimeAddedNDay(Number(event.target.value))
               });
             }}
+            placeholder="5"
+            type="number"
+            value={getNumberOfDaysFromDate(new Date(collectModule.endsAt))}
           />
         </div>
       ) : null}

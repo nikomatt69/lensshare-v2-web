@@ -95,16 +95,16 @@ const DecentAction: FC<DecentActionProps> = ({
     return () => clearInterval(interval);
   }, [transactionStatusData]);
 
-  // TODO: Remove test condition
-  // if (true) {
-  //   return (
-  //     <Button className={className} onClick={act}>
-  //       <div>
-  //         {`Mint for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
-  //       </div>
-  //     </Button>
-  //   );
-  // }
+  
+   if (true) {
+     return (
+       <Button className={className} onClick={act}>
+         <div>
+           {`Mint for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
+         </div>
+       </Button>
+     );
+   }
 
   if (!sessionProfileId) {
     return (
@@ -153,7 +153,7 @@ const DecentAction: FC<DecentActionProps> = ({
       {txHash ? (
         <>
           <MetaDetails
-            icon={<LinkIcon className="ld-text-gray-500 size-4" />}
+            icon={<LinkIcon className="ld-text-gray-500 h-4 w-4" />}
             title="PolygonScan"
             value={`https://polygonscan.com/tx/${txHash}`}
           >
@@ -166,7 +166,7 @@ const DecentAction: FC<DecentActionProps> = ({
             </Link>
           </MetaDetails>
           <MetaDetails
-            icon={<LinkIcon className="ld-text-gray-500 size-4" />}
+            icon={<LinkIcon className="ld-text-gray-500 h-4 w-4" />}
             title="LayerZeroScan"
             value={`https://layerzeroscan.com/tx/${txHash}`}
           >

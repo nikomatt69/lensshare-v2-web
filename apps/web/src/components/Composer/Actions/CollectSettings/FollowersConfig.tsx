@@ -8,18 +8,18 @@ interface FollowersConfigProps {
 }
 
 const FollowersConfig: FC<FollowersConfigProps> = ({ setCollectType }) => {
-  const collectModule = useCollectModuleStore((state) => state.collectModule);
+  const { collectModule } = useCollectModuleStore((state) => state);
 
   return (
-    <div className="pt-5">
+    <div className="mt-5">
       <ToggleWithHelper
+        description="Only followers can collect"
+        heading="Exclusivity"
+        icon={<UserGroupIcon className="h-5 w-5" />}
         on={collectModule.followerOnly || false}
         setOn={() =>
           setCollectType({ followerOnly: !collectModule.followerOnly })
         }
-        heading="Who can collect"
-        description="Only followers can collect"
-        icon={<UserGroupIcon className="h-4 w-4" />}
       />
     </div>
   );

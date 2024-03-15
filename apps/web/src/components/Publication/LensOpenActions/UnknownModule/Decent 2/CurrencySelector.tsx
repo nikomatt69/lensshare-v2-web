@@ -151,7 +151,7 @@ const CurrencySelector: FC<CurrencySelectorProps> = ({ onSelectCurrency }) => {
               <div className="relative">
                 <img
                   alt={currency.symbol}
-                  className="size-10"
+                  className="h-10 w-10"
                   height={40}
                   src={getTokenImage(currency.symbol)}
                   title={currency.name}

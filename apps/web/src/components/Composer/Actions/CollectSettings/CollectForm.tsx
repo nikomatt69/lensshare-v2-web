@@ -14,27 +14,25 @@ import SplitConfig from './SplitConfig';
 import TimeLimitConfig from './TimeLimitConfig';
 import { useQuery } from '@tanstack/react-query';
 import getAllTokens from '@lib/api/getAllTokens';
+import { isAddress } from 'viem';
 
 interface CollectFormProps {
   setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
 const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
-  const collectModule = useCollectModuleStore((state) => state.collectModule);
-  const reset = useCollectModuleStore((state) => state.reset);
-  const setCollectModule = useCollectModuleStore(
-    (state) => state.setCollectModule
+  const { collectModule, reset, setCollectModule } = useCollectModuleStore(
+    (state) => state
   );
 
   const { SimpleCollectOpenActionModule } = CollectOpenActionModuleType;
-  const recipients = collectModule.recipients ?? [];
+  const recipients = collectModule.recipients || [];
   const splitTotal = recipients.reduce((acc, curr) => acc + curr.split, 0);
   const hasEmptyRecipients = recipients.some(
     (recipient) => !recipient.recipient
   );
   const hasInvalidEthAddressInRecipients = recipients.some(
-    (recipient) =>
-      recipient.recipient && !isValidEthAddress(recipient.recipient)
+    (recipient) => recipient.recipient && !isAddress(recipient.recipient)
   );
   const isRecipientsDuplicated = () => {
     const recipientsSet = new Set(
@@ -57,8 +55,8 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
 
   if (isLoading) {
     return (
-      <div className="space-y-2 px-5 py-3.5 text-center font-bold">
-        <Spinner size="md" className="mx-auto" />
+      <div className="m-5 space-y-2 text-center font-bold">
+        <Spinner className="mx-auto" size="md" />
         <div>Loading collect settings</div>
       </div>
     );
@@ -67,9 +65,9 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
   if (error) {
     return (
       <ErrorMessage
-        title="Failed to load modules"
-        error={error}
         className="m-5"
+        error={error}
+        title="Failed to load modules"
       />
     );
   }
@@ -83,37 +81,47 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
   };
 
   return (
-    <div className="space-y-3 p-5">
-      <ToggleWithHelper
-        on={collectModule.type !== null}
-        setOn={toggleCollect}
-        description="This post can be collected"
-      />
+    <>
+      <div className="p-5">
+        <ToggleWithHelper
+          description="This post can be collected"
+          heading="Enable Collect"
+          on={collectModule.type !== null}
+          setOn={toggleCollect}
+        />
+      </div>
+      <div className="divider" />
       {collectModule.type !== null ? (
-        <div className="ml-5">
-          <AmountConfig allowedTokens={data} setCollectType={setCollectType} />
-          {collectModule.amount?.value ? (
-            <>
-              <ReferralConfig setCollectType={setCollectType} />
-              <SplitConfig
-                isRecipientsDuplicated={isRecipientsDuplicated}
-                setCollectType={setCollectType}
-              />
-            </>
-          ) : null}
-          <CollectLimitConfig setCollectType={setCollectType} />
-          <TimeLimitConfig setCollectType={setCollectType} />
-          <FollowersConfig setCollectType={setCollectType} />
-        </div>
+        <>
+          <div className="p-5">
+            <AmountConfig
+              allowedTokens={data}
+              setCollectType={setCollectType}
+            />
+            {collectModule.amount?.value ? (
+              <>
+                <ReferralConfig setCollectType={setCollectType} />
+                <SplitConfig
+                  isRecipientsDuplicated={isRecipientsDuplicated}
+                  setCollectType={setCollectType}
+                />
+              </>
+            ) : null}
+            <CollectLimitConfig setCollectType={setCollectType} />
+            <TimeLimitConfig setCollectType={setCollectType} />
+            <FollowersConfig setCollectType={setCollectType} />
+          </div>
+          <div className="divider" />
+        </>
       ) : null}
-      <div className="flex space-x-2 pt-5">
+      <div className="flex space-x-2 p-5">
         <Button
           className="ml-auto"
-          variant="danger"
-          outline
           onClick={() => {
             setShowModal(false);
           }}
+          outline
+          variant="danger"
         >
           Cancel
         </Button>
@@ -123,6 +131,7 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
               collectModule.type !== null) ||
             splitTotal > 100 ||
             hasEmptyRecipients ||
+            recipients.length === 1 ||
             hasInvalidEthAddressInRecipients ||
             isRecipientsDuplicated()
           }
@@ -131,7 +140,7 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
           Save
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 
