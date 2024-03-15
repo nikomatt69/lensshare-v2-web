@@ -1,4 +1,5 @@
 import type {
+  Erc20,
   MirrorablePublication,
   UnknownOpenActionModuleSettings
 } from '@lensshare/lens';
@@ -17,15 +18,15 @@ import { type FC, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 import useActOnUnknownOpenAction from 'src/hooks/useActOnUnknownOpenAction';
-import { useUpdateEffect } from 'usehooks-ts';
 import { encodeAbiParameters, formatUnits, parseUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 
 import TipAction from './TipAction';
 import { TipIcon } from './TipIcon';
 import { CHAIN } from '@lib/costantChain';
-import { useModuleMetadataQuery } from '@lensshare/lens';
+import { LimitType, useModuleMetadataQuery } from '@lensshare/lens';
 import { USD_ENABLED_TOKEN_SYMBOLS } from './tokens symbols';
+import { useEnabledCurrenciesQuery } from '@lensshare/lens/generated5';
 
 interface TipOpenActionModuleProps {
   module: UnknownOpenActionModuleSettings;
@@ -84,16 +85,14 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
     successToast: "You've sent a tip!"
   });
 
-  const { data: allowedTokens, isLoading: loadingAllowedTokens } = useQuery({
-    queryFn: () =>
-      getAllTokens((tokens) =>
-        setSelectedCurrency(
-          tokens.find(
-            (token) => token.contractAddress === DEFAULT_COLLECT_TOKEN
-          ) as AllowedToken
-        )
-      ),
-    queryKey: ['getAllTokens']
+  
+
+  const {
+    data: allowedTokens,
+    loading: loadingAllowedTokens,
+    error
+  } = useEnabledCurrenciesQuery({
+    variables: { request: { limit: LimitType.TwentyFive } }
   });
 
   if (loading || loadingAllowedTokens) {
@@ -110,8 +109,8 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
     }
 
     const abi = JSON.parse(metadata?.processCalldataABI);
-    const currency = allowedTokens?.find(
-      (token) => token.contractAddress === tip.currency
+    const currency = allowedTokens?.currencies.items.find(
+      (currencies) => currencies?.contract.address === tip.currency
     );
 
     if (!currency) {
@@ -122,7 +121,7 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
     const usdValue = usdEnabled ? amount / usdPrice : amount;
 
     const calldata = encodeAbiParameters(abi, [
-      currency.contractAddress,
+      currency.contract.address,
       parseUnits(usdValue.toString(), currency.decimals).toString()
     ]);
 
@@ -172,14 +171,14 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
             onChange={(e) => {
               setTip({ ...tip, currency: e.target.value });
               setSelectedCurrency(
-                allowedTokens?.find(
-                  (token) => token.contractAddress === e.target.value
-                ) as AllowedToken
+                allowedTokens?.currencies.items.find(
+                  (currencies) => currencies?.contract.address === e.target.value
+                ) as unknown as AllowedToken
               );
             }}
-            options={allowedTokens?.map((token) => ({
+            options={allowedTokens?.currencies.items.map((token) => ({
               label: token.name,
-              value: token.contractAddress
+              value: token.contract.address
             }))}
           />
           <div className="ld-text-gray-500 text-sm">Balance: {balance}</div>
@@ -196,7 +195,7 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
         <TipAction
           act={act}
           className="mt-5 w-full justify-center"
-          icon={<TipIcon className="w-4 h-4" />}
+          icon={<TipIcon className="h-4 w-4" />}
           isLoading={isLoading}
           module={module}
           moduleAmount={{

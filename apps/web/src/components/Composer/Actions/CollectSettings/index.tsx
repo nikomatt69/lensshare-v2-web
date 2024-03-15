@@ -21,11 +21,11 @@ const CollectSettings: FC = () => {
           type="button"
           whileTap={{ scale: 0.9 }}
         >
-          <RectangleStackIcon className="h-5 w-5" />
+          <RectangleStackIcon className="h-5 w-5 text-brand" />
         </motion.button>
       </Tooltip>
       <Modal
-        icon={<RectangleStackIcon className="h-5 w-5" />}
+        icon={<RectangleStackIcon className="h-5 w-5 text-brand" />}
         onClose={() => {
           setShowModal(false);
           reset();

@@ -41,7 +41,6 @@ import MutualFollowers from './MutualFollowers';
 import MutualFollowersList from './MutualFollowers/List';
 import ScamWarning from './ScamWarning';
 import MeetingIcon from '@components/Meet/MeetingIcon';
-import SuperfluidSubscribe from '@components/Superfluid';
 import TbaBadge from './TbaBadge';
 import IsVerified from '@components/Shared/IsVerified';
 import router from 'next/router';
@@ -197,9 +196,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
             <EnvelopeIcon className="h-6 w-6" />
           </Link>
            
-          {currentProfile?.id !== profile.id && (
-            <SuperfluidSubscribe profile={profile} />
-          )}
+          
         </div>
         {currentProfile?.id !== profile.id ? (
           <>

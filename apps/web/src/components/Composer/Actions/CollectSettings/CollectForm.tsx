@@ -1,6 +1,5 @@
 import ToggleWithHelper from '@components/Shared/ToggleWithHelper';
-import { CollectOpenActionModuleType } from '@lensshare/lens';
-import isValidEthAddress from '@lensshare/lib/isValidEthAddress';
+import { CollectOpenActionModuleType, LimitType } from '@lensshare/lens';
 import type { CollectModuleType } from '@lensshare/types/hey';
 import { Button, ErrorMessage, Spinner } from '@lensshare/ui';
 import type { Dispatch, FC, SetStateAction } from 'react';
@@ -12,9 +11,8 @@ import FollowersConfig from './FollowersConfig';
 import ReferralConfig from './ReferralConfig';
 import SplitConfig from './SplitConfig';
 import TimeLimitConfig from './TimeLimitConfig';
-import { useQuery } from '@tanstack/react-query';
-import getAllTokens from '@lib/api/getAllTokens';
 import { isAddress } from 'viem';
+import { useEnabledCurrenciesQuery } from '@lensshare/lens/generated5';
 
 interface CollectFormProps {
   setShowModal: Dispatch<SetStateAction<boolean>>;
@@ -48,12 +46,11 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
     });
   };
 
-  const { data, error, isLoading } = useQuery({
-    queryFn: () => getAllTokens(),
-    queryKey: ['getAllTokens']
+  const { data, loading, error } = useEnabledCurrenciesQuery({
+    variables: { request: { limit: LimitType.TwentyFive } }
   });
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="m-5 space-y-2 text-center font-bold">
         <Spinner className="mx-auto" size="md" />
@@ -95,7 +92,7 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
         <>
           <div className="p-5">
             <AmountConfig
-              allowedTokens={data}
+              enabledModuleCurrencies={data?.currencies.items}
               setCollectType={setCollectType}
             />
             {collectModule.amount?.value ? (

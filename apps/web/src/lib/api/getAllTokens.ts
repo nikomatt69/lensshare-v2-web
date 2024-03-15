@@ -12,7 +12,7 @@ const getAllTokens = async (
   callbackFn?: (tokens: AllowedToken[]) => void
 ): Promise<AllowedToken[]> => {
   try {
-    const response = await axios.get(`${LENSSHARE_API_URL}/token/all`);
+    const response = await axios.get(`/api/token/all`);
     const { data } = response;
     callbackFn?.(data?.tokens || []);
 

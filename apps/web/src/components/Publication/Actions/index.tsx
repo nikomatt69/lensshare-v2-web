@@ -45,7 +45,7 @@ const PublicationActions: FC<PublicationActionsProps> = ({
     publicationViews,
     targetPublication.id
   );
-  const canTip = targetPublication.openActionModules.some(
+  const canTip = targetPublication.openActionModules?.some(
     (module) => module.contract.address === VerifiedOpenActionModules.Tip
   );
 
