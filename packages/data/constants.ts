@@ -31,6 +31,7 @@ export const THIRDWEB_CLIENT_ID = 'cb587c94a1b0c6faad337b0d07e696a7';
 export const LENSHUB_PROXY = getEnvConfig().lensHubProxyAddress;
 export const DEFAULT_COLLECT_TOKEN = getEnvConfig().defaultCollectToken;
 export const LIT_PROTOCOL_ENVIRONMENT = getEnvConfig().litProtocolEnvironment;
+export const PUBLICACT_PROXY = getEnvConfig().publicActProxyAddress;
 
 export const SUPERFLUID_SUBGRAPH =
   'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-matic';

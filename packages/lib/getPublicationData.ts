@@ -28,7 +28,7 @@ const getPublicationData = (
   const canShowTitle = showTitle && willHaveTitle;
   const content = canShowTitle
     ? `${metadata.title}\n\n${metadata.content}`
-    : metadata.content;
+    : metadata?.content;
 
   switch (metadata?.__typename) {
     case 'ArticleMetadataV3':
