@@ -8,7 +8,6 @@ import { useAppStore } from 'src/store/useAppStore';
 import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
 import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import { useProStore } from 'src/store/useProStore';
-import { isAddress } from 'viem';
 import { useMembershipNftStore } from 'src/store/useMembershipNftStore';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 
@@ -31,10 +30,7 @@ const PreferencesProvider: FC = () => {
   // Fetch preferences
   const fetchPreferences = async () => {
     try {
-      if (
-        Boolean(currentSessionProfileId) &&
-        !isAddress(currentSessionProfileId)
-      ) {
+      if (Boolean(currentSessionProfileId)) {
         const preferences = await getPreferences(
           currentSessionProfileId,
           getAuthWorkerHeaders()

@@ -1,12 +1,8 @@
 import type { FC } from 'react';
 import type { Nft as INft } from '@lensshare/types/misc';
-import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
-import { type AnyPublication, useProfileQuery } from '@lensshare/lens';
-import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
-import truncateByWords from '@lensshare/lib/truncateByWords';
 
-import { Button, Card, Spinner, Tooltip } from '@lensshare/ui';
+import { Button, Card, Tooltip } from '@lensshare/ui';
 
 import MintedBy from './MintedBy';
 import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';

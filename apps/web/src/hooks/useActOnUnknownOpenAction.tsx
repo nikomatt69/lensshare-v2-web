@@ -82,7 +82,9 @@ const useActOnUnknownOpenAction = ({
     useCreateActOnOpenActionTypedDataMutation({
       onCompleted: async ({ createActOnOpenActionTypedData }) => {
         const { id, typedData } = createActOnOpenActionTypedData;
-        await handleWrongNetwork();
+        if (handleWrongNetwork()) {
+          return;
+        }
 
         if (canBroadcast) {
           const signature = await signTypedDataAsync(getSignature(typedData));

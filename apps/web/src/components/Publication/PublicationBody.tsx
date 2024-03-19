@@ -19,7 +19,7 @@ import Snapshot from './HeyOpenActions/Snapshot';
 import NotSupportedPublication from './NotSupportedPublication';
 import getSnapshotProposalId from '@lib/getSnapshotProposalId';
 import EncryptedPublication from './EncryptedPublication';
-
+import { CardBody, CardContainer } from '@lensshare/ui/src/3DCard';
 interface PublicationBodyProps {
   contentClassName?: string;
   publication: AnyPublication;
@@ -97,28 +97,34 @@ const PublicationBody: FC<PublicationBodyProps> = ({
           <Link href={`/posts/${id}`}>Show more</Link>
         </div>
       ) : null}
-      {/* Attachments and Quotes */}
-      {showAttachments ? (
-        <Attachments
-          publication={publication}
-          asset={filteredAsset}
-          attachments={filteredAttachments}
-        />
-      ) : null}
-      {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
+      <CardContainer className="w-max-fit">
+        <CardBody className="group/card relative   rounded-xl  border-black/[0.1]   dark:border-white/[0.2]  dark:hover:shadow-emerald-500/[0.1]   ">
+          {/* Attachments and Quotes */}
+          {showAttachments ? (
+            <Attachments
+              publication={publication}
+              asset={filteredAsset}
+              attachments={filteredAttachments}
+            />
+          ) : null}
+          {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
 
-      {showLive ? (
-        <div className="mt-3">
-          <Video src={metadata.liveURL || metadata.playbackURL} />
-        </div>
-      ) : null}
-      {showOembed ? <Oembed publication={publication} url={urls[0]} /> : null}
-      {showSharingLink ? (
-        <Oembed publication={publication} url={metadata.sharingLink} />
-      ) : null}
-      {targetPublication?.__typename === 'Quote' && (
-        <Quote publication={targetPublication.quoteOn} />
-      )}
+          {showLive ? (
+            <div className="mt-3">
+              <Video src={metadata.liveURL || metadata.playbackURL} />
+            </div>
+          ) : null}
+          {showOembed ? (
+            <Oembed publication={publication} url={urls[0]} />
+          ) : null}
+          {showSharingLink ? (
+            <Oembed publication={publication} url={metadata.sharingLink} />
+          ) : null}
+          {targetPublication?.__typename === 'Quote' && (
+            <Quote publication={targetPublication.quoteOn} />
+          )}
+        </CardBody>
+      </CardContainer>
     </div>
   );
 };

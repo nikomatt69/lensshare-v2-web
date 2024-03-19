@@ -7,6 +7,10 @@ import getCurrentSessionProfileId from './getCurrentSessionProfileId';
 const pushToImpressions = (id: string): void => {
   const anonymousId = hydrateLeafwatchAnonymousId();
   const currentSessionProfileId = getCurrentSessionProfileId();
+  const publicationProfileId = id.split('-')[0];
+  if (publicationProfileId === currentSessionProfileId) {
+    return;
+  }
 
   if ( id && navigator.serviceWorker?.controller) {
     navigator.serviceWorker.controller.postMessage({

@@ -23,6 +23,9 @@ import DecentOpenActionModule from './Module';
 import DecentOpenActionShimmer from './Decent Open Action Shimmer';
 import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
 import type { AllowedToken } from '@lensshare/types/hey';
+import { CHAIN } from '@lib/costantChain';
+import { CHAIN_ID } from 'src/constants';
+
 
 const OPEN_ACTION_EMBED_TOOLTIP = 'Open action embedded';
 
@@ -126,7 +129,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
               targetPublication.by.id,
               targetPublication.by.ownedBy.address,
               addressParameter as Address,
-              '137', // srcChainId, only supported on Polygon POS for now
+              '137',
               selectedQuantity !== 1 ? BigInt(selectedQuantity) : 1n,
               selectedCurrency.contractAddress
             );

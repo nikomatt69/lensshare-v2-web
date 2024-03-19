@@ -1,5 +1,4 @@
 import type {
-  Erc20,
   MirrorablePublication,
   UnknownOpenActionModuleSettings
 } from '@lensshare/lens';
@@ -9,11 +8,9 @@ import type { Address } from 'viem';
 import Loader from '@components/Shared/Loader';
 import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
 
-import getAllTokens from '@lib/api/getAllTokens';
 import getAssetSymbol from '@lensshare/lib/getAssetSymbol';
 import getRedstonePrice from '@lib/getRedstonePrice';
 import { RangeSlider, Select } from '@lensshare/ui';
-import { Query, useQuery } from '@tanstack/react-query';
 import { type FC, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
@@ -23,10 +20,10 @@ import { useAccount, useBalance } from 'wagmi';
 
 import TipAction from './TipAction';
 import { TipIcon } from './TipIcon';
-import { CHAIN } from '@lib/costantChain';
 import { LimitType, useModuleMetadataQuery } from '@lensshare/lens';
 import { USD_ENABLED_TOKEN_SYMBOLS } from './tokens symbols';
 import { useEnabledCurrenciesQuery } from '@lensshare/lens/generated5';
+import { CHAIN_ID } from 'src/constants';
 
 interface TipOpenActionModuleProps {
   module: UnknownOpenActionModuleSettings;
@@ -81,19 +78,14 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
   );
 
   const { actOnUnknownOpenAction, isLoading } = useActOnUnknownOpenAction({
-    signlessApproved: true,
+    signlessApproved: module.signlessApproved,
     successToast: "You've sent a tip!"
   });
 
-  
-
-  const {
-    data: allowedTokens,
-    loading: loadingAllowedTokens,
-    error
-  } = useEnabledCurrenciesQuery({
-    variables: { request: { limit: LimitType.TwentyFive } }
-  });
+  const { data: allowedTokens, loading: loadingAllowedTokens } =
+    useEnabledCurrenciesQuery({
+      variables: { request: { limit: LimitType.TwentyFive } }
+    });
 
   if (loading || loadingAllowedTokens) {
     return (
@@ -172,7 +164,8 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
               setTip({ ...tip, currency: e.target.value });
               setSelectedCurrency(
                 allowedTokens?.currencies.items.find(
-                  (currencies) => currencies?.contract.address === e.target.value
+                  (currencies) =>
+                    currencies?.contract.address === e.target.value
                 ) as unknown as AllowedToken
               );
             }}
@@ -202,7 +195,7 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
             asset: {
               contract: {
                 address: selectedCurrency.contractAddress,
-                chainId: CHAIN.id
+                chainId: CHAIN_ID
               },
               decimals: selectedCurrency.decimals,
               name: selectedCurrency.name,

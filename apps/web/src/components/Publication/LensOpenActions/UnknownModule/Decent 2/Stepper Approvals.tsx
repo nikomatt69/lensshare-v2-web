@@ -112,7 +112,9 @@ const StepperApprovals: FC<StepperApprovalsProps> = ({
           }
         }
       });
-      await handleWrongNetwork();
+      if (handleWrongNetwork()) {
+        return;
+      }
 
       return sendTransaction?.({
         account: data?.generateModuleCurrencyApprovalData.from,

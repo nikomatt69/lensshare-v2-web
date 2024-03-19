@@ -1,3 +1,4 @@
+import { CHAIN } from '@lib/costantChain';
 import { useCallback } from 'react';
 import { CHAIN_ID } from 'src/constants';
 import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
@@ -10,7 +11,7 @@ const useHandleWrongNetwork = () => {
   const chain = useChainId();
 
   const handleWrongNetwork = useCallback(() => {
-    if (chain !== CHAIN_ID) {
+    if (chain !== CHAIN.id) {
       setShowWrongNetworkModal(true);
       return true;
     }

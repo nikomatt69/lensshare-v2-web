@@ -39,7 +39,7 @@ const PreferencesSettings: NextPage = () => {
           </div>
           <div className="divider my-5" />
           <div className="space-y-6">
-            <HighSignalNotificationFilter />
+
             <PushNotifications />
         
           </div>

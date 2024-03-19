@@ -10,7 +10,6 @@ import {
   useDefaultProfileQuery
 } from '@lensshare/lens';
 import { HelpTooltip, Modal } from '@lensshare/ui';
-import getCurrentSession from '@lib/getCurrentSession';
 import { useEffect, useState } from 'react';
 import {
   ArrowTopRightOnSquareIcon,
@@ -38,6 +37,7 @@ import StepperApprovals from './Stepper Approvals';
 import { CHAIN } from '@lib/costantChain';
 import DecentAction from './DecentAction';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
+import { CHAIN_ID } from 'src/constants';
 const TOOLTIP_PRICE_HELP =
   'You don’t have enough native Zora ETH so we switched you to the next token with the lowest gas that you have enough of (lol)';
 interface DecentOpenActionModuleProps {
@@ -182,11 +182,10 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
         showCurrencySelector
           ? 'Select token'
           : actionData?.uiData.platformName
-            ? `Mint on ${actionData?.uiData.platformName}`
-            : 'Mint NFT'
+          ? `Mint on ${actionData?.uiData.platformName}`
+          : 'Mint NFT'
       }
     >
-      {' '}
       {showCurrencySelector ? (
         <CurrencySelector
           onSelectCurrency={(currency) => {
@@ -217,9 +216,9 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
               <h2 className="text-xl">{actionData?.uiData.nftName}</h2>
               {creatorProfileData ? (
                 <p className="text-black/50">
-                  by{' '}
+                  by
                   {
-                    getProfile(creatorProfileData.defaultProfile as Profile)
+                    getProfile(creatorProfileData?.defaultProfile as Profile)
                       .slug
                   }
                 </p>
@@ -350,7 +349,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
                   asset: {
                     contract: {
                       address: selectedCurrency.contractAddress,
-                      chainId: CHAIN.id
+                      chainId: CHAIN_ID
                     },
                     decimals: selectedCurrency.decimals,
                     name: selectedCurrency.name,

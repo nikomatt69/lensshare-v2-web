@@ -66,7 +66,7 @@ const ActionInfo: FC<ActionInfoProps> = ({
             {truncateByWords(collectionName, 5)}
           </h2>
           <p className="text-black/50">
-            by {getProfile(data.defaultProfile as Profile).slug}
+            by {getProfile(data?.defaultProfile as Profile).slug}
           </p>
         </span>
         <p className="text-black/50">
