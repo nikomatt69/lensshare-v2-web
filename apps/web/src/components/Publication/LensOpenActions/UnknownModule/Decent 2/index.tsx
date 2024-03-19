@@ -8,17 +8,16 @@ import type { ActionData, PublicationInfo } from 'nft-openaction-kit';
 
 import ActionInfo from '@components/Shared/Oembed/Nft/ActionInfo';
 
-import { PUBLICATION } from '@lensshare/data/tracking';
 import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
 import getNftChainInfo from '@lensshare/lib/getNftChainInfo';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import { Button, Card, Spinner, Tooltip } from '@lensshare/ui';
 import errorToast from '@lib/errorToast';
-import { Leafwatch } from '@lib/leafwatch';
 import { NftOpenActionKit } from 'nft-openaction-kit';
 import { type FC, useEffect, useState, useRef } from 'react';
-import { Address, useAccount } from 'wagmi';
+import type { Address } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 import DecentOpenActionModule from './Module';
 import DecentOpenActionShimmer from './Decent Open Action Shimmer';
@@ -79,7 +78,9 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
   const module = targetPublication.openActionModules.find(
     (module) => module.contract.address === VerifiedOpenActionModules.DecentNFT
   );
-
+  const NEXT_PUBLIC_DECENT_API_KEY = 'fee46c572acecfc76c8cb2a1498181f9';
+  const NEXT_PUBLIC_OPENSEA_API_KEY = 'ee7460014fda4f58804f25c29a27df35';
+  const NEXT_PUBLIC_RARIBLE_API_KEY = '4ad887e1-fe57-47e9-b078-9c35f37c4c13';
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   const { address } = useAccount();
@@ -107,9 +108,9 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
     () => {
       const actionDataFromPost = async () => {
         const nftOpenActionKit = new NftOpenActionKit({
-          decentApiKey: process.env.NEXT_PUBLIC_DECENT_API_KEY || '',
-          openSeaApiKey: process.env.NEXT_PUBLIC_OPENSEA_API_KEY || '',
-          raribleApiKey: process.env.NEXT_PUBLIC_RARIBLE_API_KEY || ''
+          decentApiKey: NEXT_PUBLIC_DECENT_API_KEY,
+          openSeaApiKey: NEXT_PUBLIC_OPENSEA_API_KEY,
+          raribleApiKey: NEXT_PUBLIC_RARIBLE_API_KEY
         });
 
         const addressParameter = address
@@ -169,7 +170,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
             src={nft.mediaUrl}
           />
         </div>
-        {!!actionData && nft ? (
+        {actionData && nft ? (
           <div className="flex items-center justify-between border-t p-4 dark:border-gray-700">
             <div className="flex items-center space-x-2">
               {nft.chain ? (
@@ -179,7 +180,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 >
                   <img
                     alt={getNftChainInfo(nft.chain).name}
-                    className="w-5 h-5"
+                    className="h-5 w-5"
                     src={getNftChainInfo(nft.chain).logo}
                   />
                 </Tooltip>
@@ -209,9 +210,6 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 className="text-base font-normal"
                 onClick={() => {
                   setShowOpenActionModal(true);
-                  Leafwatch.track(PUBLICATION.OPEN_ACTIONS.DECENT.OPEN_DECENT, {
-                    publication_id: publication.id
-                  });
                 }}
                 size="md"
               >

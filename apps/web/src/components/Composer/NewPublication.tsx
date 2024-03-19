@@ -98,10 +98,14 @@ const OpenActionSettings = dynamic(
     loading: () => <div className="shimmer mb-1 h-5 w-5 rounded-lg" />
   }
 );
+
+const NEXT_PUBLIC_DECENT_API_KEY = 'fee46c572acecfc76c8cb2a1498181f9';
+const NEXT_PUBLIC_OPENSEA_API_KEY = 'ee7460014fda4f58804f25c29a27df35';
+const NEXT_PUBLIC_RARIBLE_API_KEY = '4ad887e1-fe57-47e9-b078-9c35f37c4c13';
 const nftOpenActionKit = new NftOpenActionKit({
-  decentApiKey: process.env.NEXT_PUBLIC_DECENT_API_KEY || '',
-  openSeaApiKey: process.env.NEXT_PUBLIC_OPENSEA_API_KEY || '',
-  raribleApiKey: process.env.NEXT_PUBLIC_RARIBLE_API_KEY || ''
+  decentApiKey: NEXT_PUBLIC_DECENT_API_KEY,
+  openSeaApiKey: NEXT_PUBLIC_OPENSEA_API_KEY,
+  raribleApiKey: NEXT_PUBLIC_RARIBLE_API_KEY
 });
 
 interface NewPublicationProps {
@@ -112,8 +116,8 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [openActionEmbedLoading, setOpenActionEmbedLoading] =
-  useState<boolean>(false);
-const [openActionEmbed, setOpenActionEmbed] = useState<any | undefined>();
+    useState<boolean>(false);
+  const [openActionEmbed, setOpenActionEmbed] = useState<any | undefined>();
   const targetPublication = isMirrorPublication(publication)
     ? publication?.mirrorOn
     : publication;
@@ -212,7 +216,7 @@ const [openActionEmbed, setOpenActionEmbed] = useState<any | undefined>();
     ? publication.momoka?.proof
     : isQuote
     ? quotedPublication?.momoka?.proof
-    : noCollect;
+    : noCollect && noOpenAction;
 
   const onError = (error?: any) => {
     setIsLoading(false);
@@ -629,7 +633,7 @@ const [openActionEmbed, setOpenActionEmbed] = useState<any | undefined>();
           {!publication?.momoka?.proof ? (
             <>
               <CollectSettings />
-               <OpenActionSettings />
+              <OpenActionSettings />
               <ReferenceSettings />
             </>
           ) : null}

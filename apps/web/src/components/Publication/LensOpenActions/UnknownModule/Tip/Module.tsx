@@ -13,7 +13,7 @@ import getAllTokens from '@lib/api/getAllTokens';
 import getAssetSymbol from '@lensshare/lib/getAssetSymbol';
 import getRedstonePrice from '@lib/getRedstonePrice';
 import { RangeSlider, Select } from '@lensshare/ui';
-import { useQuery } from '@tanstack/react-query';
+import { Query, useQuery } from '@tanstack/react-query';
 import { type FC, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 

@@ -15,6 +15,7 @@ import getCurrentSession from '@lib/getCurrentSession';
 import { useState } from 'react';
 import { formatUnits, isAddress } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
+import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 
 interface TipActionProps {
   act: () => void;
@@ -36,8 +37,8 @@ const TipAction: FC<TipActionProps> = ({
   title
 }) => {
   const [allowed, setAllowed] = useState(true);
-  const { id: sessionProfileId } = getCurrentSession();
-  const isWalletUser = isAddress(sessionProfileId);
+  const currentSessionProfileId = getCurrentSessionProfileId();
+  const isWalletUser = isAddress(currentSessionProfileId);
 
   const { address } = useAccount();
 
@@ -58,7 +59,7 @@ const TipAction: FC<TipActionProps> = ({
         );
         setAllowed(allowedAmount > amount);
       },
-      skip: !amount || !sessionProfileId || !assetAddress,
+      skip: !amount || !currentSessionProfileId || !assetAddress,
       variables: {
         request: {
           currencies: [assetAddress],
@@ -83,7 +84,7 @@ const TipAction: FC<TipActionProps> = ({
     hasAmount = true;
   }
 
-  if (!sessionProfileId) {
+  if (!currentSessionProfileId) {
     return (
       <div className="mt-5">
         <LoginButton />

@@ -9,7 +9,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 
 const allowedBots =
-  '.*(bot|telegram|baidu|bing|yandex|iframely|whatsapp|facebook).*';
+  '.*(bot|telegram|baidu|bing|yandex|iframely|whatsapp|facebook|twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot).*';
 
 /** @type {import('next').NextConfig} */
 

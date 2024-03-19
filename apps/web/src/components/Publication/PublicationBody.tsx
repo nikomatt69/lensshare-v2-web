@@ -67,20 +67,24 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   const showLive = metadata?.__typename === 'LiveStreamMetadataV3';
   // Show attachments if it's there
   const showAttachments = filteredAttachments.length > 0 || filteredAsset;
-  const showEmbed = metadata.__typename === 'EmbedMetadataV3';
   const showSnapshot = snapshotProposalId;
   // Show live if it's there
   const showSharingLink = metadata?.__typename === 'LinkMetadataV3';
   // Show oembed if no NFT, no attachments, no quoted publication
   const showOembed =
-    !showSharingLink && hasURLs && !showLive && !showSnapshot && !showAttachments && !quoted;
+    !showSharingLink &&
+    hasURLs &&
+    !showLive &&
+    !showSnapshot &&
+    !showAttachments &&
+    !quoted;
 
   return (
     <div className="break-words">
       <Markup
         className={cn(
           { 'line-clamp-5': canShowMore },
-          'markup linkify text-xs break-words',
+          'markup linkify break-words text-xs',
           contentClassName
         )}
         mentions={targetPublication.profilesMentioned}
@@ -89,7 +93,7 @@ const PublicationBody: FC<PublicationBodyProps> = ({
       </Markup>
       {canShowMore ? (
         <div className="ld-text-gray-500 mt-4 flex items-center space-x-1 text-sm font-bold">
-          <EyeIcon className="w-4 h-4" />
+          <EyeIcon className="h-4 w-4" />
           <Link href={`/posts/${id}`}>Show more</Link>
         </div>
       ) : null}

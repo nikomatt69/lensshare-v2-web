@@ -1,5 +1,3 @@
-import { useAccount, useSignMessage } from "wagmi";
-
 let browserPushWorker: Worker;
 
 if (typeof Worker !== 'undefined') {
@@ -16,7 +14,7 @@ export const BrowserPush = {
     browserPushWorker.postMessage({ title });
 
     browserPushWorker.onmessage = (event: MessageEvent) => {
-      if (!('Notification' in window)) {
+      if ('Notification' in window) {
         return;
       }
 

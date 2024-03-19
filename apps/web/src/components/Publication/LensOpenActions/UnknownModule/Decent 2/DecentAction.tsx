@@ -3,7 +3,6 @@ import type { FC } from 'react';
 import { useTransactionStatus } from 'src/hooks/useIndexStatus';
 
 import { Button, Spinner } from '@lensshare/ui';
-import getCurrentSession from '@lib/getCurrentSession';
 import { useEffect, useState } from 'react';
 import { LinkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -17,6 +16,7 @@ import {
   getMessagesBySrcTxHash,
   MessageStatus
 } from '@layerzerolabs/scan-client';
+import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 interface DecentActionProps {
   act: () => void;
   allowanceLoading?: boolean;
@@ -37,8 +37,8 @@ const DecentAction: FC<DecentActionProps> = ({
   txHash
 }) => {
   const [pending, setPending] = useState(false);
-  const { id: sessionProfileId } = getCurrentSession();
-  const isWalletUser = isAddress(sessionProfileId);
+  const currentSessionProfileId = getCurrentSessionProfileId();
+  const isWalletUser = isAddress(currentSessionProfileId);
 
   const { address } = useAccount();
 
@@ -95,18 +95,7 @@ const DecentAction: FC<DecentActionProps> = ({
     return () => clearInterval(interval);
   }, [transactionStatusData]);
 
-  
-   if (true) {
-     return (
-       <Button className={className} onClick={act}>
-         <div>
-           {`Mint for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
-         </div>
-       </Button>
-     );
-   }
-
-  if (!sessionProfileId) {
+  if (!currentSessionProfileId) {
     return (
       <div className="w-full">
         <LoginButton isBig />
@@ -132,6 +121,16 @@ const DecentAction: FC<DecentActionProps> = ({
         size="lg"
       >
         {`Insufficient ${assetSymbol} balance`}
+      </Button>
+    );
+  }
+
+  if (true) {
+    return (
+      <Button className={className} onClick={act}>
+        <div>
+          {`Mint for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
+        </div>
       </Button>
     );
   }
