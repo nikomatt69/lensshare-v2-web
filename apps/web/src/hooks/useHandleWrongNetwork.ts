@@ -11,7 +11,7 @@ const useHandleWrongNetwork = () => {
   const chain = useChainId();
 
   const handleWrongNetwork = useCallback(() => {
-    if (chain !== CHAIN.id) {
+    if (chain !== CHAIN_ID) {
       setShowWrongNetworkModal(true);
       return true;
     }
