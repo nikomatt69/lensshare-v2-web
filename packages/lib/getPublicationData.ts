@@ -28,7 +28,7 @@ const getPublicationData = (
   const canShowTitle = showTitle && willHaveTitle;
   const content = canShowTitle
     ? `${metadata.title}\n\n${metadata.content}`
-    : metadata?.content;
+    : metadata.content;
 
   switch (metadata?.__typename) {
     case 'ArticleMetadataV3':
@@ -87,6 +87,11 @@ const getPublicationData = (
         attachments: getAttachmentsData(metadata.attachments),
         content: metadata.content
       };
+    case 'EmbedMetadataV3':
+      return {
+        content: removeUrlsByHostnames(metadata.content, knownEmbedHostnames),
+        attachments: getAttachmentsData(metadata.attachments)
+    };
     case 'LiveStreamMetadataV3':
       return {
         attachments: getAttachmentsData(metadata.attachments),

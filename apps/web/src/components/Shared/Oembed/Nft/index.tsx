@@ -48,11 +48,8 @@ const Nft: FC<NftProps> = ({ nft, publicationId }) => {
           <Button
             className="text-sm"
             icon={<CursorArrowRaysIcon className="h-4 w-4" />}
-            onClick={() =>
-              Leafwatch.track(PUBLICATION.COLLECT_MODULE.OPEN_COLLECT, {
-                publication_id: publicationId
-              })
-            }
+            
+            
             size="md"
           >
             Mint

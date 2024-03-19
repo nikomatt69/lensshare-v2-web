@@ -1,22 +1,19 @@
-import { BASE_URL, HEY_API_URL, OEMBED_WORKER_URL } from '@lensshare/data/constants';
 import type { OG } from '@lensshare/types/misc';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { FC } from 'react';
-import urlcat from 'urlcat';
 
 import Embed from './Embed';
 import Player from './Player';
 import getFavicon from 'src/utils/oembed/getFavicon';
 
 import Nft from './Nft';
-import { AnyPublication } from '@lensshare/lens';
+import type { AnyPublication } from '@lensshare/lens';
 import Portal from './Portal';
 
 import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import DecentOpenAction from '@components/Publication/LensOpenActions/UnknownModule/Decent 2';
-
 
 interface OembedProps {
   className?: string;

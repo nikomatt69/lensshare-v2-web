@@ -72,13 +72,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       displayName,
       slugWithPrefix
     ],
-    metadataBase: new URL(`https://mycrumbs.xyz/posts/${targetPublication.id}`),
+    metadataBase: new URL(`https://mycrumbs.xyz/posts/${targetPublication?.id}`),
     openGraph: {
       description: description,
       images: getPublicationOGImages(metadata) as any,
       siteName: 'MyCrumbs',
       type: 'article',
-      url: `https://mycrumbs.xyz/posts/${targetPublication.id}`
+      url: `https://mycrumbs.xyz/posts/${targetPublication?.id}`
     },
     other: {
       'count:actions': targetPublication.stats.countOpenActions,
@@ -92,7 +92,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     publisher: displayName,
     title: title,
     twitter: {
-      card: assetIsAudio ? 'summary' : 'summary_large_image'
+      card: assetIsAudio ? 'summary' : 'summary_large_image',
+      site: '@lensshareappxyz'
     }
   };
 }
