@@ -89,7 +89,7 @@ const QueuedPublication: FC<QueuedPublicationProps> = ({ txn }) => {
         </Tooltip>
       </div>
       <div className="markup linkify text-md break-words">
-        <Markup mentions={getMentions(txn.content)}>{txn.content}</Markup>
+        <Markup mentions={getMentions(txn?.content)}>{txn.content}</Markup>
       </div>
     </Card>
   );

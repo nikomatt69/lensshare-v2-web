@@ -1,7 +1,7 @@
 import { useState, type FC, useEffect } from 'react';
 
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
-import { Portal } from '@lensshare/types/misc';
+import type { Portal as IPortal } from '@lensshare/types/misc';
 import { Button, Card } from '@lensshare/ui';
 import { PUBLICATION } from '@lensshare/data/tracking';
 import { Leafwatch } from '@lib/leafwatch';
@@ -11,16 +11,17 @@ import toast from 'react-hot-toast';
 import cn from '@lensshare/ui/cn';
 import { useAppStore } from 'src/store/useAppStore';
 import getAuthApiHeaders from './getAuthApiHeaders main';
+import { LinkIcon } from '@heroicons/react/24/outline';
 
 interface PortalProps {
-  portal: Portal;
+  portal: IPortal;
   publicationId?: string;
 }
 
 const Portal: FC<PortalProps> = ({ portal, publicationId }) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const [portalData, setPortalData] = useState<null | Portal>(null);
-  const [loading, setLoading] = useState(false);
+  const [portalData, setPortalData] = useState<IPortal | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (portal) {
@@ -32,7 +33,7 @@ const Portal: FC<PortalProps> = ({ portal, publicationId }) => {
     return null;
   }
 
-  const { buttons, image, postUrl } = portalData;
+  const { buttons, image, portalUrl, postUrl } = portalData;
 
   const onPost = async (index: number) => {
     if (!currentProfile) {
@@ -40,9 +41,9 @@ const Portal: FC<PortalProps> = ({ portal, publicationId }) => {
     }
 
     try {
-      setLoading(true);
+      setIsLoading(true);
 
-      const { data }: { data: { portal: Portal } } = await axios.post(
+      const { data }: { data: { portal: IPortal } } = await axios.post(
         `/api/act`,
         { buttonIndex: index + 1, postUrl, publicationId },
         { headers: getAuthApiHeaders() }
@@ -56,7 +57,7 @@ const Portal: FC<PortalProps> = ({ portal, publicationId }) => {
     } catch {
       toast.error(Errors.SomethingWentWrong);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -76,27 +77,40 @@ const Portal: FC<PortalProps> = ({ portal, publicationId }) => {
           'grid gap-4 p-5 dark:border-gray-700'
         )}
       >
-        {buttons.map(({ button, type }, index) => (
+         {buttons.map(({ action, button, target }, index) => (
           <Button
-            disabled={loading || !publicationId || !currentProfile}
+            className="justify-center"
+            disabled={isLoading || !publicationId || !currentProfile}
+            icon={
+              (action === 'link' ||
+                action === 'post_redirect' ||
+                action === 'mint') && <LinkIcon className="h-4 w-4" />
+            }
             key={index}
             onClick={() => {
-              Leafwatch.track(PUBLICATION.NEW_POST, {
-                publication_id: publicationId,
-                type
+              Leafwatch.track(PUBLICATION.CLICK_OEMBED, {
+                action,
+                publication_id: publicationId
               });
 
-              if (type === 'redirect') {
-                window.open(postUrl, '_blank');
-              } else if (type === 'submit') {
+              if (
+                action === 'link' ||
+                action === 'post_redirect' ||
+                action === 'mint'
+              ) {
+                const url = action === 'mint' ? portalUrl : target || portalUrl;
+                window.open(url, '_blank');
+              } else if (action === 'post') {
                 onPost(index);
               }
             }}
             outline
-            size="lg"
-            className="flex-grow"
-            type={type === 'submit' ? 'submit' : 'button'}
-            variant="secondary"
+            size="md"
+            type={
+              action === 'post' || action === 'post_redirect'
+                ? 'submit'
+                : 'button'
+            }
           >
             {button}
           </Button>

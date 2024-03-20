@@ -94,13 +94,11 @@ export interface MessageDescriptor {
 }
 
 export interface OptimisticTransaction {
-  collectOn?: string;
+  type: OptmisticPublicationType;
+  content: string;
   commentOn?: string;
-  content?: string;
-  mirrorOn?: string;
   txHash?: string;
   txId?: string;
-  type: OptmisticPublicationType;
 }
 
 export interface MarkupLinkProps {

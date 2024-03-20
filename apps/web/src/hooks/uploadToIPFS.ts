@@ -17,7 +17,7 @@ const everland = async (
   onProgress?: (percentage: number) => void
 ) => {
   try {
-    const token = await axios.get(STS_GENERATOR_WORKER_URL);
+    const token = await axios.get(`${STS_GENERATOR_WORKER_URL}/token`);
     const client = new S3({
       endpoint: EVER_ENDPOINT,
       region: EVER_REGION,
