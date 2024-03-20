@@ -37,8 +37,8 @@ const TipAction: FC<TipActionProps> = ({
   title
 }) => {
   const [allowed, setAllowed] = useState(true);
-  const currentSessionProfileId = getCurrentSessionProfileId();
-  const isWalletUser = isAddress(currentSessionProfileId);
+  const { id: sessionProfileId } = getCurrentSession();
+  const isWalletUser = isAddress(sessionProfileId);
 
   const { address } = useAccount();
 
@@ -59,7 +59,7 @@ const TipAction: FC<TipActionProps> = ({
         );
         setAllowed(allowedAmount > amount);
       },
-      skip: !amount || !currentSessionProfileId || !assetAddress,
+      skip: !amount || !sessionProfileId || !assetAddress,
       variables: {
         request: {
           currencies: [assetAddress],
@@ -84,7 +84,7 @@ const TipAction: FC<TipActionProps> = ({
     hasAmount = true;
   }
 
-  if (!currentSessionProfileId) {
+  if (!sessionProfileId) {
     return (
       <div className="mt-5">
         <LoginButton />

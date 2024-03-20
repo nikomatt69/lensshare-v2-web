@@ -32,6 +32,7 @@ import {
   ScrollView,
   StyleSheet
 } from 'react-native';
+import getCurrentSession from '@lib/getCurrentSession';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -66,7 +67,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const { connector } = useAccount();
   const { disconnect } = useDisconnect();
   const disconnectXmtp = useDisconnectXmtp();
-  const currentSessionProfileId = getCurrentSessionProfileId();
+  const { id: sessionProfileId } = getCurrentSession();
 
   const logout = (reload = false) => {
     resetPreferences();
@@ -79,8 +80,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   };
   const { isRoomJoined } = useRoom();
   const { loading } = useCurrentProfileQuery({
-    variables: { request: { forProfileId: currentSessionProfileId } },
-    skip: !currentSessionProfileId || isAddress(currentSessionProfileId),
+    variables: { request: { forProfileId: sessionProfileId } },
+    skip: !sessionProfileId || isAddress(sessionProfileId),
     onCompleted: ({ profile, userSigNonces }) => {
       setCurrentProfile(profile as Profile);
       setLensHubOnchainSigNonce(userSigNonces.lensHubOnchainSigNonce);

@@ -17,6 +17,7 @@ import { useUpdateEffect } from 'usehooks-ts';
 import { isAddress } from 'viem';
 import { useAccount } from 'wagmi';
 import { useNotificationStore } from 'src/store/persisted/useNotificationStore';
+import getCurrentSession from '@lib/getCurrentSession';
 
 const LensSubscriptionsProvider: FC = () => {
   const setLatestNotificationId = useNotificationStore(
@@ -29,13 +30,13 @@ const LensSubscriptionsProvider: FC = () => {
     (state) => state.setLensPublicActProxyOnchainSigNonce
   );
   const { address } = useAccount();
-  const currentSessionProfileId = getCurrentSessionProfileId();
-  const canUseSubscriptions = Boolean(currentSessionProfileId) && address;
+  const { id: sessionProfileId } = getCurrentSession();
+  const canUseSubscriptions = Boolean(sessionProfileId) && address;
 
   // Begin: New Notification
   const { data: newNotificationData } =
     useNewNotificationSubscriptionSubscription({
-      variables: { for: currentSessionProfileId },
+      variables: { for: sessionProfileId },
       skip: !canUseSubscriptions
     });
 
@@ -74,7 +75,7 @@ const LensSubscriptionsProvider: FC = () => {
   const { data: authorizationRecordRevokedData } =
     useAuthorizationRecordRevokedSubscriptionSubscription({
       skip: !canUseSubscriptions,
-      variables: { authorizationId: currentSessionProfileId  }
+      variables: { authorizationId: sessionProfileId  }
     });
 
   useUpdateEffect(() => {
@@ -95,7 +96,7 @@ const LensSubscriptionsProvider: FC = () => {
         data.userSigNonces.lensPublicActProxyOnchainSigNonce
       );
     },
-    skip: currentSessionProfileId ? !isAddress(currentSessionProfileId) : true
+    skip: sessionProfileId ? !isAddress(sessionProfileId) : true
   });
 
   // Sync zustand stores between tabs

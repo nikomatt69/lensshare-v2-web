@@ -1,6 +1,7 @@
 
 import { EnvelopeOpenIcon } from '@heroicons/react/24/solid';
 import { Card } from '@lensshare/ui';
+import getCurrentSession from '@lib/getCurrentSession';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 
 import { Client } from '@xmtp/xmtp-js';
@@ -15,7 +16,7 @@ const EnableMessages: FC = () => {
   const { push } = useRouter();
   const [canMessage, setCanMessage] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const currentSessionProfileId = getCurrentSessionProfileId();
+  const { id: sessionProfileId } = getCurrentSession();
   const onConversationSelected = () => {
     push('/messages');
   };
@@ -23,7 +24,7 @@ const EnableMessages: FC = () => {
   useEffectOnce(() => {
     const fetchCanMessage = async () => {
       const isMessagesEnabled = await Client.canMessage(
-        currentSessionProfileId,
+        sessionProfileId,
         {
           env: 'production'
         }

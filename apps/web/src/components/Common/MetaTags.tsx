@@ -22,12 +22,10 @@ const MetaTags: FC<MetaTagsProps> = ({
       <link href="https://mycrumbs.xyz" rel="canonical" />
 
       <meta property="og:url" content="https://mycrumbs.xyz" />
-      <meta property="og:site_name" content={APP_NAME} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={DEFAULT_OG} />
-      <meta property="og:image:width" content="400" />
-      <meta property="og:image:height" content="400" />
+      <meta content={APP_NAME} property="og:site_name" />
+      <meta content={title} property="og:title" />
+      <meta content={description} property="og:description" />
+      <meta content={DEFAULT_OG} property="og:image" />
 
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:site" content={APP_NAME} />
@@ -44,9 +42,29 @@ const MetaTags: FC<MetaTagsProps> = ({
         href="/opensearch.xml"
         title={APP_NAME}
       />
+
+      {/* Prefetch and Preconnect */}
+      <link rel="preconnect" href="https://static-assets.mycrumbs.xyz" />
+      <link rel="dns-prefetch" href="https://static-assets.mycrumbs.xyz" />
+      <link rel="preconnect" href="https://asset.mycrumbs.xyz" />
+      <link rel="dns-prefetch" href="https://asset.mycrumbs.xyz" />
+      <link rel="preconnect" href="https://prerender.mycrumbs.xyz" />
+      <link rel="dns-prefetch" href="https://prerender.mycrumbs.xyz" />
+      <link rel="preconnect" href="https://og.mycrumbs.xyz" />
+      <link rel="dns-prefetch" href="https://og.mycrumbs.xyz" />
+
+      {/* PWA config */}
+
+      <link rel="manifest" href="/manifest.json" />
+
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      <meta name="apple-mobile-web-app-title" content="MyCrumbs" />
+      <link rel="icon" href="/images/icon.png" />
+      <meta name="theme-color" content="#000" />
     </Head>
   );
 };
 
 export default MetaTags;
-

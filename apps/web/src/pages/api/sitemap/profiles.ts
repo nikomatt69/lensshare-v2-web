@@ -64,3 +64,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return ( error);
   }
 };
+
+export default allowCors(handler);

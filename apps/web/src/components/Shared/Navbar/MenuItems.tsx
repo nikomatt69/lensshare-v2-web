@@ -9,6 +9,7 @@ import WalletUser from './WalletUser';
 import { isAddress } from 'viem';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import { Profile } from '@lensshare/lens';
+import getCurrentSession from '@lib/getCurrentSession';
 
 export const NextLink = ({ children, href, ...rest }: Record<string, any>) => (
   <Link href={href} {...rest}>
@@ -18,14 +19,14 @@ export const NextLink = ({ children, href, ...rest }: Record<string, any>) => (
 
 const MenuItems: FC = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const currentSessionProfileId = getCurrentSessionProfileId();
+  const { id: sessionProfileId } = getCurrentSession();
 
   if (currentProfile) {
     return <SignedUser />;
   }
 
-  // If the currentSessionProfileId is a valid eth address, we can assume that address don't have a profile yet
-  if (isAddress(currentSessionProfileId)) {
+  // If the sessionProfileId is a valid eth address, we can assume that address don't have a profile yet
+  if (isAddress(sessionProfileId)) {
     return <WalletUser />;
   }
 

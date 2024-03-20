@@ -12,16 +12,21 @@ import getPublicationData from '@lensshare/lib/getPublicationData';
 import getProfile from '@lensshare/lib/getProfile';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import React from 'react';
-
+import { headers } from 'next/headers';
 import getCollectModuleMetadata from '@lib/getCollect';
 import getPublicationOGImages from '@lib/getPublication';
 import defaultMetadata from 'src/defaultMetadata';
+import logger from 'src/app/logger';
 
-interface Props {
+type Props = {
   params: { id: string };
-}
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const headersList = headers();
+  const agent = headersList.get('user-agent');
+  logger.info(`OG request from ${agent} for Publication:${params.id}`);
+
   const { id } = params;
   const { data } = await apolloClient().query({
     query: PublicationDocument,
@@ -38,121 +43,58 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : publication;
   const { by: profile, metadata } = targetPublication;
   const filteredContent = getPublicationData(metadata)?.content || '';
+  const filteredAttachments = getPublicationData(metadata)?.attachments || [];
   const filteredAsset = getPublicationData(metadata)?.asset;
+
+  const assetIsImage = filteredAsset?.type === 'Image';
+  const assetIsVideo = filteredAsset?.type === 'Video';
   const assetIsAudio = filteredAsset?.type === 'Audio';
 
-  const { displayName, link, slugWithPrefix } = getProfile(profile);
-  const title = `${targetPublication.__typename} by ${slugWithPrefix} • ${APP_NAME}`;
-  const description = (filteredContent || title).slice(0, 155);
+  const getOGImages = () => {
+    if (assetIsImage) {
+      if (filteredAttachments.length > 0) {
+        return filteredAttachments.map((attachment) => attachment.uri);
+      }
+
+      return [filteredAsset?.uri];
+    }
+
+    if (assetIsVideo) {
+      if (filteredAttachments.length > 0) {
+        return filteredAttachments.map((attachment) => attachment.uri);
+      }
+
+      return [filteredAsset?.cover];
+    }
+
+    if (assetIsAudio) {
+      if (filteredAttachments.length > 0) {
+        return filteredAttachments.map((attachment) => attachment.uri);
+      }
+
+      return [filteredAsset?.cover];
+    }
+
+    return [];
+  };
+
+  const title = `${targetPublication.__typename} by ${
+    getProfile(profile).slugWithPrefix
+  } • ${APP_NAME}`;
 
   return {
-    alternates: {
-      canonical: `https://mycrumbs.xyz/posts/${targetPublication.id}`
-    },
-    applicationName: APP_NAME,
-    authors: {
-      name: displayName,
-      url: `https://mycrumbs.xyz${link}`
-    },
-    creator: displayName,
-    description: description,
-    keywords: [
-      'social media post',
-      'social media',
-      'lenster',
-      'user post',
-      'like',
-      'share',
-      'post',
-      'publication',
-      'lens',
-      'lens protocol',
-      'decentralized',
-      'web3',
-      displayName,
-      slugWithPrefix
-    ],
-    metadataBase: new URL(`https://mycrumbs.xyz/posts/${targetPublication?.id}`),
+    description: filteredContent,
+    metadataBase: new URL(`https://mycrumbs.xyz/posts/${targetPublication.id}`),
     openGraph: {
-      description: description,
-      images: getPublicationOGImages(metadata) as any,
+      images: getOGImages() as any,
       siteName: 'MyCrumbs',
-      type: 'article',
-      url: `https://mycrumbs.xyz/posts/${targetPublication?.id}`
+      type: 'article'
     },
-    other: {
-      'count:actions': targetPublication.stats.countOpenActions,
-      'count:comments': targetPublication.stats.comments,
-      'count:likes': targetPublication.stats.reactions,
-      'count:mirrors': targetPublication.stats.mirrors,
-      'count:quotes': targetPublication.stats.quotes,
-      'lens:id': targetPublication.id,
-      ...getCollectModuleMetadata(targetPublication)
-    },
-    publisher: displayName,
     title: title,
-    twitter: {
-      card: assetIsAudio ? 'summary' : 'summary_large_image',
-      site: '@lensshareappxyz'
-    }
+    twitter: { card: assetIsAudio ? 'summary' : 'summary_large_image' }
   };
 }
 
-export default async function Page({ params }: Props) {
-  const metadata = await generateMetadata({ params });
-  const { data } = await apolloClient().query({
-    query: PublicationsDocument,
-    variables: {
-      request: {
-        limit: LimitType.Fifty,
-        where: {
-          commentOn: {
-            id: metadata.other?.['lens:id'],
-            ranking: { filter: 'RELEVANT' }
-          }
-        }
-      }
-    }
-  });
-
-  if (!metadata) {
-    return <h1>{params.id}</h1>;
-  }
-
-  return (
-    <>
-      <h1>{metadata.title?.toString()}</h1>
-      <h2>{metadata.description?.toString()}</h2>
-      <div>
-        <b>Stats</b>
-        <ul>
-          <li>Actions: {metadata.other?.['count:actions']}</li>
-          <li>Comments: {metadata.other?.['count:comments']}</li>
-          <li>Likes: {metadata.other?.['count:likes']}</li>
-          <li>Mirrors: {metadata.other?.['count:mirrors']}</li>
-          <li>Quotes: {metadata.other?.['count:quotes']}</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Comments</h3>
-        <ul>
-          {data?.publications?.items?.map((publication: AnyPublication) => {
-            const targetPublication = isMirrorPublication(publication)
-              ? publication.mirrorOn
-              : publication;
-            const filteredContent =
-              getPublicationData(targetPublication.metadata)?.content || '';
-
-            return (
-              <li key={publication.id}>
-                <a href={`https://mycrumbs.xyz/posts/${publication.id}`}>
-                  {filteredContent}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </>
-  );
+export default function Page({ params }: Props) {
+  return <div>{params.id}</div>;
 }

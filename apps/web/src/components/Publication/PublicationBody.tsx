@@ -14,12 +14,17 @@ import cn from '@lensshare/ui/cn';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { memo } from 'react';
+
+
+import getPublicationAttribute from '@lensshare/lib/getPublicationAttribute';
 import { isIOS, isMobile } from 'react-device-detect';
 import Snapshot from './HeyOpenActions/Snapshot';
 import NotSupportedPublication from './NotSupportedPublication';
 import getSnapshotProposalId from '@lib/getSnapshotProposalId';
 import EncryptedPublication from './EncryptedPublication';
 import { CardBody, CardContainer } from '@lensshare/ui/src/3DCard';
+import Embed from './HeyOpenActions/Embed';
+import Nft from './HeyOpenActions/Nft';
 interface PublicationBodyProps {
   contentClassName?: string;
   publication: AnyPublication;
@@ -63,19 +68,25 @@ const PublicationBody: FC<PublicationBodyProps> = ({
     return <NotSupportedPublication type={metadata?.__typename} />;
   }
 
+  const showNft = metadata.__typename === 'MintMetadataV3';
+  const showEmbed = metadata.__typename === 'EmbedMetadataV3';
   // Show live if it's there
   const showLive = metadata?.__typename === 'LiveStreamMetadataV3';
   // Show attachments if it's there
   const showAttachments = filteredAttachments.length > 0 || filteredAsset;
   const showSnapshot = snapshotProposalId;
+
+  const showPoll = (snapshotProposalId);
   // Show live if it's there
   const showSharingLink = metadata?.__typename === 'LinkMetadataV3';
   // Show oembed if no NFT, no attachments, no quoted publication
   const showOembed =
     !showSharingLink &&
     hasURLs &&
+    !showNft &&
     !showLive &&
     !showSnapshot &&
+    !showEmbed &&
     !showAttachments &&
     !quoted;
 
@@ -108,12 +119,15 @@ const PublicationBody: FC<PublicationBodyProps> = ({
             />
           ) : null}
           {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
-
+         {showNft ? (
+            <Nft url={metadata.mintLink} publication={publication.id} />
+          ) : null}
           {showLive ? (
             <div className="mt-3">
               <Video src={metadata.liveURL || metadata.playbackURL} />
             </div>
           ) : null}
+          {showEmbed ? <Embed embed={metadata?.embed} /> : null}
           {showOembed ? (
             <Oembed publication={publication} url={urls[0]} />
           ) : null}

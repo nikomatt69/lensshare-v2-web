@@ -1,9 +1,6 @@
 import type { Document } from 'linkedom';
 
-const getEmbedUrl = (document: Document): string | null => {
-  const lens =
-    document.querySelector('meta[name="lens:player"]') ||
-    document.querySelector('meta[property="lens:player"]');
+const getEmbedUrl = (document: Document): null | string => {
   const og =
     document.querySelector('meta[name="og:video:url"]') ||
     document.querySelector('meta[name="og:video:secure_url"]') ||
@@ -13,11 +10,11 @@ const getEmbedUrl = (document: Document): string | null => {
     document.querySelector('meta[name="twitter:player"]') ||
     document.querySelector('meta[property="twitter:player"]');
 
-  if (lens) {
-    return lens.getAttribute('content');
-  } else if (og) {
+  if (og) {
     return og.getAttribute('content');
-  } else if (twitter) {
+  }
+
+  if (twitter) {
     return twitter.getAttribute('content');
   }
 

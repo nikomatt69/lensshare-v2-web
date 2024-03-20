@@ -7,9 +7,10 @@ import { type FC } from 'react';
 import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
 import { isAddress } from 'viem';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
+import getCurrentSession from '@lib/getCurrentSession';
 
 const FeatureFlagsProvider: FC = () => {
-  const currentSessionProfileId = getCurrentSessionProfileId();
+  const { id: sessionProfileId } = getCurrentSession();
   const setFeatureFlags = useFeatureFlagsStore(
     (state) => state.setFeatureFlags
   );
@@ -24,12 +25,12 @@ const FeatureFlagsProvider: FC = () => {
   const fetchFeatureFlags = async () => {
     try {
       if (
-        Boolean(currentSessionProfileId) &&
-        !isAddress(currentSessionProfileId)
+        Boolean(sessionProfileId) &&
+        !isAddress(sessionProfileId)
       ) {
         const response = await axios.get(
           `${BASE_URL}/api/feature/getFeatureFlags`,
-          { params: { id: currentSessionProfileId } }
+          { params: { id: sessionProfileId } }
         );
         const {
           data
@@ -46,7 +47,7 @@ const FeatureFlagsProvider: FC = () => {
   };
 
   useQuery({
-    queryKey: ['fetchFeatureFlags', currentSessionProfileId || ''],
+    queryKey: ['fetchFeatureFlags', sessionProfileId || ''],
     queryFn: fetchFeatureFlags
   });
 

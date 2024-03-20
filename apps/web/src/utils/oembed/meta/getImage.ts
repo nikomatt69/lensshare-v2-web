@@ -1,9 +1,6 @@
 import type { Document } from 'linkedom';
 
-const getImage = (document: Document): string | null => {
-  const lens =
-    document.querySelector('meta[name="lens:image"]') ||
-    document.querySelector('meta[property="lens:image"]');
+const getImage = (document: Document): null | string => {
   const og =
     document.querySelector('meta[name="og:image"]') ||
     document.querySelector('meta[property="og:image"]');
@@ -13,11 +10,11 @@ const getImage = (document: Document): string | null => {
     document.querySelector('meta[property="twitter:image"]') ||
     document.querySelector('meta[property="twitter:image:src"]');
 
-  if (lens) {
-    return lens.getAttribute('content');
-  } else if (og) {
+  if (og) {
     return og.getAttribute('content');
-  } else if (twitter) {
+  }
+
+  if (twitter) {
     return twitter.getAttribute('content');
   }
 

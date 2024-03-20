@@ -21,17 +21,17 @@ import { useAppStore } from 'src/store/useAppStore';
 
 const WalletUser: FC = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
-  const  currentSessionProfileId  = getCurrentSessionProfileId();
+  const {id: sessionProfileId } = getCurrentSession();
   const { ens } = useEnsName({
-    address: currentSessionProfileId,
-    enabled: Boolean(currentSessionProfileId)
+    address: sessionProfileId,
+    enabled: Boolean(sessionProfileId)
   });
 
   const Avatar = () => (
     <Image
-      alt={currentSessionProfileId}
+      alt={sessionProfileId}
       className="w-8 h-8 cursor-pointer rounded-full border dark:border-gray-700"
-      src={getStampFyiURL(currentSessionProfileId)}
+      src={getStampFyiURL(sessionProfileId)}
     />
   );
 

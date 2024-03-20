@@ -10,9 +10,10 @@ import { usePreferencesStore } from 'src/store/usePreferencesStore';
 import { useProStore } from 'src/store/useProStore';
 import { useMembershipNftStore } from 'src/store/useMembershipNftStore';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
+import getCurrentSession from '@lib/getCurrentSession';
 
 const PreferencesProvider: FC = () => {
-  const currentSessionProfileId = getCurrentSessionProfileId();
+  const { id: sessionProfileId } = getCurrentSession();
   const setVerifiedMembers = useAppStore((state) => state.setVerifiedMembers);
   const setPreferences = usePreferencesStore((state) => state.setPreferences);
   const setIsPro = useProStore((state) => state.setIsPro);
@@ -30,9 +31,9 @@ const PreferencesProvider: FC = () => {
   // Fetch preferences
   const fetchPreferences = async () => {
     try {
-      if (Boolean(currentSessionProfileId)) {
+      if (Boolean(sessionProfileId)) {
         const preferences = await getPreferences(
-          currentSessionProfileId,
+          sessionProfileId,
           getAuthWorkerHeaders()
         );
 
@@ -51,7 +52,7 @@ const PreferencesProvider: FC = () => {
 
   useQuery({
     queryFn: fetchPreferences,
-    queryKey: ['fetchPreferences', currentSessionProfileId || '']
+    queryKey: ['fetchPreferences', sessionProfileId || '']
   });
 
   // Fetch verified members

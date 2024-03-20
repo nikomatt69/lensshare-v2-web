@@ -1,5 +1,4 @@
-
-import { Nft } from '@lensshare/types/misc';
+import type { Nft } from '@lensshare/types/misc';
 import type { Document } from 'linkedom';
 import type { Address } from 'viem';
 // https://reflect.site/g/yoginth/hey-nft-extended-open-graph-spec/780502f3c8a3404bb2d7c39ec091602e

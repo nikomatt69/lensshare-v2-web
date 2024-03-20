@@ -17,6 +17,7 @@ import {
   MessageStatus
 } from '@layerzerolabs/scan-client';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
+import getCurrentSession from '@lib/getCurrentSession';
 interface DecentActionProps {
   act: () => void;
   allowanceLoading?: boolean;
@@ -37,8 +38,8 @@ const DecentAction: FC<DecentActionProps> = ({
   txHash
 }) => {
   const [pending, setPending] = useState(false);
-  const currentSessionProfileId = getCurrentSessionProfileId();
-  const isWalletUser = isAddress(currentSessionProfileId);
+  const { id: sessionProfileId } = getCurrentSession();
+  const isWalletUser = isAddress(sessionProfileId);
 
   const { address } = useAccount();
 
@@ -95,7 +96,7 @@ const DecentAction: FC<DecentActionProps> = ({
     return () => clearInterval(interval);
   }, [transactionStatusData]);
 
-  if (!currentSessionProfileId) {
+  if (!sessionProfileId) {
     return (
       <div className="w-full">
         <LoginButton isBig />

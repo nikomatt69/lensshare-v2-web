@@ -3,14 +3,17 @@ const knownSites = [
   'youtu.be',
   'tape.xyz',
   'twitch.tv',
+  'kick.com',
   'open.spotify.com',
   'soundcloud.com',
-  'oohlala.xyz',
-  'kick.com',
-  'lvpr.tv'
+  'oohlala.xyz'
 ];
 
+// URLs that are manually picked to be embedded that dont have embed metatags
 const pickUrlSites = ['open.spotify.com', 'kick.com'];
+
+// URLs that should not have query params removed
+const skipClean = ['youtube.com', 'youtu.be'];
 
 const spotifyTrackUrlRegex =
   /^ht{2}ps?:\/{2}open\.spotify\.com\/track\/[\dA-Za-z]+(\?si=[\dA-Za-z]+)?$/;
@@ -24,18 +27,19 @@ const youtubeRegex =
   /^https?:\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w-]+)(?:\?.*)?$/;
 const tapeRegex =
   /^https?:\/\/tape\.xyz\/watch\/[\dA-Za-z-]+(\?si=[\dA-Za-z]+)?$/;
-const twitchRegex = /^https?:\/\/www\.twitch\.tv\/[\dA-Za-z-]+$/;
+const twitchRegex = /^https?:\/\/www\.twitch\.tv\/videos\/[\dA-Za-z-]+$/;
 const kickRegex = /^https?:\/\/kick\.com\/[\dA-Za-z-]+$/;
-const livepeerUrlRegex = /^https?:\/\/lvpr\.tv\/\?v=[\da-z]{16}$/;
 
 const generateIframe = (
-  embedUrl: string | null,
+  embedUrl: null | string,
   url: string
-): string | null => {
-  const universalSize = `width="560" height="315"`;
+): null | string => {
+  const universalSize = `width="100%" height="415"`;
   const parsedUrl = new URL(url);
   const hostname = parsedUrl.hostname.replace('www.', '');
   const pickedUrl = pickUrlSites.includes(hostname) ? url : embedUrl;
+  // Remove query params from url
+  const cleanedUrl = skipClean ? url : (pickedUrl?.split('?')[0] as string);
 
   if (!knownSites.includes(hostname) || !pickedUrl) {
     return null;
@@ -43,48 +47,26 @@ const generateIframe = (
 
   switch (hostname) {
     case 'youtube.com':
-    case 'youtu.be':
-      if (youtubeRegex.test(url)) {
+    case 'youtu.be': {
+      if (youtubeRegex.test(cleanedUrl)) {
         return `<iframe src="${pickedUrl}" ${universalSize} allow="accelerometer; encrypted-media" allowfullscreen></iframe>`;
       }
 
       return null;
-    case 'tape.xyz':
-      if (tapeRegex.test(url)) {
+    }
+    case 'tape.xyz': {
+      if (tapeRegex.test(cleanedUrl)) {
         return `<iframe src="${pickedUrl}" ${universalSize} allow="accelerometer; encrypted-media" allowfullscreen></iframe>`;
       }
 
       return null;
-    case 'open.spotify.com':
-      const spotifySize = `style="max-width: 560px;" width="100%"`;
-      if (spotifyTrackUrlRegex.test(url)) {
-        const spotifyUrl = pickedUrl.replace('/track', '/embed/track');
-        return `<iframe src="${spotifyUrl}" ${spotifySize} height="155" allow="encrypted-media"></iframe>`;
-      }
-
-      if (spotifyPlaylistUrlRegex.test(url)) {
-        const spotifyUrl = pickedUrl.replace('/playlist', '/embed/playlist');
-        return `<iframe src="${spotifyUrl}" ${spotifySize} height="380" allow="encrypted-media"></iframe>`;
-      }
-
-      return null;
-    case 'lvpr.tv':
-      if (livepeerUrlRegex.test(url)) {
-        return `<iframe src="${pickedUrl}" ${universalSize}></iframe>`;
-      }
-      return null;
-    case 'soundcloud.com':
-      if (soundCloudRegex.test(url)) {
-        return `<iframe src="${pickedUrl}" ${universalSize}></iframe>`;
-      }
-
-      return null;
+    }
     case 'twitch.tv': {
       const twitchEmbedUrl = pickedUrl.replace(
         '&player=facebook&autoplay=true&parent=meta.tag',
-        '&player=lensshare&autoplay=false&parent=mycrumbs.xyz'
+        '&player=hey&autoplay=false&parent=hey.xyz'
       );
-      if (twitchRegex.test(url)) {
+      if (twitchRegex.test(cleanedUrl)) {
         return `<iframe src="${twitchEmbedUrl}" ${universalSize} allowfullscreen></iframe>`;
       }
 
@@ -92,18 +74,40 @@ const generateIframe = (
     }
     case 'kick.com': {
       const kickEmbedUrl = pickedUrl.replace('kick.com', 'player.kick.com');
-      if (kickRegex.test(url)) {
+      if (kickRegex.test(cleanedUrl)) {
         return `<iframe src="${kickEmbedUrl}" ${universalSize} allowfullscreen></iframe>`;
       }
 
       return null;
     }
-    case 'oohlala.xyz':
-      if (oohlalaUrlRegex.test(url)) {
+    case 'open.spotify.com': {
+      const spotifySize = `style="max-width: 100%;" width="100%"`;
+      if (spotifyTrackUrlRegex.test(cleanedUrl)) {
+        const spotifyUrl = pickedUrl.replace('/track', '/embed/track');
+        return `<iframe src="${spotifyUrl}" ${spotifySize} height="155" allow="encrypted-media"></iframe>`;
+      }
+
+      if (spotifyPlaylistUrlRegex.test(cleanedUrl)) {
+        const spotifyUrl = pickedUrl.replace('/playlist', '/embed/playlist');
+        return `<iframe src="${spotifyUrl}" ${spotifySize} height="380" allow="encrypted-media"></iframe>`;
+      }
+
+      return null;
+    }
+    case 'soundcloud.com': {
+      if (soundCloudRegex.test(cleanedUrl)) {
         return `<iframe src="${pickedUrl}" ${universalSize}></iframe>`;
       }
 
       return null;
+    }
+    case 'oohlala.xyz': {
+      if (oohlalaUrlRegex.test(cleanedUrl)) {
+        return `<iframe src="${pickedUrl}" ${universalSize}></iframe>`;
+      }
+
+      return null;
+    }
     default:
       return `<iframe src="${pickedUrl}" width="560"></iframe>`;
   }

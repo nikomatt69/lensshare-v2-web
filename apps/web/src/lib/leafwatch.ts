@@ -1,3 +1,4 @@
+import getCurrentSession from './getCurrentSession';
 import getCurrentSessionProfileId from './getCurrentSessionProfileId';
 
 let worker: Worker;
@@ -11,12 +12,12 @@ if (typeof Worker !== 'undefined') {
  */
 export const Leafwatch = {
   track: (name: string, properties?: Record<string, unknown>) => {
-    const currentSessionProfileId = getCurrentSessionProfileId();
+    const { id: sessionProfileId } = getCurrentSession();
     const { referrer } = document;
     const referrerDomain = referrer ? new URL(referrer).hostname : null;
 
     worker.postMessage({
-      actor: currentSessionProfileId,
+      actor: sessionProfileId,
       name,
       platform: 'web',
       properties,

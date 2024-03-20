@@ -38,6 +38,7 @@ import { CHAIN } from '@lib/costantChain';
 import DecentAction from './DecentAction';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import { CHAIN_ID } from 'src/constants';
+import getCurrentSession from '@lib/getCurrentSession';
 const TOOLTIP_PRICE_HELP =
   'You don’t have enough native Zora ETH so we switched you to the next token with the lowest gas that you have enough of (lol)';
 interface DecentOpenActionModuleProps {
@@ -133,7 +134,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
   };
 
   const [allowed, setAllowed] = useState(true);
-  const currentSessionProfileId = getCurrentSessionProfileId();
+  const { id: sessionProfileId } = getCurrentSession();
 
   const amount = parseInt(formattedTotalPrice) || 0;
   const assetAddress = selectedCurrency.contractAddress;
@@ -151,7 +152,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
         );
         setAllowed(allowedAmount > amount);
       },
-      skip: !amount || !currentSessionProfileId || !assetAddress,
+      skip: !amount || !sessionProfileId || !assetAddress,
       variables: {
         request: {
           currencies: [assetAddress],

@@ -6,22 +6,24 @@ export interface IPFSResponse {
 }
 
 export interface NewAttachment {
+  file?: File;
   id?: string;
-  type: 'Image' | 'Video' | 'Audio';
-  uri: string;
   mimeType: string;
   previewUri: string;
-  file?: File;
+  type: 'Audio' | 'Image' | 'Video';
+  uri?: string;
 }
 
-export type ButtonType = 'redirect' | 'submit';
+export type ButtonType = 'link' | 'mint' | 'post_redirect' | 'post';
 
 export interface Portal {
   buttons: {
+    action: ButtonType;
     button: string;
-    type: ButtonType;
+    target?: string;
   }[];
   image: string;
+  portalUrl: string;
   postUrl: string;
   version: string;
 }
@@ -92,11 +94,13 @@ export interface MessageDescriptor {
 }
 
 export interface OptimisticTransaction {
-  type: OptmisticPublicationType;
-  content: string;
+  collectOn?: string;
   commentOn?: string;
+  content?: string;
+  mirrorOn?: string;
   txHash?: string;
   txId?: string;
+  type: OptmisticPublicationType;
 }
 
 export interface MarkupLinkProps {

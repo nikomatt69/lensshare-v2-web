@@ -14,9 +14,9 @@ import getPortal from './meta/getPortal';
 import getNft from './meta/getNft';
 
 
-const getMetadata = async (url: string): Promise<any> => {
+const getMetadata = async (url: string): Promise<OG> => {
   const { html } = await fetch(url, {
-    headers: { 'User-Agent': 'Twitterbot' }
+    headers: { 'User-Agent': 'MyCrumbs' }
   }).then(async (res) => ({
     html: await res.text()
   }));

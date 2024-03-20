@@ -1,9 +1,6 @@
 import type { Document } from 'linkedom';
 
-const getTitle = (document: Document): string | null => {
-  const lens =
-    document.querySelector('meta[name="lens:title"]') ||
-    document.querySelector('meta[property="lens:title"]');
+const getTitle = (document: Document): null | string => {
   const og =
     document.querySelector('meta[name="og:title"]') ||
     document.querySelector('meta[property="og:title"]');
@@ -11,11 +8,11 @@ const getTitle = (document: Document): string | null => {
     document.querySelector('meta[name="twitter:title"]') ||
     document.querySelector('meta[property="twitter:title"]');
 
-  if (lens) {
-    return lens.getAttribute('content');
-  } else if (og) {
+  if (og) {
     return og.getAttribute('content');
-  } else if (twitter) {
+  }
+
+  if (twitter) {
     return twitter.getAttribute('content');
   }
 
