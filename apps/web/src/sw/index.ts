@@ -39,6 +39,16 @@ self.addEventListener('message', (event) => {
   }
 });
 
+self.addEventListener('push', (event) => {
+  event.waitUntil(
+    self.registration.showNotification('MyCrumbs', {
+      body: 'New Notification',
+      icon: 'public/icon.png',
+    }) // Removed the semicolon here
+  );
+});
+
+
 self.addEventListener('activate', (event) => event.waitUntil(handleActivate()));
 
 export {};

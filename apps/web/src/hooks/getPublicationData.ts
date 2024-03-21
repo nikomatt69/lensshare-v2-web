@@ -66,11 +66,11 @@ export const getPublicationData = (
         },
         attachments: getAttachmentsData(metadata.attachments)
       };
-    case 'MintMetadataV3':
-      return {
-        content: metadata.content,
-        attachments: getAttachmentsData(metadata.attachments)
-      };
+      case 'MintMetadataV3':
+        return {
+          attachments: getAttachmentsData(metadata.attachments),
+          content: metadata.content
+        };
     case 'EmbedMetadataV3':
       return {
         content: metadata.content,

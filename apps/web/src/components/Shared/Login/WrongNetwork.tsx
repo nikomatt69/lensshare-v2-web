@@ -3,6 +3,8 @@ import { CHAIN_ID } from 'src/constants';
 import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
 
 import SwitchNetwork from '../SwitchNetwork';
+import { CHAIN } from '@lib/costantChain';
+import { POLYGON_CHAIN_ID } from '@lensshare/data/constants';
 
 const WrongNetwork: FC = () => {
   const setShowWrongNetworkModal = useGlobalModalStateStore(
@@ -18,7 +20,7 @@ const WrongNetwork: FC = () => {
         </div>
       </div>
       <SwitchNetwork
-        toChainId={CHAIN_ID}
+        toChainId={POLYGON_CHAIN_ID}
         onSwitch={() => setShowWrongNetworkModal(false)}
       />
     </div>

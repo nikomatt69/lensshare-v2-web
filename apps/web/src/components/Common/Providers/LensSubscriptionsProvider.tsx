@@ -1,4 +1,4 @@
-import { type Notification } from '@lensshare/lens';
+import type { Notification }  from '@lensshare/lens';
 import {
   useAuthorizationRecordRevokedSubscriptionSubscription,
   useNewNotificationSubscriptionSubscription,
@@ -30,14 +30,14 @@ const LensSubscriptionsProvider: FC = () => {
     (state) => state.setLensPublicActProxyOnchainSigNonce
   );
   const { address } = useAccount();
-  const { id: sessionProfileId } = getCurrentSession();
+  const { authorizationId, id: sessionProfileId } = getCurrentSession();
   const canUseSubscriptions = Boolean(sessionProfileId) && address;
 
   // Begin: New Notification
   const { data: newNotificationData } =
     useNewNotificationSubscriptionSubscription({
-      variables: { for: sessionProfileId },
-      skip: !canUseSubscriptions
+      skip: !canUseSubscriptions || isAddress(sessionProfileId),
+      variables: { for: sessionProfileId }
     });
 
   useUpdateEffect(() => {
@@ -75,7 +75,7 @@ const LensSubscriptionsProvider: FC = () => {
   const { data: authorizationRecordRevokedData } =
     useAuthorizationRecordRevokedSubscriptionSubscription({
       skip: !canUseSubscriptions,
-      variables: { authorizationId: sessionProfileId  }
+      variables: { authorizationId }
     });
 
   useUpdateEffect(() => {

@@ -6,10 +6,8 @@ import { Button, Card, Tooltip } from '@lensshare/ui';
 
 import MintedBy from './MintedBy';
 import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';
-import { Leafwatch } from '@lib/leafwatch';
 import Link from 'next/link';
 import getNftChainInfo from '@lensshare/lib/getNftChainInfo';
-import { PUBLICATION } from '@lensshare/data/tracking';
 
 // TODO: change copy
 interface NftProps {
@@ -48,8 +46,6 @@ const Nft: FC<NftProps> = ({ nft, publicationId }) => {
           <Button
             className="text-sm"
             icon={<CursorArrowRaysIcon className="h-4 w-4" />}
-            
-            
             size="md"
           >
             Mint
