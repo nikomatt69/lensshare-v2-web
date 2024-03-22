@@ -158,23 +158,16 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
           </div>
         </div>
         <div className="flex w-5/12 flex-col items-end space-y-1">
-          <Select
+        <Select
             defaultValue={DEFAULT_COLLECT_TOKEN}
             onChange={(e) => {
-              const selectedToken = allowedTokens?.currencies.items.find(
-                (currencies) => currencies?.contract.address === e.target.value
+              setTip({ ...tip, currency: e.target.value });
+              setSelectedCurrency(
+                allowedTokens?.currencies.items.find(
+                  (currencies) =>
+                    currencies?.contract.address === e.target.value
+                ) as unknown as AllowedToken
               );
-              if (selectedToken) {
-                setSelectedCurrency({
-                  ...selectedToken,
-                  contractAddress: selectedToken.contract.address,
-                  // Assumi che `id` possa essere derivato in qualche modo o impostato se necessario
-                  id:
-                    selectedToken.__typename +
-                    '_' +
-                    selectedToken.contract.address // Esempio di generazione di un id
-                } as AllowedToken);
-              }
             }}
             options={allowedTokens?.currencies.items.map((token) => ({
               label: token.name,

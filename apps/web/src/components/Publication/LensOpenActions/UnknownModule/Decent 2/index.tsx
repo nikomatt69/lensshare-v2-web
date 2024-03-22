@@ -173,7 +173,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
             src={nft.mediaUrl}
           />
         </div>
-        {actionData && nft ? (
+        {!!actionData && nft ? (
           <div className="flex items-center justify-between border-t p-4 dark:border-gray-700">
             <div className="flex items-center space-x-2">
               {nft.chain ? (

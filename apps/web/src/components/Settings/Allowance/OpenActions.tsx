@@ -68,22 +68,18 @@ const OpenActions: FC = () => {
                 (currencies) => currencies?.contract.address === e.target.value
               );
               if (selectedToken) {
-                setSelectedCurrency({
-                  ...selectedToken,
-                  contractAddress: selectedToken.contract.address,
-                  // Assumi che `id` possa essere derivato in qualche modo o impostato se necessario
-                  id:
-                    selectedToken.__typename +
-                    '_' +
-                    selectedToken.contract.address // Esempio di generazione di un id
-                } as AllowedToken);
-              }
-            }}
-            options={allowedTokens?.currencies.items.map((token) => ({
-              label: token.name,
-              value: token.contract.address
-            }))}
-          />
+                setSelectedCurrency(
+                  allowedTokens?.currencies.items.find(
+                    (currencies) =>
+                      currencies?.contract.address === e.target.value
+                  ) as unknown as AllowedToken
+                );
+              }}}
+              options={allowedTokens?.currencies.items.map((token) => ({
+                label: token.name,
+                value: token.contract.address
+              }))}
+            />
       {loading|| currencyLoading ? (
         <div className="py-5">
           <Loader />

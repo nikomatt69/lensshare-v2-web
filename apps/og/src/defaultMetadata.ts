@@ -1,11 +1,11 @@
-import { APP_NAME, DEFAULT_OG, DESCRIPTION } from '@lensshare/data/constants';
+import { APP_NAME, DEFAULT_OG, DESCRIPTION, IMAGE_OG } from '@lensshare/data/constants';
 import type { Metadata } from 'next';
 
 const defaultMetadata: Metadata = {
   description: DESCRIPTION,
   metadataBase: new URL(`https://mycrumbs.xyz`),
   openGraph: {
-    images: [DEFAULT_OG],
+    images: [IMAGE_OG],
     siteName: 'MyCrumbs',
     type: 'website'
   },

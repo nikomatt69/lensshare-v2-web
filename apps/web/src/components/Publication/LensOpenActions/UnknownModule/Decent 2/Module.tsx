@@ -80,7 +80,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
 
   const { actOnUnknownOpenAction, isLoading, relayStatus, txHash } =
     useActOnUnknownOpenAction({
-      signlessApproved: module.signlessApproved,
+      signlessApproved: true,
       successToast: 'Initiated cross-chain NFT mint'
     });
 
@@ -350,7 +350,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
                   asset: {
                     contract: {
                       address: selectedCurrency.contractAddress,
-                      chainId: CHAIN_ID
+                      chainId: CHAIN.id
                     },
                     decimals: selectedCurrency.decimals,
                     name: selectedCurrency.name,

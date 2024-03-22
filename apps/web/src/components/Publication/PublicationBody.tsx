@@ -68,8 +68,8 @@ const PublicationBody: FC<PublicationBodyProps> = ({
     return <NotSupportedPublication type={metadata?.__typename} />;
   }
 
-  const showNft = metadata.__typename === 'MintMetadataV3';
-  const showEmbed = metadata.__typename === 'EmbedMetadataV3';
+  const showNft = metadata?.__typename === 'MintMetadataV3';
+  const showEmbed = metadata?.__typename === 'EmbedMetadataV3';
   // Show live if it's there
   const showLive = metadata?.__typename === 'LiveStreamMetadataV3';
   // Show attachments if it's there
@@ -83,10 +83,8 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   const showOembed =
     !showSharingLink &&
     hasURLs &&
-    !showNft &&
     !showLive &&
     !showSnapshot &&
-    !showEmbed &&
     !showAttachments &&
     !quoted;
 
@@ -120,7 +118,7 @@ const PublicationBody: FC<PublicationBodyProps> = ({
           ) : null}
           {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
          {showNft ? (
-            <Nft url={metadata.mintLink} publication={publication.id} />
+            <Nft url={metadata.mintLink} publication={publication} />
           ) : null}
           {showLive ? (
             <div className="mt-3">

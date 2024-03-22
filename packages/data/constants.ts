@@ -310,6 +310,7 @@ export const LIT_PROTOCOL_ENV = IS_MAINNET ? 'polygon' : 'polygon';
 export const GIPHY_TOKEN = 'mztAE0vdQdlfCYsM11E6UaPjUmjpYDHV';
 
 export const DEFAULT_OG = `${STATIC_ASSETS_URL}/images/icon.png`;
+export const IMAGE_OG = `public/images/icon.png`;
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const MESSAGE_PAGE_LIMIT = 35;
 export const SCROLL_THRESHOLD = 0.1;

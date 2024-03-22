@@ -126,7 +126,15 @@ const DecentAction: FC<DecentActionProps> = ({
     );
   }
 
-  
+  if (true) {
+    return (
+      <Button className={className} onClick={act}>
+        <div>
+          {`Mint for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
+        </div>
+      </Button>
+    );
+  }
 
   return (
     <>

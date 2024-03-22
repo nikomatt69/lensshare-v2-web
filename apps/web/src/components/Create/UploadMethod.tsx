@@ -16,7 +16,7 @@ const UploadMethod = () => {
   const isUnderFreeLimit = canUploadedToIpfs(uploadedMedia.file?.size)
 
   useEffect(() => {
-    if (!isUnderFreeLimit) {
+    if (isUnderFreeLimit) {
       setUploadedMedia({ isUploadToIpfs: false })
     }
   }, [isUnderFreeLimit, setUploadedMedia])
