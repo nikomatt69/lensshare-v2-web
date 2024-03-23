@@ -53,7 +53,6 @@ const Oembed: FC<OembedProps> = ({
     image: data?.image,
     isLarge: data?.isLarge,
     nft: data?.nft,
-    dnft:data?.dnft,
     portal: data?.portal,
     site: data?.site,
     title: data?.title,

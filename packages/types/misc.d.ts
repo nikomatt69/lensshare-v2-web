@@ -75,7 +75,6 @@ export interface OG {
   lastIndexedAt?: string;
   portal: null | Portal;
   nft: Nft | null;
-  dnft: DNft | null;
   site: null | string;
   title: null | string;
   url: string;

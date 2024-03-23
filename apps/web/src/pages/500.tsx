@@ -2,7 +2,7 @@ import MetaTags from '@components/Common/MetaTags';
 import { HomeIcon } from '@heroicons/react/24/outline';
 import { APP_NAME } from '@lensshare/data/constants';
 import { Button } from '@lensshare/ui';
-import heyFont from '@lib/heyFont';
+import {heyFont} from '@lib/heyFont';
 import Link from 'next/link';
 import type { FC } from 'react';
 

@@ -627,10 +627,9 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         openActionEmbed={!!openActionEmbed}
         openActionEmbedLoading={openActionEmbedLoading}
       />
-      <NewAttachments attachments={attachments} />
       <div className="divider mx-5" />
-      <div className="block items-center px-5 sm:flex">
-        <div className="flex items-center space-x-4">
+      <div className="mx-5 my-3 block items-center sm:flex">
+        <div className="mx-1.5 flex items-center space-x-4">
           <Attachment />
           <EmojiPicker
             emojiClassName="text-brand"
@@ -663,7 +662,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           <PollSettings />
           {!isComment && <LivestreamSettings />}
           </div>
-        <div className="ml-auto mt-2 sm:mt-0">
+          <div className="ml-auto pt-2 sm:pt-0">
           <Button
             disabled={
               isLoading ||
@@ -685,6 +684,9 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
             {isComment ? 'Comment' : 'Post'}
           </Button>
         </div>
+      </div>
+      <div className="px-5 py-2">
+        <NewAttachments attachments={attachments} />
       </div>
       <Discard onDiscard={onDiscardClick} />
     </Card>
