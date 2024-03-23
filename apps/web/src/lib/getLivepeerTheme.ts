@@ -1,7 +1,8 @@
 import { BRAND_COLOR } from '@lensshare/data/constants';
 import type { ThemeConfig } from '@livepeer/react';
+import { heyFont } from './heyFont';
 
-import heyFont from './heyFont';
+
 
 const getLivepeerTheme: ThemeConfig = {
   colors: {

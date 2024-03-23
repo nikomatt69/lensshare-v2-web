@@ -1,9 +1,10 @@
 import '../styles.css';
 import Providers from '@components/Common/Providers';
-import heyFont from '@lib/heyFont';
+
 import type { AppProps } from 'next/app';
 import { Suspense } from 'react';
 import Loading from '@components/Shared/Loading';
+import { heyFont } from '@lib/heyFont';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (

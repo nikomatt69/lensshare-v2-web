@@ -14,7 +14,7 @@ import cn from '@lensshare/ui/cn';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { memo } from 'react';
-
+import getProfileTheme from '@lib/getProfileTheme';
 
 import getPublicationAttribute from '@lensshare/lib/getPublicationAttribute';
 import { isIOS, isMobile } from 'react-device-detect';
@@ -26,6 +26,8 @@ import { CardBody, CardContainer } from '@lensshare/ui/src/3DCard';
 import Embed from './HeyOpenActions/Embed';
 import Nft from './HeyOpenActions/Nft';
 import OpenActionOnBody from './LensOpenActions/OnBody';
+import { useProfileThemeStore } from '@components/Profile';
+import { useRouter } from 'next/router';
 interface PublicationBodyProps {
   contentClassName?: string;
   publication: AnyPublication;
@@ -39,6 +41,9 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   quoted = false,
   showMore = false
 }) => {
+
+  const { pathname } = useRouter();
+  const { profileTheme } = useProfileThemeStore();
   const targetPublication = isMirrorPublication(publication)
     ? publication.mirrorOn
     : publication;
@@ -60,6 +65,9 @@ const PublicationBody: FC<PublicationBodyProps> = ({
       content = truncatedContent;
     }
   }
+  const theme =
+  pathname === '/u/[handle]' ? getProfileTheme(profileTheme) : null;
+
 
   if (targetPublication.isEncrypted) {
     return <EncryptedPublication publication={targetPublication} />;
@@ -69,7 +77,6 @@ const PublicationBody: FC<PublicationBodyProps> = ({
     return <NotSupportedPublication type={metadata?.__typename} />;
   }
 
-  const showNft = metadata?.__typename === 'MintMetadataV3';
   const showEmbed = metadata?.__typename === 'EmbedMetadataV3';
   // Show live if it's there
   const showLive = metadata?.__typename === 'LiveStreamMetadataV3';
@@ -90,7 +97,7 @@ const PublicationBody: FC<PublicationBodyProps> = ({
     !quoted;
 
   return (
-    <div className="break-words">
+    <div className={cn('break-words', theme?.publicationFont)}>
       <Markup
         className={cn(
           { 'line-clamp-5': canShowMore },
@@ -119,9 +126,6 @@ const PublicationBody: FC<PublicationBodyProps> = ({
             />
           ) : null}
           {showSnapshot ? <Snapshot proposalId={snapshotProposalId} /> : null}
-         {showNft ? (
-            <Nft url={metadata.mintLink} publication={publication} />
-          ) : null}
           {showLive ? (
             <div className="mt-3">
               <Video src={metadata.liveURL || metadata.playbackURL} />

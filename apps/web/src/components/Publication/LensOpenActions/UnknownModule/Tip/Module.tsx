@@ -78,7 +78,7 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
   );
 
   const { actOnUnknownOpenAction, isLoading } = useActOnUnknownOpenAction({
-    signlessApproved: module.signlessApproved,
+    signlessApproved: true,
     successToast: "You've sent a tip!"
   });
 

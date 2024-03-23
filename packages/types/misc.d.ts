@@ -31,6 +31,13 @@ export interface Portal {
 export interface Nft {
   chain: null | string;
   collectionName: string;
+  creatorAddress: `0x${string}` | null;
+  mediaUrl: string;
+  sourceUrl: string;
+}
+export interface DNft {
+  chain: null | string;
+  collectionName: string;
   contractAddress: `0x${string}`;
   creatorAddress: `0x${string}`;
   description: string;
@@ -68,6 +75,7 @@ export interface OG {
   lastIndexedAt?: string;
   portal: null | Portal;
   nft: Nft | null;
+  dnft: DNft | null;
   site: null | string;
   title: null | string;
   url: string;

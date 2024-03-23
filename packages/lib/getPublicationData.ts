@@ -18,19 +18,19 @@ const getPublicationData = (
   }[];
   content?: string;
 } | null => {
-  const showTitle = ALLOWED_APP_FOR_TITLE.includes(metadata.appId);
+  const showTitle = ALLOWED_APP_FOR_TITLE.includes(metadata?.appId);
   const willHaveTitle =
-    metadata.__typename === 'ArticleMetadataV3' ||
-    metadata.__typename === 'ImageMetadataV3' ||
-    metadata.__typename === 'AudioMetadataV3' ||
-    metadata.__typename === 'VideoMetadataV3' ||
-    metadata.__typename === 'LiveStreamMetadataV3';
+    metadata?.__typename === 'ArticleMetadataV3' ||
+    metadata?.__typename === 'ImageMetadataV3' ||
+    metadata?.__typename === 'AudioMetadataV3' ||
+    metadata?.__typename === 'VideoMetadataV3' ||
+    metadata?.__typename === 'LiveStreamMetadataV3';
   const canShowTitle = showTitle && willHaveTitle;
   const content = canShowTitle
     ? `${metadata.title}\n\n${metadata.content}`
-    : metadata.content;
+    : metadata?.content;
 
-  switch (metadata.__typename) {
+  switch (metadata?.__typename) {
     case 'ArticleMetadataV3':
       return {
         attachments: getAttachmentsData(metadata.attachments),
@@ -58,6 +58,7 @@ const getPublicationData = (
             metadata.asset.cover?.optimized?.uri ||
             audioAttachments?.coverUri ||
             PLACEHOLDER_IMAGE,
+        
           title: metadata.title,
           type: 'Audio',
           uri: metadata.asset.audio.optimized?.uri || audioAttachments?.uri
@@ -74,6 +75,7 @@ const getPublicationData = (
             metadata.asset.cover?.optimized?.uri ||
             videoAttachments?.coverUri ||
             PLACEHOLDER_IMAGE,
+      
           type: 'Video',
           uri: metadata.asset.video.optimized?.uri || videoAttachments?.uri
         },
@@ -85,6 +87,11 @@ const getPublicationData = (
         attachments: getAttachmentsData(metadata.attachments),
         content: metadata.content
       };
+    case 'EmbedMetadataV3':
+      return {
+        content: removeUrlsByHostnames(metadata.content, knownEmbedHostnames),
+        attachments: getAttachmentsData(metadata.attachments)
+    };
     case 'LiveStreamMetadataV3':
       return {
         attachments: getAttachmentsData(metadata.attachments),

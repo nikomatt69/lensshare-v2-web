@@ -28,6 +28,27 @@ import FollowDialog from './FollowDialog';
 import ProfilePageShimmer from './Shimmer';
 import StoriesRender from '@components/Composer/Stories (1)';
 import ProfileBytes from './ProfileBytes';
+import { createTrackedSelector } from 'react-tracked';
+import { create } from 'zustand';
+import getProfileTheme from '@lib/getProfileTheme';
+
+export interface ProfileTheme {
+  backgroundColour: string;
+  bioFont: string;
+  publicationFont: string;
+}
+
+interface State {
+  profileTheme: null | ProfileTheme;
+  setProfileTheme: (profileTheme: ProfileTheme) => void;
+}
+
+const store = create<State>((set) => ({
+  profileTheme: null,
+  setProfileTheme: (profileTheme) => set(() => ({ profileTheme }))
+}));
+
+export const useProfileThemeStore = createTrackedSelector(store);
 
 const ViewProfile: NextPage = (publication) => {
   const {
@@ -35,6 +56,9 @@ const ViewProfile: NextPage = (publication) => {
     isReady
   } = useRouter();
   const currentProfile = useAppStore((state) => state.currentProfile);
+  const { profileTheme, setProfileTheme } = useProfileThemeStore();
+
+
   const lowerCaseProfileFeedType = [
     ProfileFeedType.Feed.toLowerCase(),
     ProfileFeedType.Replies.toLowerCase(),
@@ -56,6 +80,15 @@ const ViewProfile: NextPage = (publication) => {
         ...(id
           ? { forProfileId: id }
           : { forHandle: `${HANDLE_PREFIX}${handle}` })
+      }
+    },
+    onCompleted: (data) => {
+      if (data.profile?.id === '0x0d') {
+        setProfileTheme({
+          backgroundColour: '#f3ecea',
+          bioFont: 'audiowide',
+          publicationFont: 'audiowide'
+        });
       }
     },
     skip: id ? !id : !handle
@@ -105,8 +138,10 @@ const ViewProfile: NextPage = (publication) => {
     return <Custom500 />;
   }
 
+  const theme = getProfileTheme(profileTheme);
+
   return (
-    <>
+    <span style={{ backgroundColor: theme?.backgroundColour }}>
       <Modal show={showFollowModal} onClose={() => setShowFollowModal(false)}>
         <FollowDialog
           profile={profile as Profile}
@@ -158,7 +193,7 @@ const ViewProfile: NextPage = (publication) => {
           )}
         </GridItemEight>
       </GridLayout>
-    </>
+    </span>
   );
 };
 

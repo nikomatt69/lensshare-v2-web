@@ -11,7 +11,7 @@ import {
 } from 'next/font/google';
 import localFont from 'next/font/local';
 
-export const heyFont = localFont({
+const heyFont = localFont({
   src: [
     {
       path: '../../public/fonts/helvetica-rounded-bold-5871d05ead8de.ttf',

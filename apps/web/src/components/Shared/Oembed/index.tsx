@@ -13,7 +13,7 @@ import Portal from './Portal';
 
 import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
-import DecentOpenAction from '@components/Publication/LensOpenActions/UnknownModule/Decent 2';
+
 
 interface OembedProps {
   className?: string;
@@ -53,6 +53,7 @@ const Oembed: FC<OembedProps> = ({
     image: data?.image,
     isLarge: data?.isLarge,
     nft: data?.nft,
+    dnft:data?.dnft,
     portal: data?.portal,
     site: data?.site,
     title: data?.title,
@@ -81,14 +82,7 @@ const Oembed: FC<OembedProps> = ({
 
   return (
     <div className={className}>
-      {embedDecentOpenAction && !!publication ? (
-        <DecentOpenAction
-          og={og}
-          openActionEmbed={!!openActionEmbed}
-          openActionEmbedLoading={!!openActionEmbedLoading}
-          publication={publication}
-        />
-      ) : og.html ? (
+      {og.html ? (
         <Player og={og} />
       ) : og.nft ? (
         <Nft nft={og.nft} publicationId={publication?.id} />

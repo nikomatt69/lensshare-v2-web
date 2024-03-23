@@ -96,6 +96,7 @@
     "react-native-reanimated": "^3.6.1",
     "react-native-reanimated-swc-plugin": "^0.3.0",
     "react-native-web": "^0.19.10",
+    "react-tracked": "^1.7.14",
     "react-use": "^17.4.3",
     "react-use-websocket": "^4.5.0",
     "react-virtuoso": "^4.6.2",
