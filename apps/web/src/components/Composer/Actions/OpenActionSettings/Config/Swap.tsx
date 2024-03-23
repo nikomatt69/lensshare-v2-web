@@ -8,12 +8,14 @@ import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-m
 import { Input } from '@lensshare/ui';
 import { useEffect } from 'react';
 import { createTrackedSelector } from 'react-tracked';
-import { useOpenActionStore } from 'src/store/non-persisted/publication/useOpenActionStore';
+
 import { useProfileStore } from 'src/store/persisted/useProfileStore';
 import { encodeAbiParameters } from 'viem';
 import { create } from 'zustand';
 
 import SaveOrCancel from '../SaveOrCancel';
+import { useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
+import { useAppStore } from 'src/store/useAppStore';
 
 interface State {
   enabled: boolean;
@@ -43,7 +45,7 @@ const store = create<State>((set) => ({
 export const useSwapActionStore = createTrackedSelector(store);
 
 const SwapConfig: FC = () => {
-  const { currentProfile } = useProfileStore();
+  const { currentProfile } = useAppStore();
   const { openAction, setOpenAction, setShowModal } = useOpenActionStore();
   const {
     enabled,
