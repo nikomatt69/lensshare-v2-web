@@ -10,13 +10,12 @@ import type { FC } from 'react';
 import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
 import { usePublicationStore } from 'src/store/usePublicationStore';
 
-import Login from './Login';
-import WrongNetwork from './Login/WrongNetwork';
 import Invites from './Modal/Invites';
 import ReportProfile from './Modal/ReportProfile';
 import SwitchProfiles from './SwitchProfiles';
 import { useSignupStore } from './Auth/Signup';
 import Auth from './Auth';
+import WrongNetwork from './Auth/WrongNetwork';
 
 const GlobalModals: FC = () => {
   // Report modal state
@@ -37,8 +36,7 @@ const GlobalModals: FC = () => {
     showReportProfileModal,
     reportingProfile,
     setShowReportProfileModal,
-    setShowDiscardModal,
-
+    setShowDiscardModal
   } = useGlobalModalStateStore();
 
   const {

@@ -34,11 +34,11 @@ import type { ActionData } from 'nft-openaction-kit';
 import type { Nft } from '@lensshare/types/misc';
 import getRedstonePrice from '@lib/getRedstonePrice';
 import StepperApprovals from './Stepper Approvals';
-import { CHAIN } from '@lib/costantChain';
 import DecentAction from './DecentAction';
-import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import { CHAIN_ID } from 'src/constants';
 import getCurrentSession from '@lib/getCurrentSession';
+import { CHAIN } from '@lib/costantChain';
+
 const TOOLTIP_PRICE_HELP =
   'You don’t have enough native Zora ETH so we switched you to the next token with the lowest gas that you have enough of (lol)';
 interface DecentOpenActionModuleProps {
@@ -80,7 +80,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
 
   const { actOnUnknownOpenAction, isLoading, relayStatus, txHash } =
     useActOnUnknownOpenAction({
-      signlessApproved: true,
+      signlessApproved: module.signlessApproved,
       successToast: 'Initiated cross-chain NFT mint'
     });
 
@@ -160,7 +160,6 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
         }
       }
     });
-
   return (
     <Modal
       icon={
@@ -187,6 +186,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
           : 'Mint NFT'
       }
     >
+      {' '}
       {showCurrencySelector ? (
         <CurrencySelector
           onSelectCurrency={(currency) => {
@@ -217,7 +217,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
               <h2 className="text-xl">{actionData?.uiData.nftName}</h2>
               {creatorProfileData ? (
                 <p className="text-black/50">
-                  by
+                  by{' '}
                   {
                     getProfile(creatorProfileData?.defaultProfile as Profile)
                       .slug
@@ -350,6 +350,7 @@ const DecentOpenActionModule: FC<DecentOpenActionModuleProps> = ({
                   asset: {
                     contract: {
                       address: selectedCurrency.contractAddress,
+                      // eslint-disable-next-line react-hooks/rules-of-hooks
                       chainId: CHAIN.id
                     },
                     decimals: selectedCurrency.decimals,

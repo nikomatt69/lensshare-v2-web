@@ -1,4 +1,3 @@
-import WalletSelector from '@components/Shared/Login/WalletSelector';
 import SwitchNetwork from '@components/Shared/SwitchNetwork';
 import {
   CurrencyDollarIcon,
@@ -28,6 +27,7 @@ import {
 } from 'wagmi';
 
 import { useZoraMintStore } from '.';
+import WalletSelector from '@components/Shared/Auth/WalletSelector';
 
 const NO_BALANCE_ERROR = 'exceeds the balance of the account';
 const MAX_MINT_EXCEEDED_ERROR = 'Purchase_TooManyForAddress';
@@ -104,7 +104,6 @@ const MintAction: FC<MintActionProps> = ({
   useUpdateEffect(() => {
     if (txnData?.transactionHash) {
       onCompleted?.();
-      
     }
   }, [isSuccess]);
 

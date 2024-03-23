@@ -12,6 +12,7 @@ import { Errors } from '@lensshare/data/errors';
 import { PUBLICATION } from '@lensshare/data/tracking';
 import type {
   AnyPublication,
+  MirrorablePublication,
   MomokaCommentRequest,
   MomokaPostRequest,
   MomokaQuoteRequest,
@@ -62,7 +63,7 @@ import Discard from './Post/Discard';
 import LinkPreviews from './LinkPreviews';
 import getURLs from '@lensshare/lib/getURLs';
 import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
-import Shimmer from '@components/Nft/Shimmer';
+
 import { useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
 const Attachment = dynamic(
   () => import('@components/Composer/Actions/Attachment'),
@@ -103,13 +104,13 @@ const NEXT_PUBLIC_DECENT_API_KEY = 'fee46c572acecfc76c8cb2a1498181f9';
 const NEXT_PUBLIC_OPENSEA_API_KEY = 'ee7460014fda4f58804f25c29a27df35';
 const NEXT_PUBLIC_RARIBLE_API_KEY = '4ad887e1-fe57-47e9-b078-9c35f37c4c13';
 const nftOpenActionKit = new NftOpenActionKit({
-  decentApiKey: NEXT_PUBLIC_DECENT_API_KEY,
-  openSeaApiKey: NEXT_PUBLIC_OPENSEA_API_KEY,
-  raribleApiKey: NEXT_PUBLIC_RARIBLE_API_KEY
+  decentApiKey: NEXT_PUBLIC_DECENT_API_KEY || '',
+  openSeaApiKey: NEXT_PUBLIC_OPENSEA_API_KEY || '',
+  raribleApiKey: NEXT_PUBLIC_RARIBLE_API_KEY || ''
 });
 
 interface NewPublicationProps {
-  publication: AnyPublication;
+  publication: MirrorablePublication;
 }
 
 const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
@@ -118,10 +119,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   const [openActionEmbedLoading, setOpenActionEmbedLoading] =
     useState<boolean>(false);
   const [openActionEmbed, setOpenActionEmbed] = useState<any | undefined>();
-  const targetPublication = isMirrorPublication(publication)
-    ? publication?.mirrorOn
-    : publication;
-
+  
   // Modal store
   const setShowNewPostModal = useGlobalModalStateStore(
     (state) => state.setShowNewPostModal
@@ -275,7 +273,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       publication_has_poll: showPollEditor,
       publication_open_action: openAction?.address,
       publication_is_live: showLiveVideoEditor,
-      comment_on: isComment ? targetPublication.id : null,
+      comment_on: isComment ? publication.id : null,
       quote_on: isQuote ? quotedPublication?.id : null
     };
     Leafwatch.track(
@@ -305,7 +303,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   } = useCreatePublication({
     onCompleted,
     onError,
-    commentOn: targetPublication,
+    commentOn: publication,
     quoteOn: quotedPublication!
   });
 
@@ -313,18 +311,50 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     setPublicationContentError('');
   }, [audioPublication]);
 
-  useEffectOnce(() => {
+  useEffect(() => {
+    const fetchOpenActionEmbed = async () => {
+      setOpenActionEmbedLoading(true);
+      const publicationContentUrls = getURLs(publicationContent);
+
+      try {
+        const calldata = await nftOpenActionKit.detectAndReturnCalldata(
+          publicationContentUrls[0]
+        );
+        if (calldata) {
+          setOpenActionEmbed({
+            unknownOpenAction: {
+              address: VerifiedOpenActionModules.DecentNFT,
+              data: calldata
+            }
+          });
+        } else {
+          setOpenActionEmbed(undefined);
+        }
+      } catch (error_) {
+        setOpenActionEmbed(undefined);
+        setOpenActionEmbedLoading(false);
+      }
+      setOpenActionEmbedLoading(false);
+    };
+
+    fetchOpenActionEmbed();
+  }, [publicationContent]);
+
+  useEffect(() => {
     editor.update(() => {
       $convertFromMarkdownString(publicationContent);
     });
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const getAnimationUrl = () => {
+    const fallback =
+      'ipfs://bafkreiaoua5s4iyg4gkfjzl6mzgenw4qw7mwgxj7zf7ev7gga72o5d3lf4';
     if (attachments.length > 0 || hasAudio || hasVideo) {
-      return attachments[0]?.uri;
+      return attachments[0]?.uri || fallback;
     }
-
-    return null;
+    return fallback;
   };
 
   const getTitlePrefix = () => {
@@ -370,14 +400,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       }
 
       setPublicationContentError('');
-      let textNftImageUrl;
-      if (!attachments.length && !useMomoka) {
-        textNftImageUrl = await getTextNftUrl(
-          publicationContent,
-          getProfile(currentProfile).slug,
-          new Date().toLocaleString()
-        );
-      }
+      
 
       let processedPublicationContent =
         publicationContent.length > 0 ? publicationContent : undefined;
@@ -395,7 +418,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         marketplace: {
           name: title,
           description: processedPublicationContent,
-          animation_url: getAnimationUrl() || textNftImageUrl,
+          animation_url: getAnimationUrl(),
           external_url: `https://mycrumbs.xyz${getProfile(currentProfile).link}`
         }
       };
@@ -415,7 +438,6 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           collectOpenAction: collectModuleParams(collectModule, currentProfile)
         });
       }
-
       if (openAction) {
         openActionModules.push({ unknownOpenAction: openAction });
       }
@@ -428,7 +450,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         | MomokaPostRequest
         | MomokaCommentRequest
         | MomokaQuoteRequest = {
-        ...(isComment && { commentOn: targetPublication.id }),
+        ...(isComment && { commentOn: publication.id }),
         ...(isQuote && { quoteOn: quotedPublication?.id }),
         contentURI: `ar://${arweaveId}`
       };
@@ -473,7 +495,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         | OnchainCommentRequest
         | OnchainQuoteRequest = {
         contentURI: `ar://${arweaveId}`,
-        ...(isComment && { commentOn: targetPublication.id }),
+        ...(isComment && { commentOn: publication.id }),
         ...(isQuote && { quoteOn: quotedPublication?.id }),
         openActionModules,
         ...(onlyFollowers && {
@@ -539,10 +561,10 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
 
   const setGifAttachment = (gif: IGif) => {
     const attachment: NewAttachment = {
-      uri: gif.images.original.url,
       mimeType: 'image/gif',
       previewUri: gif.images.original.url,
-      type: 'Image'
+      type: 'Image',
+      uri: gif.images.original.url
     };
     addAttachments([attachment]);
   };
@@ -605,9 +627,10 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         openActionEmbed={!!openActionEmbed}
         openActionEmbedLoading={openActionEmbedLoading}
       />
+      <NewAttachments attachments={attachments} />
       <div className="divider mx-5" />
-      <div className="mx-5 my-3 block items-center sm:flex">
-        <div className="mx-1.5 flex items-center space-x-4">
+      <div className="block items-center px-5 sm:flex">
+        <div className="flex items-center space-x-4">
           <Attachment />
           <EmojiPicker
             emojiClassName="text-brand"
@@ -639,8 +662,8 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           ) : null}
           <PollSettings />
           {!isComment && <LivestreamSettings />}
-        </div>
-        <div className="ml-auto pt-2 sm:pt-0">
+          </div>
+        <div className="ml-auto mt-2 sm:mt-0">
           <Button
             disabled={
               isLoading ||
@@ -662,9 +685,6 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
             {isComment ? 'Comment' : 'Post'}
           </Button>
         </div>
-      </div>
-      <div className="px-5">
-        <NewAttachments attachments={attachments} />
       </div>
       <Discard onDiscard={onDiscardClick} />
     </Card>

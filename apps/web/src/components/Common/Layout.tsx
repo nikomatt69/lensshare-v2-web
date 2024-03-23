@@ -3,7 +3,6 @@ import GlobalBanners from '@components/Shared/GlobalBanners';
 import BottomNavigation from '@components/Shared/Navbar/BottomNavigation';
 import type { Profile } from '@lensshare/lens';
 import { useCurrentProfileQuery } from '@lensshare/lens';
-import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import getToastOptions from '@lib/getToastOptions';
 import Head from 'next/head';
 import { useTheme } from 'next-themes';
@@ -21,7 +20,6 @@ import Navbar from '../Shared/Navbar';
 import { isAddress } from 'viem';
 import { useRoom } from '@huddle01/react/hooks';
 import SpacesWindow from './SpacesWindow/SpacesWindow';
-import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 import { useRouter } from 'next/router';
 import { useDisconnectXmtp } from 'src/hooks/useXmtpClient';
 import { useSpacesStore } from 'src/store/persisted/spaces';
@@ -53,14 +51,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const resetPreferences = usePreferencesStore(
     (state) => state.resetPreferences
   );
-  const { pathname } = useRouter();
+  useRouter();
 
   const setLensHubOnchainSigNonce = useNonceStore(
     (state) => state.setLensHubOnchainSigNonce
-  );
-
-  const resetPushChatStore = usePushChatStore(
-    (state) => state.resetPushChatStore
   );
 
   const isMounted = useIsMounted();
@@ -108,7 +102,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       flex: 1
     }
   });
-  const { showSpacesLobby, showSpacesWindow } = useSpacesStore();
+  useSpacesStore();
   useEffectOnce(() => {
     validateAuthentication();
   });
@@ -127,10 +121,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
 
-        <link
-          rel="manifest"
-          href="https://progressier.app/B5LgRYtk8D553Rd2UvFW/progressier.json"
-        />
+        <link rel="manifest" href="/manifest.json" />
         <script
           defer
           src="https://progressier.app/B5LgRYtk8D553Rd2UvFW/script.js"

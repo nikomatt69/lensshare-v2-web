@@ -2,7 +2,7 @@ import { Errors } from '@lensshare/data/errors';
 import logger from '@lensshare/lib/logger';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import allowCors from 'src/utils//allowCors';
-import { CACHE_AGE, CACHE_AGE_30_DAYS } from 'src/utils/constants';
+import { SWR_CACHE_AGE_1_MIN_30_DAYS } from 'src/utils/constants';
 import getMetadata from 'src/utils/oembed/getMetadata';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { url } = req.query;
@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     logger.info(`Oembed generated for ${url}`);
     return res
       .status(200)
-      .setHeader('Cache-Control', CACHE_AGE_30_DAYS)
+      .setHeader('Cache-Control', SWR_CACHE_AGE_1_MIN_30_DAYS)
       .json({
         oembed: await getMetadata(url as string),
         success: true

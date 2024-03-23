@@ -2,6 +2,7 @@ import type { PublicationMetadata } from '@lensshare/lens';
 import getAttachmentsData from '@lensshare/lib/getAttachmentsData';
 import { getPublicationMediaUrl } from './getPublicationMediaUrl';
 import { getThumbnailUrl } from './getThumbnailUrl';
+import removeUrlsByHostnames from '@lensshare/lib/removeUrlsByHostnames';
 
 export const getPublicationData = (
   metadata: PublicationMetadata
@@ -69,13 +70,11 @@ export const getPublicationData = (
       case 'MintMetadataV3':
         return {
           attachments: getAttachmentsData(metadata.attachments),
-          content: metadata.content
+          content: removeUrlsByHostnames(
+            metadata.content,
+            new Set(['basepaint.art', 'unlonely.app'])
+          )
         };
-    case 'EmbedMetadataV3':
-      return {
-        content: metadata.content,
-        attachments: getAttachmentsData(metadata.attachments)
-      };
     case 'LiveStreamMetadataV3':
       return {
         title: metadata.title,

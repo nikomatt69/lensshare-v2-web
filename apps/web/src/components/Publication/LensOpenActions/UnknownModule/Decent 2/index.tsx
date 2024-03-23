@@ -23,9 +23,8 @@ import DecentOpenActionModule from './Module';
 import DecentOpenActionShimmer from './Decent Open Action Shimmer';
 import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
 import type { AllowedToken } from '@lensshare/types/hey';
-import { CHAIN } from '@lib/costantChain';
-import { CHAIN_ID } from 'src/constants';
-
+import { Leafwatch } from '@lib/leafwatch';
+import { PUBLICATION } from '@lensshare/data/tracking';
 
 const OPEN_ACTION_EMBED_TOOLTIP = 'Open action embedded';
 
@@ -81,9 +80,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
   const module = targetPublication.openActionModules.find(
     (module) => module.contract.address === VerifiedOpenActionModules.DecentNFT
   );
-  const NEXT_PUBLIC_DECENT_API_KEY = 'fee46c572acecfc76c8cb2a1498181f9';
-  const NEXT_PUBLIC_OPENSEA_API_KEY = 'ee7460014fda4f58804f25c29a27df35';
-  const NEXT_PUBLIC_RARIBLE_API_KEY = '4ad887e1-fe57-47e9-b078-9c35f37c4c13';
+
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   const { address } = useAccount();
@@ -111,9 +108,9 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
     () => {
       const actionDataFromPost = async () => {
         const nftOpenActionKit = new NftOpenActionKit({
-          decentApiKey: NEXT_PUBLIC_DECENT_API_KEY,
-          openSeaApiKey: NEXT_PUBLIC_OPENSEA_API_KEY,
-          raribleApiKey: NEXT_PUBLIC_RARIBLE_API_KEY
+          decentApiKey: process.env.NEXT_PUBLIC_DECENT_API_KEY || '',
+          openSeaApiKey: process.env.NEXT_PUBLIC_OPENSEA_API_KEY || '',
+          raribleApiKey: process.env.NEXT_PUBLIC_RARIBLE_API_KEY || ''
         });
 
         const addressParameter = address
@@ -129,7 +126,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
               targetPublication.by.id,
               targetPublication.by.ownedBy.address,
               addressParameter as Address,
-              '137',
+              '137', // srcChainId, only supported on Polygon POS for now
               selectedQuantity !== 1 ? BigInt(selectedQuantity) : 1n,
               selectedCurrency.contractAddress
             );
@@ -183,7 +180,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 >
                   <img
                     alt={getNftChainInfo(nft.chain).name}
-                    className="h-5 w-5"
+                    className="size-5"
                     src={getNftChainInfo(nft.chain).logo}
                   />
                 </Tooltip>
@@ -204,7 +201,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 content={<span>{OPEN_ACTION_EMBED_TOOLTIP}</span>}
                 placement="top"
               >
-                <Button className="text-base font-normal" size="md">
+                <Button className="text-base font-normal" size="lg">
                   Mint
                 </Button>
               </Tooltip>
@@ -213,8 +210,11 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 className="text-base font-normal"
                 onClick={() => {
                   setShowOpenActionModal(true);
+                  Leafwatch.track(PUBLICATION.OPEN_ACTIONS.DECENT.OPEN_DECENT, {
+                    publication_id: publication.id
+                  });
                 }}
-                size="md"
+                size="lg"
               >
                 Mint
               </Button>

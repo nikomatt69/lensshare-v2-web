@@ -1,6 +1,7 @@
 import { Card } from '@lensshare/ui';
 import type { FC } from 'react';
-import WalletSelector from './Login/WalletSelector';
+import WalletSelector from './Auth/WalletSelector';
+
 
 
 

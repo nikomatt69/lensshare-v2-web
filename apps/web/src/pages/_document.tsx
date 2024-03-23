@@ -10,10 +10,7 @@ class LensShareDocument extends Document {
 
           {/* Prefetch and Preconnect */}
           <link rel="preconnect" href="https://static-assets.mycrumbs.xyz" />
-          <link
-            rel="dns-prefetch"
-            href="https://static-assets.mycrumbs.xyz"
-          />
+          <link rel="dns-prefetch" href="https://static-assets.mycrumbs.xyz" />
           <link rel="preconnect" href="https://asset.mycrumbs.xyz" />
           <link rel="dns-prefetch" href="https://asset.mycrumbs.xyz" />
           <link rel="preconnect" href="https://prerender.mycrumbs.xyz" />
@@ -54,10 +51,7 @@ class LensShareDocument extends Document {
 
           {/* PWA config */}
 
-          <link
-            rel="manifest"
-            href="https://progressier.app/B5LgRYtk8D553Rd2UvFW/progressier.json"
-          />
+          <link rel="manifest" href="/manifest.json" />
 
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="mobile-web-app-capable" content="yes" />

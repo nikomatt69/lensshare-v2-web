@@ -54,6 +54,7 @@ const StepperApprovals: FC<StepperApprovalsProps> = ({
     useGenerateModuleCurrencyApprovalDataLazyQuery();
   const handleWrongNetwork = useHandleWrongNetwork();
 
+
   const onError = (error: any) => {
     errorToast(error);
   };
@@ -112,9 +113,7 @@ const StepperApprovals: FC<StepperApprovalsProps> = ({
           }
         }
       });
-      if (handleWrongNetwork()) {
-        return;
-      }
+      await handleWrongNetwork();
 
       return sendTransaction?.({
         account: data?.generateModuleCurrencyApprovalData.from,
@@ -125,7 +124,6 @@ const StepperApprovals: FC<StepperApprovalsProps> = ({
       onError(error);
     }
   };
-
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 p-4">
       <div className="flex w-full items-start justify-between">

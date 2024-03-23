@@ -78,7 +78,7 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
   );
 
   const { actOnUnknownOpenAction, isLoading } = useActOnUnknownOpenAction({
-    signlessApproved: true,
+    signlessApproved: module.signlessApproved,
     successToast: "You've sent a tip!"
   });
 
@@ -158,7 +158,7 @@ const TipOpenActionModule: FC<TipOpenActionModuleProps> = ({
           </div>
         </div>
         <div className="flex w-5/12 flex-col items-end space-y-1">
-        <Select
+          <Select
             defaultValue={DEFAULT_COLLECT_TOKEN}
             onChange={(e) => {
               setTip({ ...tip, currency: e.target.value });

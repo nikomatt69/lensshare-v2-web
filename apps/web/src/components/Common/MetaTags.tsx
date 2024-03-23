@@ -1,4 +1,4 @@
-import { APP_NAME, DEFAULT_OG, DESCRIPTION } from '@lensshare/data/constants';
+import { APP_NAME, DESCRIPTION, IMAGE_OG } from '@lensshare/data/constants';
 import Head from 'next/head';
 import type { FC } from 'react';
 
@@ -21,17 +21,18 @@ const MetaTags: FC<MetaTagsProps> = ({
       />
       <link href="https://mycrumbs.xyz" rel="canonical" />
 
-      <meta property="og:url" content="https://mycrumbs.xyz" />
-      <meta content={APP_NAME} property="og:site_name" />
-      <meta content={title} property="og:title" />
-      <meta content={description} property="og:description" />
-      <meta content={DEFAULT_OG} property="og:image" />
+      <meta property="og:site_name" content={APP_NAME} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={IMAGE_OG} />
+      <meta property="og:image:width" content="400" />
+      <meta property="og:image:height" content="400" />
 
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:site" content={APP_NAME} />
       <meta property="twitter:title" content={title} />
       <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={DEFAULT_OG} />
+      <meta property="twitter:image" content={IMAGE_OG} />
       <meta property="twitter:image:width" content="400" />
       <meta property="twitter:image:height" content="400" />
       <meta property="twitter:creator" content="@lenshareappxyz" />

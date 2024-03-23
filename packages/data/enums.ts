@@ -17,7 +17,8 @@ export const AlgorithmProvider = {
   HEY: 'hey'
 };
 
-
 export enum OpenAction {
-  Tip = 'Tip'
+  Tip = 'Tip',
+  DecentNft = 'DecentNft',
+  Swap = 'Swap'
 }

@@ -1,5 +1,6 @@
 import MetaTags from '@components/Common/MetaTags';
-import Signup from '@components/Shared/Login/New';
+import Signup from '@components/Shared/Auth/Signup';
+
 import NotLoggedIn from '@components/Shared/NotLoggedIn';
 import SettingsHelper from '@components/Shared/SettingsHelper';
 import { APP_NAME } from '@lensshare/data/constants';

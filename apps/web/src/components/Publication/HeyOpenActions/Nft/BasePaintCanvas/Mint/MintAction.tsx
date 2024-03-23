@@ -1,4 +1,4 @@
-import WalletSelector from '@components/Shared/Login/WalletSelector';
+import WalletSelector from '@components/Shared/Auth/WalletSelector';
 import SwitchNetwork from '@components/Shared/SwitchNetwork';
 import {
   CurrencyDollarIcon,
@@ -7,11 +7,9 @@ import {
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { BasePaint } from '@lensshare/abis';
 import { BASEPAINT_CONTRACT } from '@lensshare/data/contracts';
-import { PUBLICATION } from '@lensshare/data/tracking';
 import type { AnyPublication } from '@lensshare/lens';
 import type { BasePaintCanvas } from '@lensshare/types/nft';
 import { Button, Spinner } from '@lensshare/ui';
-import { Leafwatch } from '@lib/leafwatch';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { useUpdateEffect } from 'usehooks-ts';
@@ -26,6 +24,8 @@ import {
 } from 'wagmi';
 
 import { useBasePaintMintStore } from '.';
+import { PUBLICATION } from '@lensshare/data/tracking';
+import { Leafwatch } from '@lib/leafwatch';
 
 const NO_BALANCE_ERROR = 'exceeds the balance of the account';
 
@@ -78,7 +78,12 @@ const MintAction: FC<MintActionProps> = ({
 
   useUpdateEffect(() => {
     if (txnData?.transactionHash) {
-      
+      Leafwatch.track(PUBLICATION.OPEN_ACTIONS.BASEPAINT_NFT.MINT, {
+        nft: nftAddress,
+        price: openEditionPrice * quantity,
+        publication_id: publication,
+        quantity
+      });
     }
   }, [isSuccess]);
 

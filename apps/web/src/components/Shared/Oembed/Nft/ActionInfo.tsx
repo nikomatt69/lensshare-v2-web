@@ -8,7 +8,6 @@ import { useDefaultProfileQuery, useProfileQuery } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import truncateByWords from '@lensshare/lib/truncateByWords';
 import { Image } from '@lensshare/ui';
-
 const defaultCurrency = {
   contractAddress: DEFAULT_COLLECT_TOKEN,
   decimals: 18,
@@ -51,7 +50,7 @@ const ActionInfo: FC<ActionInfoProps> = ({
       <div className="flex flex-col items-start justify-start">
         <Image
           alt={actionData.uiData.platformName}
-          className="h-6 w-6 rounded-full border bg-gray-200 dark:border-gray-700"
+          className="size-6 rounded-full border bg-gray-200 dark:border-gray-700"
           height={24}
           loading="lazy"
           // TODO: manage on platform image onError
@@ -66,7 +65,7 @@ const ActionInfo: FC<ActionInfoProps> = ({
             {truncateByWords(collectionName, 5)}
           </h2>
           <p className="text-black/50">
-            by {getProfile(data?.defaultProfile as Profile).slug}
+            by {getProfile(data.defaultProfile as Profile).slug}
           </p>
         </span>
         <p className="text-black/50">

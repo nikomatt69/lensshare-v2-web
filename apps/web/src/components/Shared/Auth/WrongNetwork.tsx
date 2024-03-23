@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 
 import { CHAIN_ID} from 'src/constants';
-import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
+import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
 
 import SwitchNetwork from '../SwitchNetwork';
 

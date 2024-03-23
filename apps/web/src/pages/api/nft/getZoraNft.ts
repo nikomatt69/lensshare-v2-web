@@ -3,7 +3,7 @@ import getZoraChainIsMainnet from '@lensshare/lib/nft/getZoraChainIsMainnet';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import urlcat from 'urlcat';
 import allowCors from 'src/utils/allowCors';
-import { CACHE_AGE } from 'src/utils/constants';
+import { SWR_CACHE_AGE_10_MINS_30_DAYS } from 'src/utils/constants';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { chain, address, token } = req.query;
@@ -24,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res
       .status(200)
-      .setHeader('Cache-Control', CACHE_AGE)
+      .setHeader('Cache-Control', SWR_CACHE_AGE_10_MINS_30_DAYS)
       .json({ success: true, nft: nft.collection || null });
   } catch (error) {
     throw error;

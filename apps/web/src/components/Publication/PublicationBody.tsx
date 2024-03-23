@@ -25,6 +25,7 @@ import EncryptedPublication from './EncryptedPublication';
 import { CardBody, CardContainer } from '@lensshare/ui/src/3DCard';
 import Embed from './HeyOpenActions/Embed';
 import Nft from './HeyOpenActions/Nft';
+import OpenActionOnBody from './LensOpenActions/OnBody';
 interface PublicationBodyProps {
   contentClassName?: string;
   publication: AnyPublication;
@@ -109,6 +110,7 @@ const PublicationBody: FC<PublicationBodyProps> = ({
       <CardContainer className="w-max-fit">
         <CardBody className="group/card relative   rounded-xl  border-black/[0.1]   dark:border-white/[0.2]  dark:hover:shadow-emerald-500/[0.1]   ">
           {/* Attachments and Quotes */}
+          <OpenActionOnBody publication={targetPublication} />
           {showAttachments ? (
             <Attachments
               publication={publication}

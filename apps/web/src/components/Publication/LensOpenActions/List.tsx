@@ -1,10 +1,6 @@
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
-import { type AnyPublication, OpenActionModuleType } from '@lensshare/lens';
-import getOpenActionModuleData from '@lensshare/lib/getOpenActionModuleData';
+import { type AnyPublication } from '@lensshare/lens';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
-import { Card } from '@lensshare/ui';
 import type { FC } from 'react';
-import { useState } from 'react';
 
 import CollectModule from './CollectModule';
 
@@ -13,6 +9,7 @@ import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-m
 import allowedOpenActionModules from '@lib/allowedOpen (1)';
 
 const IgnoredModules = [
+  VerifiedOpenActionModules.Swap,
   VerifiedOpenActionModules.Tip,
   VerifiedOpenActionModules.DecentNFT
 ];
