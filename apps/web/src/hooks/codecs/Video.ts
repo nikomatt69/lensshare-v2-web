@@ -8,6 +8,7 @@ export const ContentTypeVideoKey = new ContentTypeId({
 });
 
 export class VideoCodec {
+  fallback: any
   get contentType() {
     return ContentTypeVideoKey;
   }

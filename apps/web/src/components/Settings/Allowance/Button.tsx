@@ -117,7 +117,7 @@ const AllowanceButton: FC<AllowanceButtonProps> = ({
         {title}
       </Button>
       <Modal
-        icon={<ExclamationTriangleIcon className="size-5" />}
+        icon={<ExclamationTriangleIcon className="w-5 h-5" />}
         onClose={() => setShowWarningModal(false)}
         show={showWarningModal}
         title="Warning"

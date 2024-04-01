@@ -1,7 +1,7 @@
+import { useClient } from '@xmtp/react-sdk';
 import type { DecodedMessage } from '@xmtp/xmtp-js';
 import { useEffect, useRef } from 'react';
 
-import useXmtpClient from './useXmtpClient';
 
 type AllMessagesStream = Promise<AsyncGenerator<DecodedMessage>>;
 
@@ -12,7 +12,7 @@ type AllMessagesStream = Promise<AsyncGenerator<DecodedMessage>>;
 export const useStreamAllMessages = (
   onMessage: (message: DecodedMessage) => void
 ) => {
-  const { client } = useXmtpClient(true);
+  const { client } = useClient();
   const streamRef = useRef<AllMessagesStream>();
   const endStreamRef = useRef(async (stream?: AllMessagesStream) => {
     // it's important to reset the stream reference first so that any

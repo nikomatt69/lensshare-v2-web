@@ -13,6 +13,7 @@ import getURLs from '@lensshare/lib/getURLs';
 import getNft from '@lensshare/lib/nft/getNft';
 import getUserLocale from '@lib/getUserLocale';
 import { useCallback } from 'react';
+import { usePublicationAttributesStore } from 'src/store/non-persisted/usePublicationAttributesStore';
 import { usePublicationStore } from 'src/store/usePublicationStore';
 import { v4 as uuid } from 'uuid';
 
@@ -30,7 +31,7 @@ const usePublicationMetadata = () => {
     showLiveVideoEditor,
     liveVideoConfig
   } = usePublicationStore();
-
+  const { attributes } = usePublicationAttributesStore();
   const attachmentsHasAudio = attachments[0]?.type === 'Audio';
   const attachmentsHasVideo = attachments[0]?.type === 'Video';
 
@@ -54,7 +55,9 @@ const usePublicationMetadata = () => {
       const localBaseMetadata = {
         id: uuid(),
         locale: getUserLocale(),
-        appId: APP_NAME
+        appId: APP_NAME,
+        attributes: attributes?.length ? attributes : undefined,
+        
       };
 
       const attachmentsToBeUploaded = attachments.map((attachment) => ({
@@ -122,6 +125,7 @@ const usePublicationMetadata = () => {
       }
     },
     [
+      attributes,
       attachments,
       videoDurationInSeconds,
       audioPublication,

@@ -47,16 +47,15 @@ const MetaTags: FC<MetaTagsProps> = ({
       {/* Prefetch and Preconnect */}
       <link rel="preconnect" href="https://static-assets.mycrumbs.xyz" />
       <link rel="dns-prefetch" href="https://static-assets.mycrumbs.xyz" />
-      <link rel="preconnect" href="https://asset.mycrumbs.xyz" />
-      <link rel="dns-prefetch" href="https://asset.mycrumbs.xyz" />
-      <link rel="preconnect" href="https://prerender.mycrumbs.xyz" />
-      <link rel="dns-prefetch" href="https://prerender.mycrumbs.xyz" />
       <link rel="preconnect" href="https://og.mycrumbs.xyz" />
       <link rel="dns-prefetch" href="https://og.mycrumbs.xyz" />
 
       {/* PWA config */}
 
-      <link rel="manifest" href="/manifest.json" />
+      <link
+        rel="manifest"
+        href="https://progressier.app/B5LgRYtk8D553Rd2UvFW/progressier.json"
+      />
 
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="mobile-web-app-capable" content="yes" />

@@ -1,15 +1,15 @@
-import { LightBulbIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import {
+  CurrencyDollarIcon,
+  LightBulbIcon,
+  UserGroupIcon
+} from '@heroicons/react/24/outline';
 import { IS_MAINNET } from '@lensshare/data/constants';
 import { HomeFeedType } from '@lensshare/data/enums';
-import { HOME } from '@lensshare/data/tracking';
 import { TabButton } from '@lensshare/ui';
-import { Leafwatch } from '@lib/leafwatch';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 import Algorithms from './Algorithms';
-import FeedEventFilters from './FeedEventFilters';
 import SeeThroughLens from './SeeThroughLens';
-import RefreshButton from './Refresh';
 import GraphOutline from '@components/Icons/GraphOutline';
 import FireOutline from '@components/Icons/FireOutline';
 
@@ -28,7 +28,6 @@ const FeedType: FC<FeedTypeProps> = ({ setFeedType, feedType }) => {
           active={feedType === HomeFeedType.FOLLOWING}
           onClick={() => {
             setFeedType(HomeFeedType.FOLLOWING);
- 
           }}
         />
         <TabButton
@@ -37,7 +36,14 @@ const FeedType: FC<FeedTypeProps> = ({ setFeedType, feedType }) => {
           active={feedType === HomeFeedType.HIGHLIGHTS}
           onClick={() => {
             setFeedType(HomeFeedType.HIGHLIGHTS);
-     
+          }}
+        />
+        <TabButton
+          active={feedType === HomeFeedType.PREMIUM}
+          icon={<CurrencyDollarIcon className="h-4 w-4" />}
+          name="Premium"
+          onClick={() => {
+            setFeedType(HomeFeedType.PREMIUM);
           }}
         />
         <TabButton
@@ -46,16 +52,14 @@ const FeedType: FC<FeedTypeProps> = ({ setFeedType, feedType }) => {
           active={feedType === HomeFeedType.HEY_MOSTVIEWED}
           onClick={() => {
             setFeedType(HomeFeedType.HEY_MOSTVIEWED);
-     
           }}
         />
-         <TabButton
+        <TabButton
           name="Most Recommended"
           icon={<FireOutline className="h-4 w-4" />}
           active={feedType === HomeFeedType.K3L_RECOMMENDED}
           onClick={() => {
             setFeedType(HomeFeedType.K3L_RECOMMENDED);
-     
           }}
         />
       </div>
@@ -64,7 +68,7 @@ const FeedType: FC<FeedTypeProps> = ({ setFeedType, feedType }) => {
         feedType === HomeFeedType.HIGHLIGHTS ? (
           <SeeThroughLens />
         ) : null}
-        
+
         {IS_MAINNET ? <Algorithms /> : null}
       </div>
     </div>

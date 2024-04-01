@@ -19,10 +19,7 @@ const OpenActionItem: FC<OpenActionItemProps> = ({
   title,
   type
 }) => {
-  const setScreen = useOpenActionStore((state) => state.setScreen);
-  const setSelectedOpenAction = useOpenActionStore(
-    (state) => state.setSelectedOpenAction
-  );
+  const { setScreen, setSelectedOpenAction } = useOpenActionStore();
 
   const onOpenActionSelected = (name: OpenAction) => {
     setScreen(ScreenType.Config);
@@ -36,13 +33,13 @@ const OpenActionItem: FC<OpenActionItemProps> = ({
       onClick={() => onOpenActionSelected(type)}
     >
       <div className="flex items-center space-x-3">
-        <div className="text-brand-500">{icon}</div>
+        {icon}
         <div className="space-y-1">
           <div className="font-bold">{title}</div>
           <div className="text-sm">{description}</div>
         </div>
       </div>
-      <ChevronRightIcon className="w-5 h-5 text-gray-400" />
+      <ChevronRightIcon className="h-5 w-5 text-gray-400" />
     </Card>
   );
 };

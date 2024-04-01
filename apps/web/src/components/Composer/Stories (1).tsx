@@ -25,6 +25,7 @@ import {
 import { useInView } from 'react-cool-inview';
 import ProfileBytes from '@components/Profile/ProfileBytes';
 import ProfileBytesLast from '@components/Profile/ProfileBytesLast';
+import Loader from '@components/Shared/Loader';
 
 type Props = {
   trigger: React.ReactNode;
@@ -83,7 +84,7 @@ const StoriesRender: FC<Props> = ({ trigger, publication, profile }) => {
   });
 
   if (loading) {
-    return <LatestBytesShimmer count={4} />;
+    return <Loader />;
   }
 
   if (data?.publications?.items?.length === 0) {

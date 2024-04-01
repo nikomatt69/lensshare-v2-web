@@ -72,8 +72,8 @@ export const POLYGON_RPC_URL = IS_MAINNET
   ? 'https://rpc.ankr.com/polygon'
   : 'https://rpc.ankr.com/polygon';
 export const IRYS_NODE_URL = IS_MAINNET
-  ? 'https://node2.irys.xyz'
-  : 'https://node2.irys.xyz';
+  ? 'https://arweave.mainnet.irys.xyz/tx/matic'
+  : 'https://arweave.mainnet.irys.xyz/tx/matic';
 export const IRYS_CURRENCY = 'matic';
 
 export const useBytesStore = create<AppState>((set) => ({

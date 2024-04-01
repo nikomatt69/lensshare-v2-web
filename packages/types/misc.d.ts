@@ -35,20 +35,6 @@ export interface Nft {
   mediaUrl: string;
   sourceUrl: string;
 }
-export interface DNft {
-  chain: null | string;
-  collectionName: string;
-  contractAddress: `0x${string}`;
-  creatorAddress: `0x${string}`;
-  description: string;
-  endTime: null | string;
-  mediaUrl: string;
-  mintCount: null | string;
-  mintStatus: 'closed' | 'live' | null | string;
-  mintUrl: null | string;
-  schema: 'erc1155' | 'erc721' | string;
-  sourceUrl: string;
-}
 
 
 export interface UserSuggestion {

@@ -6,9 +6,9 @@ import ExploreFeed from '@components/Explore/Feed';
 import Footer from '@components/Shared/Footer';
 import { STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import { HomeFeedType } from '@lensshare/data/enums';
-import { Card, GridItemEight, GridItemFour, GridLayout, Image } from '@lensshare/ui';
+import { GridItemEight, GridItemFour, GridLayout, Image } from '@lensshare/ui';
 import type { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
 
 import AlgorithmicFeed from './AlgorithmicFeed';
@@ -22,15 +22,18 @@ import Timeline from './Timeline';
 import { useTheme } from 'next-themes';
 
 import RecommendedProfiles from './RecommendedProfiles';
-import FeaturedGroup from '@components/Publication/FeaturedGroup';
-import ListenFeed from '@components/Listen/Curated';
-import { AnyPublication, usePublicationQuery } from '@lensshare/lens';
+import type { AnyPublication } from '@lensshare/lens';
+import { usePublicationQuery } from '@lensshare/lens';
 import { getPublication } from 'src/hooks/getPublication';
 import { useRouter } from 'next/router';
-import Wrapper from '@components/Echos/Wrapper';
 
-import SpacesWindowBottomBar from '@components/Spaces/SpacesWindow/SpacesWindowBottomBar';
-
+import PaidActions from './PaidActions/PaidActions index';
+import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
+import { useClient } from '@xmtp/react-sdk';
+import { useAccount, useWalletClient } from 'wagmi';
+import { loadKeys } from '@lib/xmtp/keys';
+import { useRoom } from '@huddle01/react/hooks';
+import Meet from '@components/Meet/Meet';
 
 const Home: NextPage = () => {
   const currentProfile = useAppStore((state) => state.currentProfile);
@@ -40,6 +43,30 @@ const Home: NextPage = () => {
   const {
     query: { id }
   } = useRouter();
+  const { address } = useAccount();
+  const { data: walletClient } = useWalletClient();
+
+  const initXmtp = async () => {
+    if (!address) {
+      return;
+    }
+
+    let keys = loadKeys(address);
+    if (!keys) {
+      return;
+    }
+
+    return await initialize({
+      keys,
+      options: { env: 'production' },
+      signer: walletClient as any
+    });
+  };
+
+  useEffect(() => {
+    initXmtp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { data, error, loading } = usePublicationQuery({
     variables: {
@@ -47,15 +74,15 @@ const Home: NextPage = () => {
     },
     skip: !id
   });
-
-  
-
+  const { newConversationAddress, selectedConversation } = useMessagesStore();
+  const { initialize, isLoading } = useClient();
   const publication = data?.publication as AnyPublication;
   const audio = getPublication(publication);
   const loggedIn = Boolean(currentProfile);
   const loggedOut = !loggedIn;
   const { resolvedTheme } = useTheme();
-
+  const { isRoomJoined } = useRoom();
+  const [isExpanded, setIsExpanded] = useState(false);
   return (
     <>
       <MetaTags />
@@ -92,6 +119,8 @@ const Home: NextPage = () => {
                 <Timeline />
               ) : feedType === HomeFeedType.HIGHLIGHTS ? (
                 <Highlights />
+              ) : feedType === HomeFeedType.PREMIUM ? (
+                <PaidActions />
               ) : feedType === HomeFeedType.ALGO ? (
                 <AlgorithmicFeed feedType={feedType} />
               ) : (
@@ -104,24 +133,22 @@ const Home: NextPage = () => {
         </GridItemEight>
         <GridItemFour>
           {/* <Gitcoin /> */}
-
           {/* Onboarding steps */}
           {loggedIn && (
             <>
-              <FeaturedGroup tags={undefined} />
-
-              
-              
-              
-                
-                
               <RecommendedProfiles />
               <EnableLensManager />
               <SetProfile />
+
+              <>
+                <div className="flex justify-center">
+                  {isRoomJoined ?<Meet />:null}
+                </div>
+              </>
             </>
           )}
-          {/* Recommendations */}
           <Footer />
+          {/* Recommendations */}
         </GridItemFour>
       </GridLayout>
     </>

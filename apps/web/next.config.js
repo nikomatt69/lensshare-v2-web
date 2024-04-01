@@ -73,7 +73,15 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'Referrer-Policy', value: 'strict-origin' }
+          { key: 'Referrer-Policy', value: 'strict-origin' },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups'
+          },
+          {
+            key: 'Cross-Origin-Allow-Origin',
+            value: 'same-origin-allow-origin'
+          }
         ],
         source: '/(.*)'
       }

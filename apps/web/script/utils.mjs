@@ -12,7 +12,9 @@ export const getFilesInDirectory = (directory) => {
     'ttf',
     'ico',
     'woff',
-    'woff2'
+    'woff2',
+    'mpeg',
+    'mp3'
   ];
 
   const filesToInclude = [];

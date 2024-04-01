@@ -1,7 +1,7 @@
 import type {
-  ContentTypeId,
   Conversation,
-  DecodedMessage
+  DecodedMessage,
+  ContentTypeId
 } from '@xmtp/xmtp-js';
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
@@ -161,9 +161,8 @@ const useSendOptimisticMessage = (
 
       // prepare message to be sent
       prepared = await conversation.prepareMessage(preparedContent, {
-        contentType,
-        contentFallback: sendOptions?.fallback?.toString() ?? undefined
-      } as any);
+        contentType
+      });
     } else {
       // message is already prepared, use existing
       prepared = sendOptions.preparedMessage;

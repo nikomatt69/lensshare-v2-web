@@ -11,17 +11,11 @@ class LensShareDocument extends Document {
           {/* Prefetch and Preconnect */}
           <link rel="preconnect" href="https://static-assets.mycrumbs.xyz" />
           <link rel="dns-prefetch" href="https://static-assets.mycrumbs.xyz" />
-          <link rel="preconnect" href="https://asset.mycrumbs.xyz" />
-          <link rel="dns-prefetch" href="https://asset.mycrumbs.xyz" />
-          <link rel="preconnect" href="https://prerender.mycrumbs.xyz" />
-          <link rel="dns-prefetch" href="https://prerender.mycrumbs.xyz" />
-          <link rel="preconnect" href="https://og.mycrumbs.xyz" />
-          <link rel="dns-prefetch" href="https://og.mycrumbs.xyz" />
+
           {/* Misc */}
           <meta name="application-name" content="MyCrumbs" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
-
           <meta
             name="apple-mobile-web-app-status-bar-style"
             content="default"
@@ -47,12 +41,14 @@ class LensShareDocument extends Document {
             href="/favicon-16x16.png"
           />
 
-          <script src="https://unpkg.com/wavesurfer.js@7" />
+          {/* Corrected script tag */}
+          <script src="https://unpkg.com/wavesurfer.js@7" defer />
 
           {/* PWA config */}
-
-          <link rel="manifest" href="/manifest.json" />
-
+          <link
+            rel="manifest"
+            href="/manifest.json"
+          />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta

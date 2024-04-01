@@ -1,7 +1,8 @@
+import { useClient } from '@xmtp/react-sdk';
 import type { Conversation, Stream } from '@xmtp/xmtp-js';
 import { useEffect, useRef } from 'react';
 
-import useXmtpClient from './useXmtpClient';
+
 
 type ConversationStream = Promise<Stream<Conversation>>;
 
@@ -12,7 +13,7 @@ type ConversationStream = Promise<Stream<Conversation>>;
 export const useStreamConversations = (
   onConversation: (conversation: Conversation) => void
 ) => {
-  const { client } = useXmtpClient(true);
+  const { client } = useClient();
   const streamRef = useRef<ConversationStream | undefined>();
   const endStreamRef = useRef(async (stream?: ConversationStream) => {
     // it's important to reset the stream reference first so that any

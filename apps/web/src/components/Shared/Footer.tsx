@@ -5,10 +5,10 @@ import urlcat from 'urlcat';
 
 const Footer: FC = () => {
   return (
-    <footer className={`'top-20'} sticky text-sm leading-7`}>
-      <div className="mt-4 flex flex-wrap gap-x-[12px] px-3 lg:px-0">
+    <footer className={`'top-20' sticky text-sm leading-7`}>
+      <div className="my-3 mt-4 flex flex-wrap gap-x-[12px] px-3 lg:px-0">
         <span className="lt-text-gray-500 font-bold">
-          &copy; {new Date().getFullYear()} Lenshareapp.xyz
+          &copy; {new Date().getFullYear()} MyCrumbs
         </span>
         <Link href="/terms">Terms</Link>
         <Link href="/privacy">Privacy</Link>

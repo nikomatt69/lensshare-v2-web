@@ -8,6 +8,7 @@ export const ContentTypeImageKey = new ContentTypeId({
 });
 
 export class ImageCodec {
+  fallback: any
   get contentType() {
     return ContentTypeImageKey;
   }

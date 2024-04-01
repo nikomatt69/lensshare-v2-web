@@ -2,6 +2,7 @@ export enum HomeFeedType {
   ALGO = 'ALGO',
   FOLLOWING = 'FOLLOWING',
   HIGHLIGHTS = 'HIGHLIGHTS',
+  PREMIUM ='PREMIUM',
   // Thirdparty Algorithms
   K3L_RECENT = 'K3L_RECENT',
   K3L_RECOMMENDED = 'K3L_RECOMMENDED',

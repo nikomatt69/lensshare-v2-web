@@ -10,6 +10,7 @@ import useEnsName from 'src/hooks/useEnsName';
 import type { Address } from 'viem';
 
 import Slug from './Slug';
+import getAvatar from '@lensshare/lib/getAvatar';
 
 interface WalletProfileProps {
   address: Address;
@@ -33,7 +34,7 @@ const WalletProfile: FC<WalletProfileProps> = ({ address }) => {
           onError={({ currentTarget }) => {
             currentTarget.src = getStampFyiURL(address);
           }}
-          src={imageKit(getStampFyiURL(address))}
+          src={imageKit(getAvatar(address))}
           className="h-10 w-10 rounded-full border bg-gray-200"
           height={40}
           width={40}

@@ -26,6 +26,7 @@ import { useAccount, useChainId, useDisconnect, useSignMessage } from 'wagmi';
 
 import UserProfile from '../UserProfile';
 import WalletSelector from './WalletSelector';
+import { CHAIN } from '@lib/costantChain';
 
 const Login: FC = () => {
   const [isLoading, setIsLoading] = useState(false);

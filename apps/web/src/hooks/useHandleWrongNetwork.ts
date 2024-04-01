@@ -1,4 +1,3 @@
-import { CHAIN } from '@lib/costantChain';
 import { useCallback } from 'react';
 import { CHAIN_ID } from 'src/constants';
 import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';

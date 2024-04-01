@@ -20,6 +20,13 @@ export const GIT_COMMIT_SHA =
 
 export const HEY_LENS_SIGNUP = getEnvConfig().heyLensSignup;
 export const API_URL = getEnvConfig().apiEndpoint;
+export const WMATIC_ADDRESS = IS_MAINNET
+  ? '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
+  : '0x9c3c9283d3e44854697cd22d3faa240cfb032889';
+export const KNOWN_ATTRIBUTES = {
+  POLL_ID: 'pollId',
+  SWAP_OA_DEFAULT_AMOUNT: 'swapOADefaultAmount'
+};
 export const SIGNUP_PRICE = 1; // in MATIC
 export const ADDRESS_PLACEHOLDER = '0x03Ba3...7EF';
 export const ADMIN_ADDRESS = '0xD47904193219374AcBe05fD0D6c42F5bC6349028';
@@ -258,8 +265,8 @@ export const WMATIC_TOKEN_ADDRESS = IS_MAINNET
   : '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889';
 
 export const BUNDLR_NODE_URL = IS_MAINNET
-  ? 'https://node2.irys.xyz'
-  : 'https://node2.irys.xyz';
+  ? 'https://arweave.mainnet.irys.xyz/tx/matic'
+  : 'https://arweave.mainnet.irys.xyz/tx/matic';
 
 export const BUNDLR_CURRENCY = 'matic';
 export const BUNDLR_CONNECT_MESSAGE = 'Sign to initialize & estimate upload...';
@@ -310,7 +317,7 @@ export const LIT_PROTOCOL_ENV = IS_MAINNET ? 'polygon' : 'polygon';
 export const GIPHY_TOKEN = 'mztAE0vdQdlfCYsM11E6UaPjUmjpYDHV';
 
 export const DEFAULT_OG = `${STATIC_ASSETS_URL}/images/icon.png`;
-export const IMAGE_OG = `public/images/icon.png`;
+export const IMAGE_OG = `${STATIC_ASSETS_URL}/logo.png`;
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const MESSAGE_PAGE_LIMIT = 35;
 export const SCROLL_THRESHOLD = 0.1;

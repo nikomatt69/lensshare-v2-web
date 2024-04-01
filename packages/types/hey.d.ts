@@ -26,6 +26,13 @@ export type Group = {
 };
 
 
+export type UniswapQuote = {
+  amountOut: string;
+  maxSlippage: string;
+  routeString: string;
+};
+
+
 export type StaffPick = {
   createdAt: Date;
   id: string;

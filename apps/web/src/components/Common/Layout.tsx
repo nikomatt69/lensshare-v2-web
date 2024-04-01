@@ -21,7 +21,7 @@ import { isAddress } from 'viem';
 import { useRoom } from '@huddle01/react/hooks';
 import SpacesWindow from './SpacesWindow/SpacesWindow';
 import { useRouter } from 'next/router';
-import { useDisconnectXmtp } from 'src/hooks/useXmtpClient';
+
 import { useSpacesStore } from 'src/store/persisted/spaces';
 import React from 'react';
 import {
@@ -31,6 +31,7 @@ import {
   StyleSheet
 } from 'react-native';
 import getCurrentSession from '@lib/getCurrentSession';
+import { useStreamAllMessages } from '@xmtp/react-sdk';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -44,7 +45,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       setRefreshing(false);
     }, 2000);
   }, []);
-
+  
   const { resolvedTheme } = useTheme();
   const setCurrentProfile = useAppStore((state) => state.setCurrentProfile);
   const currentProfile = useAppStore((state) => state.currentProfile);
@@ -60,13 +61,12 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const isMounted = useIsMounted();
   const { connector } = useAccount();
   const { disconnect } = useDisconnect();
-  const disconnectXmtp = useDisconnectXmtp();
+
   const { id: sessionProfileId } = getCurrentSession();
 
   const logout = (reload = false) => {
     resetPreferences();
     signOut();
-    disconnectXmtp();
     disconnect?.();
     if (reload) {
       location.reload();
@@ -121,7 +121,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
 
-        <link rel="manifest" href="/manifest.json" />
+        <link
+          rel="manifest"
+          href="https://progressier.app/B5LgRYtk8D553Rd2UvFW/progressier.json"
+        />
         <script
           defer
           src="https://progressier.app/B5LgRYtk8D553Rd2UvFW/script.js"

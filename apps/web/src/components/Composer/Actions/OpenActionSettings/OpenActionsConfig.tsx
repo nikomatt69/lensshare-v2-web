@@ -7,9 +7,7 @@ import { useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
 import SwapConfig from './Config/Swap';
 
 const OpenActionsConfig: FC = () => {
-  const selectedOpenAction = useOpenActionStore(
-    (state) => state.selectedOpenAction
-  );
+  const { selectedOpenAction } = useOpenActionStore();
 
   return (
     <div>
@@ -20,3 +18,4 @@ const OpenActionsConfig: FC = () => {
 };
 
 export default OpenActionsConfig;
+

@@ -65,6 +65,8 @@ import getURLs from '@lensshare/lib/getURLs';
 import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
 
 import { useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
+import { usePublicationAttributesStore } from 'src/store/non-persisted/usePublicationAttributesStore';
+import OpenActions from './OpenActions';
 const Attachment = dynamic(
   () => import('@components/Composer/Actions/Attachment'),
   {
@@ -194,7 +196,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   // States
   const [isLoading, setIsLoading] = useState(false);
   const [publicationContentError, setPublicationContentError] = useState('');
-
+  const { reset: resetAttributes } = usePublicationAttributesStore();
   const [editor] = useLexicalComposerContext();
   const createPoll = useCreatePoll();
   const getMetadata = usePublicationMetadata();
@@ -210,6 +212,29 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   const noOpenAction = !openAction;
   const noCollect = !collectModule.type;
   // Use Momoka if the profile the comment or quote has momoka proof and also check collect module has been disabled
+
+  const reset = () => {
+    editor.update(() => {
+      $getRoot().clear();
+    });
+
+    setPublicationContent('');
+    setQuotedPublication(null);
+    setShowPollEditor(false);
+    resetPollConfig();
+    setShowLiveVideoEditor(false);
+    resetLiveVideoConfig();
+    setAttachments([]);
+    setVideoThumbnail({
+      type: '',
+      uploading: false,
+      url: ''
+    });
+    resetAttributes();
+    resetOpenActionSettings();
+    resetCollectSettings();
+  };
+
   const useMomoka = isComment
     ? publication.momoka?.proof
     : isQuote
@@ -236,23 +261,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     }
 
     setIsLoading(false);
-    editor.update(() => {
-      $getRoot().clear();
-    });
-    setPublicationContent('');
-    setQuotedPublication(null);
-    setShowPollEditor(false);
-    resetPollConfig();
-    setShowLiveVideoEditor(false);
-    resetLiveVideoConfig();
-    setAttachments([]);
-    setVideoThumbnail({
-      url: '',
-      type: '',
-      uploading: false
-    });
-    resetCollectSettings();
-    resetOpenActionSettings();
+    reset();
 
     if (!isComment) {
       setShowNewPostModal(false);
@@ -580,19 +589,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   };
 
   useUnmountEffect(() => {
-    setPublicationContent('');
-    setShowPollEditor(false);
-    resetPollConfig();
-    setShowLiveVideoEditor(false);
-    resetLiveVideoConfig();
-    setAttachments([]);
-    setVideoThumbnail({
-      url: '',
-      type: '',
-      uploading: false
-    });
-    resetOpenActionSettings();
-    resetCollectSettings();
+    reset();
   });
 
   return (
@@ -627,6 +624,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         openActionEmbed={!!openActionEmbed}
         openActionEmbedLoading={openActionEmbedLoading}
       />
+      <OpenActions />
       <div className="divider mx-5" />
       <div className="mx-5 my-3 block items-center sm:flex">
         <div className="mx-1.5 flex items-center space-x-4">
