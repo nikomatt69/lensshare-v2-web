@@ -15,9 +15,8 @@ export const Localstorage = {
   FingerprintStore: 'fingerprint.store',
   FeaturesCache: 'gbFeaturesCache',
   LeafwatchStore: 'leafwatch.store',
-  PushStore: 'push.store',
+  PushStore: 'push.store'
 };
-
 
 export const IndexDB = {
   AlgorithmStore: 'algorithm.store',

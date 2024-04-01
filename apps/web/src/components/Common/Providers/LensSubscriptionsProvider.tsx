@@ -1,20 +1,13 @@
-import type { Notification }  from '@lensshare/lens';
+import type { Notification } from '@lensshare/lens';
 import {
-  useAuthorizationRecordRevokedSubscriptionSubscription,
   useNewNotificationSubscriptionSubscription,
-  useUserSigNoncesQuery,
   useUserSigNoncesSubscriptionSubscription
 } from '@lensshare/lens';
 
 import { BrowserPush } from '@lib/browserPush';
-import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import getPushNotificationData from '@lib/getPushNotificationData';
 import { useEffect, type FC } from 'react';
-import { isSupported, share } from 'shared-zustand';
-import { signOut } from 'src/store/useAuthPersistStore';
 import { useNonceStore } from 'src/store/useNonceStore';
-import { useUpdateEffect } from 'usehooks-ts';
-import { isAddress } from 'viem';
 import { useAccount } from 'wagmi';
 import { useNotificationStore } from 'src/store/persisted/useNotificationStore';
 import getCurrentSession from '@lib/getCurrentSession';

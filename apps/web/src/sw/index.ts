@@ -1,7 +1,5 @@
 declare let self: ServiceWorkerGlobalScope;
 
-
-
 const impressionsEndpoint = 'https://api.mycrumbs.xyz/leafwatch/impressions';
 const publicationsVisibilityInterval = 5000;
 let viewerId: null | string = null;
@@ -44,11 +42,10 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     self.registration.showNotification('MyCrumbs', {
       body: 'New Notification',
-      icon: 'public/icon.png',
+      icon: 'public/icon.png'
     }) // Removed the semicolon here
   );
 });
-
 
 self.addEventListener('activate', (event) => event.waitUntil(handleActivate()));
 

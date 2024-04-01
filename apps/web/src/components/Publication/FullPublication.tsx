@@ -2,7 +2,7 @@ import type { AnyPublication } from '@lensshare/lens';
 import getAppName from '@lensshare/lib/getAppName';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import { formatDate } from '@lib/formatTime';
-import { useState, type FC } from 'react';
+import { type FC } from 'react';
 
 import PublicationActions from './Actions';
 import FeaturedGroup from './FeaturedGroup';
@@ -11,8 +11,6 @@ import PublicationBody from './PublicationBody';
 import PublicationHeader from './PublicationHeader';
 import PublicationStats from './PublicationStats';
 import PublicationType from './Type';
-import { useEffectOnce } from 'usehooks-ts';
-import pushToImpressions from '@lib/pushToImpressions';
 import usePushToImpressions from 'src/hooks/usePushToImpressions';
 
 interface FullPublicationProps {
@@ -26,8 +24,6 @@ const FullPublication: FC<FullPublicationProps> = ({ publication }) => {
 
   const { metadata, createdAt } = targetPublication;
   usePushToImpressions(targetPublication.id);
-
-  const [views, setViews] = useState<number | null>(null);
 
   return (
     <article className="p-4">
@@ -45,7 +41,7 @@ const FullPublication: FC<FullPublicationProps> = ({ publication }) => {
                   <span>
                     {formatDate(new Date(createdAt), 'hh:mm A · MMM D, YYYY')}
                   </span>
-                 {metadata.appId ? (
+                  {metadata.appId ? (
                     <span> · Posted via {getAppName(metadata.appId)}</span>
                   ) : null}
                 </div>

@@ -18,4 +18,3 @@ export enum Errors {
   InvalidSecret = 'Invalid secret!',
   Suspended = 'Your profile has been suspended!'
 }
-

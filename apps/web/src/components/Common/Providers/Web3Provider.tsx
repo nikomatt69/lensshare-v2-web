@@ -1,8 +1,7 @@
-import { APP_NAME, WALLETCONNECT_PROJECT_ID } from '@lensshare/data/constants';
-import { CoinbaseWalletConnector } from '@wagmi/connectors/coinbaseWallet';
+import { WALLETCONNECT_PROJECT_ID } from '@lensshare/data/constants';
 import { InjectedConnector } from '@wagmi/connectors/injected';
 import { WalletConnectConnector } from '@wagmi/connectors/walletConnect';
-import { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   base,

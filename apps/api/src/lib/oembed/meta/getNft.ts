@@ -3,8 +3,6 @@ import type { Document } from 'linkedom';
 import type { Address } from 'viem';
 import getNftChainId from '../getNftChainId';
 
-
-
 // https://reflect.site/g/yoginth/hey-nft-extended-open-graph-spec/780502f3c8a3404bb2d7c39ec091602e
 const getNft = (document: Document, sourceUrl: string): Nft | null => {
   const getMeta = (key: string) => {

@@ -1,15 +1,10 @@
-import { HEY_API_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
+import { HEY_API_URL } from '@lensshare/data/constants';
 import getPreferences from '@lib/api/getPreferences';
-import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { type FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
 import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
 import { FeatureFlag } from '@lensshare/data/feature-flags';
-import { useProStore } from 'src/store/useProStore';
-import { useMembershipNftStore } from 'src/store/useMembershipNftStore';
-import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import getCurrentSession from '@lib/getCurrentSession';
 import getAuthApiHeaders from '@components/Shared/Oembed/Portal/getAuthApiHeaders main';
 import { useVerifiedMembersStore } from 'src/store/persisted/useVerifiedMembersStore';

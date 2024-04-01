@@ -7,7 +7,15 @@ import {
 import { prisma } from '../seed';
 
 const seedProfileFeatures = async (): Promise<number> => {
-  const profileIds = ['0x0d', '0x06', '0x0383', '0x01', '0x02', '0x03','0x933b'];
+  const profileIds = [
+    '0x0d',
+    '0x06',
+    '0x0383',
+    '0x01',
+    '0x02',
+    '0x03',
+    '0x933b'
+  ];
 
   const data = profileIds.map((profileId) => {
     return [

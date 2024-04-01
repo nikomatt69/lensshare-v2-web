@@ -1,6 +1,5 @@
 import { HEY_API_URL } from '@lensshare/data/constants';
 import getCurrentSession from './getCurrentSession';
-import getCurrentSessionProfileId from './getCurrentSessionProfileId';
 
 let worker: Worker;
 

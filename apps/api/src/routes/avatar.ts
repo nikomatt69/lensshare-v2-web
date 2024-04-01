@@ -1,7 +1,11 @@
 import type { Handler } from 'express';
 
 import { LensHub } from '@lensshare/abis';
-import { IPFS_GATEWAY, IS_MAINNET, LENSHUB_PROXY,  } from '@lensshare/data/constants';
+import {
+  IPFS_GATEWAY,
+  IS_MAINNET,
+  LENSHUB_PROXY
+} from '@lensshare/data/constants';
 import logger from '@lensshare/lib/logger';
 import { CACHE_AGE_INDEFINITE_ON_DISK, RPC_URL } from 'src/lib/constants';
 import { noBody } from 'src/lib/responses';

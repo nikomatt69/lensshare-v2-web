@@ -1,5 +1,3 @@
-
-
 import { prisma } from '../seed';
 
 const seedPolls = async (): Promise<number> => {

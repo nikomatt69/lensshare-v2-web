@@ -1,6 +1,6 @@
 import type { Preferences } from '@lensshare/types/hey';
 
-import { BASE_URL, HEY_API_URL, LENSSHARE_API_URL, PREFERENCES_WORKER_URL } from '@lensshare/data/constants';
+import { HEY_API_URL } from '@lensshare/data/constants';
 import axios from 'axios';
 
 /**
@@ -29,6 +29,5 @@ const getPreferences = async (
     };
   }
 };
-
 
 export default getPreferences;
