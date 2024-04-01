@@ -5,6 +5,7 @@ import { Leafwatch } from '@lib/leafwatch';
 import { useClient, useConsent } from '@xmtp/react-sdk';
 import { type FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { MESSAGES } from '@lensshare/data/tracking';
 
 interface ConsentProps {
   address: Address;
@@ -34,7 +35,7 @@ const Consent: FC<ConsentProps> = ({ address }) => {
       setAllowing(true);
       await allow([address]);
       setAllowed(true);
-     
+      Leafwatch.track(MESSAGES.ALLOW_USER, { address });
 
       return toast.success('Allowed');
     } finally {
@@ -47,7 +48,7 @@ const Consent: FC<ConsentProps> = ({ address }) => {
       setDenying(true);
       await deny([address]);
       setAllowed(false);
-      
+      Leafwatch.track(MESSAGES.BLOCK_USER, { address });
 
       return toast.success('Blocked');
     } finally {

@@ -18,12 +18,12 @@ export const Localstorage = {
   PushStore: 'push.store',
 };
 
+
 export const IndexDB = {
-  ProfileStore: 'profile.store',
   AlgorithmStore: 'algorithm.store',
   FeatureFlagsStore: 'featureflags.store',
-  VerifiedMembersStore: 'verifiedmembers.store',
-  FeaturedGroupsStore: 'featuredgroups.store',
-  TBAStore: 'tba.store',
-  MessageStore: 'message.store',
+  ProfileStore: 'profile.store',
+  SearchStore: 'search.store',
+  TransactionStore: 'transaction.store',
+  VerifiedMembersStore: 'verifiedmembers.store'
 };

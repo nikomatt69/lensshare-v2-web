@@ -1,4 +1,4 @@
-import { IS_MAINNET, LENSSHARE_API_URL, STATS_WORKER_URL } from '@lensshare/data/constants';
+import { HEY_API_URL, IS_MAINNET, LENSSHARE_API_URL, STATS_WORKER_URL } from '@lensshare/data/constants';
 import axios from 'axios';
 
 /**
@@ -12,9 +12,10 @@ const getPublicationsViews = async (ids: string[]) => {
   }
 
   try {
-    const response = await axios.post(`${LENSSHARE_API_URL}/stats/publicationViews`, {
-      ids
-    });
+    const response = await axios.post(
+      `${HEY_API_URL}/stats/publication/views`,
+      { ids }
+    );
 
     return response.data?.views;
   } catch {

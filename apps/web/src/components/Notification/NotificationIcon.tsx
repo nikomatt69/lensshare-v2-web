@@ -5,7 +5,7 @@ import { useAppStore } from 'src/store/useAppStore';
 import { useNotificationPersistStore } from 'src/store/useNotificationPersistStore';
 
 import React, { useEffect, useState } from 'react';
-import { sendNotification } from 'src/utils/webPushUtils';
+
 const NotificationIcon: FC = () => {
   const latestNotificationId = useNotificationPersistStore(
     (state) => state.latestNotificationId
@@ -31,7 +31,7 @@ const NotificationIcon: FC = () => {
       onClick={() => {
         if (latestNotificationId) {
           setLastOpenedNotificationId(latestNotificationId);
-          sendNotification(currentProfile?.id, latestNotificationId);
+         
         }
       }}
     >

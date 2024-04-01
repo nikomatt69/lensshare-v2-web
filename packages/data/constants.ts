@@ -331,6 +331,9 @@ export const RPC_URL = IS_MAINNET
 export const LENSTER_URL = 'https://lenster.xyz';
 
 export const WALLETCONNECT_PROJECT_ID = '8974231b47453a6cae531515ed1787c7';
+export const HEY_MEMBERSHIP_NFT = IS_MAINNET
+  ? '0x100372BBF7f975f6b1448fB11AB0F814b2740EEd'
+  : '0x75120677aBF34ae95a916C6E9DbB610a06536CC3';
 
 export const LENSPROTOCOL_HANDLE = 'lensprotocol';
 export const HANDLE_SUFFIX = IS_MAINNET ? '.lens' : '.lens';

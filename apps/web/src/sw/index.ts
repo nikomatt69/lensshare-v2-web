@@ -1,12 +1,11 @@
-import { ServiceWorkerCache } from './cache'
 declare let self: ServiceWorkerGlobalScope;
 
 
 
-const impressionsEndpoint = 'https://mycrumbs.xyz/api/leafwatch/impressions';
+const impressionsEndpoint = 'https://api.mycrumbs.xyz/leafwatch/impressions';
 const publicationsVisibilityInterval = 5000;
 let viewerId: null | string = null;
-let visiblePublicationsSet = new Set();
+const visiblePublicationsSet = new Set();
 
 const sendVisiblePublicationsToServer = () => {
   const publicationsToSend = Array.from(visiblePublicationsSet);
@@ -14,52 +13,25 @@ const sendVisiblePublicationsToServer = () => {
   if (publicationsToSend.length > 0 && viewerId) {
     visiblePublicationsSet.clear();
     fetch(impressionsEndpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        viewer_id: viewerId,
-        ids: publicationsToSend
+        ids: publicationsToSend,
+        viewer_id: viewerId
       }),
-      keepalive: true
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
+      method: 'POST'
     })
       .then(() => {})
       .catch(() => {});
   }
 };
 
-const preCachedAssets = (process.env.STATIC_ASSETS ?? []) as string[];
-const CACHEABLE_PATHS = ['/', '/contact', '/explore', '/messages'];
-const CACHEABLE_DOMAINS = [
-  'https://static-asset.mycrumbs.xyz',
-  'https://asset.mycrumbs.xyz',
-  'https://prerender.mycrumbs.xyz'
-];
-
-const cache = new ServiceWorkerCache({
-  cachePrefix: 'SWCache',
-  cacheableRoutes: [...CACHEABLE_PATHS, ...CACHEABLE_DOMAINS],
-  staticAssets: preCachedAssets
-});
-
-async function handleInstall(): Promise<void> {
-  void self.skipWaiting();
-  await cache.cacheStaticAssets();
-}
+setInterval(sendVisiblePublicationsToServer, publicationsVisibilityInterval);
 
 const handleActivate = async (): Promise<void> => {
   await self.clients.claim();
-  await cache.invalidatePreviousCache();
 };
 
-const handleFetch = (event: FetchEvent): void => {
-  const request = event.request.clone();
-  const { origin } = new URL(request.url);
-
-  if (self.location.origin === origin || CACHEABLE_DOMAINS.includes(origin)) {
-    event.respondWith(cache.get(event));
-  }
-  return;
-};
 self.addEventListener('message', (event) => {
   // Impression tracking
   if (event.data && event.data.type === 'PUBLICATION_VISIBLE') {
@@ -67,9 +39,17 @@ self.addEventListener('message', (event) => {
     viewerId = event.data.viewerId;
   }
 });
-setInterval(sendVisiblePublicationsToServer, publicationsVisibilityInterval);
-self.addEventListener('fetch', handleFetch);
-self.addEventListener('install', (event) => event.waitUntil(handleInstall()));
+
+self.addEventListener('push', (event) => {
+  event.waitUntil(
+    self.registration.showNotification('MyCrumbs', {
+      body: 'New Notification',
+      icon: 'public/icon.png',
+    }) // Removed the semicolon here
+  );
+});
+
+
 self.addEventListener('activate', (event) => event.waitUntil(handleActivate()));
 
 export {};

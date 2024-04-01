@@ -15,7 +15,7 @@ const getPreferences = async (
 ): Promise<Preferences> => {
   try {
     const response: { data: { result: Preferences } } = await axios.get(
-      `${LENSSHARE_API_URL}/preference/getPreferences`,
+      `${HEY_API_URL}/preferences/get`,
       { headers, params: { id } }
     );
 
@@ -23,11 +23,12 @@ const getPreferences = async (
   } catch {
     return {
       features: [],
-      membershipNft: { dismissedOrMinted: false },
-      preference: null,
-      pro: { enabled: false }
+      hasDismissedOrMintedMembershipNft: true,
+      highSignalNotificationFilter: false,
+      isPride: false
     };
   }
 };
+
 
 export default getPreferences;

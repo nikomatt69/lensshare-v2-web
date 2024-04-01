@@ -19,6 +19,9 @@ import { BASE_URL } from '@lensshare/data/constants';
 import SW from '@components/ServiceWorker';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ThemeProvider from './ThemeProvider';
+import LeafwatchProvider from './LeafwatchProvider';
+import OptimisticTransactionsProvider from './OptimisticTransactionsProvider';
+import PreferencesProvider from './PreferencesProvider';
 
 const lensApolloClient = apolloClient(authLink);
 const livepeerClient = createReactClient({
@@ -35,10 +38,13 @@ const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <ErrorBoundary>
       <SW />
+      <LeafwatchProvider />
       <Web3Provider>
         <ApolloProvider client={lensApolloClient}>
           <LensSubscriptionsProvider />
+          <OptimisticTransactionsProvider />
           <QueryClientProvider client={queryClient}>
+            <PreferencesProvider />
             <LivepeerConfig client={livepeerClient} theme={getLivepeerTheme}>
               <ThemeProvider>
                 <Layout>{children}</Layout>

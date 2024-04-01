@@ -9,5 +9,13 @@ export enum Errors {
   InvalidProfileId = 'Invalid profile id!',
   InvalidAddress = 'Invalid address!',
   NotAdmin = 'You are not admin!',
-  NoBody = 'No body provided!'
+  NoBody = 'No body provided!',
+  NoPermission = 'You do not have permission to perform this action!',
+  NotAllowed = 'Not allowed!',
+  RateLimited = 'You are being rate limited!',
+  AppNotAllowed = 'This app is not allowed to perform this action!',
+  InvalidBody = 'Invalid body!',
+  InvalidSecret = 'Invalid secret!',
+  Suspended = 'Your profile has been suspended!'
 }
+

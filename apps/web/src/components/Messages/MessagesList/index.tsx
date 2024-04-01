@@ -38,13 +38,7 @@ const MessagesList: FC = () => {
   >([]);
 
   // callback to handle incoming messages
-  const onMessage = useCallback((message: CachedMessageWithId) => {
-    setStreamedMessages((prev) => [...prev, message]);
-  }, []);
 
-  useStreamMessages(selectedConversation);
-  useStreamMessages(selectedConversation);
-  useStreamAllMessages();
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
 

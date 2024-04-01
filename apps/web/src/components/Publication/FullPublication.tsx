@@ -13,6 +13,7 @@ import PublicationStats from './PublicationStats';
 import PublicationType from './Type';
 import { useEffectOnce } from 'usehooks-ts';
 import pushToImpressions from '@lib/pushToImpressions';
+import usePushToImpressions from 'src/hooks/usePushToImpressions';
 
 interface FullPublicationProps {
   publication: AnyPublication;
@@ -24,9 +25,7 @@ const FullPublication: FC<FullPublicationProps> = ({ publication }) => {
     : publication;
 
   const { metadata, createdAt } = targetPublication;
-  useEffectOnce(() => {
-    pushToImpressions(targetPublication.id);
-  });
+  usePushToImpressions(targetPublication.id);
 
   const [views, setViews] = useState<number | null>(null);
 

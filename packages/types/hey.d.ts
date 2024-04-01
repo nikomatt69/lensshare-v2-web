@@ -9,7 +9,6 @@ export type Group = Database['public']['Tables']['groups']['Row'];
 
 export type StaffPick = Database['public']['Tables']['staff-picks']['Row'];
 
-
 export type Group = {
   avatar: string;
   createdAt: Date;
@@ -25,13 +24,15 @@ export type Group = {
   x: null | string;
 };
 
+export type ProfileFlags = {
+  isSuspended: boolean;
+};
 
 export type UniswapQuote = {
   amountOut: string;
   maxSlippage: string;
   routeString: string;
 };
-
 
 export type StaffPick = {
   createdAt: Date;
@@ -61,16 +62,10 @@ export type MembershipNft =
 
 export type Preferences = {
   features: string[];
-  membershipNft: { dismissedOrMinted: boolean };
-  preference?: {
-    createdAt: Date;
-    highSignalNotificationFilter: boolean;
-    id: string;
-    isPride: boolean;
-  } | null;
-  pro: { enabled: boolean };
+  hasDismissedOrMintedMembershipNft: boolean;
+  highSignalNotificationFilter: boolean;
+  isPride: boolean;
 };
-
 export type CollectModuleType = {
   type?:
     | CollectOpenActionModuleType.SimpleCollectOpenActionModule

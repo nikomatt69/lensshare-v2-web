@@ -3,7 +3,7 @@ import { createClient } from '@clickhouse/client';
 import { CLICKHOUSE_URL } from './constants';
 
 const createClickhouseClient = () => {
-  const NEXT_PUBLIC_CLICKHOUSE_PASSWORD = 'gieK~6F9vTWnG';
+  const NEXT_PUBLIC_CLICKHOUSE_PASSWORD = 'y0Ym7Ni07T.55';
   return createClient({
     host: CLICKHOUSE_URL,
     database: 'default',

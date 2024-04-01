@@ -5,8 +5,8 @@ import { APP_NAME } from '@lensshare/data/constants';
 import { Card, GridItemEight, GridLayout } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
 import { loadKeys } from '@lib/xmtp/keys';
-import { DecodedMessage, useClient, useStreamAllMessages, useStreamMessages } from '@xmtp/react-sdk';
-import { useCallback, useEffect, useState } from 'react';
+import { useClient } from '@xmtp/react-sdk';
+import { useEffect } from 'react';
 import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
 import { useAccount, useWalletClient } from 'wagmi';
 
@@ -16,13 +16,16 @@ import MessagesList from './MessagesList';
 import useResizeObserver from 'use-resize-observer';
 import { PAGEVIEW } from '@lensshare/data/tracking';
 import { Leafwatch } from '@lib/leafwatch';
-import useGetMessages from 'src/hooks/useGetMessages';
 
 const Messages: NextPage = () => {
   const { newConversationAddress, selectedConversation } = useMessagesStore();
   const { initialize, isLoading } = useClient();
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
+
+  useEffect(() => {
+    Leafwatch.track(PAGEVIEW, { page: 'messages' });
+  }, []);
 
   const initXmtp = async () => {
     if (!address) {
@@ -46,14 +49,7 @@ const Messages: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-
-
-  const [endTime, setEndTime] = useState<Map<string, Date>>(new Map());
-  useStreamAllMessages();
-  
-  const { ref: divref, width: divWidth = 1080 } =
-    useResizeObserver<HTMLDivElement>();
+  const { ref: divref, width: divWidth = 1080 } = useResizeObserver<HTMLDivElement>();
 
   return (
     <div ref={divref}>

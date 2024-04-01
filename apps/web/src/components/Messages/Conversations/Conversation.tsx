@@ -1,7 +1,6 @@
-import { useStreamAllMessages, type CachedConversation } from '@xmtp/react-sdk';
+import { type CachedConversation } from '@xmtp/react-sdk';
 import type { FC } from 'react';
 import type { Address } from 'viem';
-
 
 import cn from '@lensshare/ui/cn';
 import { Leafwatch } from '@lib/leafwatch';
@@ -9,6 +8,7 @@ import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
 
 import User from './User';
 import React from 'react';
+import { MESSAGES } from '@lensshare/data/tracking';
 
 interface ConversationProps {
   conversation: CachedConversation;
@@ -20,7 +20,6 @@ const Conversation: FC<ConversationProps> = ({ conversation }) => {
     setNewConversationAddress,
     setSelectedConversation
   } = useMessagesStore();
-  const [open, setOpen] = React.useState(false);
 
   return (
     <div
@@ -35,9 +34,7 @@ const Conversation: FC<ConversationProps> = ({ conversation }) => {
       onClick={() => {
         setNewConversationAddress(null);
         setSelectedConversation(conversation);
-        setOpen(false)
-
-  ;
+        Leafwatch.track(MESSAGES.OPEN_CONVERSATION);
       }}
     >
       <User

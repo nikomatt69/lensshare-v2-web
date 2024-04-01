@@ -50,7 +50,7 @@ const User: FC<UserProps> = ({ address, conversation }) => {
       <div className=" items-center space-x-3">
         <Image
           alt={address}
-          className="z-[1] w-11 h-11 cursor-pointer rounded-full border bg-gray-200 dark:border-gray-700"
+          className="z-[1] h-11 w-11 cursor-pointer rounded-full border bg-gray-200 dark:border-gray-700"
           height={44}
           loading="lazy"
           src={getStampFyiURL(address)}
@@ -68,7 +68,7 @@ const User: FC<UserProps> = ({ address, conversation }) => {
     <div className="flex items-center space-x-3">
       <Image
         alt={profile.id}
-        className="z-[1] w-11 h-11 cursor-pointer rounded-full border bg-gray-200 dark:border-gray-700"
+        className="z-[1] h-11 w-11 cursor-pointer rounded-full border bg-gray-200 dark:border-gray-700"
         height={44}
         loading="lazy"
         onError={({ currentTarget }) => {
@@ -87,10 +87,10 @@ const User: FC<UserProps> = ({ address, conversation }) => {
             slug={getProfile(profile).slugWithPrefix}
           />
           {isVerified(profile.id) ? (
-            <CheckBadgeIcon className="text-brand-500 ml-1 w-4 h-4" />
+            <CheckBadgeIcon className="text-brand-500 ml-1 h-4 w-4" />
           ) : null}
           {hasMisused(profile.id) ? (
-            <ExclamationCircleIcon className="ml-1 w-4 h-4" />
+            <ExclamationCircleIcon className="ml-1 h-4 w-4" />
           ) : null}
         </div>
         <LatestMessage conversation={conversation} />

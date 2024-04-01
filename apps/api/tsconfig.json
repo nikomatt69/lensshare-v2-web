@@ -1,10 +1,10 @@
 {
-  "extends": "@lensshare/config/react.tsconfig.json",
+  "extends": "@lensshare/config/base.tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@utils*": ["utils*"]
-    }
+    "module": "commonjs",
+    "noEmit": false,
+    "outDir": "dist",
+    "baseUrl": "."
   },
-  "include": ["next-env.d.ts", "**/*.ts"]
+  "include": ["next-env.d.ts", "**/*.ts", "src"]
 }

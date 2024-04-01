@@ -71,17 +71,18 @@ const Conversations: FC<ConversationsProps> = ({ isClientLoading }) => {
   }, [activeTab, conversations]);
 
   useEffect(() => {
-    if (client) {
+    if (client?.address) {
       loadConsentList();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [conversations]);
 
   useEffect(() => {
     const end = page * conversationsPerPage;
     const newConversations = filteredConversations.slice(0, end);
     setVisibleConversations(newConversations);
   }, [page, filteredConversations]);
+
   const [open, setOpen] = React.useState(false);
 
   useStreamAllMessages();

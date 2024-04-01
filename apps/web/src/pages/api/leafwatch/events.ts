@@ -84,29 +84,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const client = createClickhouseClient();
     const result = await client.insert({
+      format: 'JSONEachRow',
       table: 'events',
       values: [
         {
-          name,
           actor: actor || null,
-          properties: properties || null,
-          url: url || null,
-          city: ipData?.city || null,
-          country: ipData?.country || null,
-          region: ipData?.regionName || null,
-          referrer: referrer || null,
-          platform: platform || null,
           browser: ua.browser.name || null,
           browser_version: ua.browser.version || null,
+          city: ipData?.city || null,
+          country: ipData?.country || null,
+          ip: ip || null,
+          name,
           os: ua.os.name || null,
-          utm_source: utmSource || null,
-          utm_medium: utmMedium || null,
+          platform: platform || null,
+          properties: properties || null,
+          referrer: referrer || null,
+          region: ipData?.regionName || null,
+          url: url || null,
           utm_campaign: utmCampaign || null,
-          utm_term: utmTerm || null,
-          utm_content: utmContent || null
+          utm_content: utmContent || null,
+          utm_medium: utmMedium || null,
+          utm_source: utmSource || null,
+          utm_term: utmTerm || null
         }
-      ],
-      format: 'JSONEachRow'
+      ]
     });
 
     return res

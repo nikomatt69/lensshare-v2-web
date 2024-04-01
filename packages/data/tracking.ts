@@ -9,6 +9,16 @@ export const AUTH = {
   CHANGE_WALLET: 'Change wallet'
 };
 
+export const MESSAGES = {
+  ALLOW_USER: 'Allow user',
+  BLOCK_USER: 'Block user',
+  ENABLE_MESSAGES: 'Enable messages',
+  OPEN_CONVERSATION: 'Open conversation',
+  SEND_MESSAGE: 'Send message',
+  START_CONVERSATION: 'Start conversation'
+};
+
+
 export const PROFILE = {
   FOLLOW: 'Follow profile',
   SUPER_FOLLOW: 'Super follow profile',

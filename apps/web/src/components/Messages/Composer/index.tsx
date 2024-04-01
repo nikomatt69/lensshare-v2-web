@@ -1,97 +1,31 @@
 import type { CachedConversation } from '@xmtp/react-sdk';
 import type { ChangeEvent, FC } from 'react';
 
+import { MESSAGES } from '@lensshare/data/tracking';
 import { Button, Input } from '@lensshare/ui';
-import { useSendMessage, useStreamAllMessages } from '@xmtp/react-sdk';
+import { useSendMessage } from '@xmtp/react-sdk';
 import { useEffect, useRef, useState } from 'react';
 
-import { PhoneIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { PhoneIcon } from '@heroicons/react/24/outline';
 
-import { type Attachment as TAttachment } from 'xmtp-content-type-remote-attachment';
 import { AudioRecorder } from 'react-audio-voice-recorder';
-import {
-  useAttachmentCachePersistStore,
-  useAttachmentStore
-} from 'src/store/attachment';
-import toast from 'react-hot-toast';
-import { ContentTypeAudioeKey } from 'src/hooks/codecs/Audio';
+
 import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 import { uploadToIPFS } from 'src/hooks/uploadToIPFS';
 import { STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import Link from 'next/link';
+import { Leafwatch } from '@lib/leafwatch';
 
 interface ComposerProps {
   conversation: CachedConversation;
 }
 
 const Composer: FC<ComposerProps> = ({ conversation }) => {
-  interface AttachmentPreviewProps {
-    onDismiss: () => void;
-    dismissDisabled: boolean;
-    attachment: TAttachment;
-  }
-
-  /**
-   * This component is for displaying the attachment preview in the messages
-   * list before it's uploaded and sent to the network. It matches how the
-   * attachment is rendered when retrieved from the network.
-   */
-
+  const [show, setShow] = useState(false);
+  const [meetingUrl, setMeetingUrl] = useState('');
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const { sendMessage } = useSendMessage();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [sending, setSending] = useState<boolean>(false);
-  const [attachment, setAttachment] = useState<TAttachment | null>(null);
-  const canSendMessage = attachment || message.length > 0;
-
-  const addLoadedAttachmentURL = useAttachmentStore(
-    (state) => state.addLoadedAttachmentURL
-  );
-  const cacheAttachment = useAttachmentCachePersistStore(
-    (state) => state.cacheAttachment
-  );
-
-  const [show, setShow] = useState(false);
-  const [meetingUrl, setMeetingUrl] = useState('');
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [conversation]);
-
-  const onDismiss = () => {
-    setAttachment(null);
-
-    const el = fileInputRef.current;
-    if (el) {
-      el.value = '';
-    }
-  };
-
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-
-    try {
-      if (attachment) {
-        const sentAttachment = await sendMessage(conversation, message); // Assume this function handles sending the attachment
-        if (!sentAttachment) {
-          toast.error(`Error sending attachment`);
-        }
-      }
-
-      if (message) {
-        await sendMessage(conversation, message);
-        setMessage('');
-        inputRef.current?.focus();
-      }
-    } catch (error) {
-      toast.error(`Error sending message`);
-    } finally {
-      setSending(false);
-    }
-  };
 
   const dataURLToBlob = (dataURL: string): Blob | null => {
     const arr = dataURL.split(',');
@@ -109,8 +43,7 @@ const Composer: FC<ComposerProps> = ({ conversation }) => {
   };
   const sendAudioAttachment = async (
     conversation: CachedConversation,
-    audioDataURL: string,
-   
+    audioDataURL: string
   ): Promise<void> => {
     try {
       // Convert Data URL to Blob
@@ -128,7 +61,9 @@ const Composer: FC<ComposerProps> = ({ conversation }) => {
       }
 
       // Construct a message with the audio attachment URL
-      const messageContent = `Vocal : [${sanitizeDStorageUrl(uploadResult.url)}]`;
+      const messageContent = `Vocal : [${sanitizeDStorageUrl(
+        uploadResult.url
+      )}]`;
 
       await sendMessage(conversation, messageContent);
     } catch (error) {
@@ -141,53 +76,31 @@ const Composer: FC<ComposerProps> = ({ conversation }) => {
     reader.onloadend = async () => {
       if (typeof reader.result === 'string') {
         // Assuming a function that handles creating and sending an audio attachment
-        await sendAudioAttachment(
-          conversation,
-          reader.result,
-        
-        ); // Corrected typo in ContentTypeAudioKey // Corrected typo in ContentTypeAudioKey
+        await sendAudioAttachment(conversation, reader.result); // Corrected typo in ContentTypeAudioKey // Corrected typo in ContentTypeAudioKey
         setMessage('');
       }
     };
   };
 
-  const onAttachmentChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length) {
-      const file = e.target.files[0];
-
-      const fileReader = new FileReader();
-      fileReader.addEventListener('load', async function () {
-        const data = fileReader.result;
-
-        if (!(data instanceof ArrayBuffer)) {
-          return;
-        }
-
-        const attachment: TAttachment = {
-          filename: file.name,
-          mimeType: file.type,
-          data: new Uint8Array(data)
-        };
-
-        setAttachment(attachment);
-      });
-
-      fileReader.readAsArrayBuffer(file);
-    } else {
-      setAttachment(null);
-    }
-  };
-
   useEffect(() => {
-    setMessage(message ?? '');
-    // only run this effect when the conversation changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, [conversation]);
 
-  const handleMessageChange = (value: string) => {
-    setMessage(value);
+  const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
   };
-  useStreamAllMessages();
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (conversation.peerAddress && message) {
+      setMessage('');
+      inputRef.current?.focus();
+      await sendMessage(conversation, message);
+      Leafwatch.track(MESSAGES.SEND_MESSAGE);
+    }
+  };
   return (
     <div className="border-t dark:border-gray-700">
       <form
@@ -217,10 +130,6 @@ const Composer: FC<ComposerProps> = ({ conversation }) => {
             const meetingUrl = `${url}/meet/${roomId}`;
 
             setMessage(meetingUrl);
-
-            // Instead of sending a message, set the meeting URL in the state
-            sendMessage(conversation, message);
-            // Instead of sending a message, set the meeting URL in the state
             setShow(true);
             setMeetingUrl(meetingUrl);
           }}
@@ -234,23 +143,11 @@ const Composer: FC<ComposerProps> = ({ conversation }) => {
           )}
         </div>
 
-        
-          <AudioRecorder showVisualizer onRecordingComplete={addAudioElement} />
-       
-        <label className="flex cursor-pointer items-center">
-          <PhotoIcon className="text-brand-500 h-6 w-5" />
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".png, .jpg, .jpeg, .gif"
-            className="hidden w-full"
-            onChange={onAttachmentChange}
-          />
-        </label>
-        
+        <AudioRecorder showVisualizer onRecordingComplete={addAudioElement} />
+
         <Input
           autoFocus
-          onChange={(event) => handleMessageChange(event.target.value)}
+          onChange={handleMessageChange}
           placeholder="Type a message..."
           ref={inputRef}
           type="text"
@@ -259,7 +156,6 @@ const Composer: FC<ComposerProps> = ({ conversation }) => {
         <Button disabled={!message} type="submit">
           Send
         </Button>
-       
       </form>
     </div>
   );

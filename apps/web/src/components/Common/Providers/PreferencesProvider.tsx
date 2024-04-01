@@ -1,4 +1,4 @@
-import { LENSSHARE_API_URL } from '@lensshare/data/constants';
+import { HEY_API_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import getPreferences from '@lib/api/getPreferences';
 import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
 import { useQuery } from '@tanstack/react-query';
@@ -6,27 +6,27 @@ import axios from 'axios';
 import { type FC } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
 import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
+import { FeatureFlag } from '@lensshare/data/feature-flags';
 import { useProStore } from 'src/store/useProStore';
 import { useMembershipNftStore } from 'src/store/useMembershipNftStore';
 import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
 import getCurrentSession from '@lib/getCurrentSession';
+import getAuthApiHeaders from '@components/Shared/Oembed/Portal/getAuthApiHeaders main';
+import { useVerifiedMembersStore } from 'src/store/persisted/useVerifiedMembersStore';
+import { usePreferencesStore } from 'src/store/usePreferencesStore';
+import { useProfileRestriction } from 'src/store/useProfileRestriction';
 
 const PreferencesProvider: FC = () => {
   const { id: sessionProfileId } = getCurrentSession();
-  const setVerifiedMembers = useAppStore((state) => state.setVerifiedMembers);
-  const setPreferences = usePreferencesStore((state) => state.setPreferences);
-  const setIsPro = useProStore((state) => state.setIsPro);
-  const setFeatureFlags = useFeatureFlagsStore(
-    (state) => state.setFeatureFlags
-  );
-  const setStaffMode = useFeatureFlagsStore((state) => state.setStaffMode);
-  const setGardenerMode = useFeatureFlagsStore(
-    (state) => state.setGardenerMode
-  );
-  const setDismissedOrMinted = useMembershipNftStore(
-    (state) => state.setDismissedOrMinted
-  );
+  const { setVerifiedMembers } = useVerifiedMembersStore();
+  const {
+    setHasDismissedOrMintedMembershipNft,
+    setHighSignalNotificationFilter,
+    setIsPride
+  } = usePreferencesStore();
+  const { setRestriction } = useProfileRestriction();
+  const { setFeatureFlags, setGardenerMode, setStaffMode } =
+    useFeatureFlagsStore();
 
   // Fetch preferences
   const fetchPreferences = async () => {
@@ -34,15 +34,30 @@ const PreferencesProvider: FC = () => {
       if (Boolean(sessionProfileId)) {
         const preferences = await getPreferences(
           sessionProfileId,
-          getAuthWorkerHeaders()
+          getAuthApiHeaders()
         );
 
         // Profile preferences
-        setPreferences({
-          highSignalNotificationFilter:
-            preferences.preference?.highSignalNotificationFilter || false,
-          isPride: preferences.preference?.isPride || false
+        setHighSignalNotificationFilter(
+          preferences.highSignalNotificationFilter
+        );
+        setIsPride(preferences.isPride);
+
+        // Feature flags
+        setFeatureFlags(preferences.features);
+        setStaffMode(preferences.features.includes(FeatureFlag.StaffMode));
+        setGardenerMode(
+          preferences?.features.includes(FeatureFlag.GardenerMode)
+        );
+        setRestriction({
+          isFlagged: preferences.features.includes(FeatureFlag.Flagged),
+          isSuspended: preferences.features.includes(FeatureFlag.Suspended)
         });
+
+        // Membership NFT
+        setHasDismissedOrMintedMembershipNft(
+          preferences.hasDismissedOrMintedMembershipNft
+        );
       }
       return true;
     } catch {
@@ -58,7 +73,7 @@ const PreferencesProvider: FC = () => {
   // Fetch verified members
   const fetchVerifiedMembers = async () => {
     try {
-      const response = await axios.get(`${LENSSHARE_API_URL}/misc/getVerified`);
+      const response = await axios.get(`${HEY_API_URL}/misc/verified`);
       const { data } = response;
       setVerifiedMembers(data.result || []);
       return true;

@@ -52,10 +52,7 @@ const MetaTags: FC<MetaTagsProps> = ({
 
       {/* PWA config */}
 
-      <link
-        rel="manifest"
-        href="https://progressier.app/B5LgRYtk8D553Rd2UvFW/progressier.json"
-      />
+      <link rel="manifest" href="/manifest.json" />
 
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="mobile-web-app-capable" content="yes" />

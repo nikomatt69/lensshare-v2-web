@@ -1,2 +1,2 @@
-export const CLICKHOUSE_URL = 'https://bztl7z46aw.eu-west-1.aws.clickhouse.cloud:8443';
+export const CLICKHOUSE_URL = 'https://vgc59dcvih.eu-west-2.aws.clickhouse.cloud:8443';
 

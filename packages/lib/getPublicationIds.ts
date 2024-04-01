@@ -1,4 +1,4 @@
-import { FEEDS_WORKER_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
+import { FEEDS_WORKER_URL, HEY_API_URL, LENSSHARE_API_URL } from '@lensshare/data/constants';
 import axios from 'axios';
 
 /**
@@ -11,17 +11,17 @@ import axios from 'axios';
 const getPublicationIds = async (
   provider: string,
   strategy: string,
-  limit: number | null,
-  offset: number | null,
+  limit: null | number,
+  offset: null | number,
   profile?: string
 ) => {
   try {
-    const response = await axios.get(`${LENSSHARE_API_URL}/feed/getPublicationIds`, {
+    const response = await axios.get(`${HEY_API_URL}/feed`, {
       params: {
-        provider,
-        strategy,
         limit,
         offset,
+        provider,
+        strategy,
         ...(profile ? { profile } : {})
       }
     });

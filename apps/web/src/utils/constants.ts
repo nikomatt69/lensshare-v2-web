@@ -1,6 +1,6 @@
 // DB URLs
 export const SUPABASE_URL = 'https://nberpnnqcqfnrzjpnisb.supabase.co';
-export const CLICKHOUSE_URL = 'https://bztl7z46aw.eu-west-1.aws.clickhouse.cloud:8443';
+export const CLICKHOUSE_URL = 'https://vgc59dcvih.eu-west-2.aws.clickhouse.cloud:8443';
 
 // DB Feature IDs
 export const STAFF_FEATURE_ID = 'eea3b2d2-a60c-4e41-8130-1cb34cc37810';

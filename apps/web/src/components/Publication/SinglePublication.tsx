@@ -15,6 +15,7 @@ import PublicationType from './Type';
 import { useInView } from 'react-cool-inview';
 import pushToImpressions from '@lib/pushToImpressions';
 import { useEffectOnce } from 'usehooks-ts';
+import usePushToImpressions from 'src/hooks/usePushToImpressions';
 
 interface SinglePublicationProps {
   publication: AnyPublication;
@@ -58,9 +59,7 @@ const SinglePublication: FC<SinglePublicationProps> = ({
     }
   });
 
-  useEffectOnce(() => {
-    pushToImpressions(rootPublication.id);
-  });
+  usePushToImpressions(rootPublication.id);
   return (
     <PublicationWrapper
       className={cn(

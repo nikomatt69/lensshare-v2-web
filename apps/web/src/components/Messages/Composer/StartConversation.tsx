@@ -19,6 +19,8 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
 import { useAccount } from 'wagmi';
+import { MESSAGES } from '@lensshare/data/tracking';
+import { Leafwatch } from '@lib/leafwatch';
 
 const StartConversation: FC = () => {
   const { address } = useAccount();
@@ -66,6 +68,7 @@ const StartConversation: FC = () => {
       setSelectedConversation(
         conversation.cachedConversation as CachedConversation
       );
+      Leafwatch.track(MESSAGES.START_CONVERSATION);
       setIsSending(false);
     }
   };

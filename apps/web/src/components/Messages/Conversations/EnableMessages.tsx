@@ -1,4 +1,5 @@
 import { CursorArrowRaysIcon } from '@heroicons/react/24/outline';
+import { MESSAGES } from '@lensshare/data/tracking';
 
 import { Button, EmptyState } from '@lensshare/ui';
 import { Leafwatch } from '@lib/leafwatch';
@@ -33,7 +34,7 @@ const EnableMessages: FC = () => {
         options: { env: 'production' },
         signer: walletClient as any
       });
-      
+      Leafwatch.track(MESSAGES.ENABLE_MESSAGES);
 
       return toast.success('Messages enabled successfully');
     } finally {

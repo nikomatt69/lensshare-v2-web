@@ -8,6 +8,7 @@ import PublicationBody from './PublicationBody';
 import PublicationHeader from './PublicationHeader';
 import { useInView } from 'react-cool-inview';
 import pushToImpressions from '@lib/pushToImpressions';
+import usePushToImpressions from 'src/hooks/usePushToImpressions';
 
 interface ThreadBodyProps {
   publication: AnyPublication;
@@ -20,7 +21,8 @@ const ThreadBody: FC<ThreadBodyProps> = ({ publication }) => {
         return;
       }
 
-      pushToImpressions(publication.id);
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      usePushToImpressions(publication.id);
     }
   });
   return (

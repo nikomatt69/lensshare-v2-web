@@ -12,6 +12,7 @@ import AggregatedNotificationTitle from '../AggregatedNotificationTitle';
 import { NotificationProfileAvatar } from '../Profile';
 import { useEffectOnce } from 'usehooks-ts';
 import pushToImpressions from '@lib/pushToImpressions';
+import usePushToImpressions from 'src/hooks/usePushToImpressions';
 // million-ignore
 interface ActedNotificationProps {
   notification: ActedNotification;
@@ -29,9 +30,7 @@ const ActedNotification: FC<ActedNotificationProps> = ({ notification }) => {
   const length = actions.length - 1;
   const moreThanOneProfile = length > 1;
 
-  useEffectOnce(() => {
-    pushToImpressions(notification.publication.id);
-  });
+  usePushToImpressions(notification.publication.id);
 
   const text = moreThanOneProfile
     ? `and ${length} ${plur('other', length)} acted on your`

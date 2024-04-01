@@ -11,6 +11,7 @@ import AggregatedNotificationTitle from '../AggregatedNotificationTitle';
 import { NotificationProfileAvatar } from '../Profile';
 import { useEffectOnce } from 'usehooks-ts';
 import pushToImpressions from '@lib/pushToImpressions';
+import usePushToImpressions from 'src/hooks/usePushToImpressions';
 // million-ignore
 interface MirrorNotificationProps {
   notification: MirrorNotification;
@@ -29,9 +30,7 @@ const MirrorNotification: FC<MirrorNotificationProps> = ({ notification }) => {
     : 'mirrored your';
   const type = notification?.publication.__typename;
 
-  useEffectOnce(() => {
-    pushToImpressions(notification.publication.id);
-  });
+  usePushToImpressions(notification.publication.id);
 
   return (
     <div className="space-y-2">

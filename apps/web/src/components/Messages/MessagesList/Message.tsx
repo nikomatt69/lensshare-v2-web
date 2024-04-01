@@ -12,16 +12,16 @@ import { getTimeFromNow } from 'src/hooks/formatTime4';
 import { useAppStore } from 'src/store/useAppStore';
 import { ContentTypeAudioeKey } from 'src/hooks/codecs/Audio';
 import Markup from '@components/Shared/Markup';
+import { useAccount } from 'wagmi';
 interface MessagesProps {
   message: CachedMessageWithId;
 }
 
 const Messages: FC<MessagesProps> = ({ message }) => {
-  const { currentProfile } = useAppStore();
-  const [messages, setMessages] = useState<CachedMessageWithId[]>([]);
+  const { address } = useAccount();
   const reactions = useReactions(message);
   const messageHasReaction = hasReaction(message);
-  const isSender = message.senderAddress === currentProfile?.ownedBy.address;
+  const isSender = message.senderAddress === address;
   
  
   if (message.contentType === ContentTypeText.toString()) {
