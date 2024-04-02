@@ -8,11 +8,11 @@ import { Client } from '@xmtp/xmtp-js';
 import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useEffectOnce, useUpdateEffect } from 'usehooks-ts';
 
 const EnableMessages: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { push } = useRouter();
   const [canMessage, setCanMessage] = useState(false);
   const [loaded, setLoaded] = useState(false);

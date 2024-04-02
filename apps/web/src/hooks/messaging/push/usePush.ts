@@ -13,15 +13,16 @@ import { useWalletClient } from 'wagmi';
 import { useProfileStore } from 'src/store/persisted/useProfileStore';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 import { PUSH_ENV } from '@lensshare/data/constants';
-import { useAppStore } from 'src/store/useAppStore';
+
 import { getAccountFromProfile } from './helper2';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 export const MAX_CHAT_ITEMS = 30;
 
 const usePushHooks = () => {
   const connectedProfile = usePushChatStore((state) => state.connectedProfile);
   const recepientProfile = usePushChatStore((state) => state.recipientProfile);
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const {currentProfile} = useAppStore();
   const pgpPrivateKey = usePushChatStore((state) => state.pgpPrivateKey);
   const recepientAccount = getAccountFromProfile(recepientProfile?.id!);
   const account = getAccountFromProfile(currentProfile?.id);

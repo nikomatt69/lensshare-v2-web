@@ -47,12 +47,8 @@ import useCreatePoll from 'src/hooks/useCreatePoll';
 import useCreatePublication from 'src/hooks/useCreatePublication';
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
 import usePublicationMetadata from 'src/hooks/usePublicationMetadata';
-import { useAppStore } from 'src/store/useAppStore';
-import { useCollectModuleStore } from 'src/store/useCollectModuleStore';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
-import { useNonceStore } from 'src/store/useNonceStore';
-import { usePublicationStore } from 'src/store/usePublicationStore';
-import { useReferenceModuleStore } from 'src/store/useReferenceModuleStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import { useEffectOnce, useUpdateEffect } from 'usehooks-ts';
 import { NftOpenActionKit } from 'nft-openaction-kit';
 import LivestreamSettings from './Actions/LivestreamSettings';
@@ -63,10 +59,14 @@ import Discard from './Post/Discard';
 import LinkPreviews from './LinkPreviews';
 import getURLs from '@lensshare/lib/getURLs';
 import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
-
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 import { useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
 import { usePublicationAttributesStore } from 'src/store/non-persisted/usePublicationAttributesStore';
 import OpenActions from './OpenActions';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
+import { useCollectModuleStore } from 'src/store/non-persisted/useCollectModuleStore';
+import { useReferenceModuleStore } from 'src/store/non-persisted/useReferenceModuleStore';
 const Attachment = dynamic(
   () => import('@components/Composer/Actions/Attachment'),
   {
@@ -116,19 +116,15 @@ interface NewPublicationProps {
 }
 
 const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [openActionEmbedLoading, setOpenActionEmbedLoading] =
     useState<boolean>(false);
   const [openActionEmbed, setOpenActionEmbed] = useState<any | undefined>();
   
   // Modal store
-  const setShowNewPostModal = useGlobalModalStateStore(
-    (state) => state.setShowNewPostModal
-  );
-  const setShowDiscardModal = useGlobalModalStateStore(
-    (state) => state.setShowDiscardModal
-  );
+  const { setShowDiscardModal, setShowNewPostModal } =
+  useGlobalModalStateStore();
 
   // Nonce store
   const { lensHubOnchainSigNonce } = useNonceStore();
@@ -580,7 +576,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
 
   const isSubmitDisabledByPoll = showPollEditor
     ? !pollConfig.choices.length ||
-      pollConfig.choices.some((choice) => !choice.length)
+      pollConfig.choices.some((choice: string | any[]) => !choice.length)
     : false;
 
   const onDiscardClick = () => {

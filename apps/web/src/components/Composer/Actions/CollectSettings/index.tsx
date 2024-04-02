@@ -3,9 +3,10 @@ import { Modal, Tooltip } from '@lensshare/ui';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useCollectModuleStore } from 'src/store/useCollectModuleStore';
+
 
 import CollectForm from './CollectForm';
+import { useCollectModuleStore } from 'src/store/non-persisted/useCollectModuleStore';
 
 const CollectSettings: FC = () => {
   const { reset } = useCollectModuleStore((state) => state);

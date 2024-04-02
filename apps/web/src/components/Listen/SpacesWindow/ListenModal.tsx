@@ -1,7 +1,7 @@
 import type { AnyPublication } from '@lensshare/lens';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import { isMobile } from 'react-device-detect';
 import {

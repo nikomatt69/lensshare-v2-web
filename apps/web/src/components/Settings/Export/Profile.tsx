@@ -6,10 +6,10 @@ import { Button, Card } from '@lensshare/ui';
 import { Leafwatch } from '@lib/leafwatch';
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const Profile: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [profile, setProfile] = useState<TProfile | null>(null);
   const [exporting, setExporting] = useState(false);
   const [fetchCompleted, setFetchCompleted] = useState(false);

@@ -1,5 +1,6 @@
 import parseJwt from '@lensshare/lib/parseJwt';
-import { hydrateAuthTokens } from 'src/store/useAuthPersistStore';
+import { hydrateAuthTokens } from 'src/store/persisted/useAuthStore';
+
 
 const getCurrentSessionProfileId = (): string => {
   const { accessToken } = hydrateAuthTokens();

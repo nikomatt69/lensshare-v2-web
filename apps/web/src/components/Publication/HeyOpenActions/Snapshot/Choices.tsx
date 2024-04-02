@@ -8,7 +8,7 @@ import axios from 'axios';
 import type { FC } from 'react';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useSignTypedData } from 'wagmi';
 
 import VoteProposal from './VoteProposal';
@@ -35,7 +35,7 @@ const Choices: FC<ChoicesProps> = ({
   isLensterPoll = false,
   refetch
 }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [voteSubmitting, setVoteSubmitting] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(0);
   const [voteConfig, setVoteConfig] = useState({

@@ -7,7 +7,7 @@ import { DecodedMessage } from '@xmtp/xmtp-js';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useMessageStore } from 'src/store/message';
 
 import { useMessageDb } from './useMessageDb';
@@ -22,7 +22,7 @@ const MAX_PROFILES_PER_REQUEST = 50;
 
 const useMessagePreviews = () => {
   const router = useRouter();
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const conversations = useMessageStore((state) => state.conversations);
   const setConversations = useMessageStore((state) => state.setConversations);
   const previewMessages = useMessageStore((state) => state.previewMessages);

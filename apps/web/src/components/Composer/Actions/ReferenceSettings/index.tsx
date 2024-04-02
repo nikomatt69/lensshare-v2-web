@@ -12,7 +12,8 @@ import { Tooltip } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
 import { motion } from 'framer-motion';
 import type { FC, ReactNode } from 'react';
-import { useReferenceModuleStore } from 'src/store/useReferenceModuleStore';
+import { useReferenceModuleStore } from 'src/store/non-persisted/useReferenceModuleStore';
+
 
 const ReferenceSettings: FC = () => {
   const {

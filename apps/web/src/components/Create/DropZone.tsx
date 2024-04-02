@@ -11,10 +11,11 @@ import toast from 'react-hot-toast'
 import { CREATOR_VIDEO_CATEGORIES } from 'src/categories'
 import { canUploadedToIpfs } from 'src/hooks/canUploadedToIpfs'
 import { useDragAndDrop } from 'src/hooks/useDragAndDrop'
-import useBytesStore from 'src/store/bytes'
+import useBytesStore from 'src/store/persisted/bytes'
+
 
 const DropZone = () => {
-  const setUploadedMedia = useBytesStore((state) => state.setUploadedMedia)
+  const {setUploadedMedia} = useBytesStore()
 
   const {
     dragOver,

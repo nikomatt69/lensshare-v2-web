@@ -58,7 +58,7 @@ import type { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import urlcat from 'urlcat';
 import { useContractWrite, useSignTypedData } from 'wagmi';
 import type { z } from 'zod';
@@ -88,7 +88,7 @@ interface ProfileSettingsFormProps {
 }
 
 const ProfileSettingsForm: FC<ProfileSettingsFormProps> = ({ profile }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
 
   // Cover Picture

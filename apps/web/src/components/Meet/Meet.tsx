@@ -11,7 +11,7 @@ import cn from '@lensshare/ui/cn';
 import { useTheme } from 'next-themes';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { useMeetPersistStore } from 'src/store/meet';
+
 import { useUpdateEffect } from 'usehooks-ts';
 
 import AudioElem from './Audio';
@@ -19,7 +19,8 @@ import { BasicIcons } from './BasicIcons';
 import SwitchDeviceMenu from './SwitchDeviceMenu';
 import VideoElem from './Video';
 import { STATIC_ASSETS_URL } from '@lensshare/data/constants';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+import { useMeetPersistStore } from 'src/store/persisted/meet';
 
 type HTMLAudioElementWithSetSinkId = HTMLAudioElement & {
   setSinkId: (id: string) => void;
@@ -27,7 +28,7 @@ type HTMLAudioElementWithSetSinkId = HTMLAudioElement & {
 
 const Meet: FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { leaveRoom } = useRoom();
   const {
     produceAudio,

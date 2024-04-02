@@ -5,7 +5,7 @@ import type { MirrorablePublication, Profile } from '@lensshare/lens';
 import type { FC } from 'react';
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import getProfile from '@lensshare/lib/getProfile';
 import { formatNumber } from 'src/hooks/formatNumber';
 import { getPublicationData } from 'src/hooks/getPublicationData';
@@ -17,7 +17,7 @@ type Props = {
 
 const BottomOverlay: FC<Props> = ({ video }) => {
   const profile = video.by;
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [following, setFollowing] = useState(false);
   return (
     <div className="from-trasparent absolute bottom-0 left-0 right-0 z-[1] mb-4 rounded-b-xl bg-gradient-to-t to-transparent px-3 pb-3 pt-5 text-gray-400">

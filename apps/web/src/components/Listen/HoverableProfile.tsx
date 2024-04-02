@@ -9,7 +9,7 @@ import React from 'react';
 import { getProfile } from 'src/hooks/getProfile';
 import { getProfilePicture } from 'src/hooks/getProfilePicture';
 import { imageCdn } from 'src/hooks/imageCdn';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 type Props = {
   profile: Profile;
@@ -24,8 +24,8 @@ const HoverableProfile: FC<Props> = ({
   children,
   pfp
 }) => {
-  const activeProfile = useAppStore((state) => state.currentProfile);
-  const isMyProfile = activeProfile?.id === profile.id;
+  const {currentProfile} = useAppStore();
+  const isMyProfile = currentProfile?.id === profile.id;
 
   return (
     <HoverCard.Root>
@@ -58,7 +58,7 @@ const HoverableProfile: FC<Props> = ({
                 size="4"
                 fallback={getProfile(profile)?.displayName[0] ?? ';)'}
                 radius="large"
-                alt={getProfile(activeProfile)?.displayName}
+                alt={getProfile(currentProfile)?.displayName}
               />
             </div>
             <div className="absolute bottom-3 right-3 flex-none" />

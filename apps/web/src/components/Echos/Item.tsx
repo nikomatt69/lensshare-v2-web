@@ -10,7 +10,8 @@ import type { FC } from 'react';
 import React from 'react';
 
 import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
-import useEchoStore from 'src/store/echos';
+import useEchoStore from 'src/store/persisted/echos';
+
 
 type Props = {
   publication: PrimaryPublication;

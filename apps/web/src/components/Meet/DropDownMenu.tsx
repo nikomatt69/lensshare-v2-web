@@ -4,9 +4,10 @@ import cn from '@lensshare/ui/cn';
 import { useTheme } from 'next-themes';
 import type { FC } from 'react';
 import { Fragment, useEffect, useState } from 'react';
-import { useMeetPersistStore } from 'src/store/meet';
+
 
 import DeviceList from './DeviceList';
+import { useMeetPersistStore } from 'src/store/persisted/meet';
 
 type DropDownProps = {
   deviceType: 'audioInput' | 'video' | 'audioOutput';
@@ -65,6 +66,7 @@ const DropDownMenu: FC<DropDownProps> = ({ deviceType }) => {
 
   useEffect(() => {
     listMediaDevices();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

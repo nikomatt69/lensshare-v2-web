@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import MenuItems from './MenuItems';
 import MoreNavItems from './MoreNavItems';
@@ -20,7 +20,7 @@ import PlusOutline from '@components/Icons/PlusOutline';
 import { ADMIN_ADDRESS2 } from '@lensshare/data/constants';
 
 const Navbar: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const [showSearch, setShowSearch] = useState(false);
   const router = useRouter();

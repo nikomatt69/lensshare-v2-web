@@ -8,7 +8,6 @@ import { Image } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
 import getCurrentSession from '@lib/getCurrentSession';
 import useEnsName from 'src/hooks/useEnsName';
-import useProfileStore from 'src/store/persisted/useProfileStore';
 
 import MenuTransition from '../MenuTransition';
 import Slug from '../Slug';
@@ -16,12 +15,11 @@ import { NextLink } from './MenuItems';
 import AppVersion from './NavItems/AppVersion';
 import Logout from './NavItems/Logout';
 import ThemeSwitch from './NavItems/ThemeSwitch';
-import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const WalletUser: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const {id: sessionProfileId } = getCurrentSession();
+  const { currentProfile } = useAppStore();
+  const { id: sessionProfileId } = getCurrentSession();
   const { ens } = useEnsName({
     address: sessionProfileId,
     enabled: Boolean(sessionProfileId)
@@ -30,7 +28,7 @@ const WalletUser: FC = () => {
   const Avatar = () => (
     <Image
       alt={sessionProfileId}
-      className="w-8 h-8 cursor-pointer rounded-full border dark:border-gray-700"
+      className="h-8 w-8 cursor-pointer rounded-full border dark:border-gray-700"
       src={getStampFyiURL(sessionProfileId)}
     />
   );

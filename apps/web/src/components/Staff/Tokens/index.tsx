@@ -8,8 +8,8 @@ import { useEffectOnce } from 'usehooks-ts';
 
 import StaffSidebar from '../Sidebar';
 import List from './List';
-import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
-import { useAppStore } from 'src/store/useAppStore';
+
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { PAGEVIEW } from '@lensshare/data/tracking';
 import {
   ADMIN_ADDRESS,
@@ -20,8 +20,8 @@ import {
 import { GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 
 const Tokens: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const staffMode = useFeatureFlagsStore((state) => state.staffMode);
+  const { currentProfile } = useAppStore();
+
 
   useEffectOnce(() => {
     Leafwatch.track(PAGEVIEW, { page: 'staff-tools', subpage: 'tokens' });

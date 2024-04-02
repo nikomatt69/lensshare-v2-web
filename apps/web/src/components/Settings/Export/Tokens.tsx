@@ -1,6 +1,7 @@
 import { Card } from '@lensshare/ui';
 import type { FC } from 'react';
-import { hydrateAuthTokens } from 'src/store/useAuthPersistStore';
+import { hydrateAuthTokens } from 'src/store/persisted/useAuthStore';
+
 
 const Tokens: FC = () => {
   const { accessToken, refreshToken } = hydrateAuthTokens();

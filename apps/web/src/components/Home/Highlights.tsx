@@ -8,24 +8,30 @@ import { OptmisticPublicationType } from '@lensshare/types/enums';
 import { Card, EmptyState, ErrorMessage } from '@lensshare/ui';
 import type { FC } from 'react';
 import { useInView } from 'react-cool-inview';
-import { useAppStore } from 'src/store/useAppStore';
-import { useTimelineStore } from 'src/store/useTimelineStore';
-import { useTransactionPersistStore } from 'src/store/useTransactionPersistStore';
+import { Virtuoso } from 'react-virtuoso';
+import { useImpressionsStore } from 'src/store/non-persisted/useImpressionsStore';
+import { useTimelineStore } from 'src/store/non-persisted/useTimelineStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+import { useProfileStore } from 'src/store/persisted/useProfileStore';
+import { useTransactionStore } from 'src/store/persisted/useTransactionStore';
 
 const Highlights: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const txnQueue = useTransactionPersistStore((state) => state.txnQueue);
-  const seeThroughProfile = useTimelineStore(
-    (state) => state.seeThroughProfile
-  );
+  const { currentProfile } = useProfileStore();
+  const { txnQueue } = useTransactionStore();
+  const { seeThroughProfile } = useTimelineStore();
+  const { fetchAndStoreViews } = useImpressionsStore();
 
   // Variables
   const request: FeedHighlightsRequest = {
-    where: { for: seeThroughProfile?.id ?? currentProfile?.id },
-    limit: LimitType.TwentyFive
+    limit: LimitType.TwentyFive,
+    where: { for: seeThroughProfile?.id || currentProfile?.id }
   };
 
-  const { data, loading, error, fetchMore } = useFeedHighlightsQuery({
+  const { data, error, fetchMore, loading } = useFeedHighlightsQuery({
+    onCompleted: async ({ feedHighlights }) => {
+      const ids = feedHighlights?.items?.map((p) => p.id) || [];
+      await fetchAndStoreViews(ids);
+    },
     variables: { request }
   });
 
@@ -33,17 +39,17 @@ const Highlights: FC = () => {
   const pageInfo = data?.feedHighlights?.pageInfo;
   const hasMore = pageInfo?.next;
 
-  const { observe } = useInView({
-    onChange: async ({ inView }) => {
-      if (!inView || !hasMore) {
-        return;
-      }
-
-      await fetchMore({
-        variables: { request: { ...request, cursor: pageInfo?.next } }
-      });
+  const onEndReached = async () => {
+    if (!hasMore) {
+      return;
     }
-  });
+
+    const { data } = await fetchMore({
+      variables: { request: { ...request, cursor: pageInfo?.next } }
+    });
+    const ids = data?.feedHighlights?.items?.map((p) => p.id) || [];
+    await fetchAndStoreViews(ids);
+  };
 
   if (loading) {
     return <PublicationsShimmer />;
@@ -52,33 +58,40 @@ const Highlights: FC = () => {
   if (publications?.length === 0) {
     return (
       <EmptyState
+        icon={<LightBulbIcon className="h-8 w-8" />}
         message="No posts yet!"
-        icon={<LightBulbIcon className="text-brand h-8 w-8" />}
       />
     );
   }
 
   if (error) {
-    return <ErrorMessage title="Failed to load highlights" error={error} />;
+    return <ErrorMessage error={error} title="Failed to load highlights" />;
   }
 
   return (
     <>
       {txnQueue.map((txn) =>
-        txn?.type === OptmisticPublicationType.NewPost ? (
-          <QueuedPublication key={txn.id} txn={txn} />
+        txn?.type === OptmisticPublicationType.Post ? (
+          <QueuedPublication key={txn.txId} txn={txn} />
         ) : null
       )}
-      <Card className="divide-y-[1px] dark:divide-gray-700">
-        {publications?.map((publication, index) => (
-          <SinglePublication
-            key={`${publication?.id}_${index}`}
-            isFirst={index === 0}
-            isLast={index === publications.length - 1}
-            publication={publication as AnyPublication}
-          />
-        ))}
-        {hasMore ? <span ref={observe} /> : null}
+      <Card>
+        <Virtuoso
+          className="virtual-divider-list-window"
+          computeItemKey={(index, publication) => `${publication.id}-${index}`}
+          data={publications}
+          endReached={onEndReached}
+          itemContent={(index, publication) => {
+            return (
+              <SinglePublication
+                isFirst={index === 0}
+                isLast={index === (publications?.length || 0) - 1}
+                publication={publication as AnyPublication}
+              />
+            );
+          }}
+          useWindowScroll
+        />
       </Card>
     </>
   );

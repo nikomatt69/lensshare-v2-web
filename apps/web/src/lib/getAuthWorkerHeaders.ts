@@ -1,5 +1,6 @@
 import { IS_MAINNET } from '@lensshare/data/constants';
-import { hydrateAuthTokens } from 'src/store/useAuthPersistStore';
+import { hydrateAuthTokens } from 'src/store/persisted/useAuthStore';
+
 
 const getAuthWorkerHeaders = () => {
   return {

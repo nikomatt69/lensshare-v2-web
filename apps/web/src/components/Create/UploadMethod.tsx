@@ -4,14 +4,15 @@ import { Text } from '@radix-ui/themes'
 import React, { useEffect } from 'react'
 
 import IrysInfo from './IrysInfo'
-import useBytesStore from 'src/store/bytes'
+
 import { canUploadedToIpfs } from 'src/hooks/canUploadedToIpfs'
 import { formatMB } from 'src/hooks/formatMB'
 import { IPFS_FREE_UPLOAD_LIMIT } from '@lensshare/data/constants'
+import useBytesStore from 'src/store/persisted/bytes'
 
 const UploadMethod = () => {
-  const uploadedMedia = useBytesStore((state) => state.uploadedMedia)
-  const setUploadedMedia = useBytesStore((state) => state.setUploadedMedia)
+  const { irysData, setIrysData, getIrysInstance } = useBytesStore();
+  const { uploadedMedia, setUploadedMedia } = useBytesStore();
 
   const isUnderFreeLimit = canUploadedToIpfs(uploadedMedia.file?.size)
 

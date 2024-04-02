@@ -17,10 +17,10 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import { useInView } from 'react-cool-inview';
 import toast from 'react-hot-toast';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const List: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const [revoking, setRevoking] = useState(false);
   const [revokeingSessionId, setRevokeingSessionId] = useState<string | null>(

@@ -9,10 +9,10 @@ import { formatDate } from '@lib/formatTime';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { useInView } from 'react-cool-inview';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const List: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const request: ProfileActionHistoryRequest = { limit: LimitType.TwentyFive };
   const { data, loading, error, fetchMore } = useProfileActionHistoryQuery({

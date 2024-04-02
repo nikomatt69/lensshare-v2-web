@@ -52,6 +52,7 @@ const PushWc: FC<RequestBody> = ({}) => {
   // Call the function when the component is mounted
   React.useEffect(() => {
     sendNotification();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null; // or return some JSX here

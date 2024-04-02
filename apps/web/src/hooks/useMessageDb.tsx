@@ -2,7 +2,7 @@ import type { Profile } from '@lensshare/lens';
 import type { DecodedMessage } from '@xmtp/xmtp-js';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useCallback } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import type { LensProfile, PreviewMessage } from 'src/store/message-db';
 import { db } from 'src/store/message-db';
 
@@ -24,7 +24,7 @@ const assertProfileId = (profileId: string | undefined) => {
 };
 
 export const useMessageDb = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const batchPersistPreviewMessages = useCallback(
     async (previewMap: Map<string, DecodedMessage>) => {

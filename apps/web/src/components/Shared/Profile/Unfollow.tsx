@@ -1,7 +1,6 @@
 import { UserMinusIcon } from '@heroicons/react/24/outline';
 import { LensHub } from '@lensshare/abis';
 import { LENSHUB_PROXY } from '@lensshare/data/constants';
-import { PROFILE } from '@lensshare/data/tracking';
 import type { Profile, UnfollowRequest } from '@lensshare/lens';
 import {
   useBroadcastOnchainMutation,
@@ -13,16 +12,16 @@ import checkDispatcherPermissions from '@lensshare/lib/checkDispatcherPermission
 import getSignature from '@lensshare/lib/getSignature';
 import { Button, Spinner } from '@lensshare/ui';
 import errorToast from '@lib/errorToast';
-import { Leafwatch } from '@lib/leafwatch';
 import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
-import { useAppStore } from 'src/store/useAppStore';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
-import { useNonceStore } from 'src/store/useNonceStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 import { useContractWrite, useSignTypedData } from 'wagmi';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 interface UnfollowProps {
   profile: Profile;
@@ -42,11 +41,9 @@ const Unfollow: FC<UnfollowProps> = ({
   unfollowSource
 }) => {
   const { pathname } = useRouter();
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore();
-  const setShowAuthModal = useGlobalModalStateStore(
-    (state) => state.setShowAuthModal
-  );
+  const { setShowAuthModal } = useGlobalModalStateStore();
   const [isLoading, setIsLoading] = useState(false);
   const handleWrongNetwork = useHandleWrongNetwork();
 
@@ -77,7 +74,6 @@ const Unfollow: FC<UnfollowProps> = ({
     setIsLoading(false);
     setFollowing(false);
     toast.success('Unfollowed successfully!');
-
   };
 
   const onError = (error: any) => {

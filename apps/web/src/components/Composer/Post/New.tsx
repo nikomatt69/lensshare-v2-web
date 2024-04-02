@@ -5,19 +5,20 @@ import getProfile from '@lensshare/lib/getProfile';
 import { Card, Image } from '@lensshare/ui';
 import { useRouter } from 'next/router';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import { useEffectOnce } from 'usehooks-ts';
 
 const NewPost: FC = () => {
   const { isReady, push, query } = useRouter();
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const setShowNewPostModal = useGlobalModalStateStore(
-    (state) => state.setShowNewPostModal
+  const { currentProfile } = useAppStore();
+  const {setShowNewPostModal} = useGlobalModalStateStore(
+    
   );
-  const setPublicationContent = usePublicationStore(
-    (state) => state.setPublicationContent
+  const {setPublicationContent} = usePublicationStore(
+   
   );
 
   const openModal = () => {

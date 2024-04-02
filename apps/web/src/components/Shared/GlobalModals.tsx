@@ -7,8 +7,6 @@ import {
 } from '@heroicons/react/24/outline';
 import { Modal } from '@lensshare/ui';
 import type { FC } from 'react';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
-import { usePublicationStore } from 'src/store/usePublicationStore';
 
 import Invites from './Modal/Invites';
 import ReportProfile from './Modal/ReportProfile';
@@ -16,12 +14,14 @@ import SwitchProfiles from './SwitchProfiles';
 import { useSignupStore } from './Auth/Signup';
 import Auth from './Auth';
 import WrongNetwork from './Auth/WrongNetwork';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 const GlobalModals: FC = () => {
   // Report modal state
   const {
     showPublicationReportModal,
-    reportingPublication,
+    reportingPublicationId,
     setShowPublicationReportModal,
     showProfileSwitchModal,
     setShowProfileSwitchModal,
@@ -50,9 +50,7 @@ const GlobalModals: FC = () => {
     showPollEditor,
     pollConfig
   } = usePublicationStore();
-  const authModalType = useGlobalModalStateStore(
-    (state) => state.authModalType
-  );
+  const { authModalType } = useGlobalModalStateStore();
   const signupScreen = useSignupStore((state) => state.screen);
 
   const showSignupModalTitle = signupScreen === 'choose';
@@ -80,10 +78,10 @@ const GlobalModals: FC = () => {
         icon={<ShieldCheckIcon className="text-brand h-5 w-5" />}
         show={showPublicationReportModal}
         onClose={() =>
-          setShowPublicationReportModal(false, reportingPublication)
+          setShowPublicationReportModal(false, reportingPublicationId)
         }
       >
-        <ReportPublication publication={reportingPublication} />
+        <ReportPublication publication={reportingPublicationId} />
       </Modal>
       <Modal
         title="Report profile"

@@ -9,7 +9,6 @@ import {
   useBroadcastOnchainMutation,
   useCreateChangeProfileManagersTypedDataMutation
 } from '@lensshare/lens';
-import { hydrateTbaStatus } from 'src/store/useTbaStatusStore';
 import checkDispatcherPermissions from '@lensshare/lib/checkDispatcherPermissions';
 import getSignature from '@lensshare/lib/getSignature';
 import { Button, Form, Input, Spinner, useZodForm } from '@lensshare/ui';
@@ -18,10 +17,11 @@ import { Leafwatch } from '@lib/leafwatch';
 import { type FC, useState } from 'react';
 import toast from 'react-hot-toast';
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
-import { useAppStore } from 'src/store/useAppStore';
-import { useNonceStore } from 'src/store/useNonceStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 import { useContractWrite, useSignTypedData } from 'wagmi';
 import { object, string } from 'zod';
+import { hydrateTbaStatus } from '@lensshare/web/src/store/persisted/useTbaStatusStore';
 
 const newProfileManagerSchema = object({
   manager: string()
@@ -36,7 +36,7 @@ interface AddProfileManagerProps {
 const AddProfileManager: FC<AddProfileManagerProps> = ({
   setShowAddManagerModal
 }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore();
   const [isLoading, setIsLoading] = useState(false);
   const { isTba } = hydrateTbaStatus();

@@ -1,17 +1,13 @@
-import { AUTH } from '@lensshare/data/tracking';
 import { Button } from '@lensshare/ui';
-import { Leafwatch } from '@lib/leafwatch';
 import type { FC } from 'react';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 interface LoginButtonProps {
   isBig?: boolean;
 }
 
 const LoginButton: FC<LoginButtonProps> = ({ isBig = false }) => {
-  const setShowAuthModal = useGlobalModalStateStore(
-    (state) => state.setShowAuthModal
-  );
+  const { setShowAuthModal } = useGlobalModalStateStore();
 
   return (
     <Button
@@ -26,7 +22,6 @@ const LoginButton: FC<LoginButtonProps> = ({ isBig = false }) => {
       }
       onClick={() => {
         setShowAuthModal(true);
-
       }}
     >
       Login

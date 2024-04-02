@@ -46,7 +46,7 @@ const SpacesWindow: FC = () => {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = createRef<HTMLAudioElementWithSetSinkId>();
 
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const setMusicTrackPath = (musicTrack: MusicTrack) => {
     switch (musicTrack) {

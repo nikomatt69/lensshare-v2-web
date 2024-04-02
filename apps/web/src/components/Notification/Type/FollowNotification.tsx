@@ -4,7 +4,7 @@ import getProfile from '@lensshare/lib/getProfile';
 import plur from 'plur';
 import type { FC } from 'react';
 import { memo } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import AggregatedNotificationTitle from '../AggregatedNotificationTitle';
 import { NotificationProfileAvatar } from '../Profile';
@@ -14,7 +14,7 @@ interface FollowNotificationProps {
 }
 // million-ignore
 const FollowNotification: FC<FollowNotificationProps> = ({ notification }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const followers = notification?.followers;
   const firstProfile = followers?.[0];
   const length = followers.length - 1;

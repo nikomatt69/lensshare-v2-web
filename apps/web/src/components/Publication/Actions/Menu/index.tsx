@@ -6,7 +6,7 @@ import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
 import { Fragment } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import Bookmark from './Bookmark';
 import CopyPostText from './CopyPostText';
@@ -22,7 +22,7 @@ interface PublicationMenuProps {
 }
 
 const PublicationMenu: FC<PublicationMenuProps> = ({ publication }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const iconClassName = 'w-[15px] sm:w-[18px]';
 
   return (

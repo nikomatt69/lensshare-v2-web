@@ -7,7 +7,7 @@ import {
   useBroadcastOnchainMutation,
   useCreateChangeProfileManagersTypedDataMutation
 } from '@lensshare/lens';
-import { hydrateTbaStatus } from 'src/store/useTbaStatusStore';
+
 import checkDispatcherPermissions from '@lensshare/lib/checkDispatcherPermissions';
 import getSignature from '@lensshare/lib/getSignature';
 import { Button, Spinner } from '@lensshare/ui';
@@ -17,9 +17,10 @@ import { Leafwatch } from '@lib/leafwatch';
 import type { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useAppStore } from 'src/store/useAppStore';
-import { useNonceStore } from 'src/store/useNonceStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 import { useContractWrite, useSignTypedData } from 'wagmi';
+import { hydrateTbaStatus } from 'src/store/persisted/useTbaStatusStore';
 
 interface ToggleLensManagerProps {
   buttonSize?: 'sm';
@@ -28,7 +29,7 @@ interface ToggleLensManagerProps {
 const ToggleLensManager: FC<ToggleLensManagerProps> = ({
   buttonSize = 'md'
 }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore();
   const [isLoading, setIsLoading] = useState(false);
   const { isTba } = hydrateTbaStatus();

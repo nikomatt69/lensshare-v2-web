@@ -8,7 +8,7 @@ import cn from '@lensshare/ui/cn';
 import { Player } from '@livepeer/react';
 import type { FC } from 'react';
 import { memo } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface VideoProps {
   src: string;
@@ -17,7 +17,7 @@ interface VideoProps {
 }
 
 const Video: FC<VideoProps> = ({ src, poster, className = '' }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   return (
     <div className={cn('lp-player', className)} onClick={stopEventPropagation}>

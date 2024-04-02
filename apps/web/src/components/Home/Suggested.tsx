@@ -9,10 +9,10 @@ import { EmptyState, ErrorMessage } from '@lensshare/ui';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { Virtuoso } from 'react-virtuoso';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const Suggested: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { data, loading, error } = useProfileRecommendationsQuery({
     variables: { request: { for: currentProfile?.id } }
   });

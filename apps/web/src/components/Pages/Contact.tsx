@@ -24,7 +24,7 @@ import axios from 'axios';
 import type { FC } from 'react';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useEffectOnce } from 'usehooks-ts';
 import { object, string } from 'zod';
 
@@ -42,7 +42,7 @@ const newContactSchema = object({
 const Contact: FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const form = useZodForm({
     schema: newContactSchema

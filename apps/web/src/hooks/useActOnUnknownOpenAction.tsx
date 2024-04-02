@@ -16,7 +16,7 @@ import { useState } from 'react';
 import useHandleWrongNetwork from './useHandleWrongNetwork';
 import toast from 'react-hot-toast';
 import errorToast from '@lib/errorToast';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface CreatePublicationProps {
   onSuccess?: () => void;
@@ -31,7 +31,7 @@ const useActOnUnknownOpenAction = ({
 }: CreatePublicationProps) => {
   const { currentProfile } = useAppStore();
   const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore(
-    (state) => state
+    
   );
   const [isLoading, setIsLoading] = useState(false);
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>();

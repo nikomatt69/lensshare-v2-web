@@ -3,7 +3,7 @@
 import type { Conversation, DecodedMessage } from '@xmtp/xmtp-js';
 import { SortDirection } from '@xmtp/xmtp-js';
 import { useEffect, useRef, useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useMessageStore } from 'src/store/message';
 
 import { useMessageDb } from './useMessageDb';
@@ -30,7 +30,7 @@ const useGetMessagePreviews = () => {
   const conversations = useMessageStore((state) => state.conversations);
   const previewMessages = useMessageStore((state) => state.previewMessages);
   const client = useMessageStore((state) => state.client);
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { batchPersistPreviewMessages } = useMessageDb();
   const hasSyncedMessages = useMessageStore((state) => state.hasSyncedMessages);
   const setHasSyncedMessages = useMessageStore(

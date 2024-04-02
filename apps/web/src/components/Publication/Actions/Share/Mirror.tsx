@@ -28,8 +28,9 @@ import type { FC } from 'react';
 import { toast } from 'react-hot-toast';
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
 import { useMirrorOrQuoteOptimisticStore } from 'src/store/OptimisticActions/useMirrorOrQuoteOptimisticStore';
-import { useAppStore } from 'src/store/useAppStore';
-import { useNonceStore } from 'src/store/useNonceStore';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import { useContractWrite, useSignTypedData } from 'wagmi';
 
 interface MirrorProps {
@@ -39,7 +40,7 @@ interface MirrorProps {
 }
 
 const Mirror: FC<MirrorProps> = ({ publication, setIsLoading, isLoading }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const {
     getMirrorOrQuoteCountByPublicationId,
     hasQuotedOrMirroredByMe,

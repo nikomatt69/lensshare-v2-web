@@ -10,14 +10,14 @@ import { useQuery } from '@tanstack/react-query';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-cool-inview';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface AlgorithmicFeedProps {
   feedType: HomeFeedType;
 }
 
 const AlgorithmicFeed: FC<AlgorithmicFeedProps> = ({ feedType }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [displayedPublications, setDisplayedPublications] = useState<any[]>([]);
 
   const limit = LimitType.Ten;

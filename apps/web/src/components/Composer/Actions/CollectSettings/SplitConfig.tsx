@@ -12,11 +12,12 @@ import isValidEthAddress from '@lensshare/lib/isValidEthAddress';
 import splitNumber from '@lensshare/lib/splitNumber';
 import { Button, Input } from '@lensshare/ui';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
-import { useCollectModuleStore } from 'src/store/useCollectModuleStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import SearchProfiles from '../OpenActionSettings/SearchProfiles';
 import { isAddress } from 'viem';
 import { ADDRESS_PLACEHOLDER } from '@lensshare/data/constants';
+import { useCollectModuleStore } from 'src/store/non-persisted/useCollectModuleStore';
 
 interface SplitConfigProps {
   isRecipientsDuplicated: () => boolean;

@@ -4,14 +4,14 @@ import NotLoggedIn from '@components/Shared/NotLoggedIn';
 import { APP_NAME } from '@lensshare/data/constants';
 import { GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import type { NextPage } from 'next';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import SettingsSidebar from '../Sidebar';
 import Verification from './Verification';
 
 
 const AccountSettings: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   if (!currentProfile) {
     return <NotLoggedIn />;

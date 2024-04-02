@@ -6,10 +6,10 @@ import { Button, Image } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
 import { useRef } from 'react';
-import { usePublicationStore } from 'src/store/usePublicationStore';
 import { useUpdateEffect } from 'usehooks-ts';
 
 import Audio from './Audio';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 
 const getClass = (attachments: number) => {
   if (attachments === 1) {
@@ -39,10 +39,8 @@ const NewAttachments: FC<NewAttachmentsProps> = ({
   attachments = [],
   hideDelete = false
 }) => {
-  const setAttachments = usePublicationStore((state) => state.setAttachments);
-  const setVideoDurationInSeconds = usePublicationStore(
-    (state) => state.setVideoDurationInSeconds
-  );
+  const {setVideoDurationInSeconds,setAttachments }= usePublicationStore();
+
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const onDataLoaded = () => {

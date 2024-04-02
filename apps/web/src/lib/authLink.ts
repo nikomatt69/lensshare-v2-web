@@ -2,11 +2,8 @@ import { ApolloLink, fromPromise, toPromise } from '@apollo/client';
 import { API_URL } from '@lensshare/data/constants';
 import parseJwt from '@lensshare/lib/parseJwt';
 import axios from 'axios';
-import {
-  hydrateAuthTokens,
-  signIn,
-  signOut
-} from 'src/store/useAuthPersistStore';
+import { hydrateAuthTokens, signIn, signOut } from 'src/store/persisted/useAuthStore';
+
 
 const REFRESH_AUTHENTICATION_MUTATION = `
   mutation Refresh($request: RefreshRequest!) {

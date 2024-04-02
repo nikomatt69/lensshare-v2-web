@@ -1,14 +1,13 @@
 import type { FC } from 'react';
 
-import { CHAIN_ID} from 'src/constants';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { CHAIN_ID } from 'src/constants';
+
 
 import SwitchNetwork from '../SwitchNetwork';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 const WrongNetwork: FC = () => {
-  const setShowWrongNetworkModal = useGlobalModalStateStore(
-    (state) => state.setShowWrongNetworkModal
-  );
+  const { setShowWrongNetworkModal } = useGlobalModalStateStore();
 
   return (
     <div className="p-5">

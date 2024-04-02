@@ -4,7 +4,8 @@ import type { CollectModuleType } from '@lensshare/types/hey';
 import { Input } from '@lensshare/ui';
 import { getNumberOfDaysFromDate, getTimeAddedNDay } from '@lib/formatTime';
 import type { FC } from 'react';
-import { useCollectModuleStore } from 'src/store/useCollectModuleStore';
+import { useCollectModuleStore } from 'src/store/non-persisted/useCollectModuleStore';
+
 
 interface TimeLimitConfigProps {
   setCollectType: (data: CollectModuleType) => void;

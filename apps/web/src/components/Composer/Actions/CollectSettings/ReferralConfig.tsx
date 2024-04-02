@@ -3,7 +3,8 @@ import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
 import { OpenActionModuleType } from '@lensshare/lens';
 import { Input } from '@lensshare/ui';
 import type { FC } from 'react';
-import { useCollectModuleStore } from 'src/store/useCollectModuleStore';
+import { useCollectModuleStore } from 'src/store/non-persisted/useCollectModuleStore';
+
 
 interface ReferralConfigProps {
   setCollectType: (data: any) => void;

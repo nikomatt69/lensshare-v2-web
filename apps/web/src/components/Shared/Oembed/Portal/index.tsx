@@ -9,7 +9,7 @@ import axios from 'axios';
 import { Errors } from '@lensshare/data/errors';
 import toast from 'react-hot-toast';
 import cn from '@lensshare/ui/cn';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import getAuthApiHeaders from './getAuthApiHeaders main';
 import { LinkIcon } from '@heroicons/react/24/outline';
 
@@ -19,7 +19,7 @@ interface PortalProps {
 }
 
 const Portal: FC<PortalProps> = ({ portal, publicationId }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [portalData, setPortalData] = useState<IPortal | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 

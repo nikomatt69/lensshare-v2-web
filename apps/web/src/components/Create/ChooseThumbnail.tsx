@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import type { IPFSUploadResult } from 'src/types/custom-types';
-import useBytesStore from 'src/store/bytes';
+
 import getFileFromDataURL from '@lensshare/lib/getFileFromDataURL';
 import { generateVideoThumbnails } from '@lensshare/lib/generateVideoThumbnails';
 import logger from '@lensshare/lib/logger';
@@ -14,6 +14,7 @@ import { DocumentPlusIcon } from '@heroicons/react/24/outline';
 import ThumbnailsShimmer from '@components/Shared/Shimmer/ThumbnailsShimmer';
 import Loader from '@components/Shared/Loader';
 import { uploadToIPFS } from 'src/hooks/uploadToIPFS';
+import useBytesStore from 'src/store/persisted/bytes';
 
 interface Props {
   file: File | null;
@@ -31,8 +32,8 @@ type Thumbnail = {
 const ChooseThumbnail: FC<Props> = ({ file }) => {
   const [thumbnails, setThumbnails] = useState<Thumbnail[]>([]);
   const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState(-1);
-  const uploadedMedia = useBytesStore((state) => state.uploadedMedia);
-  const setUploadedMedia = useBytesStore((state) => state.setUploadedMedia);
+  const {uploadedMedia ,setUploadedMedia} = useBytesStore();
+  
 
   const uploadThumbnailToIpfs = async (fileToUpload: File) => {
     setUploadedMedia({ uploadingThumbnail: true });

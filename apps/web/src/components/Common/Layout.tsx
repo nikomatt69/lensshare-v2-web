@@ -8,10 +8,8 @@ import Head from 'next/head';
 import { useTheme } from 'next-themes';
 import { type FC, type ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { useAppStore } from 'src/store/useAppStore';
-import { hydrateAuthTokens, signOut } from 'src/store/useAuthPersistStore';
-import { useNonceStore } from 'src/store/useNonceStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import { useEffectOnce, useIsMounted } from 'usehooks-ts';
 import { useAccount, useDisconnect } from 'wagmi';
 import GlobalModals from '../Shared/GlobalModals';
@@ -31,7 +29,11 @@ import {
   StyleSheet
 } from 'react-native';
 import getCurrentSession from '@lib/getCurrentSession';
-import { useStreamAllMessages } from '@xmtp/react-sdk';
+
+import { usePreferencesStore } from 'src/store/non-persisted/usePreferencesStore';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
+import { useFeatureFlagsStore } from 'src/store/persisted/useFeatureFlagsStore';
+import { hydrateAuthTokens, signOut } from 'src/store/persisted/useAuthStore';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -45,18 +47,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       setRefreshing(false);
     }, 2000);
   }, []);
-  
-  const { resolvedTheme } = useTheme();
-  const setCurrentProfile = useAppStore((state) => state.setCurrentProfile);
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const resetPreferences = usePreferencesStore(
-    (state) => state.resetPreferences
-  );
-  useRouter();
 
-  const setLensHubOnchainSigNonce = useNonceStore(
-    (state) => state.setLensHubOnchainSigNonce
-  );
+  const { resolvedTheme } = useTheme();
+
+  const { currentProfile, setCurrentProfile, setFallbackToCuratedFeed } =
+    useAppStore();
+  const { resetPreferences } = usePreferencesStore();
+  const { resetFeatureFlags } = useFeatureFlagsStore();
+  const { setLensHubOnchainSigNonce } = useNonceStore();
+  useRouter();
 
   const isMounted = useIsMounted();
   const { connector } = useAccount();
@@ -121,14 +120,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           content={resolvedTheme === 'dark' ? '#1b1b1d' : '#ffffff'}
         />
 
-        <link
-          rel="manifest"
-          href="https://progressier.app/B5LgRYtk8D553Rd2UvFW/progressier.json"
-        />
-        <script
-          defer
-          src="https://progressier.app/B5LgRYtk8D553Rd2UvFW/script.js"
-        />
+        <link rel="manifest" href="/manifest.json" />
+
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Toaster

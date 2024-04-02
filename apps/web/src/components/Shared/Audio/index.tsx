@@ -4,13 +4,14 @@ import getProfile from '@lensshare/lib/getProfile';
 import type { APITypes } from 'plyr-react';
 import type { ChangeEvent, FC } from 'react';
 import { useRef, useState } from 'react';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+
 import { object, string } from 'zod';
 
 import CoverImage from './CoverImage';
 import Player from './Player';
 import { Card } from '@lensshare/ui';
 import { useAverageColor } from 'src/hooks/useAverageColor';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 
 export const AudioPublicationSchema = object({
   title: string().trim().min(1, { message: 'Invalid audio title' }),

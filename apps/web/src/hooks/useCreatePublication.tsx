@@ -33,11 +33,13 @@ import checkDispatcherPermissions from '@lensshare/lib/checkDispatcherPermission
 import getSignature from '@lensshare/lib/getSignature';
 import { OptmisticPublicationType } from '@lensshare/types/enums';
 import { useRouter } from 'next/router';
-import { useAppStore } from 'src/store/useAppStore';
-import { useNonceStore } from 'src/store/useNonceStore';
-import { usePublicationStore } from 'src/store/usePublicationStore';
-import { useTransactionPersistStore } from 'src/store/useTransactionPersistStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
+
+
 import { useContractWrite, useSignTypedData } from 'wagmi';
+import { useTransactionStore } from 'src/store/persisted/useTransactionStore';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 
 interface CreatePublicationProps {
   commentOn?: AnyPublication;
@@ -54,10 +56,10 @@ const useCreatePublication = ({
 }: CreatePublicationProps) => {
   const { push } = useRouter();
   const { cache } = useApolloClient();
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore();
   const { publicationContent } = usePublicationStore();
-  const { txnQueue, setTxnQueue } = useTransactionPersistStore();
+  const { addTransaction } = useTransactionStore();
   const { canBroadcast } = checkDispatcherPermissions(currentProfile);
 
   const isComment = Boolean(commentOn);
@@ -73,10 +75,10 @@ const useCreatePublication = ({
     return {
       ...(isComment && { commentOn: commentOn?.id }),
       type: isComment
-        ? OptmisticPublicationType.NewComment
+        ? OptmisticPublicationType.Comment
         : isQuote
-        ? OptmisticPublicationType.NewQuote
-        : OptmisticPublicationType.NewPost,
+        ? OptmisticPublicationType.Quote
+        : OptmisticPublicationType.Post,
       txHash,
       txId,
       content: publicationContent
@@ -111,10 +113,7 @@ const useCreatePublication = ({
     onSuccess: ({ hash }) => {
       onCompleted();
       setLensHubOnchainSigNonce(lensHubOnchainSigNonce + 1);
-      setTxnQueue([
-        generateOptimisticPublication({ txHash: hash }),
-        ...txnQueue
-      ]);
+      addTransaction(generateOptimisticPublication({ txHash: hash }));
     },
     onError: (error) => {
       onError(error);
@@ -137,10 +136,10 @@ const useCreatePublication = ({
     onCompleted: ({ broadcastOnchain }) => {
       onCompleted(broadcastOnchain.__typename);
       if (broadcastOnchain.__typename === 'RelaySuccess') {
-        setTxnQueue([
+        addTransaction(
           generateOptimisticPublication({ txId: broadcastOnchain.txId }),
-          ...txnQueue
-        ]);
+          
+        );
       }
     }
   });
@@ -214,10 +213,10 @@ const useCreatePublication = ({
     onCompleted: ({ postOnchain }) => {
       onCompleted(postOnchain.__typename);
       if (postOnchain.__typename === 'RelaySuccess') {
-        setTxnQueue([
+        addTransaction(
           generateOptimisticPublication({ txId: postOnchain.txId }),
-          ...txnQueue
-        ]);
+         
+        );
       }
     },
     onError
@@ -227,12 +226,12 @@ const useCreatePublication = ({
     onCompleted: ({ commentOnchain }) => {
       onCompleted(commentOnchain.__typename);
       if (commentOnchain.__typename === 'RelaySuccess') {
-        setTxnQueue([
+        addTransaction(
           generateOptimisticPublication({
             txId: commentOnchain.txId
           }),
-          ...txnQueue
-        ]);
+         
+        );
       }
     },
     onError
@@ -242,12 +241,12 @@ const useCreatePublication = ({
     onCompleted: ({ quoteOnchain }) => {
       onCompleted(quoteOnchain.__typename);
       if (quoteOnchain.__typename === 'RelaySuccess') {
-        setTxnQueue([
+        addTransaction(
           generateOptimisticPublication({
             txId: quoteOnchain.txId
           }),
-          ...txnQueue
-        ]);
+         
+        );
       }
     },
     onError

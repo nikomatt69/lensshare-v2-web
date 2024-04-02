@@ -4,15 +4,15 @@ import type { AnyPublication } from '@lensshare/lens';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { useGlobalAlertStateStore } from 'src/store/useGlobalAlertStateStore';
+import { useGlobalAlertStateStore } from 'src/store/non-persisted/useGlobalAlertStateStore';
 
 interface DeleteProps {
   publication: AnyPublication;
 }
 
 const Delete: FC<DeleteProps> = ({ publication }) => {
-  const setShowPublicationDeleteAlert = useGlobalAlertStateStore(
-    (state) => state.setShowPublicationDeleteAlert
+  const {setShowPublicationDeleteAlert} = useGlobalAlertStateStore(
+    
   );
 
   return (

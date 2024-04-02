@@ -5,7 +5,7 @@ import type { Profile } from '@lensshare/lens';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import type { FC } from 'react';
 import { Fragment } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import Block from './Block';
 import Report from './Report';
@@ -16,7 +16,7 @@ interface ProfileMenuProps {
 }
 
 const ProfileMenu: FC<ProfileMenuProps> = ({ profile }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   return (
     <Menu as="div" className="relative">

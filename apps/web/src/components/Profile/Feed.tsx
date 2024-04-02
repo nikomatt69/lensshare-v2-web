@@ -1,7 +1,6 @@
 import SinglePublication from '@components/Publication/SinglePublication';
 import PublicationsShimmer from '@components/Shared/Shimmer/PublicationsShimmer';
 import { RectangleStackIcon } from '@heroicons/react/24/outline';
-import { BASE_URL, STATS_WORKER_URL } from '@lensshare/data/constants';
 import type {
   AnyPublication,
   Profile,
@@ -15,11 +14,10 @@ import {
 } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import { Card, EmptyState, ErrorMessage } from '@lensshare/ui';
-import axios from 'axios';
 import { useState, type FC } from 'react';
 import { useInView } from 'react-cool-inview';
 import { ProfileFeedType } from 'src/enums';
-import { useProfileFeedStore } from 'src/store/useProfileFeedStore';
+import { useProfileFeedStore } from 'src/store/non-persisted/useProfileFeedStore';
 
 interface FeedProps {
   profile: Profile;
@@ -31,9 +29,7 @@ interface FeedProps {
 }
 
 const Feed: FC<FeedProps> = ({ profile, type }) => {
-  const mediaFeedFilters = useProfileFeedStore(
-    (state) => state.mediaFeedFilters
-  );
+  const { mediaFeedFilters } = useProfileFeedStore();
   const [views, setViews] = useState<
     | {
         id: string;
@@ -41,8 +37,6 @@ const Feed: FC<FeedProps> = ({ profile, type }) => {
       }[]
     | []
   >([]);
-
- 
 
   const getMediaFilters = () => {
     let filters: PublicationMetadataMainFocusType[] = [];
@@ -90,7 +84,6 @@ const Feed: FC<FeedProps> = ({ profile, type }) => {
         publications?.items?.map((p) => {
           return p.__typename === 'Mirror' ? p.mirrorOn?.id : p.id;
         }) || [];
-    
     }
   });
 
@@ -111,7 +104,6 @@ const Feed: FC<FeedProps> = ({ profile, type }) => {
         data?.publications?.items?.map((p) => {
           return p.__typename === 'Mirror' ? p.mirrorOn?.id : p.id;
         }) || [];
-    
     }
   });
 

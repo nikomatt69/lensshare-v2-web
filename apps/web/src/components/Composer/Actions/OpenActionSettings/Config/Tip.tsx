@@ -6,20 +6,19 @@ import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-m
 import formatAddress from '@lensshare/lib/formatAddress';
 import { Radio } from '@lensshare/ui';
 import { type FC } from 'react';
-
-import useProfileStore from 'src/store/persisted/useProfileStore';
 import { useEffectOnce } from 'usehooks-ts';
 import { encodeAbiParameters, isAddress } from 'viem';
 import { create } from 'zustand';
 
 import SaveOrCancel from '../SaveOrCancel';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
 import SearchProfiles from '../SearchProfiles';
+import { createTrackedSelector } from 'react-tracked';
 
 
 
-interface TipActionState {
+interface State {
   enabled: boolean;
   recipient: string;
   reset: () => void;
@@ -27,7 +26,7 @@ interface TipActionState {
   setRecipient: (recipient: string) => void;
 }
 
-const useTipActionStore = create<TipActionState>((set) => ({
+const store = create<State>((set) => ({
   enabled: false,
   recipient: '',
   reset: () => set({ enabled: false, recipient: '' }),
@@ -35,11 +34,10 @@ const useTipActionStore = create<TipActionState>((set) => ({
   setRecipient: (recipient) => set({ recipient })
 }));
 
+export const useTipActionStore = createTrackedSelector(store);
 const TipConfig: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const openAction = useOpenActionStore((state) => state.openAction);
-  const setShowModal = useOpenActionStore((state) => state.setShowModal);
-  const setOpenAction = useOpenActionStore((state) => state.setOpenAction);
+  const { currentProfile } = useAppStore();
+  const { openAction, setOpenAction, setShowModal } = useOpenActionStore();
   const { enabled, recipient, reset, setEnabled, setRecipient } =
     useTipActionStore();
 

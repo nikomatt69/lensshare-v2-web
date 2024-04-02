@@ -5,14 +5,14 @@ import { PAGEVIEW } from '@lensshare/data/tracking';
 import { GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import { Leafwatch } from '@lib/leafwatch';
 import type { NextPage } from 'next';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useEffectOnce } from 'usehooks-ts';
 
 import SettingsSidebar from '../Sidebar';
 import ProfileSettingsForm from './Profile';
 
 const ProfileSettings: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
 
   if (!currentProfile) {

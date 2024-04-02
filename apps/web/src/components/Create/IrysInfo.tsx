@@ -13,7 +13,8 @@ import { Button, Callout, Flex, IconButton, Text } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import useEthersWalletClient from 'src/hooks/useEthersWalletClient'
-import { IRYS_CURRENCY, useBytesStore } from 'src/store/bytes'
+import useBytesStore, { IRYS_CURRENCY } from 'src/store/persisted/bytes'
+
 import { useIsMounted } from 'usehooks-ts'
 import { formatEther, parseEther, parseUnits } from 'viem'
 import {
@@ -35,10 +36,8 @@ const IrysInfo = () => {
     watch: true
   })
 
-  const uploadedMedia = useBytesStore((state) => state.uploadedMedia)
-  const getIrysInstance = useBytesStore((state) => state.getIrysInstance)
-  const irysData = useBytesStore((state) => state.irysData)
-  const setIrysData = useBytesStore((state) => state.setIrysData)
+  const { irysData, setIrysData, getIrysInstance } = useBytesStore();
+  const { uploadedMedia, setUploadedMedia } = useBytesStore();
   const [fetchingBalance, setFetchingBalance] = useState(false)
 
   const estimatePrice = async (irys: WebIrys) => {

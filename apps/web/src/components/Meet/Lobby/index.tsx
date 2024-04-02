@@ -14,12 +14,13 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
-import { useMeetPersistStore } from 'src/store/meet';
-import { useAppStore } from 'src/store/useAppStore';
+
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useUpdateEffect } from 'usehooks-ts';
 
 import { BasicIcons } from '../BasicIcons';
 import SwitchDeviceMenu from '../SwitchDeviceMenu';
+import { useMeetPersistStore } from 'src/store/persisted/meet';
 
 type HTMLAudioElementWithSetSinkId = HTMLAudioElement & {
   setSinkId: (id: string) => void;
@@ -34,7 +35,7 @@ const Lobby: NextPage = () => {
   const { fetchVideoStream, stopVideoStream, stream: camStream } = useVideo();
   const { fetchAudioStream, stopAudioStream, stream: micStream } = useAudio();
   const { setDisplayName } = useDisplayName();
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [displayUserName, setDisplayUserName] = useState<string>(
     currentProfile?.handle?.localName ?? ''
   );
@@ -56,7 +57,7 @@ const Lobby: NextPage = () => {
     if (query.roomid && '3kzet_ujpjtF8dzciFefEOAZqrDNpdQS') {
       initialize('3kzet_ujpjtF8dzciFefEOAZqrDNpdQS');
     }
-  }, [query.roomid]);
+  }, [initialize, query.roomid]);
 
   useEffect(() => {
     if (camStream && videoRef.current) {
@@ -86,11 +87,11 @@ const Lobby: NextPage = () => {
     if (displayUserName) {
       setDisplayName(displayUserName);
     }
-  }, [displayUserName]);
+  }, [displayUserName, setDisplayName]);
 
   useEffect(() => {
     joinLobby(query.roomid as string);
-  }, []);
+  }, [joinLobby, query.roomid]);
 
   useUpdateEffect(() => {
     if (!isCamOff) {

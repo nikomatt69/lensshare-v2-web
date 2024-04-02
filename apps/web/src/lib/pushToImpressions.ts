@@ -1,8 +1,9 @@
 import { IS_MAINNET } from '@lensshare/data/constants';
-import { hydrateLeafwatchAnonymousId } from 'src/store/useLeafwatchPersistStore';
+
 
 import getCurrentSession from './getCurrentSession';
 import getCurrentSessionProfileId from './getCurrentSessionProfileId';
+import { hydrateLeafwatchAnonymousId } from 'src/store/persisted/useLeafwatchStore';
 
 const pushToImpressions = (id: string): void => {
   const anonymousId = hydrateLeafwatchAnonymousId();

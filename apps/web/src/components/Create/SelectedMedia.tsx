@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 
 import UploadMethod from './UploadMethod';
-import useBytesStore from 'src/store/bytes';
+
 import { DocumentPlusIcon } from '@heroicons/react/24/outline';
 import type { IPFSUploadResult } from 'src/types/custom-types';
 import { uploadToIPFS } from 'src/hooks/uploadToIPFS';
@@ -15,6 +15,7 @@ import { Input, Tooltip } from '@lensshare/ui';
 import { ALLOWED_AUDIO_TYPES } from '@lensshare/data/constants';
 import Loader from '@components/Shared/Loader';
 import ChooseThumbnail from './ChooseThumbnail';
+import useBytesStore from 'src/store/persisted/bytes';
 
 
 const SelectedMedia = () => {
@@ -22,8 +23,8 @@ const SelectedMedia = () => {
   const [interacted, setInteracted] = useState(false);
   const [posterPreview, setPosterPreview] = useState('');
 
-  const uploadedMedia = useBytesStore((state) => state.uploadedMedia);
-  const setUploadedMedia = useBytesStore((state) => state.setUploadedMedia);
+  const { irysData, setIrysData, getIrysInstance } = useBytesStore();
+  const { uploadedMedia, setUploadedMedia } = useBytesStore();
 
   const onDataLoaded = () => {
     if (mediaRef.current?.duration && mediaRef.current?.duration !== Infinity) {

@@ -3,13 +3,15 @@ import getPreferences from '@lib/api/getPreferences';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { type FC } from 'react';
-import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
+
 import { FeatureFlag } from '@lensshare/data/feature-flags';
 import getCurrentSession from '@lib/getCurrentSession';
 import getAuthApiHeaders from '@components/Shared/Oembed/Portal/getAuthApiHeaders main';
 import { useVerifiedMembersStore } from 'src/store/persisted/useVerifiedMembersStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
-import { useProfileRestriction } from 'src/store/useProfileRestriction';
+import { useProfileRestriction } from 'src/store/non-persisted/useProfileRestriction';
+import { usePreferencesStore } from 'src/store/non-persisted/usePreferencesStore';
+import { useFeatureFlagsStore } from 'src/store/persisted/useFeatureFlagsStore';
+
 
 const PreferencesProvider: FC = () => {
   const { id: sessionProfileId } = getCurrentSession();

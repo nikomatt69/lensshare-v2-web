@@ -1,21 +1,15 @@
-import { PUBLICATION } from '@lensshare/data/tracking';
 import { useHidePublicationMutation } from '@lensshare/lens';
 import { Alert } from '@lensshare/ui';
-import { Leafwatch } from '@lib/leafwatch';
 import type { FC } from 'react';
 import { toast } from 'react-hot-toast';
-import { useGlobalAlertStateStore } from 'src/store/useGlobalAlertStateStore';
+import { useGlobalAlertStateStore } from 'src/store/non-persisted/useGlobalAlertStateStore';
 
 const DeletePublication: FC = () => {
-  const showPublicationDeleteAlert = useGlobalAlertStateStore(
-    (state) => state.showPublicationDeleteAlert
-  );
-  const setShowPublicationDeleteAlert = useGlobalAlertStateStore(
-    (state) => state.setShowPublicationDeleteAlert
-  );
-  const deletingPublication = useGlobalAlertStateStore(
-    (state) => state.deletingPublication
-  );
+  const {
+    showPublicationDeleteAlert,
+    deletingPublication,
+    setShowPublicationDeleteAlert
+  } = useGlobalAlertStateStore();
 
   const [hidePost, { loading }] = useHidePublicationMutation({
     onCompleted: () => {

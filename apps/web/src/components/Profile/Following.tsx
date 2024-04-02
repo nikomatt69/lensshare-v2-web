@@ -9,7 +9,7 @@ import { EmptyState, ErrorMessage } from '@lensshare/ui';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { Virtuoso } from 'react-virtuoso';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface FollowingProps {
   profile: Profile;
@@ -22,7 +22,7 @@ const Following: FC<FollowingProps> = ({ profile, onProfileSelected }) => {
     for: profile.id,
     limit: LimitType.TwentyFive
   };
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const { data, loading, error, fetchMore } = useFollowingQuery({
     variables: { request },

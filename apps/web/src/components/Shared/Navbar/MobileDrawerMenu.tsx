@@ -6,15 +6,13 @@ import { Image } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
 import Link from 'next/link';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import Slug from '../Slug';
 import AppVersion from './NavItems/AppVersion';
 import Bookmarks from './NavItems/Bookmarks';
 import Contact from './NavItems/Contact';
 
-import Invites from './NavItems/Invites';
 import Logout from './NavItems/Logout';
 import Mod from './NavItems/Mod';
 import ReportBug from './NavItems/ReportBug';
@@ -24,13 +22,12 @@ import SwitchProfile from './NavItems/SwitchProfile';
 import ThemeSwitch from './NavItems/ThemeSwitch';
 import YourProfile from './NavItems/YourProfile';
 import { ADMIN_ADDRESS2 } from '@lensshare/data/constants';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 const MobileDrawerMenu: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
-  const setShowMobileDrawer = useGlobalModalStateStore(
-    (state) => state.setShowMobileDrawer
-  );
+  const { setShowMobileDrawer } = useGlobalModalStateStore();
 
   const closeDrawer = () => {
     setShowMobileDrawer(false);
@@ -90,7 +87,7 @@ const MobileDrawerMenu: FC = () => {
               </Link>
             ) : null}
 
-            <Invites className={cn(itemClass, 'px-4')} />
+            
             <ThemeSwitch
               className={cn(itemClass, 'px-4')}
               onClick={closeDrawer}
@@ -127,3 +124,4 @@ const MobileDrawerMenu: FC = () => {
 };
 
 export default MobileDrawerMenu;
+

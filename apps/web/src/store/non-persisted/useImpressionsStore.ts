@@ -2,13 +2,14 @@ import type { PublicationViewCount } from '@lensshare/types/hey';
 
 import getPublicationsViews from '@lensshare/lib/getPublicationsViews';
 import { create } from 'zustand';
+import { createTrackedSelector } from 'react-tracked';
 
-interface ImpressionsState {
+interface State {
   fetchAndStoreViews: (ids: string[]) => void;
   publicationViews: PublicationViewCount[];
 }
 
-export const useImpressionsStore = create<ImpressionsState>((set) => ({
+const store = create<State>((set) => ({
   fetchAndStoreViews: async (ids) => {
     if (!ids.length) {
       return;
@@ -21,3 +22,5 @@ export const useImpressionsStore = create<ImpressionsState>((set) => ({
   },
   publicationViews: []
 }));
+
+export const useImpressionsStore = createTrackedSelector(store);

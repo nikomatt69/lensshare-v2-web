@@ -4,7 +4,7 @@ import type { FC } from 'react';
 import React, { useEffect, useRef } from 'react';
 
 import TopOverlay from './TopOverlay';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import type { AnyPublication, MirrorablePublication, PrimaryPublication } from '@lensshare/lens';
 import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 import VideoPlayer from 'src/utils/VideoPlayer';

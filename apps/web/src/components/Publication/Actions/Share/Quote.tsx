@@ -4,8 +4,8 @@ import { type AnyPublication, TriStateValue } from '@lensshare/lens';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 
 interface QuoteProps {
   publication: AnyPublication;
@@ -17,12 +17,8 @@ const Quote: FC<QuoteProps> = ({ publication }) => {
     : publication;
   const publicationType = targetPublication.__typename;
 
-  const setShowNewPostModal = useGlobalModalStateStore(
-    (state) => state.setShowNewPostModal
-  );
-  const setQuotedPublication = usePublicationStore(
-    (state) => state.setQuotedPublication
-  );
+  const { setShowNewPostModal } = useGlobalModalStateStore();
+  const { setQuotedPublication } = usePublicationStore();
 
   if (targetPublication.operations.canQuote === TriStateValue.No) {
     return null;

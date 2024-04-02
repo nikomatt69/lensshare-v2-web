@@ -4,7 +4,8 @@ import { HOME } from '@lensshare/data/tracking';
 import { Toggle, Tooltip } from '@lensshare/ui';
 import { Leafwatch } from '@lib/leafwatch';
 import type { FC } from 'react';
-import { useEnabledAlgorithmsStore } from 'src/store/useEnabledAlgorithmsPersistStore';
+import { useEnabledAlgorithmsStore } from 'src/store/persisted/useEnabledAlgorithmsStore';
+
 
 const List: FC = () => {
   const enabledAlgorithms = useEnabledAlgorithmsStore(

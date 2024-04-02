@@ -1,7 +1,10 @@
 import { ReferenceModuleType } from '@lensshare/lens';
+
+
+import { createTrackedSelector } from 'react-tracked';
 import { create } from 'zustand';
 
-interface ReferenceModuleState {
+interface State {
   degreesOfSeparation: number;
   onlyFollowers: boolean;
   selectedReferenceModule: ReferenceModuleType;
@@ -10,7 +13,7 @@ interface ReferenceModuleState {
   setSelectedReferenceModule: (selectedModule: ReferenceModuleType) => void;
 }
 
-export const useReferenceModuleStore = create<ReferenceModuleState>((set) => ({
+const store = create<State>((set) => ({
   degreesOfSeparation: 2,
   onlyFollowers: false,
   selectedReferenceModule: ReferenceModuleType.FollowerOnlyReferenceModule,
@@ -20,3 +23,5 @@ export const useReferenceModuleStore = create<ReferenceModuleState>((set) => ({
   setSelectedReferenceModule: (selectedReferenceModule) =>
     set(() => ({ selectedReferenceModule }))
 }));
+
+export const useReferenceModuleStore = createTrackedSelector(store);

@@ -20,7 +20,7 @@ export const useTbaStatusStore = create(
       setIsTba: (isTba) => set(() => ({ isTba }))
     }),
     {
-      name: IndexDB.TBAStore,
+      name: IndexDB.ProfileStore,
       storage: createIdbStorage()
     }
   )

@@ -1,5 +1,6 @@
 import { IS_MAINNET } from "@lensshare/data/constants";
-import { verifiedMembers } from "src/store/useAppStore";
+import { verifiedMembers } from "src/store/persisted/app";
+
 
 
 /**

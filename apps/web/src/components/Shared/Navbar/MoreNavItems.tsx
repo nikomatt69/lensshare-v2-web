@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import MenuTransition from '../MenuTransition';
 import Bookmarks from './NavItems/Bookmarks';
@@ -9,7 +9,7 @@ import Contact from './NavItems/Contact';
 import ReportBug from './NavItems/ReportBug';
 
 const MoreNavItems: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   return (
     <Menu as="div">

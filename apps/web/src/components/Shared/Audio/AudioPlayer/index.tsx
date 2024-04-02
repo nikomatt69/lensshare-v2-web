@@ -5,7 +5,7 @@ import React, { useRef, useState } from 'react';
 import type WaveSurfer from 'wavesurfer.js';
 import { Image } from '@lensshare/ui';
 import { XCircleIcon } from '@heroicons/react/24/solid';
-import useEchoStore from 'src/store/echos';
+
 import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
 import { usePublicationQuery } from '@lensshare/lens';
@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import type { APITypes } from 'plyr-react';
 import sanitizeDStorageUrl from '@lensshare/lib/sanitizeDStorageUrl';
 import { imageCdn } from 'src/hooks/imageCdn';
+import useEchoStore from 'src/store/persisted/echos';
 
 type Props = {
   audio: PrimaryPublication;

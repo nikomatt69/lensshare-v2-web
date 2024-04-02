@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import Choices from './Choices';
 import Header from './Header';
@@ -15,7 +15,7 @@ interface SnapshotProps {
 }
 
 const Snapshot: FC<SnapshotProps> = ({ proposalId }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const { data, loading, error, refetch } = useProposalQuery({
     client: snapshotApolloClient,

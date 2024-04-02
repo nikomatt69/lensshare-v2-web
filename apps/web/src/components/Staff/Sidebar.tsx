@@ -12,10 +12,10 @@ import {
   ADMIN_ADDRESS2,
   ADMIN_ADDRESS3
 } from '@lensshare/data/constants';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const StaffSidebar: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   if (
     currentProfile?.ownedBy.address === ADMIN_ADDRESS ||

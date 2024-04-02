@@ -3,20 +3,20 @@ import isOpenActionAllowed from '@lensshare/lib/isOpenActionAllowed';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import OpenAction from '../LensOpenActions';
-import Comment from './Comment';
 import Like from './Like';
 import Mod from './Mod';
 import ShareMenu from './Share';
 import Views from './Views';
-import { useImpressionsStore } from 'src/store/useImpressionsStore';
+
 import getPublicationViewCountById from '@lib/getPublicationViewCountById';
 import { ADMIN_ADDRESS } from '@lensshare/data/constants';
 import CommentModal from '@components/Bytes/CommentModal';
 import TipOpenAction from '../LensOpenActions/UnknownModule/Tip';
 import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
+import { useImpressionsStore } from 'src/store/non-persisted/useImpressionsStore';
 
 interface PublicationActionsProps {
   publication: AnyPublication;
@@ -30,12 +30,10 @@ const PublicationActions: FC<PublicationActionsProps> = ({
   const targetPublication = isMirrorPublication(publication)
     ? publication.mirrorOn
     : publication;
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const hasOpenAction = (targetPublication.openActionModules?.length || 0) > 0;
-  const publicationViews = useImpressionsStore(
-    (state) => state.publicationViews
-  );
+  const { publicationViews } = useImpressionsStore();
   const canMirror = currentProfile
     ? targetPublication?.operations?.canMirror
     : true;

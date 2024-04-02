@@ -6,12 +6,9 @@ import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
-import { usePublicationStore } from 'src/store/usePublicationStore';
 
 import PublicationMenu from './Actions/Menu';
-import Source from './Source';
-
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 
 interface PublicationHeaderProps {
   publication: AnyPublication;
@@ -26,10 +23,7 @@ const PublicationHeader: FC<PublicationHeaderProps> = ({
   quoted = false,
   isNew = false
 }) => {
-  const setQuotedPublication = usePublicationStore(
-    (state) => state.setQuotedPublication
-  );
-
+  const { setQuotedPublication } = usePublicationStore();
 
   const targetPublication = isMirrorPublication(publication)
     ? publication?.mirrorOn

@@ -11,9 +11,10 @@ import { imageCdn } from 'src/hooks/imageCdn';
 import Player from '@components/Shared/Audio/Player';
 import type { APITypes } from 'plyr-react';
 import UserProfile from '@components/Shared/UserProfile';
-import useEchoStore from 'src/store/echos';
+
 import PublicationActions from '@components/Publication/Actions';
 import { Image } from '@lensshare/ui';
+import useEchoStore from 'src/store/persisted/echos';
 
 type Props = {
   audio: PrimaryPublication;

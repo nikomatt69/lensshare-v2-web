@@ -17,7 +17,7 @@ import { Leafwatch } from '@lib/leafwatch';
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import Custom500 from 'src/pages/500';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useEffectOnce } from 'usehooks-ts';
 
 import SettingsSidebar from '../Sidebar';
@@ -31,7 +31,7 @@ enum Type {
 }
 
 const AllowanceSettings: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [type, setType] = useState<Type>(Type.COLLECT_MODULES);
 
   useEffectOnce(() => {

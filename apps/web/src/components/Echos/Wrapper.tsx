@@ -2,12 +2,13 @@ import type { PrimaryPublication } from '@lensshare/lens';
 import type { APITypes } from 'plyr-react';
 import type { FC } from 'react';
 import React, { useRef, useState } from 'react';
-import useEchoStore from 'src/store/echos';
+
 import { Image } from '@lensshare/ui';
 import getAvatar from '@lensshare/lib/getAvatar';
 import MiniPlayer from '@components/Shared/Audio/MiniPlayer';
 import AudioMinimized from '@components/Shared/Audio/AudioMinimized';
 import AudioPlayer from '@components/Shared/Audio/AudioPlayer';
+import useEchoStore from 'src/store/persisted/echos';
 
 type Props = {
   children: React.ReactNode;

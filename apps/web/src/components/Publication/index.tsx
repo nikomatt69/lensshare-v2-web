@@ -15,24 +15,18 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Custom404 from 'src/pages/404';
 import Custom500 from 'src/pages/500';
-import { useAppStore } from 'src/store/useAppStore';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import FullPublication from './FullPublication';
 import OnchainMeta from './OnchainMeta';
 import RelevantPeople from './RelevantPeople';
 import PublicationPageShimmer from './Shimmer';
-import { useNativeNavigation } from 'src/store/useNative';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 const ViewPublication: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
-  const showNewPostModal = useGlobalModalStateStore(
-    (state) => state.showNewPostModal
-  );
-  const preLoadedPublication = useNativeNavigation(
-    (state) => state.preLoadedPublication
-  );
+  const { showNewPostModal } = useGlobalModalStateStore();
 
   const {
     query: { id },

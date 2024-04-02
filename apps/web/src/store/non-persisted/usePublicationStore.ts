@@ -3,6 +3,7 @@ import type { NewAttachment } from '@lensshare/types/misc';
 import type { MetadataLicenseType } from '@lens-protocol/metadata';
 
 import { create } from 'zustand';
+import { createTrackedSelector } from 'react-tracked';
 
 interface PublicationState {
   addAttachments: (attachments: NewAttachment[]) => void;
@@ -21,6 +22,7 @@ interface PublicationState {
     streamKey: string;
   };
   pollConfig: {
+    choices: any;
     length: number;
     options: string[];
   };
@@ -67,7 +69,7 @@ interface PublicationState {
   };
 }
 
-export const usePublicationStore = create<PublicationState>((set) => ({
+const store = create<PublicationState>((set) => ({
   addAttachments: (newAttachments) =>
     set((state) => {
       return { attachments: [...state.attachments, ...newAttachments] };
@@ -135,3 +137,5 @@ export const usePublicationStore = create<PublicationState>((set) => ({
   videoDurationInSeconds: '',
   videoThumbnail: { type: '', uploading: false, url: '' }
 }));
+
+export const usePublicationStore = createTrackedSelector(store);

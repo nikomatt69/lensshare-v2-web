@@ -25,7 +25,7 @@ import MetaDetails from '../MetaDetails';
 import Access from './Access';
 import ProfileDetails from './ProfileDetails';
 import Rank from './Rank';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface ProfileStaffToolProps {
   profile: Profile;
@@ -33,7 +33,7 @@ interface ProfileStaffToolProps {
 
 const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
   
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   
 

@@ -1,17 +1,13 @@
-import { BASE_URL, IS_MAINNET } from '@lensshare/data/constants';
 import getProfile from '@lensshare/lib/getProfile';
 import axios from 'axios';
-import { useAppStore } from 'src/store/useAppStore';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 type CreatePollResponse = string;
 
 const useCreatePoll = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const pollConfig = usePublicationStore((state) => state.pollConfig);
-  const publicationContent = usePublicationStore(
-    (state) => state.publicationContent
-  );
+  const { currentProfile } = useAppStore();
+  const { pollConfig, publicationContent } = usePublicationStore();
 
   // TODO: use useCallback
   const createPoll = async (): Promise<CreatePollResponse> => {

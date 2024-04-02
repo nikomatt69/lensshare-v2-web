@@ -12,26 +12,25 @@ import getMentions from '@lensshare/lib/getMentions';
 import type { OptimisticTransaction } from '@lensshare/types/misc';
 import { Card, Tooltip } from '@lensshare/ui';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
-import { useTransactionPersistStore } from 'src/store/useTransactionPersistStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+import { useTransactionStore } from 'src/store/persisted/useTransactionStore';
 
 interface QueuedPublicationProps {
   txn: OptimisticTransaction;
 }
 
 const QueuedPublication: FC<QueuedPublicationProps> = ({ txn }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const txnQueue = useTransactionPersistStore((state) => state.txnQueue);
-  const setTxnQueue = useTransactionPersistStore((state) => state.setTxnQueue);
+  const { currentProfile } = useAppStore();
+  const { removeTransaction } = useTransactionStore();
 
   const { cache } = useApolloClient();
   const txHash = txn?.txHash;
   const txId = txn?.txId;
 
   const removeTxn = () => {
-    setTxnQueue(
-      txnQueue.filter((o) => (txHash ? o.txHash !== txHash : o.txId !== txId))
-    );
+    if (txn.txId) {
+      return removeTransaction(txn.txId);
+    }
   };
 
   const [getPublication] = usePublicationLazyQuery({
@@ -52,13 +51,6 @@ const QueuedPublication: FC<QueuedPublicationProps> = ({ txn }) => {
   });
 
   useLensTransactionStatusQuery({
-    variables: {
-      request: {
-        ...(txHash && { forTxHash: txHash }),
-        ...(txId && { forTxId: txId })
-      }
-    },
-    pollInterval: 1000,
     notifyOnNetworkStatusChange: true,
     onCompleted: async ({ lensTransactionStatus }) => {
       if (lensTransactionStatus?.status === LensTransactionStatusType.Failed) {
@@ -75,21 +67,32 @@ const QueuedPublication: FC<QueuedPublicationProps> = ({ txn }) => {
         }
         removeTxn();
       }
+    },
+    pollInterval: 1000,
+    variables: {
+      request: {
+        ...(txHash && { forTxHash: txHash }),
+        ...(txId && { forTxId: txId })
+      }
     }
   });
+
+  if (!txn.content) {
+    return null;
+  }
 
   return (
     <Card as="article" className="p-5">
       <div className="flex items-start justify-between pb-4">
-        <SmallUserProfile profile={currentProfile as Profile} linkToProfile />
+        <SmallUserProfile linkToProfile profile={currentProfile as Profile} />
         <Tooltip content="Indexing" placement="top">
-          <div className="bg-brand-200 flex h-4 w-4 items-center justify-center rounded-full">
-            <div className="bg-brand-500 h-2 w-2 animate-pulse rounded-full" />
+          <div className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-200">
+            <div className="animate-shimmer size-2 rounded-full bg-gray-500" />
           </div>
         </Tooltip>
       </div>
       <div className="markup linkify text-md break-words">
-        <Markup mentions={getMentions(txn?.content)}>{txn.content}</Markup>
+        <Markup mentions={getMentions(txn.content)}>{txn.content}</Markup>
       </div>
     </Card>
   );

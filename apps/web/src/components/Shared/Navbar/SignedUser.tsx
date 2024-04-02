@@ -5,16 +5,15 @@ import getProfile from '@lensshare/lib/getProfile';
 import { Image } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
-import { usePreferencesStore } from 'src/store/usePreferencesStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 
 import MenuTransition from '../MenuTransition';
 import Slug from '../Slug';
 import { NextLink } from './MenuItems';
 import MobileDrawerMenu from './MobileDrawerMenu';
 import AppVersion from './NavItems/AppVersion';
-import Invites from './NavItems/Invites';
+
 import Logout from './NavItems/Logout';
 import Mod from './NavItems/Mod';
 import Settings from './NavItems/Settings';
@@ -26,16 +25,12 @@ import {
   ADMIN_ADDRESS2,
   ADMIN_ADDRESS3
 } from '@lensshare/data/constants';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 const SignedUser: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
-  const setShowMobileDrawer = useGlobalModalStateStore(
-    (state) => state.setShowMobileDrawer
-  );
-  const showMobileDrawer = useGlobalModalStateStore(
-    (state) => state.showMobileDrawer
-  );
+  const { setShowMobileDrawer, showMobileDrawer } = useGlobalModalStateStore();
 
   const Avatar = () => (
     <Image
@@ -126,14 +121,7 @@ const SignedUser: FC = () => {
                 <Mod />
               </Menu.Item>
             ) : null}
-            <Menu.Item
-              as="div"
-              className={({ active }: { active: boolean }) =>
-                cn({ 'dropdown-active': active }, 'm-2 rounded-lg')
-              }
-            >
-              <Invites />
-            </Menu.Item>
+           
             <Menu.Item
               as="div"
               className={({ active }) =>

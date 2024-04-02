@@ -4,7 +4,7 @@ import getAvatar from '@lensshare/lib/getAvatar';
 import getProfile from '@lensshare/lib/getProfile';
 import { Image } from '@lensshare/ui';
 import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface MutualFollowersProps {
   setShowMutualFollowersModal?: Dispatch<SetStateAction<boolean>>;
@@ -15,7 +15,7 @@ const MutualFollowers: FC<MutualFollowersProps> = ({
   setShowMutualFollowersModal,
   profile
 }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const { data, loading, error } = useMutualFollowersQuery({
     variables: {

@@ -3,10 +3,11 @@ import type { FC } from 'react';
 import Oembed from '@components/Shared/Oembed';
 import getURLs from '@lensshare/lib/getURLs';
 import getNft from '@lensshare/lib/nft/getNft';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+
 
 import { ZERO_PUBLICATION_ID } from '@lensshare/data/constants';
 import type { AnyPublication, MirrorablePublication, Post } from '@lensshare/lens';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 
 interface LinkPreviewProps {
   openActionEmbed: boolean;

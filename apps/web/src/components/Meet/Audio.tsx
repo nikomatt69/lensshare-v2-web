@@ -36,7 +36,7 @@ const Audio: React.FC<
         console.error('audioCard() | Error is hapenning...');
       };
     }
-  }, []);
+  }, [track]);
 
   return <audio ref={audioRef}>Audio</audio>;
 };

@@ -35,7 +35,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
 import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
-import useProfileStore from 'src/store/persisted/useProfileStore';
+
 import { isAddress } from 'viem';
 import {
   useAccount,
@@ -45,6 +45,7 @@ import {
 } from 'wagmi';
 import getOpenActionActOnKey from '@lib/getOpenActionActOnKey';
 import getCollectModuleData from 'src/hooks/getCollectModuleData';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface CollectActionProps {
   countOpenActions: number;
@@ -59,13 +60,8 @@ const CollectAction: FC<CollectActionProps> = ({
   publication,
   setCountOpenActions
 }) => {
-  const currentProfile = useProfileStore((state) => state.currentProfile);
-  const lensHubOnchainSigNonce = useNonceStore(
-    (state) => state.lensHubOnchainSigNonce
-  );
-  const setLensHubOnchainSigNonce = useNonceStore(
-    (state) => state.setLensHubOnchainSigNonce
-  );
+  const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore();
+  const { currentProfile } = useAppStore();
 
   const { id: sessionProfileId } = getCurrentSession();
   const isWalletUser = isAddress(sessionProfileId);

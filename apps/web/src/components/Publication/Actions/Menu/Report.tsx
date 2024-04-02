@@ -4,16 +4,15 @@ import type { AnyPublication } from '@lensshare/lens';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
+
 
 interface ReportProps {
   publication: AnyPublication;
 }
 
 const Report: FC<ReportProps> = ({ publication }) => {
-  const setShowPublicationReportModal = useGlobalModalStateStore(
-    (state) => state.setShowPublicationReportModal
-  );
+  const { setShowPublicationReportModal } = useGlobalModalStateStore();
 
   return (
     <Menu.Item
@@ -26,7 +25,7 @@ const Report: FC<ReportProps> = ({ publication }) => {
       }
       onClick={(event: any) => {
         stopEventPropagation(event);
-        setShowPublicationReportModal(true, publication);
+        setShowPublicationReportModal(true, publication.id);
       }}
     >
       <div className="flex items-center space-x-2">

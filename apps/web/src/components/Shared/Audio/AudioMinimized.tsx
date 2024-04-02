@@ -2,7 +2,7 @@
 
 import type { FC, ReactNode } from 'react';
 import React, { createRef, useRef, useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import { useAcl, useHuddle01, usePeers } from '@huddle01/react/hooks';
 import { useAppUtils } from '@huddle01/react/app-utils';
@@ -22,7 +22,7 @@ const AudioMinimized: FC = () => {
   const { me } = useHuddle01();
   const [showAcceptRequest, setShowAcceptRequest] = useState(false);
   const [requestedPeerId, setRequestedPeerId] = useState('');
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const [requestType, setRequestType] = useState('');
   const { peers } = usePeers();

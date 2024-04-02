@@ -1,22 +1,19 @@
 import { BellIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
-import { useNotificationPersistStore } from 'src/store/useNotificationPersistStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import React, { useEffect, useState } from 'react';
+import { useNotificationStore } from 'src/store/persisted/useNotificationStore';
 
 const NotificationIcon: FC = () => {
-  const latestNotificationId = useNotificationPersistStore(
-    (state) => state.latestNotificationId
-  );
-  const lastOpenedNotificationId = useNotificationPersistStore(
-    (state) => state.lastOpenedNotificationId
-  );
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const setLastOpenedNotificationId = useNotificationPersistStore(
-    (state) => state.setLastOpenedNotificationId
-  );
+  const {
+    latestNotificationId,
+    lastOpenedNotificationId,
+    setLastOpenedNotificationId
+  } = useNotificationStore();
+
+  const { currentProfile } = useAppStore();
 
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
   useEffect(() => {
@@ -31,7 +28,6 @@ const NotificationIcon: FC = () => {
       onClick={() => {
         if (latestNotificationId) {
           setLastOpenedNotificationId(latestNotificationId);
-         
         }
       }}
     >

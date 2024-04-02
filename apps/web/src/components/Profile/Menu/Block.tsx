@@ -5,7 +5,8 @@ import getProfile from '@lensshare/lib/getProfile';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { useGlobalAlertStateStore } from 'src/store/useGlobalAlertStateStore';
+import { useGlobalAlertStateStore } from 'src/store/non-persisted/useGlobalAlertStateStore';
+
 
 interface BlockProps {
   profile: Profile;

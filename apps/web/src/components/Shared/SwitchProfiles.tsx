@@ -2,7 +2,6 @@ import { UserPlusIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { IS_MAINNET } from '@lensshare/data/constants';
 import { Errors } from '@lensshare/data/errors';
-import { PROFILE } from '@lensshare/data/tracking';
 import type {
   LastLoggedInProfileRequest,
   Profile,
@@ -19,23 +18,21 @@ import getProfile from '@lensshare/lib/getProfile';
 import { ErrorMessage, Image, Spinner } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
 import errorToast from '@lib/errorToast';
-import { Leafwatch } from '@lib/leafwatch';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useAppStore } from 'src/store/useAppStore';
-import { signIn } from 'src/store/useAuthPersistStore';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import { useAccount, useSignMessage } from 'wagmi';
 
 import Loader from './Loader';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
+import { signIn } from 'src/store/persisted/useAuthStore';
 
 const SwitchProfiles: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const setShowProfileSwitchModal = useGlobalModalStateStore(
-    (state) => state.setShowProfileSwitchModal
-  );
+  const { currentProfile } = useAppStore();
+  const { setShowProfileSwitchModal } = useGlobalModalStateStore();
   const [isLoading, setIsLoading] = useState(false);
   const [loggingInProfileId, setLoggingInProfileId] = useState<string | null>(
     null
@@ -102,7 +99,7 @@ const SwitchProfiles: FC = () => {
       });
 
       const switchedProfile = loadedProfile?.profile;
-      
+
       location.reload();
     } catch (error) {
       onError(error);

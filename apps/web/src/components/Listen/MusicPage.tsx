@@ -1,5 +1,5 @@
 import MetaTags from '@components/Common/MetaTags';
-import RecommendedProfiles from '@components/Home/RecommendedProfiles';
+
 import Footer from '@components/Shared/Footer';
 import { APP_NAME } from '@lensshare/data/constants';
 import type { PublicationMetadataMainFocusType } from '@lensshare/lens';
@@ -7,7 +7,7 @@ import { GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import LatestBytes from '@components/Bytes/LatestBytes';
 
@@ -17,7 +17,7 @@ import HorizantalScroller from '@components/Explore/HorizantalScroller';
 const ListenFeedRender: NextPage = () => {
   const router = useRouter();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [focus, setFocus] = useState<PublicationMetadataMainFocusType>();
 
   return (
@@ -42,8 +42,7 @@ const ListenFeedRender: NextPage = () => {
         <ListenFeed />
       </GridItemEight>
       <GridItemFour>
-       
-        {currentProfile ? <RecommendedProfiles /> : null}
+
         <Footer />
       </GridItemFour>
     </GridLayout>

@@ -9,8 +9,8 @@ import { useEffectOnce } from 'usehooks-ts';
 import StaffSidebar from '../Sidebar';
 import LeafwatchStats from './LeafwatchStats';
 import Links from './Links';
-import { useAppStore } from 'src/store/useAppStore';
-import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import { PAGEVIEW } from '@lensshare/data/tracking';
 import { Card, GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import {
@@ -21,8 +21,8 @@ import {
 } from '@lensshare/data/constants';
 
 const Overview: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const staffMode = useFeatureFlagsStore((state) => state.staffMode);
+  const { currentProfile } = useAppStore();
+
 
   useEffectOnce(() => {
     Leafwatch.track(PAGEVIEW, { page: 'staff-tools', subpage: 'overview' });

@@ -9,7 +9,7 @@ import { HomeFeedType } from '@lensshare/data/enums';
 import { GridItemEight, GridItemFour, GridLayout, Image } from '@lensshare/ui';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import AlgorithmicFeed from './AlgorithmicFeed';
 import Tabs from './Algorithms/Tabs';
@@ -18,10 +18,9 @@ import FeedType from './FeedType';
 import Hero from './Hero';
 import Highlights from './Highlights';
 import SetProfile from './SetProfile';
-import Timeline from './Timeline';
+
 import { useTheme } from 'next-themes';
 
-import RecommendedProfiles from './RecommendedProfiles';
 import type { AnyPublication } from '@lensshare/lens';
 import { usePublicationQuery } from '@lensshare/lens';
 import { getPublication } from 'src/hooks/getPublication';
@@ -34,9 +33,10 @@ import { useAccount, useWalletClient } from 'wagmi';
 import { loadKeys } from '@lib/xmtp/keys';
 import { useRoom } from '@huddle01/react/hooks';
 import Meet from '@components/Meet/Meet';
+import Timeline from './Timeline';
 
 const Home: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [feedType, setFeedType] = useState<HomeFeedType>(
     HomeFeedType.FOLLOWING
   );
@@ -136,7 +136,7 @@ const Home: NextPage = () => {
           {/* Onboarding steps */}
           {loggedIn && (
             <>
-              <RecommendedProfiles />
+             
               <EnableLensManager />
               <SetProfile />
 

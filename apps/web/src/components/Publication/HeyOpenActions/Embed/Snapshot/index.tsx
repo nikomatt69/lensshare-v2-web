@@ -6,7 +6,7 @@ import { snapshotApolloClient } from '@lensshare/snapshot/apollo';
 import type { SnapshotMetadata } from '@lensshare/types/embed';
 import { Spinner } from '@lensshare/ui';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import Wrapper from '../../../../Shared/Embed/Wrapper';
 import Choices from './Choices';
@@ -17,7 +17,7 @@ interface SnapshotProps {
 }
 
 const Snapshot: FC<SnapshotProps> = ({ embedMetadata }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { proposal: proposalId } = embedMetadata;
 
   const { data, loading, error, refetch } = useProposalQuery({

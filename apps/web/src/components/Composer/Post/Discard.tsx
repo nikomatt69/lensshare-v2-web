@@ -1,19 +1,18 @@
 import { Alert } from '@lensshare/ui';
 import type { FC } from 'react';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
+
 
 interface DiscardProps {
   onDiscard: () => void;
 }
 
 const Discard: FC<DiscardProps> = ({ onDiscard }) => {
-  const showDiscardModal = useGlobalModalStateStore(
-    (state) => state.showDiscardModal
+  const {showDiscardModal ,setShowDiscardModal} = useGlobalModalStateStore(
+    
   );
 
-  const setShowDiscardModal = useGlobalModalStateStore(
-    (state) => state.setShowDiscardModal
-  );
+
 
   return (
     <Alert

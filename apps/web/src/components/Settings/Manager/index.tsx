@@ -3,7 +3,7 @@ import NotLoggedIn from '@components/Shared/NotLoggedIn';
 import { APP_NAME } from '@lensshare/data/constants';
 import { GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import type { NextPage } from 'next';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useAccount } from 'wagmi';
 
 import SettingsSidebar from '../Sidebar';
@@ -12,7 +12,7 @@ import ProfileManager from './ProfileManager';
 import WrongWallet from '@components/Shared/WrongWallet';
 
 const ManagerSettings: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { address } = useAccount();
   const disabled = currentProfile?.ownedBy.address !== address;
 

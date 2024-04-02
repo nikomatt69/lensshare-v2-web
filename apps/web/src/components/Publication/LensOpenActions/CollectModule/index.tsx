@@ -58,8 +58,8 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
 import { useOpenActionOptimisticStore } from 'src/store/OptimisticActions/useOpenActionOptimisticStore';
-import { useAppStore } from 'src/store/useAppStore';
-import { useNonceStore } from 'src/store/useNonceStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import {
   useAccount,
   useBalance,
@@ -68,6 +68,7 @@ import {
 } from 'wagmi';
 
 import Splits from './Splits';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 
 interface CollectModuleProps {
   publication: AnyPublication;
@@ -81,7 +82,7 @@ const CollectModule: FC<CollectModuleProps> = ({ publication, openAction }) => {
     getOpenActionCountByPublicationId
   } = useOpenActionOptimisticStore();
   const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore();
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const targetPublication = isMirrorPublication(publication)
     ? publication?.mirrorOn

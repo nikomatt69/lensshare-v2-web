@@ -6,7 +6,7 @@ import React from 'react';
 
 import getPublicationData from '@lensshare/lib/getPublicationData';
 import UserProfile from '@components/Shared/UserProfile';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import NewPublication from '@components/Composer/NewPublication';
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 
 const Details: FC<Props> = ({ audio }) => {
   const metadata = getPublicationData(audio.metadata);
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   return (
     <div className="px-4 py-10 lg:px-0">
       <div className="p-2">

@@ -7,10 +7,11 @@ import {
 import { BrowserPush } from '@lib/browserPush';
 import getPushNotificationData from '@lib/getPushNotificationData';
 import { useEffect, type FC } from 'react';
-import { useNonceStore } from 'src/store/useNonceStore';
+
 import { useAccount } from 'wagmi';
 import { useNotificationStore } from 'src/store/persisted/useNotificationStore';
 import getCurrentSession from '@lib/getCurrentSession';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 
 const LensSubscriptionsProvider: FC = () => {
   const { setLatestNotificationId } = useNotificationStore();

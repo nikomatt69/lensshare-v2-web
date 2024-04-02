@@ -1,6 +1,6 @@
 import MetaTags from '@components/Common/MetaTags';
 import { APP_NAME } from '@lensshare/data/constants';
-import { IndexDB, Localstorage } from '@lensshare/data/storage';
+import { Localstorage } from '@lensshare/data/storage';
 import {
   Button,
   Card,
@@ -10,15 +10,15 @@ import {
 } from '@lensshare/ui';
 import type { NextPage } from 'next';
 import toast from 'react-hot-toast';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import SettingsSidebar from '../Sidebar';
 
 import Custom404 from 'src/pages/404';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 const CleanupSettings: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  
+  const { currentProfile } = useAppStore();
+
   const resetPushChatStore = usePushChatStore(
     (state) => state.resetPushChatStore
   );
@@ -30,7 +30,6 @@ const CleanupSettings: NextPage = () => {
     localStorage.removeItem(key);
     indexedDB.deleteDatabase(key);
     toast.success(`Cleared ${key}`);
-   
   };
 
   return (
@@ -82,14 +81,9 @@ const CleanupSettings: NextPage = () => {
               </div>
               <Button
                 onClick={() => {
-                  cleanup(
-                    IndexDB.MessageStore &&
-                      Localstorage.PushStore &&
-                      Localstorage.MessageStore
-                  ),
+                  cleanup(Localstorage.MessageStore),
                     resetPushChatStore(),
-                   
-                  toast.success(`Cleared DM keys`);
+                    toast.success(`Cleared DM keys`);
                 }}
               >
                 Cleanup

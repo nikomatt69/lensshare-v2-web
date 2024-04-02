@@ -24,22 +24,20 @@ import { Image } from '@lensshare/ui';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import useUploadAttachments from 'src/hooks/useUploadAttachments';
-import { useAppStore } from 'src/store/useAppStore';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import getAvatar from '@lensshare/lib/getAvatar';
+import {  usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS];
 
 const Editor: FC = () => {
-  const setPublicationContent = usePublicationStore(
-    (state) => state.setPublicationContent
-  );
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const showPollEditor = usePublicationStore((state) => state.showPollEditor);
-  const attachments = usePublicationStore((state) => state.attachments);
+
+  const { currentProfile } = useAppStore();
+  const { setPublicationContent ,attachments} = usePublicationStore();
+  const { showPollEditor } = usePublicationStore();
   const { handleUploadAttachments } = useUploadAttachments();
   const [editor] = useLexicalComposerContext();
-
   const handlePaste = async (pastedFiles: FileList) => {
     if (
       attachments.length === 4 ||
@@ -52,7 +50,6 @@ const Editor: FC = () => {
       await handleUploadAttachments(pastedFiles);
     }
   };
-
   useEffect(() => {
     return editor.registerCommand(
       INSERT_PARAGRAPH_COMMAND,
@@ -71,7 +68,7 @@ const Editor: FC = () => {
         className="mr-3 h-11 w-11 rounded-full border bg-gray-200 dark:border-gray-700"
         src={getAvatar(currentProfile)}
       />
-      <div className="relative w-full rounded-lg border px-2 dark:border-gray-700 dark:bg-gray-800">
+      <div className="relative w-full">
         <EmojiPickerPlugin />
         <RichTextPlugin
           contentEditable={
@@ -79,7 +76,7 @@ const Editor: FC = () => {
           }
           ErrorBoundary={() => <div>{Errors.SomethingWentWrong}</div>}
           placeholder={
-            <div className="ld-text-gray-500 pointer-events-none absolute top-2.5 text-gray-500">
+            <div className="ld-text-gray-500 pointer-events-none absolute top-2.5">
               {showPollEditor ? 'Ask a question...' : "What's new?!"}
             </div>
           }

@@ -2,7 +2,7 @@
 
 import type { FC } from 'react';
 import React, { createRef, useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import SpaceWindowHeader from './SpaceWindowHeader';
 import type { HTMLAudioElementWithSetSinkId } from './SpacesTypes';
@@ -20,7 +20,7 @@ const SpacesWindow: FC = () => {
   const { me } = useHuddle01();
   const [showAcceptRequest, setShowAcceptRequest] = useState(false);
   const [requestedPeerId, setRequestedPeerId] = useState('');
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const [requestType, setRequestType] = useState('');
   const { peers } = usePeers();

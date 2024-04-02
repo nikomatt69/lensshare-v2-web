@@ -2,16 +2,14 @@ import { FlagIcon } from '@heroicons/react/24/outline';
 import type { Profile } from '@lensshare/lens';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 interface ReportProfileProps {
   profile: Profile;
 }
 
 const Report: FC<ReportProfileProps> = ({ profile }) => {
-  const setShowReportProfileModal = useGlobalModalStateStore(
-    (state) => state.setShowReportProfileModal
-  );
+  const { setShowReportProfileModal } = useGlobalModalStateStore();
 
   return (
     <button

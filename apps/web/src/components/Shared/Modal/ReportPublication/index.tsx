@@ -28,7 +28,7 @@ const newReportPublicationSchema = object({
 });
 
 interface ReportProps {
-  publication: AnyPublication | null;
+  publication: string | null;
 }
 
 const ReportPublication: FC<ReportProps> = ({ publication }) => {
@@ -52,7 +52,7 @@ const ReportPublication: FC<ReportProps> = ({ publication }) => {
     createReport({
       variables: {
         request: {
-          for: publication?.id,
+          for: publication,
           reason: {
             [type]: {
               reason: type.replace('Reason', '').toUpperCase(),

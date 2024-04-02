@@ -1,29 +1,34 @@
-import type { AnyPublication, Profile } from '@lensshare/lens';
+import type {
+  AnyPublication,
+  MirrorablePublication,
+  Profile
+} from '@lensshare/lens';
 
+import { createTrackedSelector } from 'react-tracked';
 import { create } from 'zustand';
 
-interface GlobalAlertState {
+interface State {
   blockingorUnblockingProfile: null | Profile;
   deletingPublication: AnyPublication | null;
-  modingPublication: AnyPublication | null;
+  modingPublication: MirrorablePublication | null;
   setShowBlockOrUnblockAlert: (
     showBlockOrUnblockAlert: boolean,
     blockingorUnblockingProfile: null | Profile
   ) => void;
-  setShowModActionAlert: (
-    showModActionAlert: boolean,
-    modingPublication: AnyPublication | null
+  setShowGardenerActionsAlert: (
+    showGardenerActionsAlert: boolean,
+    modingPublication: MirrorablePublication | null
   ) => void;
   setShowPublicationDeleteAlert: (
     showPublicationDeleteAlert: boolean,
     deletingPublication: AnyPublication | null
   ) => void;
   showBlockOrUnblockAlert: boolean;
-  showModActionAlert: boolean;
+  showGardenerActionsAlert: boolean;
   showPublicationDeleteAlert: boolean;
 }
 
-export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
+const store = create<State>((set) => ({
   blockingorUnblockingProfile: null,
   deletingPublication: null,
   forceDeletePublication: false,
@@ -32,13 +37,15 @@ export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
     showBlockOrUnblockAlert,
     blockingorUnblockingProfile
   ) => set(() => ({ blockingorUnblockingProfile, showBlockOrUnblockAlert })),
-  setShowModActionAlert: (showModActionAlert, modingPublication) =>
-    set(() => ({ modingPublication, showModActionAlert })),
+  setShowGardenerActionsAlert: (showGardenerActionsAlert, modingPublication) =>
+    set(() => ({ modingPublication, showGardenerActionsAlert })),
   setShowPublicationDeleteAlert: (
     showPublicationDeleteAlert,
     deletingPublication
   ) => set(() => ({ deletingPublication, showPublicationDeleteAlert })),
   showBlockOrUnblockAlert: false,
-  showModActionAlert: false,
+  showGardenerActionsAlert: false,
   showPublicationDeleteAlert: false
 }));
+
+export const useGlobalAlertStateStore = createTrackedSelector(store);

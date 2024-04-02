@@ -1,12 +1,11 @@
 import UserProfile from '@components/Shared/UserProfile';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import { PROFILE } from '@lensshare/data/tracking';
 import type { Profile } from '@lensshare/lens';
 import { Button, Card, Form, Radio, TextArea, useZodForm } from '@lensshare/ui';
-import { Leafwatch } from '@lib/leafwatch';
 import type { FC } from 'react';
 import toast from 'react-hot-toast';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
+
 import { object, string, z } from 'zod';
 
 const ReportType = z.enum(['MISLEADING_ACCOUNT', 'UNWANTED_CONTENT']);
@@ -25,9 +24,7 @@ interface ReportProfileProps {
 }
 
 const ReportProfile: FC<ReportProfileProps> = ({ profile }) => {
-  const setShowReportProfileModal = useGlobalModalStateStore(
-    (state) => state.setShowReportProfileModal
-  );
+  const { setShowReportProfileModal } = useGlobalModalStateStore();
 
   const form = useZodForm({
     schema: reportReportProfileSchema
@@ -41,7 +38,7 @@ const ReportProfile: FC<ReportProfileProps> = ({ profile }) => {
         onSubmit={() => {
           const data = form.getValues();
           const { type, description } = data;
-          
+
           setShowReportProfileModal(false, null);
           toast.success('Reported Successfully!');
         }}

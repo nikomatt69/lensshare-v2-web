@@ -4,7 +4,8 @@ import { ENV } from '@pushprotocol/restapi/src/lib/constants';
 
 import moment from 'moment';
 import { CHAIN_ID } from 'src/constants';
-import { PUSH_ENV } from 'src/store/push-chat';
+import { PUSH_ENV } from 'src/store/persisted/usePushChatStore';
+
 
 export const HANDLE_SUFFIX = {
   LENS: '.lens',
@@ -47,10 +48,10 @@ export const dateToFromNowDaily = (timestamp: number): string => {
 };
 
 export const getIsHandle = (handle: string) => {
-  if (PUSH_ENV === ENV.STAGING) {
+  if (PUSH_ENV === ENV.PROD) {
     return handle.includes(HANDLE_SUFFIX.TEST);
   }
-  if (PUSH_ENV === ENV.PROD) {
+  if (PUSH_ENV === ENV.DEV) {
     return handle.includes(HANDLE_SUFFIX.LENS);
   }
 };

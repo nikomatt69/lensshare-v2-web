@@ -16,14 +16,14 @@ import errorToast from '@lib/errorToast';
 import { Leafwatch } from '@lib/leafwatch';
 import sanitizeProfileInterests from '@lib/sanitizeProfileInterests';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import Loader from '../../Shared/Loader';
 
 const MAX_TOPICS_ALLOWED = 12;
 
 const Interests: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { cache } = useApolloClient();
 
   const updateCache = (interests: string[]) => {

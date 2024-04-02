@@ -1,26 +1,34 @@
-import type { Preferences } from '@lensshare/types/hey';
-
+import { createTrackedSelector } from 'react-tracked';
 import { create } from 'zustand';
 
-export type ExtendedPreference = Omit<
-  NonNullable<Preferences['preference']>,
-  'createdAt' | 'id'
->;
-
-const DefaultPreferences: ExtendedPreference = {
-  highSignalNotificationFilter: false,
-  isPride: false
-};
-
-interface PreferencesState {
-  preferences: ExtendedPreference;
+interface State {
+  hasDismissedOrMintedMembershipNft: boolean;
+  highSignalNotificationFilter: boolean;
+  isPride: boolean;
   resetPreferences: () => void;
-  setPreferences: (preferences: ExtendedPreference) => void;
+  setHasDismissedOrMintedMembershipNft: (
+    hasDismissedOrMintedMembershipNft: boolean
+  ) => void;
+  setHighSignalNotificationFilter: (
+    highSignalNotificationFilter: boolean
+  ) => void;
+  setIsPride: (isPride: boolean) => void;
 }
 
-export const usePreferencesStore = create<PreferencesState>((set) => ({
-  preferences: DefaultPreferences,
-  resetPreferences: () => set(() => ({ preferences: DefaultPreferences })),
-  setPreferences: (preferences) =>
-    set(() => ({ preferences: { ...preferences } }))
+const store = create<State>((set) => ({
+  hasDismissedOrMintedMembershipNft: true,
+  highSignalNotificationFilter: false,
+  isPride: false,
+  resetPreferences: () =>
+    set(() => ({
+      hasDismissedOrMintedMembershipNft: true,
+      highSignalNotificationFilter: false
+    })),
+  setHasDismissedOrMintedMembershipNft: (hasDismissedOrMintedMembershipNft) =>
+    set(() => ({ hasDismissedOrMintedMembershipNft })),
+  setHighSignalNotificationFilter: (highSignalNotificationFilter) =>
+    set(() => ({ highSignalNotificationFilter })),
+  setIsPride: (isPride) => set(() => ({ isPride }))
 }));
+
+export const usePreferencesStore = createTrackedSelector(store);

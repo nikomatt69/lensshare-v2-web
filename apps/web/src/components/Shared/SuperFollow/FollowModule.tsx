@@ -33,11 +33,11 @@ import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
 
 import {useNonceStore} from 'src/store/non-persisted/useNonceStore';
 import { useBalance, useContractWrite, useSignTypedData } from 'wagmi';
-import {useProfileStore} from 'src/store/persisted/useProfileStore';
+
 import Loader from '../Loader';
 import NoBalanceError from '../NoBalanceError';
 import Slug from '../Slug';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface FollowModuleProps {
   profile: Profile;
@@ -60,7 +60,7 @@ const FollowModule: FC<FollowModuleProps> = ({
 }) => {
   const { pathname } = useRouter();
   const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore();
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
   const [allowed, setAllowed] = useState(true);
 

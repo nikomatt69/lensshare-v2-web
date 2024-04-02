@@ -16,7 +16,8 @@ import { OptmisticPublicationType } from '@lensshare/types/enums';
 import { Card, ErrorMessage, Spinner } from '@lensshare/ui';
 import type { FC } from 'react';
 import { useInView } from 'react-cool-inview';
-import { useTransactionPersistStore } from 'src/store/useTransactionPersistStore';
+import { useTransactionStore } from 'src/store/persisted/useTransactionStore';
+
 
 interface FeedProps {
   publication: AnyPublication;
@@ -26,7 +27,7 @@ const Feed: FC<FeedProps> = ({ publication }) => {
   const publicationId = isMirrorPublication(publication)
     ? publication?.mirrorOn?.id
     : publication?.id;
-  const txnQueue = useTransactionPersistStore((state) => state.txnQueue);
+  const {txnQueue} = useTransactionStore();
 
   // Variables
   const request: PublicationsRequest = {
@@ -88,8 +89,8 @@ const Feed: FC<FeedProps> = ({ publication }) => {
 
   return (
     <>
-      {queuedComments.map((txn) => (
-        <QueuedPublication key={txn.id} txn={txn} />
+       {queuedComments.map((txn) => (
+        <QueuedPublication key={txn.txId} txn={txn} />
       ))}
       <Card className="border-trasparent w-full divide-y-[1px] rounded-xl  p-0 dark:divide-gray-700">
         {comments?.map((comment, index) =>

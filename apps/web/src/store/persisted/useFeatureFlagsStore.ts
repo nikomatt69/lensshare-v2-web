@@ -3,11 +3,12 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import createIdbStorage from '../lib/createIdbStorage';
+import { createTrackedSelector } from 'react-tracked';
 
-interface FeatureFlagsState {
+interface State {
   featureFlags: string[];
   gardenerMode: boolean;
-  hydrateFeatureFlags: () => { featureFlags: string[] };
+  hydrateFeatureFlags: () => string[];
   resetFeatureFlags: () => void;
   setFeatureFlags: (featureFlags: string[]) => void;
   setGardenerMode: (gardenerMode: boolean) => void;
@@ -15,16 +16,12 @@ interface FeatureFlagsState {
   staffMode: boolean;
 }
 
-export const useFeatureFlagsStore = create(
-  persist<FeatureFlagsState>(
+const store = create(
+  persist<State>(
     (set, get) => ({
       featureFlags: [],
       gardenerMode: false,
-      hydrateFeatureFlags: () => {
-        return {
-          featureFlags: get().featureFlags
-        };
-      },
+      hydrateFeatureFlags: () => get().featureFlags,
       resetFeatureFlags: () =>
         set(() => ({
           featureFlags: [],
@@ -43,5 +40,5 @@ export const useFeatureFlagsStore = create(
   )
 );
 
-export const hydrateFeatureFlags = () =>
-  useFeatureFlagsStore.getState().hydrateFeatureFlags();
+export const hydrateFeatureFlags = () => store.getState().hydrateFeatureFlags();
+export const useFeatureFlagsStore = createTrackedSelector(store);

@@ -1,12 +1,9 @@
 import MetaTags from '@components/Common/MetaTags';
 import NotLoggedIn from '@components/Shared/NotLoggedIn';
 import { APP_NAME } from '@lensshare/data/constants';
-import { PAGEVIEW } from '@lensshare/data/tracking';
 import { Card, GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
-import { Leafwatch } from '@lib/leafwatch';
 import type { NextPage } from 'next';
-import { useAppStore } from 'src/store/useAppStore';
-import { useEffectOnce } from 'usehooks-ts';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import SettingsSidebar from '../Sidebar';
 import HighSignalNotificationFilter from './HighSignalNotificationFilter';
@@ -14,9 +11,7 @@ import HighSignalNotificationFilter from './HighSignalNotificationFilter';
 import PushNotifications from './PushNotifications';
 
 const PreferencesSettings: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-
-
+  const { currentProfile } = useAppStore();
 
   if (!currentProfile) {
     return <NotLoggedIn />;
@@ -39,9 +34,8 @@ const PreferencesSettings: NextPage = () => {
           </div>
           <div className="divider my-5" />
           <div className="space-y-6">
-
+            <HighSignalNotificationFilter />
             <PushNotifications />
-        
           </div>
         </Card>
       </GridItemEight>

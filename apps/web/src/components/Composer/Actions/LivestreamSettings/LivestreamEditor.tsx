@@ -13,7 +13,8 @@ import axios from 'axios';
 import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
+
 interface WrapperProps {
   children: ReactNode;
 }
@@ -27,16 +28,12 @@ const Wrapper: FC<WrapperProps> = ({ children }) => {
 };
 
 const LivestreamEditor: FC = () => {
-  const liveVideoConfig = usePublicationStore((state) => state.liveVideoConfig);
-  const setLiveVideoConfig = usePublicationStore(
-    (state) => state.setLiveVideoConfig
-  );
-  const setShowLiveVideoEditor = usePublicationStore(
-    (state) => state.setShowLiveVideoEditor
-  );
-  const resetLiveVideoConfig = usePublicationStore(
-    (state) => state.resetLiveVideoConfig
-  );
+  const {
+    liveVideoConfig,
+    resetLiveVideoConfig,
+    setLiveVideoConfig,
+    setShowLiveVideoEditor
+  } = usePublicationStore();
 
   const [screen, setScreen] = useState<'create' | 'record'>('create');
   const [creating, setCreating] = useState(false);

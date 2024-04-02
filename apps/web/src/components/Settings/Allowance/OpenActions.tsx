@@ -14,7 +14,7 @@ import { useState } from 'react';
 import Allowance from './Allowance';
 import { useEnabledCurrenciesQuery } from '@lensshare/lens/generated5';
 import type { AllowedToken } from '@lensshare/types/hey';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const getAllowancePayload = (currency: string) => {
   return {
@@ -24,7 +24,7 @@ const getAllowancePayload = (currency: string) => {
 };
 
 const OpenActions: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [currencyLoading, setCurrencyLoading] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<AllowedToken | null>(
     null

@@ -26,11 +26,11 @@ import { signIn, signOut } from 'src/store/persisted/useAuthStore';
 
 import { useAccount, useSignMessage } from 'wagmi';
 
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import Loader from '../Loader';
 
 const SwitchProfiles: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
   const [loggingInProfileId, setLoggingInProfileId] = useState<null | string>(
     null

@@ -31,7 +31,7 @@ import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import urlcat from 'urlcat';
 
 import Followerings from './Followerings';
@@ -55,7 +55,7 @@ interface DetailsProps {
 }
 
 const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { setRecipientProfile } = usePushChatStore();
   const [showMutualFollowersModal, setShowMutualFollowersModal] =
     useState(false);

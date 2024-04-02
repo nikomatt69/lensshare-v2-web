@@ -1,14 +1,11 @@
 import Link from 'next/link';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import LoginButton from './LoginButton';
 import SignedUser from './SignedUser';
-import SignupButton from './SignupButton';
 import WalletUser from './WalletUser';
 import { isAddress } from 'viem';
-import getCurrentSessionProfileId from '@lib/getCurrentSessionProfileId';
-import { Profile } from '@lensshare/lens';
 import getCurrentSession from '@lib/getCurrentSession';
 
 export const NextLink = ({ children, href, ...rest }: Record<string, any>) => (
@@ -18,7 +15,7 @@ export const NextLink = ({ children, href, ...rest }: Record<string, any>) => (
 );
 
 const MenuItems: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { id: sessionProfileId } = getCurrentSession();
 
   if (currentProfile) {

@@ -1,17 +1,15 @@
 import { StarIcon } from '@heroicons/react/24/outline';
-import { PROFILE } from '@lensshare/data/tracking';
 import type { Profile } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import { Button, Modal } from '@lensshare/ui';
-import { Leafwatch } from '@lib/leafwatch';
 import dynamic from 'next/dynamic';
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import Loader from '../Loader';
 import Slug from '../Slug';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 const FollowModule = dynamic(() => import('./FollowModule'), {
   loading: () => <Loader message="Loading Super follow" />
@@ -37,10 +35,8 @@ const SuperFollow: FC<SuperFollowProps> = ({
   superFollowSource
 }) => {
   const [showFollowModal, setShowFollowModal] = useState(false);
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const setShowAuthModal = useGlobalModalStateStore(
-    (state) => state.setShowAuthModal
-  );
+  const { currentProfile } = useAppStore();
+  const { setShowAuthModal } = useGlobalModalStateStore();
 
   return (
     <>
@@ -53,7 +49,6 @@ const SuperFollow: FC<SuperFollowProps> = ({
             return;
           }
           setShowFollowModal(!showFollowModal);
-
         }}
         aria-label="Super follow"
         icon={<StarIcon className="h-4 w-4" />}

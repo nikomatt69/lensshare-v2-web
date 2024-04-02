@@ -15,10 +15,11 @@ import DropZone from './DropZone';
 
 import SelectedMedia from './SelectedMedia';
 import { checkIsBytesVideo } from 'src/hooks/checkIsBytesVideo';
-import useBytesStore from 'src/store/bytes';
+
 import TooltipBytes from './TooltipBytes';
 import InputMentions from './InputMentions';
 import CollectSettings from '@components/Composer/Actions/CollectSettings';
+import useBytesStore from 'src/store/persisted/bytes';
 
 const formSchema = object({
   title: string()
@@ -40,8 +41,7 @@ type Props = {
 };
 
 const Details: FC<Props> = ({ onUpload, onCancel }) => {
-  const uploadedMedia = useBytesStore((state) => state.uploadedMedia);
-  const setUploadedMedia = useBytesStore((state) => state.setUploadedMedia);
+  const {uploadedMedia ,setUploadedMedia} = useBytesStore();
   const isByteSizeVideo = checkIsBytesVideo(uploadedMedia.durationInSeconds);
 
   const {

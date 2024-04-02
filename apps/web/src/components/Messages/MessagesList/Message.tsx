@@ -9,7 +9,7 @@ import {
 } from '@xmtp/react-sdk';
 import { useState, type FC, useCallback, useEffect } from 'react';
 import { getTimeFromNow } from 'src/hooks/formatTime4';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { ContentTypeAudioeKey } from 'src/hooks/codecs/Audio';
 import Markup from '@components/Shared/Markup';
 import { useAccount } from 'wagmi';

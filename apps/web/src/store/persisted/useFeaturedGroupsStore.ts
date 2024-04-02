@@ -24,7 +24,7 @@ export const useFeaturedGroupsStore = create(
       setFeaturedGroups: (featuredGroups) => set(() => ({ featuredGroups }))
     }),
     {
-      name: IndexDB.FeaturedGroupsStore,
+      name: IndexDB.FeatureFlagsStore,
       storage: createIdbStorage()
     }
   )

@@ -10,7 +10,7 @@ import {
 import type { Post, Profile, PublicationsRequest } from '@lensshare/lens';
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { EmptyState, Image } from '@lensshare/ui';
 import getAvatar from '@lensshare/lib/getAvatar';
 
@@ -36,7 +36,7 @@ type Props = {
 const StoriesRender: FC<Props> = ({ trigger, publication, profile }) => {
   const [show, setShow] = useState(false);
   const [currentViewingId, setCurrentViewingId] = useState('');
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [showModal, setShowModal] = useState(false);
   const profilePic = currentProfile?.metadata?.picture;
   const startOfToday = startOfDay(new Date());

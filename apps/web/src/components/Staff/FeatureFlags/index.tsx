@@ -9,15 +9,15 @@ import { useEffectOnce } from 'usehooks-ts';
 
 import StaffSidebar from '../Sidebar';
 import List from './List';
-import { useAppStore } from 'src/store/useAppStore';
-import { useFeatureFlagsStore } from 'src/store/useFeatureFlagsStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import { PAGEVIEW } from '@lensshare/data/tracking';
 import { GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import { ADMIN_ADDRESS, ADMIN_ADDRESS2, ADMIN_ADDRESS3, APP_NAME } from '@lensshare/data/constants';
 
 const FeatureFlags: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
-  const staffMode = useFeatureFlagsStore((state) => state.staffMode);
+  const { currentProfile } = useAppStore();
+
 
   useEffectOnce(() => {
     Leafwatch.track(PAGEVIEW, {

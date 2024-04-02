@@ -1,5 +1,7 @@
 export enum OptmisticPublicationType {
-  NewPost = 'NEW_POST',
-  NewComment = 'NEW_COMMENT',
-  NewQuote = 'NEW_QUOTE'
+  Collect = 'Collect',
+  Comment = 'Comment',
+  Mirror = 'Mirror',
+  Post = 'Post',
+  Quote = 'Quote'
 }

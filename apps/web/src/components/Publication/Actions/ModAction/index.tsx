@@ -1,6 +1,6 @@
 import { BanknotesIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import { GARDENER } from '@lensshare/data/tracking';
-import type { AnyPublication, ReportPublicationRequest } from '@lensshare/lens';
+import type { AnyPublication, MirrorablePublication, ReportPublicationRequest } from '@lensshare/lens';
 import {
   PublicationReportingSpamSubreason,
   useReportPublicationMutation
@@ -11,76 +11,82 @@ import cn from '@lensshare/ui/cn';
 import { Leafwatch } from '@lib/leafwatch';
 import type { FC, ReactNode } from 'react';
 import { toast } from 'react-hot-toast';
-import { useGlobalAlertStateStore } from 'src/store/useGlobalAlertStateStore';
+import { useGlobalAlertStateStore } from 'src/store/non-persisted/useGlobalAlertStateStore';
+import { useToggle } from 'usehooks-ts';
 
-interface ModActionProps {
-  publication: AnyPublication;
-  className?: string;
+interface GardenerActionsProps {
+  publication: MirrorablePublication;
 }
 
-const ModAction: FC<ModActionProps> = ({ publication, className = '' }) => {
-  const setShowModActionAlert = useGlobalAlertStateStore(
-    (state) => state.setShowModActionAlert
+const GardenerActions: FC<GardenerActionsProps> = ({ publication }) => {
+  const { setShowGardenerActionsAlert } = useGlobalAlertStateStore();
+  const [hasReported, toggletHasReported] = useToggle(
+    publication.operations?.hasReported
   );
   const [createReport, { loading }] = useReportPublicationMutation();
 
   const reportPublication = async ({
-    type,
-    subreason
+    subreason,
+    type
   }: {
-    type: string;
     subreason: string;
+    type: string;
   }) => {
     // Variables
     const request: ReportPublicationRequest = {
-      for: publication?.id,
+      for: publication.id,
       reason: {
-        [type]: {
-          reason: type.replace('Reason', '').toUpperCase(),
-          subreason
-        }
+        [type]: { reason: type.replace('Reason', '').toUpperCase(), subreason }
       }
     };
 
     return await createReport({
-      variables: { request },
-      onCompleted: () => {
-        setShowModActionAlert(false, null);
-      }
+      onCompleted: () => setShowGardenerActionsAlert(false, null),
+      variables: { request }
     });
   };
 
   interface ReportButtonProps {
-    config: {
-      type: string;
-      subreason: string;
-    }[];
+    config: { subreason: string; type: string }[];
     icon: ReactNode;
     label: string;
+    type: string;
   }
 
-  const ReportButton: FC<ReportButtonProps> = ({ config, icon, label }) => (
+  const ReportButton: FC<ReportButtonProps> = ({
+    config,
+    icon,
+    label,
+    type
+  }) => (
     <Button
-      disabled={loading}
-      variant="warning"
-      size="sm"
-      outline
+      disabled={loading || hasReported}
       icon={icon}
       onClick={() => {
+        Leafwatch.track(GARDENER.REPORT, {
+          publication_id: publication.id,
+          type
+        });
+
         toast.promise(
           Promise.all(
-            config.map(async ({ type, subreason }) => {
-              await reportPublication({ type, subreason });
-
+            config.map(async ({ subreason, type }) => {
+              await reportPublication({ subreason, type });
             })
           ),
           {
+            error: 'Error reporting publication',
             loading: 'Reporting publication...',
-            success: 'Publication reported successfully',
-            error: 'Error reporting publication'
+            success: () => {
+              toggletHasReported();
+              return 'Publication reported successfully';
+            }
           }
         );
       }}
+      outline
+      size="sm"
+      variant="warning"
     >
       {label}
     </Button>
@@ -88,46 +94,49 @@ const ModAction: FC<ModActionProps> = ({ publication, className = '' }) => {
 
   return (
     <span
-      className={cn('flex flex-wrap items-center gap-3 text-sm', className)}
+      className="flex flex-wrap items-center gap-3 text-sm"
       onClick={stopEventPropagation}
-      aria-hidden="true"
     >
       <ReportButton
         config={[
           {
-            type: 'spamReason',
-            subreason: PublicationReportingSpamSubreason.FakeEngagement
+            subreason: PublicationReportingSpamSubreason.LowSignal,
+            type: 'spamReason'
           }
         ]}
         icon={<DocumentTextIcon className="h-4 w-4" />}
-        label="Poor content"
+        label="Spam"
+        type="spam"
       />
       <ReportButton
         config={[
           {
-            type: 'spamReason',
-            subreason: PublicationReportingSpamSubreason.LowSignal
+            subreason: PublicationReportingSpamSubreason.FakeEngagement,
+            type: 'spamReason'
           }
         ]}
         icon={<BanknotesIcon className="h-4 w-4" />}
-        label="Stop Sponsor"
+        label="Un-sponsor"
+        type="un-sponsor"
       />
       <ReportButton
         config={[
           {
-            type: 'spamReason',
-            subreason: PublicationReportingSpamSubreason.FakeEngagement
+            subreason: PublicationReportingSpamSubreason.FakeEngagement,
+            type: 'spamReason'
           },
           {
-            type: 'spamReason',
-            subreason: PublicationReportingSpamSubreason.LowSignal
+            subreason: PublicationReportingSpamSubreason.LowSignal,
+            type: 'spamReason'
           }
         ]}
         icon={<BanknotesIcon className="h-4 w-4" />}
-        label="Poor content & Stop Sponsor"
+        label="Both"
+        type="both"
       />
+     
     </span>
   );
 };
 
-export default ModAction;
+export default GardenerActions;

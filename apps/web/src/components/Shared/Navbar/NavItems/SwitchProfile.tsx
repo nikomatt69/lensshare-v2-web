@@ -1,16 +1,14 @@
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
 import cn from '@lensshare/ui/cn';
 import type { FC } from 'react';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 interface SwitchProfileProps {
   className?: string;
 }
 
 const SwitchProfile: FC<SwitchProfileProps> = ({ className = '' }) => {
-  const setShowProfileSwitchModal = useGlobalModalStateStore(
-    (state) => state.setShowProfileSwitchModal
-  );
+  const { setShowProfileSwitchModal } = useGlobalModalStateStore();
 
   return (
     <button

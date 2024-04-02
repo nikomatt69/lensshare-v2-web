@@ -38,7 +38,7 @@ const PreviewSpaces: FC = () => {
   const { fetchVideoStream, stopVideoStream, stream: camStream } = useVideo();
   const { fetchAudioStream, stopAudioStream, stream: micStream } = useAudio();
   const { setDisplayName } = useDisplayName();
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [displayUserName, setDisplayUserName] = useState<string>(
     currentProfile?.handle?.localName ?? ''
   );

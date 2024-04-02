@@ -15,7 +15,7 @@ import type { FC } from 'react';
 import urlcat from 'urlcat';
 
 import MetaDetails from '../MetaDetails';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface RankProps {
   profile: Profile;
@@ -23,7 +23,7 @@ interface RankProps {
 
 const Rank: FC<RankProps> = ({ profile }) => {
 
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const getRank = async (strategy: string) => {
     try {
       const response = await axios.get(

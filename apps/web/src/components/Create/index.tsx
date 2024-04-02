@@ -15,7 +15,6 @@ import {
 import type {
   CreateMomokaPostEip712TypedData,
   CreateOnchainPostEip712TypedData,
-  Profile,
   ReferenceModuleInput
 } from '@lensshare/lens';
 import {
@@ -36,9 +35,9 @@ import { useAccount, useContractWrite, useSignTypedData } from 'wagmi';
 import type { VideoFormData } from './Details';
 import Details from './Details';
 import useEthersWalletClient from 'src/hooks/useEthersWalletClient';
-import { useNonceStore } from 'src/store/useNonceStore';
-import { useAppStore } from 'src/store/useAppStore';
-import useBytesStore, { UPLOADED_VIDEO_FORM_DEFAULTS } from 'src/store/bytes';
+
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
 import { getProfile } from 'src/hooks/getProfile';
 import type { CustomErrorWithData } from 'src/types/custom-types';
@@ -60,19 +59,16 @@ import { getUploadedMediaType } from './getUploadedMediaType';
 import { canUploadedToIpfs } from 'src/hooks/canUploadedToIpfs';
 import { LensHub } from '@lensshare/abis';
 import { checkLensManagerPermissions } from './checkLensManagerPermissions';
+import useBytesStore, { UPLOADED_VIDEO_FORM_DEFAULTS } from 'src/store/persisted/bytes';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 
 const CreateSteps = () => {
-  const getIrysInstance = useBytesStore((state) => state.getIrysInstance);
-  const setIrysData = useBytesStore((state) => state.setIrysData);
-  const irysData = useBytesStore((state) => state.irysData);
-  const uploadedMedia = useBytesStore((state) => state.uploadedMedia);
-  const setUploadedMedia = useBytesStore((state) => state.setUploadedMedia);
-  const currentProfile = useAppStore(
-    (state) => state.currentProfile
-  ) as Profile;
+  const { irysData, setIrysData, getIrysInstance } = useBytesStore();
+  const { uploadedMedia, setUploadedMedia } = useBytesStore();
+  const { currentProfile } = useAppStore();
 
   const { lensHubOnchainSigNonce, setLensHubOnchainSigNonce } = useNonceStore();
-  const { queuedVideos, setQueuedVideos } = useAppStore();
+
   const { address } = useAccount();
   const { data: signer } = useEthersWalletClient();
   const router = useRouter();
@@ -102,20 +98,7 @@ const CreateSteps = () => {
     router.push(`/bytes/${pubId}`);
   };
 
-  const setToQueue = (txn: { txnId?: string; txnHash?: string }) => {
-    if (txn.txnHash || txn.txnId) {
-      setQueuedVideos([
-        {
-          thumbnailUrl: uploadedMedia.thumbnail,
-          title: uploadedMedia.title,
-          txnId: txn.txnId,
-          txnHash: txn.txnHash
-        },
-        ...(queuedVideos || [])
-      ]);
-    }
-    redirectToChannelPage();
-  };
+ 
 
   useEffect(() => {
     if (handleWrongNetwork()) {
@@ -162,7 +145,7 @@ const CreateSteps = () => {
     functionName: 'post',
     onSuccess: (data) => {
       if (data.hash) {
-        setToQueue({ txnHash: data.hash });
+        ({ txnHash: data.hash });
       }
       stopLoading();
       setLensHubOnchainSigNonce(lensHubOnchainSigNonce + 1);
@@ -186,7 +169,7 @@ const CreateSteps = () => {
       onCompleted(broadcastOnchain.__typename);
       if (broadcastOnchain.__typename === 'RelaySuccess') {
         const txnId = broadcastOnchain?.txId;
-        setToQueue({ txnId });
+        ({ txnId });
       }
     }
   });
@@ -229,7 +212,7 @@ const CreateSteps = () => {
     onCompleted: ({ postOnchain }) => {
       if (postOnchain.__typename === 'RelaySuccess') {
         onCompleted(postOnchain.__typename);
-        setToQueue({ txnId: postOnchain.txId });
+        ({ txnId: postOnchain.txId });
       }
     }
   });
@@ -364,8 +347,7 @@ const CreateSteps = () => {
       marketplace: {
         attributes,
         animation_url: uploadedMedia.dUrl,
-        external_url: `https://mycrumbs.xyz${getProfile(currentProfile)
-          ?.slug}`,
+        external_url: `https://mycrumbs.xyz${getProfile(currentProfile)?.slug}`,
         image: uploadedMedia.thumbnail,
         name: uploadedMedia.title,
         description: trimify(uploadedMedia.description)

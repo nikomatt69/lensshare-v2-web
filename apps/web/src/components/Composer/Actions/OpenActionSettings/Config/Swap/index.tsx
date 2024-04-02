@@ -20,7 +20,7 @@ import RewardConfig from './RewardConfig';
 import TokenConfig from './TokenConfig';
 import { useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
 import { usePublicationAttributesStore } from 'src/store/non-persisted/usePublicationAttributesStore';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface State {
   enabled: boolean;

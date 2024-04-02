@@ -7,15 +7,16 @@ import useNotification from './useNotification';
 import usePushHooks from './usePush';
 
 
-import { useAppStore } from 'src/store/useAppStore';
+
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
 import { PUSH_ENV } from '@lensshare/data/constants';
 import { getAccountFromProfile, getProfileIdFromDID } from './helper2';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 
 
 const usePushSocket = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const {currentProfile} = useAppStore();
   const setRecipientChat = usePushChatStore((state) => state.setRecipientChat);
   const { decryptConversation } = usePushHooks();
   const user = getAccountFromProfile(currentProfile?.id);

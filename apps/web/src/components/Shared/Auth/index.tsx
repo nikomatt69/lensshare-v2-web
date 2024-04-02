@@ -2,15 +2,14 @@ import type { FC } from 'react';
 
 import Login from '@components/Shared/Auth/Login';
 import { APP_NAME } from '@lensshare/data/constants';
-import { useGlobalModalStateStore } from 'src/store/useGlobalModalStateStore';
+
 import { useAccount } from 'wagmi';
 
 import Signup from './Signup';
+import { useGlobalModalStateStore } from 'src/store/non-persisted/useGlobalModalStateStore';
 
 const Auth: FC = () => {
-  const authModalType = useGlobalModalStateStore(
-    (state) => state.authModalType
-  );
+  const { authModalType } = useGlobalModalStateStore();
   const { isConnected } = useAccount();
 
   return (

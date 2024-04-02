@@ -7,9 +7,10 @@ import type { FC } from 'react';
 import React from 'react';
 
 import { getThumbnailUrl } from 'src/hooks/getThumbnailUrl';
-import useEchoStore from 'src/store/echos';
+
 import { Image } from '@lensshare/ui';
 import { CloudIcon, PlayIcon } from '@heroicons/react/24/outline';
+import useEchoStore from 'src/store/persisted/echos';
 
 type Props = {
   publication: AnyPublication;

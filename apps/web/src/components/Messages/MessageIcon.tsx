@@ -5,12 +5,12 @@ import Link from 'next/link';
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useMessagePersistStore } from 'src/store/message';
 import { useClient } from '@xmtp/react-sdk';
 
 const MessageIcon: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const clearMessagesBadge = useMessagePersistStore(
     (state) => state.clearMessagesBadge
   );

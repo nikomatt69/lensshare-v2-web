@@ -95,12 +95,7 @@ const SinglePublication: FC<SinglePublicationProps> = ({
               ) : null}
               <FeaturedGroup className="mt-3" tags={metadata?.tags} />
             </div>
-            {showModActions ? (
-              <ModAction
-                publication={rootPublication}
-                className="mt-3 max-w-md"
-              />
-            ) : null}
+            
           </>
         )}
       </div>

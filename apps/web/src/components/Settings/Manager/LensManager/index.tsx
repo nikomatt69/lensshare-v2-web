@@ -2,12 +2,12 @@ import { APP_NAME } from '@lensshare/data/constants';
 import checkDispatcherPermissions from '@lensshare/lib/checkDispatcherPermissions';
 import { Card } from '@lensshare/ui';
 import type { FC } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import ToggleLensManager from './ToggleLensManager';
 
 const LensManager: FC = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const { canUseSignless } = checkDispatcherPermissions(currentProfile);
 
   return (

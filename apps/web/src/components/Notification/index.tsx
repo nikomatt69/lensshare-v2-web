@@ -4,7 +4,7 @@ import { APP_NAME } from '@lensshare/data/constants';
 import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import FeedType from './FeedType';
 import List from './List';
@@ -14,7 +14,7 @@ const Notification: FC = () => {
   const {
     query: { type }
   } = useRouter();
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [feedType, setFeedType] = useState(
     type &&
       ['all', 'mentions', 'comments', 'likes', 'collects'].includes(

@@ -8,7 +8,8 @@ import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import type { FC } from 'react';
 import { useState } from 'react';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
+
 
 const GifSelector = dynamic(() => import('./GifSelector'), {
   loading: () => <Loader message="Loading GIFs" />
@@ -19,7 +20,7 @@ interface GiphyProps {
 }
 
 const Gif: FC<GiphyProps> = ({ setGifAttachment }) => {
-  const attachments = usePublicationStore((state) => state.attachments);
+  const {attachments} = usePublicationStore();
   const [showModal, setShowModal] = useState(false);
 
   return (

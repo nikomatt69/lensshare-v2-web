@@ -2,9 +2,10 @@ import type { NewAttachment } from '@lensshare/types/misc';
 import uploadToIPFS from '@lib/uploadToIPFS';
 import { useCallback } from 'react';
 import { toast } from 'react-hot-toast';
-import { usePublicationStore } from 'src/store/usePublicationStore';
+
 import { v4 as uuid } from 'uuid';
 import imageCompression from 'browser-image-compression';
+import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
 
 
 const useUploadAttachments = () => {

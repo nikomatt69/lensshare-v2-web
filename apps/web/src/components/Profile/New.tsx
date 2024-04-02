@@ -8,11 +8,11 @@ import { PAGEVIEW } from '@lensshare/data/tracking';
 import { Card, GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import { Leafwatch } from '@lib/leafwatch';
 import type { NextPage } from 'next';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { useEffectOnce } from 'usehooks-ts';
 
 const NewProfile: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
 
 

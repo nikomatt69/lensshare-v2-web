@@ -13,14 +13,14 @@ import axios from 'axios';
 import type { FC } from 'react';
 
 import MetaDetails from '../MetaDetails';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 interface ProfileDetailsProps {
   profile: Profile;
 }
 
 const ProfileDetails: FC<ProfileDetailsProps> = ({ profile }) => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const getProfileDetails = async (): Promise<{
     region: string;
     city: string;

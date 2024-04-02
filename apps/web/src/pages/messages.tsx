@@ -6,7 +6,7 @@ import {
 } from '@xmtp/react-sdk';
 
 import Custom404 from './404';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const contentTypeConfigs = [
   reactionContentTypeConfig,

@@ -12,7 +12,7 @@ import cn from '@lensshare/ui/cn';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline';
 
 import Feed from './Feed';
@@ -27,7 +27,7 @@ import CollectOutline from '@components/Icons/CollectOutline';
 const Explore: NextPage = () => {
   const router = useRouter();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [focus, setFocus] = useState<PublicationMetadataMainFocusType>();
   const { isRoomJoined } = useRoom();
   const tabs = [

@@ -9,12 +9,12 @@ import type { PublicationMetadataMainFocusType } from '@lensshare/lens';
 import { GridItemEight, GridItemFour, GridLayout } from '@lensshare/ui';
 import type { NextPage } from 'next';
 import { useState } from 'react';
-import { useAppStore } from 'src/store/useAppStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import Feed from './Feed';
 
 const Bookmarks: NextPage = () => {
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
   const [focus, setFocus] = useState<PublicationMetadataMainFocusType>();
 
   if (!currentProfile) {

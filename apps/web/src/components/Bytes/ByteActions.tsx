@@ -8,10 +8,11 @@ import ShareMenu from '@components/Publication/Actions/Share';
 import OpenAction from '@components/Publication/LensOpenActions';
 import PublicationMenu from '@components/Publication/Actions/Menu';
 import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
-import { useAppStore } from 'src/store/useAppStore';
-import { useImpressionsStore } from 'src/store/useImpressionsStore';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+
 import isOpenActionAllowed from '@lensshare/lib/isOpenActionAllowed';
 import getPublicationViewCountById from '@lib/getPublicationViewCountById';
+import { useImpressionsStore } from 'src/store/non-persisted/useImpressionsStore';
 
 type Props = {
   video: AnyPublication;
@@ -20,9 +21,9 @@ type Props = {
 const ByteActions: FC<Props> = ({ video }) => {
   const [showShare, setShowShare] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const setMute = useAppStore((state) => state.setMute);
+  const {isMute,setMute} = useAppStore();
   const [isPlaying, setPlay] = useState(true);
-  const mute = useAppStore((state) => state.isMute);
+
   const vidEl = document.querySelector(`#currentVideo`);
   const handleClickMute = (e: any) => {
     e.stopPropagation();
@@ -33,20 +34,18 @@ const ByteActions: FC<Props> = ({ video }) => {
     }
     const vol = elVol.getAttribute('title');
     const isMuted = vol ? vol?.includes('Mute') : false;
-    if (mute) {
+    if (isMute) {
       isMuted && elVol.click();
     } else {
       !isMuted && elVol.click();
     }
-    setMute && setMute(isMuted);
+    setMute(isMuted);
   };
   const targetPublication = isMirrorPublication(video) ? video.mirrorOn : video;
-  const currentProfile = useAppStore((state) => state.currentProfile);
+  const { currentProfile } = useAppStore();
 
   const hasOpenAction = (targetPublication.openActionModules?.length || 0) > 0;
-  const publicationViews = useImpressionsStore(
-    (state) => state.publicationViews
-  );
+  const {publicationViews} = useImpressionsStore();
   const canMirror = currentProfile
     ? targetPublication.operations.canMirror
     : true;
