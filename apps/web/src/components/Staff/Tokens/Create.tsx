@@ -1,14 +1,17 @@
-
+import type { AllowedToken } from '@lensshare/types/hey';
 import type { FC } from 'react';
 
-import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
+import { HEY_API_URL } from '@lensshare/data/constants';
+import { Regex } from '@lensshare/data/regex';
+import { STAFFTOOLS } from '@lensshare/data/tracking';
+import { Button, Form, Input, useZodForm } from '@lensshare/ui';
+
+import { Leafwatch } from '@lib/leafwatch';
 import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { object, string } from 'zod';
-import { AllowedToken } from '@lensshare/types/hey';
-import { Button, Form, Input, useZodForm } from '@lensshare/ui';
-import { Regex } from '@lensshare/data/regex';
+import getAuthApiHeaders from '@components/Shared/Oembed/Portal/getAuthApiHeaders main';
 
 const createTokenSchema = object({
   contractAddress: string()
@@ -33,7 +36,7 @@ const Create: FC<CreateProps> = ({ setShowCreateModal, setTokens, tokens }) => {
     schema: createTokenSchema
   });
 
-  const create = async (
+  const create = (
     name: string,
     symbol: string,
     decimals: string,
@@ -42,9 +45,9 @@ const Create: FC<CreateProps> = ({ setShowCreateModal, setTokens, tokens }) => {
     setCreating(true);
     toast.promise(
       axios.post(
-        `/api/internal/token/create`,
+        `${HEY_API_URL}/internal/tokens/create`,
         { contractAddress, decimals: parseInt(decimals), name, symbol },
-        { headers: getAuthWorkerHeaders() }
+        { headers: getAuthApiHeaders() }
       ),
       {
         error: () => {
@@ -53,6 +56,7 @@ const Create: FC<CreateProps> = ({ setShowCreateModal, setTokens, tokens }) => {
         },
         loading: 'Creating token...',
         success: ({ data }) => {
+          
           setTokens([...tokens, data?.token]);
           setCreating(false);
           setShowCreateModal(false);

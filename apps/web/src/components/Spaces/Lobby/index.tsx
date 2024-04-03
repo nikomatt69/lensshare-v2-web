@@ -12,8 +12,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
-import { useAppStore } from 'src/store/app';
-import { useMeetPersistStore } from 'src/store/meet';
+
 import { useUpdateEffect } from 'usehooks-ts';
 
 import { ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline';
@@ -22,6 +21,8 @@ import { APP_NAME } from '@lensshare/data/constants';
 import cn from '@lensshare/ui/cn';
 import { BasicIcons } from '@components/Meet/BasicIcons';
 import SwitchDeviceMenu from '@components/Meet/SwitchDeviceMenu';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+import { useMeetPersistStore } from 'src/store/persisted/meet';
 
 
 type HTMLAudioElementWithSetSinkId = HTMLAudioElement & {

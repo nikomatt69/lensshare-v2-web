@@ -1,5 +1,5 @@
 import { useHuddle01, useLobby, usePeers } from '@huddle01/react/hooks';
-import Plural from 'react-i18next';
+
 import type { FC } from 'react';
 import React, { useState } from 'react';
 

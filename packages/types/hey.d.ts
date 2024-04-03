@@ -35,10 +35,7 @@ export type UniswapQuote = {
 };
 
 export type StaffPick = {
-  createdAt: Date;
-  id: string;
-  score: number;
-  type: 'GROUP' | 'PROFILE';
+  profileId: string;
 };
 
 export type Feature = {
@@ -46,7 +43,7 @@ export type Feature = {
   enabled: boolean;
   id: string;
   key: string;
-  priority: number;
+  type: 'FEATURE' | 'MODE' | 'PERMISSION';
 };
 
 export type AllowedToken = {

@@ -28,17 +28,13 @@
   },
   "packageManager": "yarn@1.22.19",
   "engines": {
-    "node": ">=16.18.1"
+    "node": ">=18.17.0"
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
     "@cfworker/base64url": "^1.12.5",
     "@clickhouse/client": "^0.2.6",
     "@cloudflare/workers-types": "^4.20231025.0",
-    "@dynamic-labs/ethereum": "^0.19.6",
-    "@dynamic-labs/magic": "^0.19.6",
-    "@dynamic-labs/sdk-react-core": "^0.19.6",
-    "@dynamic-labs/wagmi-connector": "^0.19.6",
     "@growthbook/growthbook": "^0.30.0",
     "@huddle01/react": "^0.0.17",
     "@irys/sdk": "^0.1.1",

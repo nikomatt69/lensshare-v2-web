@@ -52,7 +52,7 @@ const Feed: FC<FeedProps> = ({ publication }) => {
 
   const queuedComments = txnQueue.filter(
     (o) =>
-      o.type === OptmisticPublicationType.NewComment &&
+      o.type === OptmisticPublicationType.Comment &&
       o.commentOn === publicationId
   );
   const queuedCount = queuedComments.length;

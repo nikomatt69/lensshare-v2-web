@@ -2,6 +2,7 @@ import { HEY_API_URL } from '@lensshare/data/constants';
 import type { AllowedToken } from '@lensshare/types/hey';
 
 import axios from 'axios';
+import allowCors from 'src/utils/allowCors';
 
 /**
  * Get all allowed tokens

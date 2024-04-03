@@ -575,8 +575,8 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   };
 
   const isSubmitDisabledByPoll = showPollEditor
-    ? !pollConfig.choices.length ||
-      pollConfig.choices.some((choice: string | any[]) => !choice.length)
+    ? !pollConfig.options.length ||
+      pollConfig.options.some((choice: string | any[]) => !choice.length)
     : false;
 
   const onDiscardClick = () => {

@@ -12,17 +12,13 @@ import { useProfileStore } from 'src/store/persisted/useProfileStore';
 
 import StaffSidebar from '../Sidebar';
 import List from './List';
-import { useAppStore } from 'src/store/persisted/useAppStore';
 
-const FeatureFlags: NextPage = () => {
-  const { currentProfile } = useAppStore();
+const Users: NextPage = () => {
+  const { currentProfile } = useProfileStore();
   const { staffMode } = useFeatureFlagsStore();
 
   useEffect(() => {
-    Leafwatch.track(PAGEVIEW, {
-      page: 'staff-tools',
-      subpage: 'feature-flags'
-    });
+    Leafwatch.track(PAGEVIEW, { page: 'staff-tools', subpage: 'users' });
   }, []);
 
   if (!currentProfile || !staffMode) {
@@ -31,7 +27,7 @@ const FeatureFlags: NextPage = () => {
 
   return (
     <GridLayout>
-      <MetaTags title={`Staff Tools • Feature Flags • ${APP_NAME}`} />
+      <MetaTags title={`Staff Tools • Users • ${APP_NAME}`} />
       <GridItemFour>
         <StaffSidebar />
       </GridItemFour>
@@ -42,4 +38,4 @@ const FeatureFlags: NextPage = () => {
   );
 };
 
-export default FeatureFlags;
+export default Users;

@@ -2,6 +2,7 @@ import type { Preferences } from '@lensshare/types/hey';
 
 import { HEY_API_URL } from '@lensshare/data/constants';
 import axios from 'axios';
+import allowCors from 'src/utils/allowCors';
 
 /**
  * Get user preferences

@@ -8,7 +8,7 @@ import {
 } from '@huddle01/react/hooks';
 import type { FC } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { useAppStore } from 'src/store/app';
+
 
 import AvatarGrid from '../Common/AvatarGrid/AvatarGrid';
 import SpacesButton from '../Common/SpacesButton';
@@ -18,11 +18,13 @@ import { useRouter } from 'next/router';
 import { useSpacesStore } from 'src/store/persisted/spaces';
 import { useTheme } from 'next-themes';
 import type { HTMLAudioElementWithSetSinkId } from '../Common/SpacesTypes';
-import { useMeetPersistStore } from 'src/store/meet';
+
 import { useDisplayName } from '@huddle01/react/app-utils';
 import SwitchDeviceMenu from '@components/Meet/SwitchDeviceMenu';
 import cn from '@lensshare/ui/cn';
 import { BasicIcons } from '@components/Meet/BasicIcons';
+import { useAppStore } from 'src/store/persisted/useAppStore';
+import { useMeetPersistStore } from 'src/store/persisted/meet';
 
 const PreviewSpaces: FC = () => {
   const { setShowSpacesLobby, setShowSpacesWindow } = useSpacesStore();

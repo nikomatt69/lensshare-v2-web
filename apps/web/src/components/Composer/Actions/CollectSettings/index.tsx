@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useState } from 'react';
 
-
 import CollectForm from './CollectForm';
 import { useCollectModuleStore } from 'src/store/non-persisted/useCollectModuleStore';
 
@@ -22,11 +21,11 @@ const CollectSettings: FC = () => {
           type="button"
           whileTap={{ scale: 0.9 }}
         >
-          <RectangleStackIcon className="h-5 w-5 text-brand" />
+          <RectangleStackIcon className="text-brand h-5 w-5" />
         </motion.button>
       </Tooltip>
       <Modal
-        icon={<RectangleStackIcon className="h-5 w-5 text-brand" />}
+        icon={<RectangleStackIcon className="text-brand h-5 w-5" />}
         onClose={() => {
           setShowModal(false);
           reset();

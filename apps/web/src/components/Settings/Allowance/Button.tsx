@@ -87,7 +87,7 @@ const AllowanceButton: FC<AllowanceButtonProps> = ({
           }
         }
       });
-      
+      await handleWrongNetwork();
 
       return sendTransaction?.({
         account: data?.generateModuleCurrencyApprovalData.from,

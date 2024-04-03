@@ -13,7 +13,7 @@ import { keysValidator } from '@lib/keysValidator';
 type ExtensionRequest = {
   title: string;
   description: string;
-  choices: string[];
+  options: string[];
   length: number;
 };
 
@@ -29,12 +29,12 @@ type SnapshotResponse = {
 const requiredKeys: (keyof ExtensionRequest)[] = [
   'title',
   'description',
-  'choices',
+  'options',
   'length'
 ];
 
 async function createPoll(body: ExtensionRequest) {
-  const { title, description, choices, length } = body;
+  const { title, description, options, length } = body;
 
   const sequencerUrl = MAINNET_SNAPSHOT_SEQUNECER_URL;
   const snapshotUrl = MAINNET_SNAPSHOT_URL;
@@ -71,7 +71,7 @@ async function createPoll(body: ExtensionRequest) {
       title,
       body: description,
       discussion: '',
-      choices,
+      options,
       start: Math.floor(Date.now() / 1000),
       end: Math.floor(Date.now() / 1000) + length * 86400,
       snapshot: blockNumber,

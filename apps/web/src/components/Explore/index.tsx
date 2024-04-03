@@ -1,5 +1,4 @@
 import MetaTags from '@components/Common/MetaTags';
-import RecommendedProfiles from '@components/Home/RecommendedProfiles';
 
 import FeedFocusType from '@components/Shared/FeedFocusType';
 import Footer from '@components/Shared/Footer';
@@ -114,7 +113,7 @@ const Explore: NextPage = () => {
       </GridItemEight>
       <GridItemFour>
         {currentProfile ? isRoomJoined && <SpacesWindow /> : null}
-        {currentProfile ? <RecommendedProfiles /> : null}
+
         <Footer />
       </GridItemFour>
     </GridLayout>

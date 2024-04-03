@@ -8,7 +8,7 @@ import {
 
 import type { FC } from 'react';
 import React, { createRef, useEffect, useState } from 'react';
-import { useAppStore } from 'src/store/app';
+
 
 import AvatarGrid from '../Common/AvatarGrid/AvatarGrid';
 import InvitationModal from '../Common/InvitationModal';
@@ -24,6 +24,7 @@ import type { HTMLAudioElementWithSetSinkId } from '../Common/SpacesTypes';
 import { useSpacesStore } from 'src/store/persisted/spaces';
 import { MusicTrack, SpacesEvents } from 'src/enums';
 import getAvatar from '@lensshare/lib/getAvatar';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const SpacesWindow: FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);

@@ -1,14 +1,16 @@
-
+import type { Feature } from '@lensshare/types/hey';
 import type { FC } from 'react';
 
+import { HEY_API_URL } from '@lensshare/data/constants';
+import { STAFFTOOLS } from '@lensshare/data/tracking';
+import { Button, Form, Input, useZodForm } from '@lensshare/ui';
 
-import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
+import { Leafwatch } from '@lib/leafwatch';
 import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { object, string } from 'zod';
-import { Feature } from '@lensshare/types/hey';
-import { Button, Form, Input, useZodForm } from '@lensshare/ui';
+import getAuthApiHeaders from '@components/Shared/Oembed/Portal/getAuthApiHeaders main';
 
 const createFeatureSchema = object({
   key: string().min(1, { message: 'Key is required' })
@@ -31,13 +33,13 @@ const Create: FC<CreateProps> = ({
     schema: createFeatureSchema
   });
 
-  const create = async (key: string) => {
+  const create = (key: string) => {
     setCreating(true);
     toast.promise(
       axios.post(
-        `/api/internal/feature/create`,
+        `${HEY_API_URL}/internal/features/create`,
         { key },
-        { headers: getAuthWorkerHeaders() }
+        { headers: getAuthApiHeaders() }
       ),
       {
         error: () => {
@@ -46,6 +48,7 @@ const Create: FC<CreateProps> = ({
         },
         loading: 'Creating feature flag...',
         success: ({ data }) => {
+          
           setFeatures([...features, data.feature]);
           setCreating(false);
           setShowCreateModal(false);

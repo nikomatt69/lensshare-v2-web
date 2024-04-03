@@ -67,7 +67,7 @@ const PublicationActions: FC<PublicationActionsProps> = ({
           publication={publication}
         />
       ) : null}
-      {views ? <Views views={views} showCount={showCount} /> : null}
+       {views > 0 ? <Views showCount={showCount} views={views} /> : null}
       {currentProfile?.ownedBy.address === ADMIN_ADDRESS ? (
         <Mod publication={publication} isFullPublication={showCount} />
       ) : null}

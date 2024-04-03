@@ -3,15 +3,7 @@ import Loader from '@components/Shared/Loader';
 import NotLoggedIn from '@components/Shared/NotLoggedIn';
 import { APP_NAME, DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
 import { PAGEVIEW } from '@lensshare/data/tracking';
-import type { Erc20 } from '@lensshare/lens';
-import {
-  FollowModuleType,
-  LimitType,
-  OpenActionModuleType,
-  useApprovedModuleAllowanceAmountQuery,
 
-} from '@lensshare/lens';
-import { useEnabledCurrenciesQuery } from '@lensshare/lens/generated5';
 import { Card, GridItemEight, GridItemFour, GridLayout, TabButton } from '@lensshare/ui';
 import { Leafwatch } from '@lib/leafwatch';
 import type { NextPage } from 'next';

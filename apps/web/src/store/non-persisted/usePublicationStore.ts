@@ -22,7 +22,7 @@ interface PublicationState {
     streamKey: string;
   };
   pollConfig: {
-    choices: any;
+   
     length: number;
     options: string[];
   };

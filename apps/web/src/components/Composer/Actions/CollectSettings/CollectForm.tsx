@@ -14,9 +14,6 @@ import TimeLimitConfig from './TimeLimitConfig';
 import { isAddress } from 'viem';
 import { useEnabledCurrenciesQuery } from '@lensshare/lens/generated5';
 import { useCollectModuleStore } from 'src/store/non-persisted/useCollectModuleStore';
-import { useQuery } from '@tanstack/react-query';
-import getAllTokens from '@lib/api/getAllTokens';
-import Loader from '@components/Shared/Loader';
 
 interface CollectFormProps {
   setShowModal: Dispatch<SetStateAction<boolean>>;
@@ -26,7 +23,6 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
   const { collectModule, reset, setCollectModule } = useCollectModuleStore(
     (state) => state
   );
-
 
   const { SimpleCollectOpenActionModule } = CollectOpenActionModuleType;
   const recipients = collectModule.recipients || [];
@@ -51,13 +47,17 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
     });
   };
 
-  const { data, error, isLoading } = useQuery({
-    queryFn: () => getAllTokens(),
-    queryKey: ['getAllTokens']
+  const { data, loading, error } = useEnabledCurrenciesQuery({
+    variables: { request: { limit: LimitType.TwentyFive } }
   });
 
-  if (isLoading) {
-    return <Loader message="Loading collect settings" />;
+  if (loading) {
+    return (
+      <div className="m-5 space-y-2 text-center font-bold">
+        <Spinner className="mx-auto" size="md" />
+        <div>Loading collect settings</div>
+      </div>
+    );
   }
 
   if (error) {
@@ -74,7 +74,6 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
     if (!collectModule.type) {
       setCollectType({ type: SimpleCollectOpenActionModule });
     } else {
-     
       reset();
     }
   };
@@ -92,9 +91,9 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
       <div className="divider" />
       {collectModule.type !== null ? (
         <>
-          <div className="m-5">
+          <div className="p-5">
             <AmountConfig
-              allowedTokens={data}
+              enabledModuleCurrencies={data?.currencies.items}
               setCollectType={setCollectType}
             />
             {collectModule.amount?.value ? (
@@ -111,8 +110,6 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
             <FollowersConfig setCollectType={setCollectType} />
           </div>
           <div className="divider" />
-         
-          <div className="divider" />
         </>
       ) : null}
       <div className="flex space-x-2 p-5">
@@ -120,13 +117,11 @@ const CollectForm: FC<CollectFormProps> = ({ setShowModal }) => {
           className="ml-auto"
           onClick={() => {
             setShowModal(false);
-          
-            reset();
           }}
           outline
           variant="danger"
         >
-          {collectModule.type ? 'Reset' : 'Cancel'}
+          Cancel
         </Button>
         <Button
           disabled={

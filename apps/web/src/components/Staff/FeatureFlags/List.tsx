@@ -1,46 +1,56 @@
-
+import type { Feature } from '@lensshare/types/hey';
 import type { FC } from 'react';
 
 import Loader from '@components/Shared/Loader';
-import ToggleWithHelper from '@components/Shared/ToggleWithHelper2';
-import {
-  AdjustmentsHorizontalIcon,
-  TrashIcon
-} from '@heroicons/react/24/outline';
+import ToggleWithHelper from '@components/Shared/ToggleWithHelper';
+import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { HEY_API_URL } from '@lensshare/data/constants';
+import { FeatureFlag } from '@lensshare/data/feature-flags';
 
-import { formatDate } from '@lib/formatTime';
-import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
+import formatDate from '@lensshare/lib/datetime/formatDate';
+import {
+
+  Button,
+  Card,
+  EmptyState,
+  ErrorMessage,
+  Modal
+} from '@lensshare/ui';
+import cn from '@lensshare/ui/cn';
+
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
+import Assign from './Assign';
 import Create from './Create';
+import getAuthApiHeaders from '@components/Shared/Oembed/Portal/getAuthApiHeaders main';
 import getAllFeatureFlags from '@lib/api/getAllFeatureFlags';
-import { Feature } from '@lensshare/types/hey';
-import { Button, Card, EmptyState, ErrorMessage, Modal } from '@lensshare/ui';
 import { Badge } from '@components/Shared/Navbar/StaffBar';
 
 const List: FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
   const [features, setFeatures] = useState<[] | Feature[]>([]);
   const [killing, setKilling] = useState(false);
 
   const { error, isLoading } = useQuery({
     queryFn: () =>
-      getAllFeatureFlags(getAuthWorkerHeaders(), (features) =>
+      getAllFeatureFlags(getAuthApiHeaders(), (features) =>
         setFeatures(features)
       ),
     queryKey: ['getAllFeatureFlags']
   });
 
-  const killFeatureFlag = async (id: string, enabled: boolean) => {
+  const killFeatureFlag = (id: string, enabled: boolean) => {
     setKilling(true);
     toast.promise(
       axios.post(
-        `/api/internal/feature/kill`,
+        `${HEY_API_URL}/internal/features/toggle`,
         { enabled, id },
-        { headers: getAuthWorkerHeaders() }
+        { headers: getAuthApiHeaders() }
       ),
       {
         error: () => {
@@ -61,12 +71,12 @@ const List: FC = () => {
     );
   };
 
-  const deleteFeatureFlag = async (id: string) => {
+  const deleteFeatureFlag = (id: string) => {
     toast.promise(
       axios.post(
-        `/api/internal/feature/delete`,
+        `${HEY_API_URL}/internal/features/delete`,
         { id },
-        { headers: getAuthWorkerHeaders() }
+        { headers: getAuthApiHeaders() }
       ),
       {
         error: 'Failed to delete feature flag',
@@ -88,7 +98,7 @@ const List: FC = () => {
         </Button>
       </div>
       <div className="divider" />
-      <div className="p-5">
+      <div className="m-5">
         {isLoading ? (
           <Loader message="Loading feature flags..." />
         ) : error ? (
@@ -96,39 +106,55 @@ const List: FC = () => {
         ) : !features.length ? (
           <EmptyState
             hideCard
-            icon={
-              <AdjustmentsHorizontalIcon className="text-brand-500 h-8 w-8" />
-            }
+            icon={<AdjustmentsHorizontalIcon className="size-8" />}
             message={<span>No feature flags found</span>}
           />
         ) : (
           <div className="space-y-5">
             {features?.map((feature) => (
-              <div
-                className="flex items-center justify-between"
-                key={feature.id}
-              >
+              <div key={feature.id}>
                 <ToggleWithHelper
-                  description={`Created on ${formatDate(
-                    feature.createdAt
-                  )} with priority ${feature.priority}`}
-                  disabled={killing}
+                  description={`Created on ${formatDate(feature.createdAt)}`}
                   heading={
                     <div className="flex items-center space-x-2">
-                      <b>{feature.key}</b>
-                      
+                      <b
+                        className={cn(
+                          (feature.key === FeatureFlag.Suspended ||
+                            feature.key === FeatureFlag.Flagged) &&
+                            'text-red-500'
+                        )}
+                      >
+                        {feature.key}
+                      </b>
+                      <Badge >{feature.type}</Badge>
                     </div>
                   }
                   on={feature.enabled}
                   setOn={() => killFeatureFlag(feature.id, !feature.enabled)}
                 />
-                { (
+                <div className="mt-2 space-x-2">
                   <Button
-                    icon={<TrashIcon className="h-4 w-4" />}
-                    onClick={() => deleteFeatureFlag(feature.id)}
+                    onClick={() => {
+                      setSelectedFeature(feature);
+                      setShowAssignModal(!showAssignModal);
+                    }}
                     outline
-                  />
-                )}
+                    size="sm"
+                    variant="secondary"
+                  >
+                    Assign
+                  </Button>
+                  {feature.type === 'FEATURE' && (
+                    <Button
+                      onClick={() => deleteFeatureFlag(feature.id)}
+                      outline
+                      size="sm"
+                      variant="danger"
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -144,6 +170,18 @@ const List: FC = () => {
           setFeatures={setFeatures}
           setShowCreateModal={setShowCreateModal}
         />
+      </Modal>
+      <Modal
+        onClose={() => setShowAssignModal(!showAssignModal)}
+        show={showAssignModal}
+        title={`Assign feature flag - ${selectedFeature?.key}`}
+      >
+        {selectedFeature ? (
+          <Assign
+            feature={selectedFeature}
+            setShowAssignModal={setShowAssignModal}
+          />
+        ) : null}
       </Modal>
     </Card>
   );

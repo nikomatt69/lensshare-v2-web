@@ -18,7 +18,7 @@ const useCreatePoll = () => {
         data: {
           title: `Poll by ${getProfile(currentProfile).slugWithPrefix}`,
           description: publicationContent,
-          choices: pollConfig.choices,
+          choices: pollConfig.options,
           length: pollConfig.length
         }
       });

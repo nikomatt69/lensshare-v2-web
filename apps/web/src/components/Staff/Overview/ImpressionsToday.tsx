@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 
-import { formatDate } from '@lib/formatTime';
+import formatDate from '@lensshare/lib/datetime/formatDate';
+
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -12,10 +13,12 @@ import {
   Title,
   Tooltip
 } from 'chart.js';
+import { useTheme } from 'next-themes';
 import { Line } from 'react-chartjs-2';
+import colors from 'tailwindcss/colors';
 
 import type { StatsType } from './LeafwatchStats';
-import { BRAND_COLOR } from '@lensshare/data/constants';
+import { CardHeader } from '@nextui-org/react';
 
 ChartJS.register(
   CategoryScale,
@@ -33,39 +36,42 @@ interface ImpressionsTodayProps {
 }
 
 const ImpressionsToday: FC<ImpressionsTodayProps> = ({ impressionsToday }) => {
+  const { resolvedTheme } = useTheme();
+
   return (
-    <div>
-      <div>
-        <div className="divider" />
-        <div className="p-5 text-lg font-bold">Impressions Today</div>
-        <div className="divider" />
-        <div className="p-5">
-          <Line
-            data={{
-              datasets: [
-                {
-                  backgroundColor: '#fff0f2',
-                  borderColor: BRAND_COLOR,
-                  data: impressionsToday.map((impression) => impression.count),
-                  fill: true,
-                  label: 'Impressions'
-                }
-              ],
-              labels: impressionsToday.map((impression) =>
-                formatDate(new Date(impression.timestamp), 'hh:mm')
-              )
-            }}
-            options={{
-              plugins: {
-                legend: { display: false },
-                title: { display: false }
-              },
-              responsive: true
-            }}
-          />
-        </div>
+    <>
+      <div className="divider" />
+      <CardHeader title="Impressions Today" />
+      <div className="m-5">
+        <Line
+          data={{
+            datasets: [
+              {
+                backgroundColor:
+                  resolvedTheme === 'dark'
+                    ? colors['zinc']['900']
+                    : colors['zinc']['200'],
+                borderColor:
+                  resolvedTheme === 'dark' ? colors['white'] : colors['black'],
+                data: impressionsToday.map((impression) => impression.count),
+                fill: true,
+                label: 'Impressions'
+              }
+            ],
+            labels: impressionsToday.map((impression) =>
+              formatDate(impression.timestamp, 'hh:mm')
+            )
+          }}
+          options={{
+            plugins: {
+              legend: { display: false },
+              title: { display: false }
+            },
+            responsive: true
+          }}
+        />
       </div>
-    </div>
+    </>
   );
 };
 

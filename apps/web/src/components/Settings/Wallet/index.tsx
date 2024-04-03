@@ -8,9 +8,6 @@ import { useAppStore } from 'src/store/persisted/useAppStore';
 
 import SettingsSidebar from '../Sidebar';
 
-import { DynamicContextProvider, DynamicEmbeddedWidget } from '@dynamic-labs/sdk-react-core';
-import { DynamicWagmiConnector } from '@dynamic-labs/wagmi-connector';
-import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 
 const WalletSettings: NextPage = () => {
   const { currentProfile } = useAppStore();
@@ -25,19 +22,6 @@ const WalletSettings: NextPage = () => {
       <GridItemFour>
       <SettingsSidebar />
       </GridItemFour>
-      <GridItemEight className="space-y-5">
-        
-        <DynamicContextProvider
-            settings={{
-              environmentId: '4ae8558e-661a-44a9-85e5-f570bc06e76a',
-              walletConnectors: [EthereumWalletConnectors]
-            }}
-          >
-            <DynamicWagmiConnector>
-            <DynamicEmbeddedWidget background="default" />
-            </DynamicWagmiConnector>
-          </DynamicContextProvider>
-      </GridItemEight>
     </GridLayout>
   );
 };

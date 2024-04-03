@@ -1,19 +1,22 @@
-
+import type { AllowedToken } from '@lensshare/types/hey';
 import type { FC } from 'react';
 
 import Loader from '@components/Shared/Loader';
-import { CurrencyDollarIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { HEY_API_URL } from '@lensshare/data/constants';
+import { STAFFTOOLS } from '@lensshare/data/tracking';
 
-import getAuthWorkerHeaders from '@lib/getAuthWorkerHeaders';
+import { Button, Card, EmptyState, ErrorMessage, Modal } from '@lensshare/ui';
+
+import { Leafwatch } from '@lib/leafwatch';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import Create from './Create';
-import { AllowedToken } from '@lensshare/types/hey';
 import getAllTokens from '@lib/api/getAllTokens';
-import { Button, Card, EmptyState, ErrorMessage, Modal } from '@lensshare/ui';
+import getAuthApiHeaders from '@components/Shared/Oembed/Portal/getAuthApiHeaders main';
 
 const List: FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -24,17 +27,18 @@ const List: FC = () => {
     queryKey: ['getAllTokens']
   });
 
-  const deleteToken = async (id: string) => {
+  const deleteToken = (id: string) => {
     toast.promise(
       axios.post(
-        `/api/internal/token/delete`,
+        `${HEY_API_URL}/internal/tokens/delete`,
         { id },
-        { headers: getAuthWorkerHeaders() }
+        { headers: getAuthApiHeaders() }
       ),
       {
         error: 'Failed to delete token',
         loading: 'Deleting token...',
         success: () => {
+        
           setTokens(tokens.filter((token) => token.id !== id));
           return 'Token deleted';
         }
@@ -51,15 +55,15 @@ const List: FC = () => {
         </Button>
       </div>
       <div className="divider" />
-      <div className="p-5">
+      <div className="m-5">
         {isLoading ? (
-          <Loader message="Loading tokens..." />
+          <Loader  message="Loading tokens..." />
         ) : error ? (
           <ErrorMessage error={error} title="Failed to load tokens" />
         ) : !tokens.length ? (
           <EmptyState
             hideCard
-            icon={<CurrencyDollarIcon className="text-brand-500 h-8 w-8" />}
+            icon={<CurrencyDollarIcon className="size-8" />}
             message={<span>No tokens found</span>}
           />
         ) : (
@@ -78,10 +82,13 @@ const List: FC = () => {
                   </div>
                 </div>
                 <Button
-                  icon={<TrashIcon className="h-4 w-4" />}
                   onClick={() => deleteToken(token.id)}
                   outline
-                />
+                  size="sm"
+                  variant="danger"
+                >
+                  Delete
+                </Button>
               </div>
             ))}
           </div>

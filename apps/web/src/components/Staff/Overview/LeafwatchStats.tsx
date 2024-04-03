@@ -1,16 +1,30 @@
 import type { FC } from 'react';
 
 import Loader from '@components/Shared/Loader';
-
+import { HEY_API_URL } from '@lensshare/data/constants';
+import {
+  ExploreProfilesOrderByType,
+  LimitType,
+  useExploreProfilesQuery
+} from '@lensshare/lens';
+import {  ErrorMessage } from '@lensshare/ui';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useState } from 'react';
 
 import NumberedStat from '../UI/NumberedStat';
+import ActiveUsers from './ActiveUsers';
 import EventsToday from './EventsToday';
 import ImpressionsToday from './ImpressionsToday';
-import { ErrorMessage } from '@lensshare/ui';
+import { CardHeader } from '@nextui-org/react';
 
 export interface StatsType {
+  dau: {
+    date: string;
+    dau: string;
+    events: string;
+    impressions: string;
+  }[];
   events: {
     all_time: string;
     last_60_seconds: string;
@@ -42,10 +56,12 @@ export interface StatsType {
 }
 
 const LeafwatchStats: FC = () => {
+  const [lensProfiles, setLensProfiles] = useState(0);
+
   const getStats = async (): Promise<StatsType> => {
     const response: {
       data: StatsType;
-    } = await axios.get(`/api/internal/leafwatch/stats`);
+    } = await axios.get(`${HEY_API_URL}/internal/leafwatch/stats`);
 
     return response.data;
   };
@@ -56,12 +72,22 @@ const LeafwatchStats: FC = () => {
     refetchInterval: 1000
   });
 
+  useExploreProfilesQuery({
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
+    onCompleted: (data) =>
+      setLensProfiles(parseInt(data.exploreProfiles.items[0].id)),
+    pollInterval: 1000,
+    variables: {
+      request: {
+        limit: LimitType.Ten,
+        orderBy: ExploreProfilesOrderByType.LatestCreated
+      }
+    }
+  });
+
   if (isLoading) {
-    return (
-      <div className="m-5">
-        <Loader message="Loading stats..." />
-      </div>
-    );
+    return <Loader  message="Loading stats..." />;
   }
 
   if (error) {
@@ -75,11 +101,10 @@ const LeafwatchStats: FC = () => {
   const { events, impressions } = data;
 
   return (
-    <div>
+    <>
       <div>
-        <div className="p-5 text-lg font-bold">Events</div>
-        <div className="divider" />
-        <div className="grid grid-cols-2 gap-2 p-5 sm:grid-cols-3">
+        <CardHeader title="Events" />
+        <div className="m-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
           <NumberedStat count={events.last_60_seconds} name="Last 60 seconds" />
           <NumberedStat count={events.today} name="Today" />
           <NumberedStat count={events.yesterday} name="Yesterday" />
@@ -90,9 +115,8 @@ const LeafwatchStats: FC = () => {
       </div>
       <div>
         <div className="divider" />
-        <div className="p-5 text-lg font-bold">Impressions</div>
-        <div className="divider" />
-        <div className="grid grid-cols-2 gap-2 p-5 sm:grid-cols-3">
+        <CardHeader title="Impressions" />
+        <div className="m-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
           <NumberedStat
             count={impressions.last_60_seconds}
             name="Last 60 seconds"
@@ -104,9 +128,17 @@ const LeafwatchStats: FC = () => {
           <NumberedStat count={impressions.all_time} name="All time" />
         </div>
       </div>
+      <div>
+        <div className="divider" />
+        <CardHeader title="Lens" />
+        <div className="m-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <NumberedStat count={lensProfiles.toString()} name="Total Profiles" />
+        </div>
+      </div>
       <EventsToday eventsToday={data.eventsToday} />
       <ImpressionsToday impressionsToday={data.impressionsToday} />
-    </div>
+      <ActiveUsers activeUsers={data.dau} />
+    </>
   );
 };
 

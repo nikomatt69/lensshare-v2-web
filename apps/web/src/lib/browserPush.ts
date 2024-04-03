@@ -14,12 +14,12 @@ export const BrowserPush = {
     browserPushWorker.postMessage({ title });
 
     browserPushWorker.onmessage = (event: MessageEvent) => {
-      if ('Notification' in window) {
+      if (!('Notification' in window)) {
         return;
       }
 
       const response = event.data;
-      new self.Notification('MyCrumbs', {
+      new Notification('MyCrumbs', {
         body: response.title,
         icon: '/logo.png'
       });
