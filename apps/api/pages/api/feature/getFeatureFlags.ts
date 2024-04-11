@@ -1,8 +1,9 @@
-import { Errors } from '@lensshare/data/errors';
+
 import allowCors from '@utils/allowCors';
 import { CACHE_AGE } from '@utils/constants';
 import createRedisClient from '@utils/createRedisClient';
 import createSupabaseClient from '@utils/createSupabaseClient';
+import { Errors } from '@utils/errors';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

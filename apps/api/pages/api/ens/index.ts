@@ -1,6 +1,7 @@
-import { Errors } from '@lensshare/data/errors';
+
 import allowCors from '@utils/allowCors';
 import { resolverAbi } from '@utils/ens/resolverAbi';
+import { Errors } from '@utils/errors';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createPublicClient, http } from 'viem';
 import { mainnet } from 'viem/chains';

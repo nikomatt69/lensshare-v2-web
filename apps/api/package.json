@@ -1,6 +1,6 @@
 {
   "name": "@lensshare/api",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "license": "AGPL-3.0",
   "scripts": {
@@ -27,6 +27,8 @@
     "@aws-sdk/client-sts": "^3.454.0",
     "@clickhouse/client-web": "^0.2.6",
     "@irys/sdk": "^0.1.0",
+    "@lensshare/data": "*",
+    "@lensshare/lib": "*",
     "@prisma/client": "5.12.1",
     "axios": "^1.6.2",
     "fast-xml-parser": "^4.3.2",
@@ -42,8 +44,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@lensshare/config": "*",
+    "@lensshare/types": "*",
     "@types/react": "^18.2.38",
-    "@lensshare/data": "*",
     "@types/request-ip": "^0.0.41",
     "@types/ua-parser-js": "^0.7.39",
     "prisma": "^5.6.0",

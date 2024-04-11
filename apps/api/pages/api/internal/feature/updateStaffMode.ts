@@ -1,9 +1,10 @@
-import { Errors } from '@lensshare/data/errors';
+
 import parseJwt from '@lensshare/lib/parseJwt';
 import allowCors from '@utils/allowCors';
 import { STAFF_MODE_FEATURE_ID } from '@utils/constants';
 import createRedisClient from '@utils/createRedisClient';
 import createSupabaseClient from '@utils/createSupabaseClient';
+import { Errors } from '@utils/errors';
 import validateIsStaff from '@utils/middlewares/validateIsStaff';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { boolean, object } from 'zod';

@@ -1,7 +1,8 @@
-import { Errors } from '@lensshare/data/errors';
+
 import allowCors from '@utils/allowCors';
 import createRedisClient from '@utils/createRedisClient';
 import createSupabaseClient from '@utils/createSupabaseClient';
+import { Errors } from '@utils/errors';
 import validateIsStaff from '@utils/middlewares/validateIsStaff';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { boolean, object, string } from 'zod';

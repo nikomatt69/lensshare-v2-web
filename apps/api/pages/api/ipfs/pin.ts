@@ -1,5 +1,6 @@
-import { Errors } from '@lensshare/data/errors';
+
 import allowCors from '@utils/allowCors';
+import { Errors } from '@utils/errors';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
