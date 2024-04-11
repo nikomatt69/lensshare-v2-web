@@ -14,16 +14,17 @@ import LeafwatchStats from './LeafwatchStats';
 import Links from './Links';
 import { PAGEVIEW } from '@lensshare/data/tracking';
 import { APP_NAME } from '@lensshare/data/constants';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const Overview: NextPage = () => {
-  const { currentProfile } = useProfileStore();
-  const { staffMode } = useFeatureFlagsStore();
+  const { currentProfile } = useAppStore();
+  
 
   useEffect(() => {
     Leafwatch.track(PAGEVIEW, { page: 'staff-tools', subpage: 'overview' });
   }, []);
 
-  if (!currentProfile || !staffMode) {
+  if (!currentProfile) {
     return <Custom404 />;
   }
 

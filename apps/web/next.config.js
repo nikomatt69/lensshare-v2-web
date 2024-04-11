@@ -6,8 +6,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE_BUNDLE === '1'
 });
 
-
-
 const allowedBots =
   '.*(bot|telegram|baidu|bing|yandex|iframely|whatsapp|facebook|twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot).*';
 
@@ -27,7 +25,6 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
   ],
   experimental: {
     scrollRestoration: true,
-    forceSwcTransforms: true
   },
   async rewrites() {
     return [
@@ -74,14 +71,6 @@ const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'Referrer-Policy', value: 'strict-origin' },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups'
-          },
-          {
-            key: 'Cross-Origin-Allow-Origin',
-            value: 'same-origin-allow-origin'
-          }
         ],
         source: '/(.*)'
       }

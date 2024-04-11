@@ -12,16 +12,17 @@ import { useProfileStore } from 'src/store/persisted/useProfileStore';
 
 import StaffSidebar from '../Sidebar';
 import List from './List';
+import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const Tokens: NextPage = () => {
-  const { currentProfile } = useProfileStore();
-  const { staffMode } = useFeatureFlagsStore();
+  const { currentProfile } = useAppStore();
+
 
   useEffect(() => {
     Leafwatch.track(PAGEVIEW, { page: 'staff-tools', subpage: 'tokens' });
   }, []);
 
-  if (!currentProfile || !staffMode) {
+  if (!currentProfile) {
     return <Custom404 />;
   }
 

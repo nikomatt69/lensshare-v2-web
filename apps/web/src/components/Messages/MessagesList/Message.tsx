@@ -1,15 +1,8 @@
-import type { CachedMessageWithId, DecodedMessage } from '@xmtp/react-sdk';
+import type { CachedMessageWithId } from '@xmtp/react-sdk';
 import cn from '@lensshare/ui/cn';
-import {
-  ContentTypeText,
-  hasReaction,
-  useReactions,
-  useStreamAllMessages,
-  useStreamMessages
-} from '@xmtp/react-sdk';
-import { useState, type FC, useCallback, useEffect } from 'react';
+import { ContentTypeText, hasReaction, useReactions } from '@xmtp/react-sdk';
+import { type FC } from 'react';
 import { getTimeFromNow } from 'src/hooks/formatTime4';
-import { useAppStore } from 'src/store/persisted/useAppStore';
 import { ContentTypeAudioeKey } from 'src/hooks/codecs/Audio';
 import Markup from '@components/Shared/Markup';
 import { useAccount } from 'wagmi';
@@ -22,12 +15,11 @@ const Messages: FC<MessagesProps> = ({ message }) => {
   const reactions = useReactions(message);
   const messageHasReaction = hasReaction(message);
   const isSender = message.senderAddress === address;
-  
- 
+
   if (message.contentType === ContentTypeText.toString()) {
     return (
       <div
-        className={cn('flex flex-col', { 'items-end': isSender })}
+        className={cn('my-2 flex flex-col', { 'items-end': isSender })}
         key={message.id}
       >
         <div className={cn('flex', { 'justify-end': isSender })}>
@@ -36,7 +28,7 @@ const Messages: FC<MessagesProps> = ({ message }) => {
               isSender
                 ? 'bg-gray-700 text-white dark:bg-gray-100 dark:text-black'
                 : 'bg-gray-100 dark:bg-gray-700',
-              'max-w-xs break-words rounded-3xl px-4 py-2 text-sm',
+              ' break-words rounded-3xl px-4 py-2 text-sm',
               isSender ? 'rounded-br-lg' : 'rounded-bl-lg'
             )}
           >

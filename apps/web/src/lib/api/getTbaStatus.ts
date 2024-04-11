@@ -18,7 +18,8 @@ const getTbaStatus = async (
 
   try {
     const response = await axios.get(`${LENSSHARE_API_URL}/tba/deployed`, {
-      params: { address }
+      params: { address },
+      headers: { 'Access-Control-Allow-Origin': 'https://api.mycrumbs.xyz' }
     });
     const { data } = response;
     callbackFn?.(data?.deployed || false);

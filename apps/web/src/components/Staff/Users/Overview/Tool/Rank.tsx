@@ -86,17 +86,17 @@ const Rank: FC<RankProps> = ({
   return (
     <>
       <div className="mt-5 flex items-center space-x-2 text-yellow-600">
-        <HashtagIcon className="size-5" />
+        <HashtagIcon className="h-5 w-5" />
         <div className="text-lg font-bold">Scores</div>
       </div>
       <div className="mt-3 space-y-2">
         <MetaDetails
-          icon={<UserIcon className="ld-text-gray-500 size-4" />}
+          icon={<UserIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Lens Classifier Score" value={''}        >
           {lensClassifierScore}
         </MetaDetails>
         <MetaDetails
-          icon={<UserPlusIcon className="ld-text-gray-500 size-4" />}
+          icon={<UserPlusIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Followship Rank" value={''}        >
           {followshipLoading ? (
             <div className="shimmer h-4 w-5 rounded" />
@@ -107,7 +107,7 @@ const Rank: FC<RankProps> = ({
           )}
         </MetaDetails>
         <MetaDetails
-          icon={<HandRaisedIcon className="ld-text-gray-500 size-4" />}
+          icon={<HandRaisedIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Engagement Rank" value={''}        >
           {engagementLoading ? (
             <div className="shimmer h-4 w-5 rounded" />
@@ -118,7 +118,7 @@ const Rank: FC<RankProps> = ({
           )}
         </MetaDetails>
         <MetaDetails
-          icon={<UserCircleIcon className="ld-text-gray-500 size-4" />}
+          icon={<UserCircleIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Influencer Rank" value={''}        >
           {influencerLoading ? (
             <div className="shimmer h-4 w-5 rounded" />
@@ -129,7 +129,7 @@ const Rank: FC<RankProps> = ({
           )}
         </MetaDetails>
         <MetaDetails
-          icon={<CurrencyDollarIcon className="ld-text-gray-500 size-4" />}
+          icon={<CurrencyDollarIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Creator Rank" value={''}        >
           {creatorLoading ? (
             <div className="shimmer h-4 w-5 rounded" />
@@ -140,7 +140,7 @@ const Rank: FC<RankProps> = ({
           )}
         </MetaDetails>
         <MetaDetails
-          icon={<CheckCircleIcon className="ld-text-gray-500 size-4" />}
+          icon={<CheckCircleIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Gitcoin Score"  value={''}        >
           {gitcoinScoreLoading ? (
             <div className="shimmer h-4 w-5 rounded" />

@@ -63,7 +63,7 @@ const List: FC = () => {
         ) : !tokens.length ? (
           <EmptyState
             hideCard
-            icon={<CurrencyDollarIcon className="size-8" />}
+            icon={<CurrencyDollarIcon className="h-8 w-8" />}
             message={<span>No tokens found</span>}
           />
         ) : (

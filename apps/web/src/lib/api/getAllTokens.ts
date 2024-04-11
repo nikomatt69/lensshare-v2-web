@@ -2,7 +2,6 @@ import { HEY_API_URL } from '@lensshare/data/constants';
 import type { AllowedToken } from '@lensshare/types/hey';
 
 import axios from 'axios';
-import allowCors from 'src/utils/allowCors';
 
 /**
  * Get all allowed tokens
@@ -12,7 +11,9 @@ import allowCors from 'src/utils/allowCors';
 const getAllTokens = async (
   callbackFn?: (tokens: AllowedToken[]) => void
 ): Promise<AllowedToken[]> => {
-  const response = await axios.get(`${HEY_API_URL}/tokens/all`);
+  const response = await axios.get(`${HEY_API_URL}/tokens/all`, {
+    headers: { 'Access-Control-Allow-Origin': 'https://api.mycrumbs.xyz' }
+  });
   const { data } = response;
   callbackFn?.(data?.tokens || []);
 

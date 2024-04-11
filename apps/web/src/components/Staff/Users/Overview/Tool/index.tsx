@@ -68,7 +68,7 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
       />
       <div className="divider my-5 border-dashed border-yellow-600" />
       <div className="flex items-center space-x-2 text-yellow-600">
-        <ShieldCheckIcon className="size-5" />
+        <ShieldCheckIcon className="h-5 w-5" />
         <div className="text-lg font-bold">Profile Overview</div>
       </div>
       <div className="mt-3 space-y-2">
@@ -78,7 +78,7 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
             icon={
               <img
                 alt="Logo"
-                className="size-4"
+                className="h-4 w-4"
                 height={16}
                 src="/logo.png"
                 width={16}
@@ -89,14 +89,14 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
           </MetaDetails>
         ) : null}
         <MetaDetails
-          icon={<HashtagIcon className="ld-text-gray-500 size-4" />}
+          icon={<HashtagIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Profile ID"
           value={profile.id}
         >
           {profile.id}
         </MetaDetails>
         <MetaDetails
-          icon={<BanknotesIcon className="ld-text-gray-500 size-4" />}
+          icon={<BanknotesIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Address"
           value={profile.ownedBy.address}
         >
@@ -104,7 +104,7 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
         </MetaDetails>
         {profile?.followNftAddress ? (
           <MetaDetails
-            icon={<PhotoIcon className="ld-text-gray-500 size-4" />}
+            icon={<PhotoIcon className="ld-text-gray-500 h-4 w-4" />}
             title="NFT address"
             value={profile.followNftAddress.address}
           >
@@ -112,21 +112,21 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
           </MetaDetails>
         ) : null}
         <MetaDetails
-          icon={<HandRaisedIcon className="ld-text-gray-500 size-4" />}
+          icon={<HandRaisedIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Has Lens Manager"
           value={''}
         >
           {profile.signless ? 'Yes' : 'No'}
         </MetaDetails>
         <MetaDetails
-          icon={<HandRaisedIcon className="ld-text-gray-500 size-4" />}
+          icon={<HandRaisedIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Gas sponsored"
           value={''}
         >
           {profile.sponsor ? 'Yes' : 'No'}
         </MetaDetails>
         <MetaDetails
-          icon={<IdentificationIcon className="ld-text-gray-500 size-4" />}
+          icon={<IdentificationIcon className="ld-text-gray-500 h-4 w-4" />}
           title="Follow module"
           value={''}
         >
@@ -134,7 +134,7 @@ const ProfileStaffTool: FC<ProfileStaffToolProps> = ({ profile }) => {
         </MetaDetails>
         {profile?.metadata?.rawURI ? (
           <MetaDetails
-            icon={<LinkIcon className="ld-text-gray-500 size-4" />}
+            icon={<LinkIcon className="ld-text-gray-500 h-4 w-4" />}
             title="Metadata"
             value={profile.metadata.rawURI}
           >

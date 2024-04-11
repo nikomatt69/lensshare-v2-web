@@ -8,7 +8,7 @@ import cn from '@lensshare/ui/cn';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { ChangeEvent, FC } from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 
 import Loader from '../Loader';
@@ -20,12 +20,17 @@ interface ListProps {
 const List: FC<ListProps> = ({ setEmoji }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchText, setSearchText] = useState('');
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['emojisData'],
+  const { data, error, isLoading } = useQuery({
     queryFn: async () => {
-      const response = await axios.get(``);
+      const response = await axios.get(`${STATIC_ASSETS_URL}/emoji.json`, {
+        // Adding CORS configuration to Axios request
+        headers: {
+          'Access-Control-Allow-Origin': '*', // This is a broad setting, consider specifying your domain
+        },
+      });
       return response.data;
-    }
+    },
+    queryKey: ['emojisData']
   });
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -39,41 +44,33 @@ const List: FC<ListProps> = ({ setEmoji }) => {
     });
   }
 
-  useEffectOnce(() => {
+  useEffect(() => {
     inputRef.current?.focus();
-  });
+  }, []);
 
   if (error) {
     return (
       <ErrorMessage
-        title={Errors.SomethingWentWrong}
+        className="m-5"
         error={{
           message: 'Error while loading emojis',
           name: Errors.SomethingWentWrong
         }}
-        className="m-5"
+        title={Errors.SomethingWentWrong}
       />
     );
   }
 
   if (isLoading) {
-    return <Loader message="Loading emojis" />;
+    return <Loader  message="Loading emojis" />;
   }
 
   return (
     <div>
       <div className="w-full p-2 pb-0 pt-4">
         <Input
-          onClick={(e) => {
-            e.preventDefault();
-            stopEventPropagation(e);
-          }}
-          ref={inputRef}
           autoFocus
-          type="text"
           className="px-3 py-2 text-sm"
-          placeholder="Search..."
-          value={searchText}
           iconLeft={<MagnifyingGlassIcon />}
           iconRight={
             <XMarkIcon
@@ -89,6 +86,14 @@ const List: FC<ListProps> = ({ setEmoji }) => {
             />
           }
           onChange={onChange}
+          onClick={(e) => {
+            e.preventDefault();
+            stopEventPropagation(e);
+          }}
+          placeholder="Search..."
+          ref={inputRef}
+          type="text"
+          value={searchText}
         />
       </div>
       <div className="grid max-h-[10rem] grid-cols-8 overflow-y-auto p-2 pt-2 text-lg">
@@ -96,8 +101,8 @@ const List: FC<ListProps> = ({ setEmoji }) => {
           <button
             className="rounded-lg py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
             key={emoji.emoji}
-            type="button"
             onClick={() => setEmoji(emoji.emoji)}
+            type="button"
           >
             {emoji.emoji}
           </button>

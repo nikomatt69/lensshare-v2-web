@@ -1,4 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
+import Script from 'next/script';
 
 class LensShareDocument extends Document {
   render() {
@@ -43,12 +44,9 @@ class LensShareDocument extends Document {
 
           {/* Corrected script tag */}
           <script src="https://unpkg.com/wavesurfer.js@7" defer />
-
+          
           {/* PWA config */}
-          <link
-            rel="manifest"
-            href="/manifest.json"
-          />
+          <link rel="manifest" href="/manifest.json" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta

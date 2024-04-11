@@ -11,7 +11,6 @@ import {
 import { Errors } from '@lensshare/data/errors';
 import { PUBLICATION } from '@lensshare/data/tracking';
 import type {
-  AnyPublication,
   MirrorablePublication,
   MomokaCommentRequest,
   MomokaPostRequest,
@@ -25,7 +24,6 @@ import { ReferenceModuleType } from '@lensshare/lens';
 import checkDispatcherPermissions from '@lensshare/lib/checkDispatcherPermissions';
 import collectModuleParams from '@lensshare/lib/collectModuleParams';
 import getProfile from '@lensshare/lib/getProfile';
-import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 import removeQuoteOn from '@lensshare/lib/removeQuoteOn';
 import type { IGif } from '@lensshare/types/giphy';
 import type { NewAttachment } from '@lensshare/types/misc';
@@ -34,7 +32,6 @@ import cn from '@lensshare/ui/cn';
 import { $convertFromMarkdownString } from '@lexical/markdown';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import errorToast from '@lib/errorToast';
-import getTextNftUrl from '@lib/getTextNftUrl';
 import { Leafwatch } from '@lib/leafwatch';
 import uploadToArweave from '@lib/uploadToArweave';
 import { useUnmountEffect } from 'framer-motion';
@@ -49,7 +46,7 @@ import useHandleWrongNetwork from 'src/hooks/useHandleWrongNetwork';
 import usePublicationMetadata from 'src/hooks/usePublicationMetadata';
 import { useAppStore } from 'src/store/persisted/useAppStore';
 
-import { useEffectOnce, useUpdateEffect } from 'usehooks-ts';
+import { useUpdateEffect } from 'usehooks-ts';
 import { NftOpenActionKit } from 'nft-openaction-kit';
 import LivestreamSettings from './Actions/LivestreamSettings';
 import LivestreamEditor from './Actions/LivestreamSettings/LivestreamEditor';
@@ -121,10 +118,10 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   const [openActionEmbedLoading, setOpenActionEmbedLoading] =
     useState<boolean>(false);
   const [openActionEmbed, setOpenActionEmbed] = useState<any | undefined>();
-  
+
   // Modal store
   const { setShowDiscardModal, setShowNewPostModal } =
-  useGlobalModalStateStore();
+    useGlobalModalStateStore();
 
   // Nonce store
   const { lensHubOnchainSigNonce } = useNonceStore();
@@ -146,12 +143,11 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     setShowPollEditor,
     resetPollConfig,
     pollConfig,
-    showLiveVideoEditor,  
+    showLiveVideoEditor,
     setShowLiveVideoEditor,
     resetLiveVideoConfig
   } = usePublicationStore();
 
-  
   useEffect(() => {
     const fetchOpenActionEmbed = async () => {
       setOpenActionEmbedLoading(true);
@@ -309,7 +305,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     onCompleted,
     onError,
     commentOn: publication,
-    quoteOn: quotedPublication!
+    quoteOn: quotedPublication as Quote
   });
 
   useUpdateEffect(() => {
@@ -351,7 +347,6 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const getAnimationUrl = () => {
     const fallback =
@@ -405,7 +400,6 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       }
 
       setPublicationContentError('');
-      
 
       let processedPublicationContent =
         publicationContent.length > 0 ? publicationContent : undefined;
@@ -446,9 +440,6 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       if (openAction) {
         openActionModules.push({ unknownOpenAction: openAction });
       }
-
-
-      
 
       // Payload for the Momoka post/comment/quote
       const momokaRequest:
@@ -611,8 +602,8 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       {quotedPublication ? (
         <Wrapper className="m-5" zeroPadding>
           <QuotedPublication
-            publication={removeQuoteOn(quotedPublication as Quote)}
             isNew
+            publication={removeQuoteOn(quotedPublication as Quote)}
           />
         </Wrapper>
       ) : null}
@@ -626,9 +617,6 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
         <div className="mx-1.5 flex items-center space-x-4">
           <Attachment />
           <EmojiPicker
-            emojiClassName="text-brand"
-            setShowEmojiPicker={setShowEmojiPicker}
-            showEmojiPicker={showEmojiPicker}
             setEmoji={(emoji) => {
               setShowEmojiPicker(false);
               editor.update(() => {
@@ -644,6 +632,8 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
                 $convertFromMarkdownString(updatedContent);
               });
             }}
+            setShowEmojiPicker={setShowEmojiPicker}
+            showEmojiPicker={showEmojiPicker}
           />
           <Gif setGifAttachment={(gif: IGif) => setGifAttachment(gif)} />
           {!publication?.momoka?.proof ? (
@@ -655,8 +645,8 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
           ) : null}
           <PollSettings />
           {!isComment && <LivestreamSettings />}
-          </div>
-          <div className="ml-auto pt-2 sm:pt-0">
+        </div>
+        <div className="ml-auto pt-2 sm:pt-0">
           <Button
             disabled={
               isLoading ||

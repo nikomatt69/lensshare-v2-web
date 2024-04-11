@@ -32,7 +32,7 @@ const Overview: NextPage = () => {
     query: { id }
   } = useRouter();
   const { currentProfile } = useAppStore();
-  const { staffMode } = useFeatureFlagsStore();
+  
 
   useEffect(() => {
     Leafwatch.track(PAGEVIEW, {
@@ -47,7 +47,7 @@ const Overview: NextPage = () => {
   });
   const profile = data?.profile as Profile;
 
-  if (!currentProfile || !staffMode) {
+  if (!currentProfile) {
     return <Custom404 />;
   }
 
@@ -64,7 +64,7 @@ const Overview: NextPage = () => {
           ) : !profile ? (
             <EmptyState
               hideCard
-              icon={<UserIcon className="size-8" />}
+              icon={<UserIcon className="h-8 w-8" />}
               message="No profile found"
             />
           ) : error ? (

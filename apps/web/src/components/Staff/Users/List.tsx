@@ -87,7 +87,7 @@ const List: FC = () => {
         />
         <button onClick={onRefetch} type="button">
           <ArrowPathIcon
-            className={cn(refetching && 'animate-spin', 'size-5')}
+            className={cn(refetching && 'animate-spin', 'h-5 w-5')}
           />
         </button>
       </div>
@@ -100,7 +100,7 @@ const List: FC = () => {
         ) : !profiles?.length ? (
           <EmptyState
             hideCard
-            icon={<UsersIcon className="size-8" />}
+            icon={<UsersIcon className="h-8 w-8" />}
             message={<span>No profiles</span>}
           />
         ) : (

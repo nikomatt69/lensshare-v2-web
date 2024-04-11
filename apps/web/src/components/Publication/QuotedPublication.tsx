@@ -7,36 +7,31 @@ import PublicationBody from './PublicationBody';
 import PublicationHeader from './PublicationHeader';
 import pushToImpressions from '@lib/pushToImpressions';
 import { useInView } from 'react-cool-inview';
+import usePushToImpressions from 'src/hooks/usePushToImpressions';
 
 interface QuotedPublicationProps {
-  publication: PrimaryPublication;
   isNew?: boolean;
+  publication: PrimaryPublication;
 }
 
 const QuotedPublication: FC<QuotedPublicationProps> = ({
-  publication,
-  isNew = false
+  isNew = false,
+  publication
 }) => {
-  const { observe } = useInView({
-    onChange: async ({ inView }) => {
-      if (!inView) {
-        return;
-      }
+  usePushToImpressions(publication.id);
 
-      pushToImpressions(publication.id);
-    }
-  });
   return (
     <PublicationWrapper
-      className="cursor-pointer p-5 first:rounded-t-xl last:rounded-b-xl hover:bg-gray-100 dark:hover:bg-gray-900"
+      className="cursor-pointer p-4 first:rounded-t-xl last:rounded-b-xl hover:bg-gray-100 dark:hover:bg-gray-900"
       publication={publication}
     >
-      <span ref={observe} />
-      <PublicationHeader publication={publication} quoted isNew={isNew} />
+      <div className="flex items-center space-x-2">
+        <PublicationHeader isNew={isNew} publication={publication} quoted />
+      </div>
       {publication.isHidden ? (
         <HiddenPublication type={publication.__typename} />
       ) : (
-        <PublicationBody publication={publication} showMore quoted />
+        <PublicationBody publication={publication} quoted showMore />
       )}
     </PublicationWrapper>
   );

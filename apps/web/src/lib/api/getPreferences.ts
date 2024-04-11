@@ -2,7 +2,6 @@ import type { Preferences } from '@lensshare/types/hey';
 
 import { HEY_API_URL } from '@lensshare/data/constants';
 import axios from 'axios';
-import allowCors from 'src/utils/allowCors';
 
 /**
  * Get user preferences
@@ -17,14 +16,14 @@ const getPreferences = async (
   try {
     const response: { data: { result: Preferences } } = await axios.get(
       `${HEY_API_URL}/preferences/get`,
-      { headers, params: { id } }
+      { headers: { 'Access-Control-Allow-Origin': 'https://api.mycrumbs.xyz' }, params: { id }, }
     );
 
     return response.data.result;
   } catch {
     return {
       features: [],
-      hasDismissedOrMintedMembershipNft: true,
+      hasDismissedOrMintedMembershipNft: false,
       highSignalNotificationFilter: false,
       isPride: false
     };

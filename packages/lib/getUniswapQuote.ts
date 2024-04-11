@@ -21,14 +21,9 @@ const getUniswapQuote = async (
   };
 
   const { data } = await axios.post(
-    'https://interface.gateway.uniswap.org/v2/quote',
+    'https://quote.heyxyz.workers.dev',
     uniswapData,
-    {
-      headers: {
-        Origin: 'https://app.uniswap.org',
-        'X-Request-Source': 'uniswap-web'
-      }
-    }
+   
   );
   const { quote } = data;
   

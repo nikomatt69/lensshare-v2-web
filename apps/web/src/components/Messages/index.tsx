@@ -53,10 +53,10 @@ const Messages: NextPage = () => {
     useResizeObserver<HTMLDivElement>();
 
   return (
-    <GridLayout classNameChild="md:gap-8 lg:flex md:flex xl:flex">
+    <GridLayout classNameChild="md:gap-8 ">
       <MetaTags title={`Messages • ${APP_NAME}`} />
 
-      <GridItemEight className="xs:mx-2 relative mx-2 mb-0 sm:mx-2 md:flex-auto lg:flex-col ">
+      <GridItemEight className="xs:mx-2 relative mx-2 mb-0 sm:mx-2 md:flex-auto ">
         <Card
           className={cn(
             !selectedConversation ? '  max-h-[22vh]' : 'max-h-[flex]',

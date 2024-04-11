@@ -16,7 +16,7 @@ import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const FeatureFlags: NextPage = () => {
   const { currentProfile } = useAppStore();
-  const { staffMode } = useFeatureFlagsStore();
+  
 
   useEffect(() => {
     Leafwatch.track(PAGEVIEW, {
@@ -25,7 +25,7 @@ const FeatureFlags: NextPage = () => {
     });
   }, []);
 
-  if (!currentProfile || !staffMode) {
+  if (!currentProfile) {
     return <Custom404 />;
   }
 

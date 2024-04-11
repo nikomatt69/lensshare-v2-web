@@ -16,7 +16,7 @@ import { useProfileStore } from 'src/store/persisted/useProfileStore';
 import { useTransactionStore } from 'src/store/persisted/useTransactionStore';
 
 const Highlights: FC = () => {
-  const { currentProfile } = useProfileStore();
+  const { currentProfile } = useAppStore();
   const { txnQueue } = useTransactionStore();
   const { seeThroughProfile } = useTimelineStore();
   const { fetchAndStoreViews } = useImpressionsStore();

@@ -20,7 +20,7 @@ const FeatureFlags: FC<FeatureFlagsProps> = ({ features, profileId }) => {
   return (
     <>
       <div className="mt-5 flex items-center space-x-2 text-yellow-600">
-        <FlagIcon className="size-5" />
+        <FlagIcon className="h-5 w-5" />
         <div className="text-lg font-bold">Feature flags</div>
       </div>
       <div className="mt-3">

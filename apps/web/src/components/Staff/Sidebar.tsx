@@ -17,27 +17,27 @@ import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const settingsSidebarItems = [
   {
-    icon: <ClipboardIcon className="size-4" />,
+    icon: <ClipboardIcon className="h-4 w-4" />,
     title: 'Overview',
     url: '/staff'
   },
   {
-    icon: <UserIcon className="size-4" />,
+    icon: <UserIcon className="h-4 w-4" />,
     title: 'Users',
     url: '/staff/users'
   },
   {
-    icon: <CurrencyDollarIcon className="size-4" />,
+    icon: <CurrencyDollarIcon className="h-4 w-4" />,
     title: 'Tokens',
     url: '/staff/tokens'
   },
   {
-    icon: <AdjustmentsHorizontalIcon className="size-4" />,
+    icon: <AdjustmentsHorizontalIcon className="h-4 w-4" />,
     title: 'Feature flags',
     url: '/staff/feature-flags'
   },
   {
-    icon: <UserPlusIcon className="size-4" />,
+    icon: <UserPlusIcon className="h-4 w-4" />,
     title: 'Signup Contract',
     url: '/staff/signup-contract'
   }

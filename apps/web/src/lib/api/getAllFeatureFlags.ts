@@ -14,7 +14,7 @@ const getAllFeatureFlags = async (
   callbackFn?: (flags: Feature[]) => void
 ): Promise<Feature[]> => {
   const response = await axios.get(`${HEY_API_URL}/internal/features/all`, {
-    headers
+    headers: { 'Access-Control-Allow-Origin': 'https://mycrumbs.xyz' }
   });
   const { data } = response;
   callbackFn?.(data?.features || []);

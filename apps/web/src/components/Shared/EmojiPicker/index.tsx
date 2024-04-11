@@ -2,55 +2,53 @@ import { FaceSmileIcon } from '@heroicons/react/24/outline';
 import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
 import { Tooltip } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
-import type { Dispatch, FC, SetStateAction } from 'react';
+import type { Dispatch, FC, MutableRefObject, SetStateAction } from 'react';
 import { useRef } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 
 import List from './List';
+import { useClickAway } from '@uidotdev/usehooks';
+import { motion } from 'framer-motion';
 
 interface EmojiPickerProps {
-  emoji?: string | null;
+  emoji?: null | string;
   setEmoji: (emoji: string) => void;
-  showEmojiPicker: boolean;
   setShowEmojiPicker: Dispatch<SetStateAction<boolean>>;
-  emojiClassName?: string;
+  showEmojiPicker: boolean;
 }
 
 const EmojiPicker: FC<EmojiPickerProps> = ({
   emoji,
   setEmoji,
-  showEmojiPicker,
   setShowEmojiPicker,
-  emojiClassName
+  showEmojiPicker
 }) => {
-  const listRef = useRef(null);
-
-  useOnClickOutside(listRef, () => setShowEmojiPicker(false));
+  const listRef = useClickAway(() => {
+    setShowEmojiPicker(false);
+  }) as MutableRefObject<HTMLDivElement>;
 
   return (
-    <div ref={listRef} className="relative">
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          stopEventPropagation(e);
-          setShowEmojiPicker(!showEmojiPicker);
-        }}
-        className="cursor-pointer"
-      >
-        {emoji ? (
-          <span>{emoji}</span>
-        ) : (
-          <Tooltip placement="top" content="Emoji">
-            <FaceSmileIcon className={cn('h-5 w-5', emojiClassName)} />
-          </Tooltip>
-        )}
-      </button>
-      {showEmojiPicker ? (
-        <div className="absolute z-[5] mt-1 w-[300px] rounded-xl border bg-white shadow-sm focus:outline-none dark:border-gray-700 dark:bg-gray-900">
-          <List setEmoji={setEmoji} />
-        </div>
-      ) : null}
-    </div>
+    <Tooltip content="Emoji" placement="top">
+      <div className="relative" ref={listRef}>
+        <motion.button
+          className="rounded-full outline-offset-8"
+          onClick={(e) => {
+            e.preventDefault();
+            stopEventPropagation(e);
+            setShowEmojiPicker(!showEmojiPicker);
+          }}
+          whileTap={{ scale: 0.9 }}
+        >
+          {emoji ? <span>{emoji}</span> : <FaceSmileIcon className="h-5 w-5" />}
+        </motion.button>
+
+        {showEmojiPicker ? (
+          <div className="absolute z-[5] mt-1 w-[300px] rounded-xl border bg-white shadow-sm focus:outline-none dark:border-gray-700 dark:bg-gray-900">
+            <List setEmoji={setEmoji} />
+          </div>
+        ) : null}
+      </div>
+    </Tooltip>
   );
 };
 

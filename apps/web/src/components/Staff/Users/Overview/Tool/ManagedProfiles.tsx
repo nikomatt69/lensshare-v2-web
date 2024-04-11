@@ -21,7 +21,7 @@ const ManagedProfiles: FC<ManagedProfilesProps> = ({ address }) => {
   return (
     <>
       <div className="mt-5 flex items-center space-x-2 text-yellow-600">
-        <UsersIcon className="size-5" />
+        <UsersIcon className="h-5 w-5" />
         <div className="text-lg font-bold">Managed profiles</div>
       </div>
       <div className="mt-3">
