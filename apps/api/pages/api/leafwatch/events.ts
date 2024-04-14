@@ -38,7 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const validation = validationSchema.safeParse(body);
 
   if (!validation.success) {
-    return res.status(400).json({ success: false, error: Errors.SomethingWentWrong });
+    return res.status(400).json({ success: false, error: Errors.NoBody });
   }
 
   const { name, actor, url, referrer, platform, properties } =
@@ -65,7 +65,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const ipResponse = await fetch(
         urlcat('https://pro.ip-api.com/json/:ip', {
           ip,
-          key: process.env.IPAPI_KEY
+          key: 'ace541d28b5da0b13d53049b165a60aa'
         })
       );
       ipData = await ipResponse.json();
@@ -83,32 +83,36 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const client = createClickhouseClient();
     const result = await client.insert({
+      format: 'JSONEachRow',
       table: 'events',
       values: [
         {
-          name,
           actor: actor || null,
-          properties: properties || null,
-          url: url || null,
-          city: ipData?.city || null,
-          country: ipData?.country || null,
-          region: ipData?.regionName || null,
-          referrer: referrer || null,
-          platform: platform || null,
           browser: ua.browser.name || null,
           browser_version: ua.browser.version || null,
+          city: ipData?.city || null,
+          country: ipData?.country || null,
+          ip: ip || null,
+          name,
           os: ua.os.name || null,
-          utm_source: utmSource || null,
-          utm_medium: utmMedium || null,
+          platform: platform || null,
+          properties: properties || null,
+          referrer: referrer || null,
+          region: ipData?.regionName || null,
+          url: url || null,
           utm_campaign: utmCampaign || null,
-          utm_term: utmTerm || null,
-          utm_content: utmContent || null
+          utm_content: utmContent || null,
+          utm_medium: utmMedium || null,
+          utm_source: utmSource || null,
+          utm_term: utmTerm || null
         }
-      ],
-      format: 'JSONEachRow'
+      ]
     });
 
-    return res.status(200).json({ success: true, id: result.query_id });
+    return res
+      .status(200)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .json({ success: true, id: result.query_id });
   } catch (error) {
     throw error;
   }

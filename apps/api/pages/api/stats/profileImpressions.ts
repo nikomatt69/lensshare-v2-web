@@ -48,9 +48,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res
       .status(200)
       .setHeader('Cache-Control', CACHE_AGE)
+      .setHeader('Access-Control-Allow-Origin', '*')
       .json({
         success: true,
-        totalImpressions: Number(result[0]?.totalImpressions),
+        totalImpressions: Number(result[0].totalImpressions),
         yearlyImpressions: result.map((row) => ({
           day: row.day,
           impressions: Number(row.impressions)

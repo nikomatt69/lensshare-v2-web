@@ -1,9 +1,11 @@
 import { Errors } from '@lensshare/data/errors';
+import logger from '@lensshare/lib/logger';
 import allowCors from '@utils/allowCors';
 import createClickhouseClient from '@utils/createClickhouseClient';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { array, object, string } from 'zod';
-
+import requestIp from 'request-ip';
+import urlcat from 'urlcat';
 type ExtensionRequest = {
   viewer_id: string;
   ids: string[];
@@ -24,25 +26,51 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const validation = validationSchema.safeParse(body);
 
   if (!validation.success) {
-    return res.status(400).json({ success: false, error: Errors.SomethingWentWrong });
+    return res.status(400).json({ success: false, error: Errors.NoBody });
   }
-
+  const ip = requestIp.getClientIp(req);
   const { viewer_id, ids } = body as ExtensionRequest;
 
   try {
+    let ipData: {
+      city: string;
+      country: string;
+      regionName: string;
+    } | null = null;
+
+    try {
+      const ipResponse = await fetch(
+        urlcat('https://pro.ip-api.com/json/:ip', {
+          ip,
+          key: 'ace541d28b5da0b13d53049b165a60aa'
+        })
+      );
+      ipData = await ipResponse.json();
+    } catch (error) {
+      return error;
+    }
+
     const values = ids.map((id) => ({
-      viewer_id,
-      publication_id: id
+      city: ipData?.city || null,
+      country: ipData?.country || null,
+      ip: ip || null,
+      publication_id: id,
+      region: ipData?.regionName || null,
+      viewer_id
     }));
 
     const client = createClickhouseClient();
     const result = await client.insert({
+      format: 'JSONEachRow',
       table: 'impressions',
-      values,
-      format: 'JSONEachRow'
+      values
     });
+    logger.info('Ingested impressions to Leafwatch');
 
-    return res.status(200).json({ success: true, id: result.query_id });
+    return res
+      .status(200)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .json({ success: true, id: result.query_id });
   } catch (error) {
     throw error;
   }
