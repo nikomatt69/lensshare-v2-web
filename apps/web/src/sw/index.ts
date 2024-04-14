@@ -4,7 +4,7 @@ import { BASE_URL } from '@lensshare/data/constants';
 
 declare let self: ServiceWorkerGlobalScope;
 
-const impressionsEndpoint = `${BASE_URL}/api/leafwatch/impressions`;
+const impressionsEndpoint = `https://api.mycrumbs.xyz/leafwatch/impressions`;
 const publicationsVisibilityInterval = 5000;
 let viewerId: null | string = null;
 let visiblePublicationsSet = new Set();
