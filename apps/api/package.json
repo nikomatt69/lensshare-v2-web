@@ -4,12 +4,13 @@
   "private": true,
   "license": "AGPL-3.0",
   "scripts": {
-    "build": "pnpm codegen; next build",
+    "build": "yarn codegen && next build",
+    "vercel-build" : " next build",
     "codegen": "prisma generate --schema ./db/schema.prisma",
     "dev": "next dev --port 4785",
     "lint": "eslint . --ext .js,.ts,.tsx",
     "lint:fix": "eslint . --fix --ext .js,.ts,.tsx",
-    "postinstall": "pnpm codegen",
+    "postinstall": "yarn codegen",
     "prettier": "prettier --check \"**/*.{js,ts,tsx,md}\"  --cache",
     "prettier:fix": "prettier --write \"**/*.{js,ts,tsx,md}\"  --cache",
     "prisma:format": "prisma format --schema ./db/schema.prisma",
@@ -21,14 +22,13 @@
   },
   "packageManager": "yarn@1.22.19",
   "engines": {
-    "node": ">=18.17.0"
+    "node": ">=16.x <=20.x"
   },
   "dependencies": {
     "@aws-sdk/client-sts": "^3.454.0",
     "@clickhouse/client-web": "^0.2.6",
     "@irys/sdk": "^0.1.0",
-    "@lensshare/data": "*",
-    "@lensshare/lib": "*",
+
     "@prisma/client": "5.12.1",
     "axios": "^1.6.2",
     "fast-xml-parser": "^4.3.2",
@@ -44,8 +44,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@lensshare/config": "*",
-    "@lensshare/types": "*",
+
     "@types/react": "^18.2.38",
     "@types/request-ip": "^0.0.41",
     "@types/ua-parser-js": "^0.7.39",
