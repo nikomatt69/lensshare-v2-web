@@ -4,6 +4,6 @@
   },
   "packageManager": "yarn@1.22.19",
   "engines": {
-    "node": ">=16.x <=20.x"
+    "node": ">=16.x <=18.x"
   }
 }
