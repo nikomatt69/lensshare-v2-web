@@ -32,8 +32,8 @@ import getCurrentSession from '@lib/getCurrentSession';
 
 import { usePreferencesStore } from 'src/store/non-persisted/usePreferencesStore';
 import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
-import { useFeatureFlagsStore } from 'src/store/persisted/useFeatureFlagsStore';
 import { hydrateAuthTokens, signOut } from 'src/store/persisted/useAuthStore';
+import useNotifictionSubscriptions from './Providers/useNotifictionSubscriptions';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -50,10 +50,9 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   const { resolvedTheme } = useTheme();
 
-  const { currentProfile, setCurrentProfile, setFallbackToCuratedFeed } =
-    useAppStore();
+  const { currentProfile, setCurrentProfile } = useAppStore();
   const { resetPreferences } = usePreferencesStore();
-  const { resetFeatureFlags } = useFeatureFlagsStore();
+
   const { setLensHubOnchainSigNonce } = useNonceStore();
   useRouter();
 
@@ -105,13 +104,18 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   useEffectOnce(() => {
     validateAuthentication();
   });
+  const GlobalHooks = () => {
+    useNotifictionSubscriptions();
 
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
+  };
   const profileLoading = !currentProfile && loading;
 
   if (profileLoading || !isMounted()) {
     return <Loading />;
   }
- 
+
   return (
     <>
       <Head>
@@ -131,6 +135,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       />
       <GlobalModals />
       <GlobalBanners />
+      <GlobalHooks />
       <GlobalAlerts />
       <div className="flex min-h-screen  flex-col pb-14 md:pb-0">
         <SafeAreaView style={styles.container}>

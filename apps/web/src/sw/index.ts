@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BASE_URL } from '@lensshare/data/constants';
-
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -28,23 +26,19 @@ const sendVisiblePublicationsToServer = () => {
   }
 };
 
-
-
 async function handleInstall(): Promise<void> {
   void self.skipWaiting();
-
 }
 
 const handleActivate = async (): Promise<void> => {
   await self.clients.claim();
-
 };
 
 const handleFetch = (event: FetchEvent): void => {
   const request = event.request.clone();
   const { origin } = new URL(request.url);
 
-  if (self.location.origin === origin ) {
+  if (self.location.origin === origin) {
     event.respondWith;
   }
   return;

@@ -13,6 +13,7 @@ const PushNotifications: FC = () => {
       setPushNotificationsEnabled(true);
     }
   }, []);
+  
 
   const togglePushNotifications = async () => {
     if (Notification.permission !== 'granted') {

@@ -1,27 +1,27 @@
 // notification.js
 
 const base64ToUint8Array = (base64: string) => {
-  const padding = '='.repeat((4 - (base64.length % 4)) % 4)
-  const b64 = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/')
+  const padding = '='.repeat((4 - (base64.length % 4)) % 4);
+  const b64 = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/');
 
-  const rawData = window.atob(b64)
-  const outputArray = new Uint8Array(rawData.length)
+  const rawData = window.atob(b64);
+  const outputArray = new Uint8Array(rawData.length);
 
   for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i)
+    outputArray[i] = rawData.charCodeAt(i);
   }
-  return outputArray
-}
+  return outputArray;
+};
 
 export const getRegistration =
   async (): Promise<ServiceWorkerRegistration | null> => {
-    const registrations = await navigator.serviceWorker.getRegistrations()
-    let registration: ServiceWorkerRegistration | null = null
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    let registration: ServiceWorkerRegistration | null = null;
 
     for (let reg of registrations) {
       if (reg.active && reg.active.scriptURL.endsWith('/service-worker.js')) {
-        registration = reg
-        break
+        registration = reg;
+        break;
       }
     }
 
@@ -31,44 +31,44 @@ export const getRegistration =
         {
           scope: '/notification/'
         }
-      )
+      );
     }
 
     if (Notification.permission !== 'granted') {
-      const permission = await Notification.requestPermission()
+      const permission = await Notification.requestPermission();
       if (permission === 'granted') {
-        return registration
+        return registration;
       }
     } else {
-      return registration
+      return registration;
     }
-    return null
-  }
+    return null;
+  };
 
 export async function subscribeUserToPush(
   subscribe: (subscription: any) => Promise<void>
 ) {
   try {
-    const registration = await getRegistration()
+    const registration = await getRegistration();
     if (registration) {
       const exisitingSubscription =
-        await registration.pushManager.getSubscription()
+        await registration.pushManager.getSubscription();
 
       if (exisitingSubscription) {
-        await subscribe(exisitingSubscription)
-        return
+        await subscribe(exisitingSubscription);
+        return;
       } else {
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: base64ToUint8Array(
             process.env.NEXT_PUBLIC_VAPID_KEY as string
           )
-        })
-        await subscribe(subscription)
+        });
+        await subscribe(subscription);
       }
     }
-    return null
+    return null;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }

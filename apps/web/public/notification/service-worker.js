@@ -2,8 +2,8 @@ self.addEventListener('push', (event) => {
   // Handle push notification event here
 
   if (event.data) {
-    const pushData = event.data.json()
-    const title = pushData.title
+    const pushData = event.data.json();
+    const { title } = pushData;
 
     // add the fields only if the value is not null
     const options = {
@@ -11,41 +11,40 @@ self.addEventListener('push', (event) => {
       [pushData?.image ? 'image' : null]: pushData?.image || null,
       [pushData?.data ? 'data' : null]: pushData?.data || null,
       icon: pushData?.icon || 'https://mycrumbs.xyz/icon-192x192.png'
-    }
-    event.waitUntil(self.registration.showNotification(title, options))
+    };
+    event.waitUntil(self.registration.showNotification(title, options));
   }
-})
+});
 
 self.addEventListener('notificationclick', (event) => {
-  event.notification.close()
+  event.notification.close();
   // Handle notification click event here
   // redirect according to the notification
   const urlToOpen =
     event?.notification?.data?.url ||
-    new URL('https://mycrumbs.xyz', self.location.origin).href
-  const clients = self.clients
+    new URL('https://mycrumbs.xyz', self.location.origin).href;
+  const { clients } = self;
   const promiseChain = clients
     .matchAll({
       type: 'window',
       includeUncontrolled: true
     })
     .then((windowClients) => {
-      let matchingClient = null
+      let matchingClient = null;
 
-      for (let i = 0; i < windowClients.length; i++) {
-        const windowClient = windowClients[i]
+      for (const windowClient of windowClients) {
         if (windowClient.url === urlToOpen) {
-          matchingClient = windowClient
-          break
+          matchingClient = windowClient;
+          break;
         }
       }
 
       if (matchingClient) {
-        return matchingClient.focus()
+        return matchingClient.focus();
       } else {
-        return clients.openWindow(urlToOpen)
+        return clients.openWindow(urlToOpen);
       }
-    })
+    });
 
-  event.waitUntil(promiseChain)
-})
+  event.waitUntil(promiseChain);
+});

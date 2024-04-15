@@ -8,7 +8,12 @@
     "incremental": true,
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ESNext","webworker","ES2023",
-    "ES7"]
+    "ES7"],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "exclude": [".next", ".turbo"]
 }

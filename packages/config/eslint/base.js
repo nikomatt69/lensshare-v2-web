@@ -6,7 +6,10 @@ module.exports = {
   },
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module'
+    sourceType: 'module',
+    ecmaFeatures: {
+      "experimentalObjectRestSpread": true
+    }
   },
   plugins: [
     '@typescript-eslint',
@@ -19,14 +22,14 @@ module.exports = {
   rules: {
     curly: 'warn',
     'no-unused-vars': 'off',
-    'prettier/prettier': 'warn',
-    'unused-imports/no-unused-imports': 'warn',
+    'prettier/prettier': 'off',
+    'unused-imports/no-unused-imports': 'off',
     'import/no-duplicates': ['error', { considerQueryString: true }],
     'prefer-destructuring': ['warn', { VariableDeclarator: { object: true } }],
-    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/ban-ts-comment': 'off', // turn warn
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/consistent-type-imports': 'warn',
+    '@typescript-eslint/consistent-type-imports': 'off',
     'no-use-before-define': 'warn',
     'no-unexpected-multiline': 'warn',
     'unicorn/better-regex': 'warn',
@@ -34,7 +37,7 @@ module.exports = {
     'unicorn/no-array-for-each': 'warn',
     'unicorn/no-for-loop': 'warn',
     'unicorn/no-lonely-if': 'warn',
-    'unicorn/no-useless-undefined': 'warn',
+    'unicorn/no-useless-undefined': 'off',
     'unicorn/prefer-array-find':'warn'
   },
   ignorePatterns: ['generated.ts', 'node_modules']

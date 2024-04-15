@@ -12,7 +12,7 @@ import Custom404 from 'src/pages/404';
 import Custom500 from 'src/pages/500';
 import { useEffectOnce } from 'usehooks-ts';
 
-import Details from './Details';
+
 import Feed from './Feed';
 import GroupPageShimmer from './Shimmer';
 
@@ -62,9 +62,7 @@ const ViewGroup: NextPage = () => {
     <>
       <MetaTags title={`Group • ${group.name} • ${APP_NAME}`} />
       <GridLayout className="pt-6">
-        <GridItemFour>
-          <Details group={group} />
-        </GridItemFour>
+       
         <GridItemEight className="space-y-5">
           <Feed group={group} />
         </GridItemEight>
