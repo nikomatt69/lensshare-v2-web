@@ -63,7 +63,7 @@
     "@xmtp/react-sdk": "6.0.0",
     "@xmtp/xmtp-js": "^11.5.0",
     "alchemy-sdk": "^3.1.1",
-    "axios": "^1.6.0",
+    "axios": "^1.6.2",
     "babel-plugin-module-resolver": "^5.0.0",
     "browser-image-compression": "^2.0.2",
     "child-process": "1.0.2",

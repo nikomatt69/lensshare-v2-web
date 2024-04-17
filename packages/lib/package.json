@@ -12,7 +12,7 @@
     "@lensshare/data": "*",
     "@lensshare/lens": "*",
     "@lensshare/types": "*",
-    "axios": "^1.6.0",
+    "axios": "^1.6.2",
     "urlcat": "^3.1.0",
     "viem": "^1.18.3"
   },
