@@ -1,0 +1,31 @@
+{
+  "extends": "@lensshare/config/react.tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext",
+      "webworker"
+      
+    ],
+    
+    "baseUrl": ".",
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "react-native-reanimated": [
+        "./src"
+      ],
+      "@components*": ["src/components*"],
+      "@lib*": ["src/lib*"],
+      "@gql*": ["src/graphql*"],
+      "@generated*": ["src/generated*"],
+      "@sw/*": ["src/sw/*"]
+    },
+    
+  },
+  "include": ["next-env.d.ts",
+  "**/*.ts",
+  "**/*.tsx",
+  "**/*.js"],
+
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@lensshare/lib",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0",
+  "scripts": {
+
+    "test:dev": "vitest run",
+    "typecheck": "tsc --pretty"
+  },
+  "dependencies": {
+    "@lensshare/data": "*",
+    "@lensshare/lens": "*",
+    "@lensshare/types": "*",
+    "axios": "^1.6.0",
+    "urlcat": "^3.1.0",
+    "viem": "^1.18.3"
+  },
+  "devDependencies": {
+    "@lensshare/config": "*",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.5"
+  }
+}

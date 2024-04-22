@@ -1,0 +1,17 @@
+{
+  "name": "@lensshare/data",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0",
+  "main": "index.ts",
+  "scripts": {
+    "test:dev": "vitest run",
+    "typecheck": "tsc --pretty"
+  },
+  "devDependencies": {
+    "@lensshare/config": "*",
+    "@types/node": "^20.8.10",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.5"
+  }
+}

@@ -1,0 +1,5 @@
+src/locales/**/*.js
+.vercel
+.env.production
+.env
+certificates

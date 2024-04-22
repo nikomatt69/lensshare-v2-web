@@ -1,0 +1,15 @@
+{
+  "name": "@lensshare/abis",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0",
+  "main": "index.ts",
+  "scripts": {
+
+    "typecheck": "tsc --pretty"
+  },
+  "devDependencies": {
+    "@lensshare/config": "*",
+    "typescript": "^5.2.2"
+  }
+}

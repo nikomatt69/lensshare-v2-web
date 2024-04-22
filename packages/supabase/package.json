@@ -1,0 +1,18 @@
+{
+  "name": "@lensshare/supabase",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0",
+  "scripts": {
+    "codegen": "supabase gen types typescript --project-id nwimpuchsqiuweraczzd > database.types.ts;",
+
+    "typecheck": "tsc --pretty"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.4"
+  },
+  "devDependencies": {
+    
+    "typescript": "^5.2.2"
+  }
+}

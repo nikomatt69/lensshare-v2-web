@@ -1,0 +1,8 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+    <ShortName>MyCrumbs</ShortName>
+    <Description>MyCrumbs Search</Description>
+    <Url type="text/html" method="get" template="https://mycrumbs.xyz/search?q={searchTerms}&#38;type=profiles"/>
+    <Image width="32" height="32">https://mycrumbs.xyz/favicon-32x32.png</Image>
+    <InputEncoding>UTF-8</InputEncoding>
+    <moz:SearchForm>https://mycrumbs.xyz</moz:SearchForm>
+</OpenSearchDescription>

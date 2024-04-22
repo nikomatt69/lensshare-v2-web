@@ -1,0 +1,28 @@
+query SuperfluidInflows($id: ID = "") {
+  account(id: $id) {
+    createdAtTimestamp
+    createdAtBlockNumber
+    isSuperApp
+    updatedAtBlockNumber
+    updatedAtTimestamp
+    inflows {
+      id
+      token {
+        name
+        symbol
+        underlyingToken {
+          name
+          symbol
+        }
+        id
+        decimals
+      }
+      deposit
+      currentFlowRate
+      sender {
+        id
+      }
+      createdAtTimestamp
+    }
+  }
+}
