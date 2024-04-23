@@ -12,11 +12,13 @@ import getTitle from './meta/getTitle';
 import getFavicon from './getFavicon';
 import getNft from './meta/getNft';
 import getPortal from './meta/getPortal';
+import getPolymarket from './meta/getPolymarket';
+import getFrame from './meta/getFrame';
 
 
-const getMetadata = async (url: string): Promise<any> => {
+const getMetadata = async (url: string): Promise<OG> => {
   const { html } = await fetch(url, {
-    headers: { 'User-Agent': 'Twitterbot' }
+    headers: { 'User-Agent': 'MyCrumbs' }
   }).then(async (res) => ({
     html: await res.text()
   }));
@@ -31,6 +33,8 @@ const getMetadata = async (url: string): Promise<any> => {
     description: getDescription(document),
     image: proxiedUrl,
     site: getSite(document),
+    frame: getFrame(document, url),
+    polymarket :getPolymarket(document, url),
     favicon: getFavicon(url),
     isLarge,
     nft: getNft(document, url),
@@ -38,6 +42,7 @@ const getMetadata = async (url: string): Promise<any> => {
     portal: getPortal(document),
     html: generateIframe(getEmbedUrl(document), url)
   };
+
   return metadata;
 };
 

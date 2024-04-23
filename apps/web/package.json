@@ -43,6 +43,7 @@
     "@livepeer/react": "^3.0.2",
     "@next/bundle-analyzer": "^14.1.0",
     "@nextui-org/react": "^2.2.10",
+    "@polymarket/clob-client": "^4.5.1",
     "@prisma/client": "^5.11.0",
     "@privy-io/react-auth": "^1.58.1",
     "@privy-io/wagmi-connector": "^0.1.12",
