@@ -11,7 +11,8 @@ import allowedOpenActionModules from '@lib/allowedOpen (1)';
 const IgnoredModules = [
   VerifiedOpenActionModules.Swap,
   VerifiedOpenActionModules.Tip,
-  VerifiedOpenActionModules.DecentNFT
+  VerifiedOpenActionModules.DecentNFT,
+  VerifiedOpenActionModules.Polymarket
 ];
 
 interface ListProps {

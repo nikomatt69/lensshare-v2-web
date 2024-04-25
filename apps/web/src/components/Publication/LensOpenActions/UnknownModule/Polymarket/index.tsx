@@ -1,26 +1,24 @@
-// src/components/MarketEditor.tsx
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
+import { ClockIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import { Button, Card, Input, Modal, Tooltip } from '@lensshare/ui';
-import { ClockIcon, PlusIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import { usePublicationStore } from 'src/store/non-persisted/usePublicationStore';
-
-const MarketEditor: FC = () => {
-  const { marketConfig, setMarketConfig, resetMarketConfig, setShowMarketEditor } =
-    usePublicationStore();
+import { MirrorablePublication, UnknownOpenActionModuleSettings } from '@lensshare/lens';
+interface PolymarketEditorProps {
+  module: UnknownOpenActionModuleSettings;
+  publication?: MirrorablePublication;
+}
+const PolymarketEditor: FC<PolymarketEditorProps> = () => {
+  const { marketConfig, setMarketConfig, resetMarketConfig, setShowMarketEditor } = usePublicationStore();
   const [showEndTimeModal, setShowEndTimeModal] = useState(false);
 
   return (
     <Card className="m-5 px-5 py-3" forceRounded>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2 text-sm">
-          <Input
-            label="Question"
-            placeholder="Enter market question"
-            value={marketConfig.question}
-            onChange={(e) => setMarketConfig({ ...marketConfig, question: e.target.value })}
-            className="text-sm"
-          />
+          <PlusIcon className="h-4 w-4" />
+          <b>Market</b>
         </div>
         <div className="flex items-center space-x-3">
           <Button
@@ -47,7 +45,7 @@ const MarketEditor: FC = () => {
                     endTime: e.target.valueAsNumber
                   })
                 }
-                value={marketConfig.endTime}
+                value={dayjs(marketConfig.endTime).toISOString().slice(0, 16)}
               />
               <div className="mt-5 flex space-x-2">
                 <Button
@@ -82,6 +80,12 @@ const MarketEditor: FC = () => {
         </div>
       </div>
       <div className="mt-3 space-y-2">
+        <Input
+          label="Market Question"
+          onChange={(e) => setMarketConfig({...marketConfig, question: e.target.value})}
+          value={marketConfig.question}
+          placeholder="Enter the market question"
+        />
         {marketConfig.outcomes.map((outcome, index) => (
           <div className="flex items-center space-x-2 text-sm" key={index}>
             <Input
@@ -129,4 +133,4 @@ const MarketEditor: FC = () => {
   );
 };
 
-export default MarketEditor;
+export default PolymarketEditor;

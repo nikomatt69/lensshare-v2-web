@@ -1,23 +1,14 @@
+// src/pages/api/poly/post.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { object, string, number, array } from 'zod';
 import allowCors from 'src/utils/allowCors';
 import validateLensAccount from 'src/utils/middlewares/validateLensAccount';
 import parseJwt from '@lensshare/lib/parseJwt';
-import { polygon } from 'viem/chains';
 import { parseHTML } from 'linkedom';
 import getPolymarket from 'src/utils/oembed/meta/getPolymarket';
 
-type PolymarketRequest = {
-  buttonIndex: number;
-  marketId: string;
-  marketQuestion: string;
-  publicationId: string;
-  conditionId: string;
-  outcomes: string[];
-  marketUrl: string;
-};
-
+// Define the shape of the request body using zod
 const validationSchema = object({
   buttonIndex: number(),
   marketId: string(),
@@ -30,54 +21,40 @@ const validationSchema = object({
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).end(); // Method Not Allowed
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).end('Method Not Allowed');  // Clearly specify allowed method
   }
 
-  const { body } = req;
-  const accessToken = req.headers['x-access-token'] as string;
-  const validation = validationSchema.safeParse(body);
+  // Validate request body against schema
+  const validation = validationSchema.safeParse(req.body);
   if (!validation.success) {
-    return res.status(400).json({ error: 'Invalid request body' });
+    return res.status(400).json({ error: 'Invalid request body', details: validation.error });
   }
 
-  // Adjust validateLensAccount middleware for Next.js or inline its logic here
-  if (!(await validateLensAccount(req))) {
-    return res.status(403).json({ error: 'Invalid Lens account' });
-  }
+  const { marketId, marketQuestion, publicationId, conditionId, outcomes, marketUrl } = validation.data;
 
-  const { marketId, marketQuestion, publicationId, conditionId, outcomes, marketUrl } = body as PolymarketRequest;
   try {
-  const payload = parseJwt(accessToken);
-    const { evmAddress, id } = payload;
+    // Validate Lens account token
+    const accessToken = req.headers['authorization']?.split(' ')[1] || '';
+    if (!accessToken || !(await validateLensAccount(req))) {
+      return res.status(403).json({ error: 'Unauthorized - Invalid Lens account or missing token' });
+    }
 
-    const untrustedData = {
-      address: evmAddress,
-      marketId,
-      marketQuestion,
-      conditionId,
-      outcomes,
-      fid: id,
-      network: polygon.id,
-      profileId: id,
-      publicationId,
-      timestamp: Date.now(),
-      url: marketUrl
-    };
+    const decodedToken = parseJwt(accessToken);
+    const { evmAddress } = decodedToken;
 
-    const { data } = await axios.post(
-      marketUrl,
-      { trustedData: untrustedData, untrustedData },
-      { headers: { 'User-Agent': 'HeyBot/0.1 (like TwitterBot)' } }
-    );
+    // Attempt to fetch the Polymarket data from the URL
+    const response = await axios.get(marketUrl);
+    const { document } = parseHTML(response.data);
+    const polymarketData = getPolymarket(document);
 
-    const { document } = parseHTML(data);
+    // Log success for debugging purposes
+    console.info(`Processed request for market ${marketId} by user ${evmAddress}`);
 
-    console.info(`Open frame button clicked by ${id} on ${marketUrl}`);
-
-    return res.status(200).json({ polymarket :getPolymarket(document), success: true });
+    return res.status(200).json({ polymarket: polymarketData, success: true });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Failed to process Polymarket data:', error);
+    return res.status(500).json({ error: 'Internal Server Error', details: error });
   }
 }
 

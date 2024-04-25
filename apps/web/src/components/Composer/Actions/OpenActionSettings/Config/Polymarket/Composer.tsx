@@ -1,3 +1,4 @@
+import { BanknotesIcon } from '@heroicons/react/24/outline';
 import { Bars3BottomLeftIcon } from '@heroicons/react/24/solid';
 import { Tooltip } from '@lensshare/ui';
 import { motion } from 'framer-motion';
@@ -19,7 +20,7 @@ const MarketSettings: FC = () => {
         }}
         aria-label="Market"
       >
-        <Bars3BottomLeftIcon className="text-brand h-5 w-5" />
+        <BanknotesIcon className="text-brand h-5 w-5" />
       </motion.button>
     </Tooltip>
   );

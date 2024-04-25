@@ -57,11 +57,17 @@ export interface Portal {
 export interface Nft {
   chain: null | string;
   collectionName: string;
-  creatorAddress: `0x${string}` | null;
+  contractAddress: `0x${string}` | null;
+  creatorAddress: `0x${string}`;
+  description: string;
+  endTime: null | string;
   mediaUrl: string;
+  mintCount: null | string;
+  mintStatus: 'closed' | 'live' | null | string;
+  mintUrl: null | string;
+  schema: 'erc1155' | 'erc721' | string;
   sourceUrl: string;
 }
-
 
 export interface UserSuggestion {
   uid: string;

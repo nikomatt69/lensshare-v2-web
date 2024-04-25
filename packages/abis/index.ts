@@ -6,3 +6,5 @@ export * from './ZoraERC721Drop';
 export * from './HeyLensSignup';
 export * from './PublicAct';
 export * from './HeyMembershipNft';
+export * from './Permit2';
+

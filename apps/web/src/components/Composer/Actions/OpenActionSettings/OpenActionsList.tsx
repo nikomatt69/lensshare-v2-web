@@ -31,6 +31,12 @@ const OpenActionsList: FC = () => {
           title="Tipping"
           type={OpenAction.Tip}
         />
+         <OpenActionItem
+          description="Add ability to tip"
+          icon={<TipIcon className="h-6 w-6" />}
+          title="Polymarket"
+          type={OpenAction.Polymarket}
+        />
       </div>
       <SaveOrCancel
         onSave={() => setShowModal(false)}

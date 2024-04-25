@@ -19,6 +19,10 @@ const getAllowanceOpenAction = (
       return { name: 'Swap Open Action' };
     case VerifiedOpenActionModules.Tip:
       return { name: 'Tip Open Action' };
+    case VerifiedOpenActionModules.Polymarket:
+      return { name: 'Polymarket Open Action' };
+      case VerifiedOpenActionModules.DecentNFT:
+        return { name: 'Decent Open Action' };  
     default:
       return { name: 'Unknown Open Action' };
   }

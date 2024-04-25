@@ -39,7 +39,9 @@ export const LENSHUB_PROXY = getEnvConfig().lensHubProxyAddress;
 export const DEFAULT_COLLECT_TOKEN = getEnvConfig().defaultCollectToken;
 export const LIT_PROTOCOL_ENVIRONMENT = getEnvConfig().litProtocolEnvironment;
 export const PUBLICACT_PROXY = getEnvConfig().publicActProxyAddress;
+export const PERMIT_2_ADDRESS = '0x000000000022D473030F116dDEE9F6B43aC78BA3';
 
+export const HEY_REFERRAL_PROFILE_ID = '37691';
 export const SUPERFLUID_SUBGRAPH =
   'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-matic';
 

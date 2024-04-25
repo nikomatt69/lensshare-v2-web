@@ -34,13 +34,15 @@ import { usePreferencesStore } from 'src/store/non-persisted/usePreferencesStore
 import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 import { hydrateAuthTokens, signOut } from 'src/store/persisted/useAuthStore';
 import useNotifictionSubscriptions from './Providers/useNotifictionSubscriptions';
+import { useOaTransactionStore } from 'src/store/non-persisted/useOaTransactionStore';
+import OaTransactionToaster from './OaTransactionToaster';
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const [refreshing, setRefreshing] = React.useState(false);
-
+  const transactions = useOaTransactionStore((state) => state.transactions);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -133,6 +135,14 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         containerStyle={{ wordBreak: 'break-word' }}
         toastOptions={getToastOptions(resolvedTheme)}
       />
+       {transactions.map((tx) => (
+        <OaTransactionToaster
+          key={tx.txHash}
+          onClose={() => {}}
+          platformName={tx.platformName}
+          txHash={tx.txHash}
+        />
+      ))}
       <GlobalModals />
       <GlobalBanners />
       <GlobalHooks />

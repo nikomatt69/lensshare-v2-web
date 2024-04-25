@@ -21,5 +21,6 @@ export const AlgorithmProvider = {
 export enum OpenAction {
   Tip = 'Tip',
   DecentNft = 'DecentNft',
-  Swap = 'Swap'
+  Swap = 'Swap',
+  Polymarket = 'Polymarket'
 }

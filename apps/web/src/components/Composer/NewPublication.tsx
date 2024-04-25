@@ -66,6 +66,7 @@ import { useCollectModuleStore } from 'src/store/non-persisted/useCollectModuleS
 import { useReferenceModuleStore } from 'src/store/non-persisted/useReferenceModuleStore';
 import usePolymarket from 'src/hooks/usePolymarket';
 import MarketEditor from './Actions/OpenActionSettings/Config/Polymarket/MarketEditor';
+import { HEY_REFERRAL_PROFILE_ID } from '@lensshare/data/constants';
 
 const Attachment = dynamic(
   () => import('@components/Composer/Actions/Attachment'),
@@ -107,9 +108,9 @@ const OpenActionSettings = dynamic(
   }
 );
 
-const NEXT_PUBLIC_DECENT_API_KEY = 'fee46c572acecfc76c8cb2a1498181f9';
-const NEXT_PUBLIC_OPENSEA_API_KEY = 'ee7460014fda4f58804f25c29a27df35';
-const NEXT_PUBLIC_RARIBLE_API_KEY = '4ad887e1-fe57-47e9-b078-9c35f37c4c13';
+const NEXT_PUBLIC_DECENT_API_KEY="fee46c572acecfc76c8cb2a1498181f9"
+const NEXT_PUBLIC_OPENSEA_API_KEY="ee7460014fda4f58804f25c29a27df35"
+const NEXT_PUBLIC_RARIBLE_API_KEY="4ad887e1-fe57-47e9-b078-9c35f37c4c13"
 const nftOpenActionKit = new NftOpenActionKit({
   decentApiKey: NEXT_PUBLIC_DECENT_API_KEY || '',
   openSeaApiKey: NEXT_PUBLIC_OPENSEA_API_KEY || '',
@@ -160,34 +161,6 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     resetLiveVideoConfig
   } = usePublicationStore();
 
-  useEffect(() => {
-    const fetchOpenActionEmbed = async () => {
-      setOpenActionEmbedLoading(true);
-      const publicationContentUrls = getURLs(publicationContent);
-
-      try {
-        const calldata = await nftOpenActionKit.detectAndReturnCalldata(
-          publicationContentUrls[0]
-        );
-        if (calldata) {
-          setOpenActionEmbed({
-            unknownOpenAction: {
-              address: VerifiedOpenActionModules.DecentNFT,
-              data: calldata
-            }
-          });
-        } else {
-          setOpenActionEmbed(undefined);
-        }
-      } catch (error_) {
-        setOpenActionEmbed(undefined);
-        setOpenActionEmbedLoading(false);
-      }
-      setOpenActionEmbedLoading(false);
-    };
-
-    fetchOpenActionEmbed();
-  }, [publicationContent]);
   const { openAction, reset: resetOpenActionSettings } = useOpenActionStore();
   // Collect module store
   const { collectModule, reset: resetCollectSettings } =
@@ -333,9 +306,10 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
       const publicationContentUrls = getURLs(publicationContent);
 
       try {
-        const calldata = await nftOpenActionKit.detectAndReturnCalldata(
-          publicationContentUrls[0]
-        );
+        const calldata = await nftOpenActionKit.detectAndReturnCalldata({
+          contentURI: publicationContentUrls[0],
+          publishingClientProfileId: HEY_REFERRAL_PROFILE_ID
+        });
         if (calldata) {
           setOpenActionEmbed({
             unknownOpenAction: {

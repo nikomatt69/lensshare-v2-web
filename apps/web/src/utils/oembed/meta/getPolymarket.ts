@@ -1,42 +1,42 @@
-import type { ButtonType, MarketInfo } from '@lensshare/types/misc';
+// src/utils/getPolymarket.ts
 import type { Document } from 'linkedom';
+import type { PolymarketMarketData } from '@lensshare/types/polymarket';
 
-const getPolymarket = (document: Document, url?: string): MarketInfo | null => {
+/**
+ * Parses a Document object to extract metadata relevant to a Polymarket market.
+ * @param document - The Document object parsed from an HTML response.
+ * @param url - The original URL fetched, used as a fallback for the market URL.
+ * @returns A PolymarketMarketData object or null if essential data can't be extracted.
+ */
+const getPolymarket = (document: Document, url?: string): PolymarketMarketData | null => {
   const getMeta = (key: string) => {
     const selector = `meta[name="${key}"], meta[property="${key}"]`;
     const metaTag = document.querySelector(selector);
     return metaTag ? metaTag.getAttribute('content') : null;
   };
-  let buttons: MarketInfo['buttons'] = [];
-  for (let i = 1; i < 5; i++) {
-    const button = getMeta(`of:button:${i}`);
-    const action = getMeta(`of:button:${i}:action`) as ButtonType;
-    const target = getMeta(`of:button:${i}:target`) as string;
 
-    if (!button) {
-      break;
-    }
+  const parseMetaContentToList = (content: string | null): string[] => content ? content.split('|') : [];
 
-    buttons.push({ action, button, target });
-  }
+  const title = getMeta('pm:title');
+  const description = getMeta('pm:description');
+  const outcomes = parseMetaContentToList(getMeta('pm:outcomes'));
   const marketId = getMeta('pm:market_id');
-  const marketQuestion = getMeta('pm:market_question');
+  const imageUrl = getMeta('pm:image_url');
+  const currentPrices = parseMetaContentToList(getMeta('pm:current_prices')).map(Number);
+  const totalVolume = parseFloat(getMeta('pm:total_volume') || '0');
 
-  const conditionId = getMeta('pm:condition_id');
-  const outcomes = getMeta('pm:outcomes')?.split('|') || [];
-  const marketUrl = url || '';
-
-  if (!marketId || !marketQuestion || !conditionId || outcomes.length === 0) {
-    return null;
+  if (!marketId || !title || outcomes.length === 0 || currentPrices.length === 0) {
+    return null; // Ensuring all essential data is present
   }
 
   return {
-    buttons,
-    marketId,
-    marketQuestion,
-    conditionId,
+    title,
+    description: description ?? '',
     outcomes,
-    marketUrl
+    marketId,
+    imageUrl: imageUrl ?? '',
+    currentPrices,
+    totalVolume
   };
 };
 

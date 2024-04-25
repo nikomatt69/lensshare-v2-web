@@ -1,14 +1,11 @@
+import type { FC } from 'react';
+import type { Address } from 'viem';
+
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
-import {
-  LensTransactionStatusType,
-  useLensTransactionStatusQuery
-} from '@lensshare/lens';
+import { LensTransactionStatusType } from '@lensshare/lens';
 import { Spinner } from '@lensshare/ui';
 import cn from '@lensshare/ui/cn';
-import type { FC } from 'react';
-import { useState } from 'react';
 import { useTransactionStatus } from 'src/hooks/useIndexStatus';
-import type { Address } from 'viem';
 
 interface IndexStatusProps {
   message?: string;
@@ -42,12 +39,12 @@ const IndexStatus: FC<IndexStatusProps> = ({
       ) : data?.lensTransactionStatus?.status ===
         LensTransactionStatusType.Failed ? (
         <div className="flex items-center space-x-1.5">
-          <XCircleIcon className="h-5 w-5 text-red-500" />
+          <XCircleIcon className="size-5 text-red-500" />
           <div>Index failed</div>
         </div>
       ) : (
         <div className="flex items-center space-x-1">
-          <CheckCircleIcon className="h-5 w-5 text-green-500" />
+          <CheckCircleIcon className="size-5 text-green-500" />
           <div className="text-black dark:text-white">Index Successful</div>
         </div>
       )}

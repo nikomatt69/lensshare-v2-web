@@ -1,36 +1,34 @@
-import type {
-  AnyPublication,
-  MirrorablePublication,
-  UnknownOpenActionModuleSettings
-} from '@lensshare/lens';
-import type { Nft, OG } from '@lensshare/types/misc';
+
 import type { ActionData, PublicationInfo } from 'nft-openaction-kit';
+import type { Address } from 'viem';
 
 import ActionInfo from '@components/Shared/Oembed/Nft/ActionInfo';
 
-import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
-import getNftChainInfo from '@lensshare/lib/getNftChainInfo';
-import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
-import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
-import { Button, Card, Spinner, Tooltip } from '@lensshare/ui';
 import errorToast from '@lib/errorToast';
+import { Leafwatch } from '@lib/leafwatch';
 import { NftOpenActionKit } from 'nft-openaction-kit';
-import { type FC, useEffect, useState, useRef } from 'react';
-import type { Address } from 'wagmi';
+import { type FC, useEffect, useRef, useState } from 'react';
+
 import { useAccount } from 'wagmi';
 
 import DecentOpenActionModule from './Module';
+import { AnyPublication, MirrorablePublication, UnknownOpenActionModuleSettings } from '@lensshare/lens';
+import { Nft, OG } from '@lensshare/types/misc';
+import { AllowedToken } from '@lensshare/types/hey';
+import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
+import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-modules';
+import stopEventPropagation from '@lensshare/lib/stopEventPropagation';
+import getNftChainInfo from '@lensshare/lib/getNftChainInfo';
+import { Button, Card, Spinner, Tooltip } from '@lensshare/ui';
+import { PUBLICATION } from '@lensshare/data/tracking';
 import DecentOpenActionShimmer from './Decent Open Action Shimmer';
-import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
-import type { AllowedToken } from '@lensshare/types/hey';
-import { CHAIN } from '@lib/costantChain';
-import { CHAIN_ID } from 'src/constants';
-
+import { HEY_REFERRAL_PROFILE_ID } from '@lensshare/data/constants';
 
 const OPEN_ACTION_EMBED_TOOLTIP = 'Open action embedded';
 
 interface DecentOpenActionProps {
   isFullPublication?: boolean;
+  mirrorPublication?: AnyPublication;
   og: OG;
   openActionEmbed: boolean;
   openActionEmbedLoading: boolean;
@@ -60,6 +58,7 @@ function formatPublicationData(
 }
 
 const DecentOpenAction: FC<DecentOpenActionProps> = ({
+  mirrorPublication,
   og,
   openActionEmbed,
   openActionEmbedLoading,
@@ -68,7 +67,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
   const [actionData, setActionData] = useState<ActionData>();
   const [showOpenActionModal, setShowOpenActionModal] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<AllowedToken>({
-    contractAddress: DEFAULT_COLLECT_TOKEN,
+    contractAddress: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
     decimals: 18,
     id: 'WMATIC',
     name: 'Wrapped MATIC',
@@ -81,13 +80,13 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
   const module = targetPublication.openActionModules.find(
     (module) => module.contract.address === VerifiedOpenActionModules.DecentNFT
   );
-  const NEXT_PUBLIC_DECENT_API_KEY = 'fee46c572acecfc76c8cb2a1498181f9';
-  const NEXT_PUBLIC_OPENSEA_API_KEY = 'ee7460014fda4f58804f25c29a27df35';
-  const NEXT_PUBLIC_RARIBLE_API_KEY = '4ad887e1-fe57-47e9-b078-9c35f37c4c13';
+
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   const { address } = useAccount();
-
+  const NEXT_PUBLIC_DECENT_API_KEY="fee46c572acecfc76c8cb2a1498181f9"
+  const NEXT_PUBLIC_OPENSEA_API_KEY="ee7460014fda4f58804f25c29a27df35"
+  const NEXT_PUBLIC_RARIBLE_API_KEY="4ad887e1-fe57-47e9-b078-9c35f37c4c13"
   const prevCurrencyRef = useRef(selectedCurrency);
 
   const nft: Nft = og.nft
@@ -95,15 +94,15 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
     : {
         chain: null,
         collectionName: '',
-
+        contractAddress: '0x0000000000000000000000000000000000000000',
         creatorAddress: '0x0000000000000000000000000000000000000000',
- 
-  
+        description: og.description || '',
+        endTime: null,
         mediaUrl: og.image || '',
-    
-    
-      
-     
+        mintCount: null,
+        mintStatus: null,
+        mintUrl: null,
+        schema: 'erc721',
         sourceUrl: og.url
       };
 
@@ -111,9 +110,9 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
     () => {
       const actionDataFromPost = async () => {
         const nftOpenActionKit = new NftOpenActionKit({
-          decentApiKey: NEXT_PUBLIC_DECENT_API_KEY,
-          openSeaApiKey: NEXT_PUBLIC_OPENSEA_API_KEY,
-          raribleApiKey: NEXT_PUBLIC_RARIBLE_API_KEY
+          decentApiKey: NEXT_PUBLIC_DECENT_API_KEY || '',
+          openSeaApiKey: NEXT_PUBLIC_OPENSEA_API_KEY || '',
+          raribleApiKey: NEXT_PUBLIC_RARIBLE_API_KEY || ''
         });
 
         const addressParameter = address
@@ -124,15 +123,22 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
         try {
           const pubInfo = formatPublicationData(targetPublication);
           const actionDataResult: ActionData =
-            await nftOpenActionKit.actionDataFromPost(
-              pubInfo,
-              targetPublication.by.id,
-              targetPublication.by.ownedBy.address,
-              addressParameter as Address,
-              '137',
-              selectedQuantity !== 1 ? BigInt(selectedQuantity) : 1n,
-              selectedCurrency.contractAddress
-            );
+            await nftOpenActionKit.actionDataFromPost({
+              executingClientProfileId: HEY_REFERRAL_PROFILE_ID,
+              mirrorerProfileId: !!mirrorPublication
+                ? mirrorPublication.by.id
+                : undefined,
+              mirrorPubId: !!mirrorPublication
+                ? mirrorPublication.id
+                : undefined,
+              paymentToken: selectedCurrency.contractAddress,
+              post: pubInfo,
+              profileId: targetPublication.by.id,
+              profileOwnerAddress: targetPublication.by.ownedBy.address,
+              quantity: selectedQuantity !== 1 ? selectedQuantity : 1,
+              senderAddress: addressParameter as Address,
+              srcChainId: '137' // srcChainId, only supported on Polygon POS for now
+            });
           if (actionDataResult) {
             setActionData(actionDataResult);
           }
@@ -183,7 +189,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 >
                   <img
                     alt={getNftChainInfo(nft.chain).name}
-                    className="h-5 w-5"
+                    className="size-5"
                     src={getNftChainInfo(nft.chain).logo}
                   />
                 </Tooltip>
@@ -204,7 +210,7 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 content={<span>{OPEN_ACTION_EMBED_TOOLTIP}</span>}
                 placement="top"
               >
-                <Button className="text-base font-normal" size="md">
+                <Button className="text-base font-normal" size="lg">
                   Mint
                 </Button>
               </Tooltip>
@@ -213,8 +219,11 @@ const DecentOpenAction: FC<DecentOpenActionProps> = ({
                 className="text-base font-normal"
                 onClick={() => {
                   setShowOpenActionModal(true);
+                  Leafwatch.track(PUBLICATION.OPEN_ACTIONS.DECENT.OPEN_DECENT, {
+                    publication_id: publication.id
+                  });
                 }}
-                size="md"
+                size="lg"
               >
                 Mint
               </Button>
