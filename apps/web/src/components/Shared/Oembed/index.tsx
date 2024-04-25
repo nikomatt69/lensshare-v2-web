@@ -64,7 +64,7 @@ const Oembed: FC<OembedProps> = ({
     url: url as string
   };
 
-  if (!og.title && !og.html  && !og.portal && !og.frame) {
+  if (!og.title && !og.html  && !og.portal && !og.frame && !og.nft && !og.polymarket) {
     return null;
   }
 
@@ -95,13 +95,15 @@ const Oembed: FC<OembedProps> = ({
         />
       ) : og.html ? (
         <Player og={og} />
-      ): og.frame ? (
+      ) : og.nft ? (
+        <Nft nft={og.nft} />
+      ) : og.portal ? (
+        <Portal portal={og.portal} publicationId={publication?.id} />
+      ) : og.frame ? (
         <Frame frame={og.frame} publicationId={publication?.id} /> 
       ):
        og.polymarket ? (
-        <PolymarketOembed questionId={og.polymarket} publicationId={publication?.id} /> 
-      ): og.portal ? (
-        <Portal portal={og.portal} publicationId={publication?.id} />
+        <PolymarketWidget marketId={og.polymarket.marketId} publicationId={publication?.id} /> 
       ) : (
         <Embed og={og} publicationId={publication?.id} />
       )}

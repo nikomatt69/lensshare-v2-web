@@ -83,11 +83,11 @@ const MessagesList: FC = () => {
   });
   // eslint-disable-next-line react-hooks/rules-of-hooks
 
-  useStreamAllMessages();
+  useStreamMessages(selectedConversation as CachedConversation);
   const [show, setShow] = useState(false);
   const [meetingUrl, setMeetingUrl] = useState('');
   return (
-    <div>
+    <div >
       <div className="flex items-center justify-between px-5 py-1">
         <LazyDefaultProfile
           address={selectedConversation.peerAddress as Address}
@@ -96,7 +96,7 @@ const MessagesList: FC = () => {
       </div>
       <div className="divider" />
       <div
-        ref={endOfMessagesRef}
+        ref={endOfMessagesRef && observe}
         className={cn(
           'h-[69vh] max-h-[69vh]',
           'flex flex-col-reverse space-y-4 overflow-y-auto p-4'
@@ -109,7 +109,7 @@ const MessagesList: FC = () => {
           const messageDiv = (
             <div
               key={`${message.id}_${messages}`}
-              ref={messages.length - 1 ? observe : null}
+              ref={messages.length + 1 ? observe : observe}
              
             >
                

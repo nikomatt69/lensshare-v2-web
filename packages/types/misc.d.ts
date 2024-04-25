@@ -1,4 +1,5 @@
 import type { OptmisticPublicationType } from './enums';
+import { PolymarketMarketData } from './polymarket';
 
 export interface IPFSResponse {
   uri: string;
@@ -91,7 +92,7 @@ export interface OG {
   image: null | string;
   isLarge: boolean | null;
   frame: Frame | null;
-  polymarket: null | MarketInfo;
+  polymarket: null | PolymarketMarketData;
   lastIndexedAt?: string;
   portal: null | Portal;
   nft: Nft | null;

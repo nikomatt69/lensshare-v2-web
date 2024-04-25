@@ -12,6 +12,7 @@ interface MessagesProps {
 
 const Messages: FC<MessagesProps> = ({ message }) => {
   const { address } = useAccount();
+  
   const reactions = useReactions(message);
   const messageHasReaction = hasReaction(message);
   const isSender = message.senderAddress === address;
