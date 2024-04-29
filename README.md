@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/nikomatt69/lensshare-webApp/blob/main/apps/web/public/icon.png" alt="MyCrumbs Logo">
+    <img src="https://raw.githubusercontent.com/nikomatt69/lensshare-v2-web/992999a/apps/web/public/icon.png" alt="MyCrumbs Logo">
     <h1>MyCrumbs</h1>
     <strong>Decentralized, and permissionless social media app 🌿</strong>
 </div>
