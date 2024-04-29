@@ -68,5 +68,5 @@ We love contributors! Feel free to contribute to this project but please read th
 
 ## ⚖️ License
 
-LensShare is open-sourced software licensed under the © [AGPLv3](LICENSE).
-# lensshare-pwa
+MyCrumbs is open-sourced software licensed under the © [AGPLv3](LICENSE).
+
