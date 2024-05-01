@@ -7,13 +7,15 @@ import { CHAIN_ID } from '@lensshare/data/constants';
 
 import type { PolymarketMarketData } from '@lensshare/types/polymarket';  // Ensure your type path is correct
 import walletClient from '@lib/walletClient';
+import { AnyPublication, UnknownOpenActionModuleSettings } from '@lensshare/lens';
 
 interface PolymarketWidgetProps {
   marketId: string;
-  publicationId?: string;
+  publication: AnyPublication;
+  module : UnknownOpenActionModuleSettings
 }
 
-const PolymarketWidget: FC<PolymarketWidgetProps> = ({ marketId, publicationId }) => {
+const PolymarketWidget: FC<PolymarketWidgetProps> = ({ marketId, publication,module }) => {
   const [marketData, setMarketData] = useState<PolymarketMarketData | null>(null);
   const { isConnected } = useAccount();
   const { data: wallet } = useWalletClient();  // Assuming useWalletClient returns an object with 'data' that includes a signer

@@ -12,6 +12,7 @@ import { useAccount } from 'wagmi';
 import { useNotificationStore } from 'src/store/persisted/useNotificationStore';
 import getCurrentSession from '@lib/getCurrentSession';
 import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
+import { subscribeUserToPush } from '@lib/notification';
 
 const LensSubscriptionsProvider: FC = () => {
   const { setLatestNotificationId } = useNotificationStore();
@@ -20,42 +21,38 @@ const LensSubscriptionsProvider: FC = () => {
   const { id: sessionProfileId } = getCurrentSession();
   const canUseSubscriptions = Boolean(sessionProfileId) && address;
 
-  // Begin: New Notification
-  const { data: newNotificationData } =
-    useNewNotificationSubscriptionSubscription({
-      skip: !canUseSubscriptions,
-      variables: { for: sessionProfileId }
-    });
+  // Handle new notifications
+  const { data: newNotificationData } = useNewNotificationSubscriptionSubscription({
+    skip: !canUseSubscriptions,
+    variables: { for: sessionProfileId }
+  });
 
   useEffect(() => {
-    const notification = newNotificationData?.newNotification as Notification;
+    if (newNotificationData?.newNotification) {
+      const notification = newNotificationData?.newNotification as Notification;
+      const notifyData = getPushNotificationData(notification);
 
-    if (notification) {
-      if (notification && getPushNotificationData(notification)) {
-        const notify = getPushNotificationData(notification);
-        BrowserPush.notify({ title: notify?.title || '' });
+      if (notifyData) {
+        BrowserPush.notify({ title: notifyData.title || '' }); // Local browser notification
+        subscribeUserToPush(async (subscription: any) => {
+          console.log('Subscribed with subscription:', subscription); // Log the subscription info (for debugging)
+        }).catch(console.error);
       }
-      setLatestNotificationId(notification?.id);
+      setLatestNotificationId(notification.id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newNotificationData]);
-  // End: New Notification
+  }, [newNotificationData, canUseSubscriptions]);
 
-  // Begin: User Sig Nonces
+  // Handle signature nonces for on-chain interactions
   const { data: userSigNoncesData } = useUserSigNoncesSubscriptionSubscription({
     skip: !canUseSubscriptions,
     variables: { address }
   });
 
   useEffect(() => {
-    const userSigNonces = userSigNoncesData?.userSigNonces;
-
-    if (userSigNonces) {
-      setLensHubOnchainSigNonce(userSigNonces.lensHubOnchainSigNonce);
+    if (userSigNoncesData?.userSigNonces) {
+      setLensHubOnchainSigNonce(userSigNoncesData.userSigNonces.lensHubOnchainSigNonce);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userSigNoncesData]);
-  // End: User Sig Nonces
+  }, [userSigNoncesData, canUseSubscriptions]);
 
   return null;
 };

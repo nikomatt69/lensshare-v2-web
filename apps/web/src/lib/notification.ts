@@ -19,7 +19,7 @@ export const getRegistration =
     let registration: ServiceWorkerRegistration | null = null;
 
     for (let reg of registrations) {
-      if (reg.active && reg.active.scriptURL.endsWith('/service-worker.js')) {
+      if (reg.active && reg.active.scriptURL.endsWith('/sw.js')) {
         registration = reg;
         break;
       }

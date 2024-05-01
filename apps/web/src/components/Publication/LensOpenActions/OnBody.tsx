@@ -9,6 +9,8 @@ import { isMirrorPublication } from '@lensshare/lib/publicationHelpers';
 
 import SwapOpenAction from './UnknownModule/Swap';
 import PolymarketEditor from './UnknownModule/Polymarket';
+import PolymarketOembed from '@components/Shared/Oembed/PolymarketOembed';
+import PolymarketWidget from '@components/Shared/Oembed/PolymarketWidget';
 
 interface OpenActionOnBodyProps {
   publication: AnyPublication;
@@ -35,12 +37,13 @@ const OpenActionOnBody: FC<OpenActionOnBodyProps> = ({ publication }) => {
           publication={targetPublication}
         />
       )}
-      {module.contract.address === VerifiedOpenActionModules.Swap && (
-        <PolymarketEditor
+      {module.contract.address === VerifiedOpenActionModules.Polymarket && (
+        <PolymarketWidget
+          marketId={targetPublication.id}
           module={module as UnknownOpenActionModuleSettings}
           publication={targetPublication}
         />
-      )}
+      )} 
     </div>
   );
 };

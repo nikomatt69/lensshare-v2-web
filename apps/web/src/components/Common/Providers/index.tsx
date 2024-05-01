@@ -42,6 +42,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
       <Web3Provider>
         <ApolloProvider client={lensApolloClient}>
           <LensSubscriptionsProvider />
+          
           <OptimisticTransactionsProvider />
           <QueryClientProvider client={queryClient}>
             <PreferencesProvider />

@@ -110,7 +110,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   });
   const GlobalHooks = () => {
     useNotifictionSubscriptions();
-    useStreamMessages(selectedConversation as CachedConversation)
+    useStreamMessages(selectedConversation?.peerAddress as unknown as CachedConversation)
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
   };
