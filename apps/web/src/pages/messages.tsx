@@ -10,7 +10,7 @@ import { useAppStore } from 'src/store/persisted/useAppStore';
 
 const contentTypeConfigs = [
   reactionContentTypeConfig,
-  attachmentContentTypeConfig
+
 ];
 
 const XMTPMessages = () => {

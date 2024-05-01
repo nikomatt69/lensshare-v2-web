@@ -41,7 +41,7 @@ import MutualFollowers from './MutualFollowers';
 import MutualFollowersList from './MutualFollowers/List';
 import ScamWarning from './ScamWarning';
 import MeetingIcon from '@components/Meet/MeetingIcon';
-import TbaBadge from './TbaBadge';
+
 import IsVerified from '@components/Shared/IsVerified';
 import router from 'next/router';
 import { usePushChatStore } from 'src/store/persisted/usePushChatStore';
@@ -112,7 +112,7 @@ const Details: FC<DetailsProps> = ({ profile, following, setFollowing }) => {
         <div className="flex items-center gap-1.5 text-2xl font-bold">
           <div className="truncate">{getProfile(profile).displayName}</div>
           <IsVerified id={profile?.id} size="lg" />
-          <TbaBadge profile={profile} />
+        
           {hasMisused(profile.id) ? (
             <Tooltip content={misuseDetails?.type}>
               <ExclamationCircleIcon className="h-6 w-6 text-red-500" />

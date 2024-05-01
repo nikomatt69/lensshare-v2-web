@@ -8,7 +8,7 @@ import getToastOptions from '@lib/getToastOptions';
 import { useTheme } from 'next-themes';
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { useOaTransactionStore } from 'src/store/non-persisted/useOaTransactionStore';
+import { useOaTransactionStore } from 'src/store/persisted/useOaTransactionStore';
 
 
 interface OaTransactionToasterProps {
@@ -66,7 +66,7 @@ const OaTransactionToaster: FC<OaTransactionToasterProps> = ({
       }
     };
 
-    interval = setInterval(fetchCrossChainStatus, 10000);
+    interval = setInterval(fetchCrossChainStatus, 50000);
 
     return () => {
       clearInterval(interval);

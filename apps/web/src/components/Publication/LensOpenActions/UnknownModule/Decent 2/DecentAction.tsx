@@ -17,6 +17,7 @@ interface DecentActionProps {
   act: () => void;
   allowanceLoading?: boolean;
   className?: string;
+  isReadyToMint?: boolean;
   isLoading?: boolean;
   moduleAmount?: Amount;
   txHash?: string;
@@ -27,6 +28,7 @@ const DecentAction: FC<DecentActionProps> = ({
   allowanceLoading,
   className = '',
   isLoading = false,
+  isReadyToMint,
   moduleAmount,
   txHash
 }) => {
@@ -86,18 +88,23 @@ const DecentAction: FC<DecentActionProps> = ({
         className={className}
         disabled={loadingState}
         icon={loadingState ? <Spinner size="xs" /> : null}
-        onClick={act}
+        onClick={(e) => {
+          e.stopPropagation();
+          act();
+        }}
       >
         <div>
           {loadingState
             ? 'Pending'
+            : !isReadyToMint
+            ? `Approve minting for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`
             : `Mint for ${moduleAmount?.value} ${moduleAmount?.asset.symbol}`}
         </div>
       </Button>
       {txHash ? (
         <>
           <MetaDetails
-            icon={<LinkIcon className="ld-text-gray-500 size-4" />}
+            icon={<LinkIcon className="ld-text-gray-500 h-4 w-4" />}
             title="PolygonScan"
             value={`https://polygonscan.com/tx/${txHash}`}
           >
@@ -110,7 +117,7 @@ const DecentAction: FC<DecentActionProps> = ({
             </Link>
           </MetaDetails>
           <MetaDetails
-            icon={<LinkIcon className="ld-text-gray-500 size-4" />}
+            icon={<LinkIcon className="ld-text-gray-500 h-4 w-4" />}
             title="LayerZeroScan"
             value={`https://layerzeroscan.com/tx/${txHash}`}
           >

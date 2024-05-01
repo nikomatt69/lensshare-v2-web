@@ -98,7 +98,7 @@ const Composer: FC<ComposerProps> = ({ conversation }) => {
       setMessage('');
       inputRef.current?.focus();
       await sendMessage(conversation, message);
-      Leafwatch.track(MESSAGES.SEND_MESSAGE);
+     
     }
   };
   return (

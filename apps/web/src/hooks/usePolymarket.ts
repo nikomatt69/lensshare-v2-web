@@ -10,7 +10,7 @@ const usePolymarket = () => {
   const createMarket = async () => {
     try {
       const profile = getProfile(currentProfile);
-      const response = await axios.post('/api/polymarket', {
+      const response = await axios.post('/api/poly/post', {
         creator: currentProfile?.ownedBy.address,
         question: marketConfig.question,
         outcomes: marketConfig.outcomes,

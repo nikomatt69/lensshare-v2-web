@@ -28,6 +28,7 @@ import Nft from './HeyOpenActions/Nft';
 import OpenActionOnBody from './LensOpenActions/OnBody';
 import { useProfileThemeStore } from '@components/Profile';
 import { useRouter } from 'next/router';
+import { KNOWN_ATTRIBUTES } from '@lensshare/data/constants';
 interface PublicationBodyProps {
   contentClassName?: string;
   publication: AnyPublication;
@@ -88,13 +89,21 @@ const PublicationBody: FC<PublicationBodyProps> = ({
   // Show live if it's there
   const showSharingLink = metadata?.__typename === 'LinkMetadataV3';
   // Show oembed if no NFT, no attachments, no quoted publication
+  const showQuote = targetPublication.__typename === 'Quote';
+  // Show oembed if no NFT, no attachments, no quoted publication
+  const hideOembed =
+    getPublicationAttribute(
+      metadata.attributes,
+      KNOWN_ATTRIBUTES.HIDE_OEMBED
+    ) === 'true';
   const showOembed =
+    !hideOembed &&
     !showSharingLink &&
     hasURLs &&
     !showLive &&
-    !showSnapshot &&
     !showAttachments &&
-    !quoted;
+    !quoted &&
+    !showQuote;
 
   return (
     <div className={cn('break-words', theme?.publicationFont)}>
@@ -131,16 +140,14 @@ const PublicationBody: FC<PublicationBodyProps> = ({
               <Video src={metadata.liveURL || metadata.playbackURL} />
             </div>
           ) : null}
-          {showEmbed ? <Embed embed={metadata?.embed} /> : null}
+         
           {showOembed ? (
             <Oembed publication={publication} url={urls[0]} />
           ) : null}
           {showSharingLink ? (
             <Oembed publication={publication} url={metadata.sharingLink} />
           ) : null}
-          {targetPublication?.__typename === 'Quote' && (
-            <Quote publication={targetPublication.quoteOn} />
-          )}
+           {showQuote && <Quote publication={targetPublication.quoteOn} />}
         </CardBody>
       </CardContainer>
     </div>

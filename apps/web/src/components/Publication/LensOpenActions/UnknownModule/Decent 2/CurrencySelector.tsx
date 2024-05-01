@@ -1,15 +1,16 @@
 import type { AllowedToken } from '@lensshare/types/hey';
 import type { FC } from 'react';
 import type { Address } from 'viem';
-import { useQuery } from '@tanstack/react-query';
 import getAssetSymbol from '@lensshare/lib/getAssetSymbol';
 import getRedstonePrice from '@lib/getRedstonePrice';
 import getTokenImage from '@lensshare/lib/getTokenImage';
 
-import { formatUnits } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
 import { STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import { TokenContracts } from '@lensshare/data/contracts';
+
+import { useQuery } from '@tanstack/react-query';
+import { formatUnits } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
 
 const SUPPORTED_CURRENCIES = [
   {
@@ -32,6 +33,13 @@ const SUPPORTED_CURRENCIES = [
     id: 'USDC',
     name: 'USD Coin',
     symbol: 'USDC'
+  },
+  {
+    contractAddress: '0x3d2bD0e15829AA5C362a4144FdF4A1112fa29B5c',
+    decimals: 18,
+    id: 'BONSAI',
+    name: 'Bonsai Token',
+    symbol: 'BONSAI'
   }
 ];
 
@@ -42,43 +50,80 @@ interface CurrencySelectorProps {
 const CurrencySelector: FC<CurrencySelectorProps> = ({ onSelectCurrency }) => {
   const { address } = useAccount();
 
-  const { data: wmaticBalanceData } = useBalance({
-    address,
-    chainId: 137,
-    token: TokenContracts['WMATIC'] as Address
-  });
+  const { data: wmaticBalanceData, isLoading: wmaticBalanceLoading } =
+    useBalance({
+      address,
+      chainId: 137,
+     
+      token: TokenContracts['WMATIC'] as Address
+    });
 
-  const { data: wethBalanceData } = useBalance({
+  const { data: wethBalanceData, isLoading: wethBalanceLoading } = useBalance({
     address,
     chainId: 137,
+    
     token: TokenContracts['WETH'] as Address
   });
 
-  const { data: usdcBalanceData } = useBalance({
+  const { data: usdcBalanceData, isLoading: usdcBalanceLoading } = useBalance({
     address,
     chainId: 137,
+    
     token: TokenContracts['USDC'] as Address
   });
 
-  const { data: wmaticPriceUsd } = useQuery({
+  const { data: bonsaiBalanceData, isLoading: bonsaiBalanceLoading } =
+    useBalance({
+      address,
+      chainId: 137,
+      
+      token: TokenContracts['BONSAI'] as Address
+    });
+
+  const { data: wmaticPriceUsd, isLoading: wmaticPriceLoading } = useQuery({
     enabled: Boolean(wmaticBalanceData),
-    queryFn: async () => await getRedstonePrice(getAssetSymbol('WMATIC')),
+    queryFn: async () => await getRedstonePrice('MATIC'),
     queryKey: ['getRedstonePrice', 'WMATIC']
   });
 
-  const { data: wethPriceUsd } = useQuery({
+  const { data: wethPriceUsd, isLoading: wethPriceLoading } = useQuery({
     enabled: Boolean(wethBalanceData),
-    queryFn: async () => await getRedstonePrice(getAssetSymbol('WETH')),
+    queryFn: async () => await getRedstonePrice('ETH'),
     queryKey: ['getRedstonePrice', 'WETH']
   });
 
-  const { data: usdcPriceUsd } = useQuery({
+  const { data: usdcPriceUsd, isLoading: usdcPriceLoading } = useQuery({
     enabled: Boolean(usdcBalanceData),
-    queryFn: async () => await getRedstonePrice(getAssetSymbol('USDC')),
+    queryFn: async () => await getRedstonePrice('USDC'),
     queryKey: ['getRedstonePrice', 'USDC']
   });
 
+  const { data: bonsaiPriceUsd, isLoading: bonsaiPriceLoading } = useQuery({
+    enabled: Boolean(bonsaiBalanceData),
+    queryFn: async () => await getRedstonePrice('BONSAI'),
+    queryKey: ['getRedstonePrice', 'BONSAI']
+  });
+
   const balances = {
+    BONSAI:
+      bonsaiBalanceData && bonsaiPriceUsd
+        ? {
+            token: parseFloat(
+              formatUnits(
+                bonsaiBalanceData?.value as bigint,
+                bonsaiBalanceData?.decimals as number
+              )
+            ).toFixed(2),
+            usd: (
+              parseFloat(
+                formatUnits(
+                  bonsaiBalanceData?.value as bigint,
+                  bonsaiBalanceData?.decimals as number
+                )
+              ) * wmaticPriceUsd
+            ).toFixed(2)
+          }
+        : { token: 0, usd: 0 },
     USDC:
       usdcBalanceData && usdcPriceUsd
         ? {
@@ -138,6 +183,16 @@ const CurrencySelector: FC<CurrencySelectorProps> = ({ onSelectCurrency }) => {
         : { token: 0, usd: 0 }
   };
 
+  const isLoading =
+    wmaticBalanceLoading ||
+    wethBalanceLoading ||
+    usdcBalanceLoading ||
+    bonsaiBalanceLoading ||
+    wmaticPriceLoading ||
+    wethPriceLoading ||
+    usdcPriceLoading ||
+    bonsaiPriceLoading;
+
   return (
     <div className="flex h-[80vh] w-full flex-col gap-2 p-5">
       {SUPPORTED_CURRENCIES.map((currency) => {
@@ -145,7 +200,10 @@ const CurrencySelector: FC<CurrencySelectorProps> = ({ onSelectCurrency }) => {
           <div
             className="hover:bg-brand-500/10 flex w-full cursor-pointer items-center justify-between rounded-lg p-2"
             key={currency.symbol}
-            onClick={() => onSelectCurrency(currency)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectCurrency(currency);
+            }}
           >
             <div className="flex items-center gap-2">
               <div className="relative">
@@ -167,20 +225,29 @@ const CurrencySelector: FC<CurrencySelectorProps> = ({ onSelectCurrency }) => {
                 />
               </div>
               <div className="flex flex-col items-start justify-center leading-none">
-                <p className="text-black">{currency.symbol}</p>
-                <p className="text-sm text-black/50">Polygon</p>
+                <p>{currency.symbol}</p>
+                <p className="text-sm opacity-50">Polygon</p>
               </div>
             </div>
 
-            <div className="flex flex-col items-end justify-center leading-none">
-              <p className="text-black">
-                {balances[currency.symbol as keyof typeof balances].token ??
-                  '--'}
-              </p>
-              <p className="text-sm text-black/50">
-                $
-                {balances[currency.symbol as keyof typeof balances].usd ?? '--'}
-              </p>
+            <div className="flex flex-col items-end justify-center gap-1 leading-none">
+              {isLoading ? (
+                <div className="animate-shimmer h-4 w-16 rounded-lg bg-gray-200" />
+              ) : (
+                <p>
+                  {balances[currency.symbol as keyof typeof balances].token ??
+                    '--'}
+                </p>
+              )}
+              {isLoading ? (
+                <div className="animate-shimmer h-4 w-12 rounded-lg bg-gray-200" />
+              ) : (
+                <p className="text-sm opacity-50">
+                  $
+                  {balances[currency.symbol as keyof typeof balances].usd ??
+                    '--'}
+                </p>
+              )}
             </div>
           </div>
         );

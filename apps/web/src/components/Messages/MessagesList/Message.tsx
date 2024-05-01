@@ -1,21 +1,24 @@
-import type { CachedMessageWithId } from '@xmtp/react-sdk';
+import type { CachedConversation, CachedMessageWithId } from '@xmtp/react-sdk';
 import cn from '@lensshare/ui/cn';
-import { ContentTypeText, hasReaction, useReactions } from '@xmtp/react-sdk';
+import { ContentTypeText, hasReaction, useConversations, useReactions, useStreamMessages } from '@xmtp/react-sdk';
 import { type FC } from 'react';
 import { getTimeFromNow } from 'src/hooks/formatTime4';
 import { ContentTypeAudioeKey } from 'src/hooks/codecs/Audio';
 import Markup from '@components/Shared/Markup';
 import { useAccount } from 'wagmi';
+import { useMessageStore } from 'src/store/message';
+import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
 interface MessagesProps {
   message: CachedMessageWithId;
 }
 
 const Messages: FC<MessagesProps> = ({ message }) => {
   const { address } = useAccount();
-  
+  const { selectedConversation  } = useMessagesStore();             
   const reactions = useReactions(message);
   const messageHasReaction = hasReaction(message);
   const isSender = message.senderAddress === address;
+  useStreamMessages(selectedConversation as CachedConversation);
 
   if (message.contentType === ContentTypeText.toString()) {
     return (

@@ -1,60 +1,58 @@
 
-import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
+import { DEFAULT_COLLECT_TOKEN, WMATIC_ADDRESS } from '@lensshare/data/constants';
 import { Profile, useDefaultProfileQuery } from '@lensshare/lens';
 import getProfile from '@lensshare/lib/getProfile';
 import truncateByWords from '@lensshare/lib/truncateByWords';
-import type { ActionData } from 'nft-openaction-kit';
+import type { ActionData, UIData } from 'nft-openaction-kit';
 import type { FC } from 'react';
 import type { Address } from 'viem';
 import {Image} from '@lensshare/ui'
+import { useOaCurrency } from 'src/store/persisted/useOaCurrency';
 // TODO: take into account other currencies
-const defaultCurrency = {
-  contractAddress: DEFAULT_COLLECT_TOKEN,
-  decimals: 18,
-  id: 'WMATIC',
-  name: 'Wrapped MATIC',
-  symbol: 'WMATIC'
-};
+
 
 interface ActionInfoProps {
-  actionData: ActionData;
+  actionData?: ActionData;
   collectionName: string;
   creatorAddress: Address;
+  uiData: UIData;
 }
 
 const ActionInfo: FC<ActionInfoProps> = ({
   actionData,
   collectionName,
-  creatorAddress
+  creatorAddress,
+  uiData
 }) => {
+  const { selectedCurrency } = useOaCurrency();
   const { data, loading } = useDefaultProfileQuery({
     skip: !creatorAddress,
     variables: { request: { for: creatorAddress } }
   });
 
-  const formattedPrice = (
-    actionData.actArgumentsFormatted.paymentToken.amount /
-    BigInt(10 ** defaultCurrency.decimals)
-  ).toString();
+  const formattedPrice: string | undefined = !actionData
+    ? undefined
+    : (
+        actionData.actArgumentsFormatted.paymentToken.amount /
+        BigInt(10 ** selectedCurrency.decimals)
+      ).toString();
 
   if (!creatorAddress && loading) {
     return null;
   }
 
-  if (!data?.defaultProfile) {
-    return null;
-  }
+  const profileExists = !!data && !!data.defaultProfile;
 
   return (
     <div className="flex items-start gap-4">
       <div className="flex flex-col items-start justify-start">
         <Image
-          alt={actionData.uiData.platformName}
-          className="size-6 rounded-full border bg-gray-200 dark:border-gray-700"
+          alt={uiData.platformName}
+          className="h-6 w-6 rounded-full border bg-gray-200 dark:border-gray-700"
           height={24}
           loading="lazy"
           // TODO: manage on platform image onError
-          src={actionData.uiData.platformLogoUrl}
+          src={uiData.platformLogoUrl}
           width={24}
         />
       </div>
@@ -65,12 +63,17 @@ const ActionInfo: FC<ActionInfoProps> = ({
             {truncateByWords(collectionName, 5)}
           </h2>
           <p className="opacity-50">
-            by {getProfile(data.defaultProfile as Profile).slug}
+            by{' '}
+            {profileExists
+              ? getProfile(data.defaultProfile as Profile).slug
+              : `${creatorAddress.slice(0, 6)}...${creatorAddress.slice(-4)}`}
           </p>
         </span>
-        <p className="opacity-50">
-          {formattedPrice} {defaultCurrency.symbol}
-        </p>
+        {!!formattedPrice && (
+          <p className="opacity-50">
+            {formattedPrice} {selectedCurrency.symbol}
+          </p>
+        )}
       </div>
     </div>
   );

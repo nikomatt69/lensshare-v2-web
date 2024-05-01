@@ -34,8 +34,10 @@ import { usePreferencesStore } from 'src/store/non-persisted/usePreferencesStore
 import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
 import { hydrateAuthTokens, signOut } from 'src/store/persisted/useAuthStore';
 import useNotifictionSubscriptions from './Providers/useNotifictionSubscriptions';
-import { useOaTransactionStore } from 'src/store/non-persisted/useOaTransactionStore';
+import { useOaTransactionStore } from 'src/store/persisted/useOaTransactionStore';
 import OaTransactionToaster from './OaTransactionToaster';
+import { CachedConversation, useStreamMessages } from '@xmtp/react-sdk';
+import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -51,7 +53,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   }, []);
 
   const { resolvedTheme } = useTheme();
-
+  const { selectedConversation } = useMessagesStore();
   const { currentProfile, setCurrentProfile } = useAppStore();
   const { resetPreferences } = usePreferencesStore();
 
@@ -108,7 +110,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   });
   const GlobalHooks = () => {
     useNotifictionSubscriptions();
-
+    useStreamMessages(selectedConversation as CachedConversation)
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
   };
@@ -135,14 +137,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         containerStyle={{ wordBreak: 'break-word' }}
         toastOptions={getToastOptions(resolvedTheme)}
       />
-       {transactions.map((tx) => (
-        <OaTransactionToaster
-          key={tx.txHash}
-          onClose={() => {}}
-          platformName={tx.platformName}
-          txHash={tx.txHash}
-        />
-      ))}
+      
       <GlobalModals />
       <GlobalBanners />
       <GlobalHooks />
@@ -150,6 +145,14 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       <div className="flex min-h-screen  flex-col pb-14 md:pb-0">
         <SafeAreaView style={styles.container}>
           <Navbar />
+          {transactions.map((tx) => (
+          <OaTransactionToaster
+          key={tx.txHash}
+          onClose={() => {}}
+          platformName={tx.platformName}
+          txHash={tx.txHash}
+          />
+          ))}
           <ScrollView
             style={styles.scrollView}
             refreshControl={

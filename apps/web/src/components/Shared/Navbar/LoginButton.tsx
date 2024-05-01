@@ -20,7 +20,8 @@ const LoginButton: FC<LoginButtonProps> = ({ isBig = false }) => {
           alt="Lens Logo"
         />
       }
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         setShowAuthModal(true);
       }}
     >

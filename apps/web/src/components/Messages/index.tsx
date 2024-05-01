@@ -16,6 +16,7 @@ import MessagesList from './MessagesList';
 import useResizeObserver from 'use-resize-observer';
 import { PAGEVIEW } from '@lensshare/data/tracking';
 import { Leafwatch } from '@lib/leafwatch';
+import HydrationZustand from '@components/Common/Providers/HydrationZustand';
 
 const Messages: NextPage = () => {
   const { newConversationAddress, selectedConversation } = useMessagesStore();
@@ -77,7 +78,9 @@ const Messages: NextPage = () => {
           {newConversationAddress ? (
             <StartConversation />
           ) : selectedConversation ? (
+            <HydrationZustand>
             <MessagesList />
+            </HydrationZustand>
           ) : null}
         </Card>
       </GridItemEight>

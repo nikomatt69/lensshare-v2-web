@@ -1,21 +1,43 @@
+/** @type {import('next').NextConfig} */
+
 const { withExpo } = require('@expo/next-adapter');
 
 const withPlugins = require('next-compose-plugins');
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE_BUNDLE === '1'
-});
+
 
 const allowedBots =
   '.*(bot|telegram|baidu|bing|yandex|iframely|whatsapp|facebook|twitterbot|linkedinbot|whatsapp|slackbot|telegrambot|discordbot|facebookbot|googlebot|bot).*';
 
-/** @type {import('next').NextConfig} */
-
-const nextConfig = withPlugins([withBundleAnalyzer, withExpo], {
+const withPWA = require('@ducanh2912/next-pwa').default({
+  dest: 'public',
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  swcMinify: true,
+  disable: process.env.NODE_ENV === 'development',
+  workboxOptions: {
+    disableDevLogs: true
+  }
+  // ... other options you like
+})
+const nextConfig = withPlugins([withExpo,withPWA], {
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: true
+  },
+  reactStrictMode: false,
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false, net: false, tls: false }
+    config.externals.push('pino-pretty', 'lokijs', 'encoding')
+
+    // Add this line to ignore the problematic modules
+    // config.plugins.push(
+    //   new webpack.IgnorePlugin({ resourceRegExp: /^@aws-sdk\/client-s3$/ })
+    // )
+
+    return config
   },
   transpilePackages: [
     'data',

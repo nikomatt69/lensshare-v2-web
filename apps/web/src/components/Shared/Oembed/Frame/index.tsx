@@ -87,7 +87,7 @@ const Frame: FC<FrameProps> = ({ frame, publicationId }) => {
             icon={
               (action === 'link' ||
                 action === 'post_redirect' ||
-                action === 'mint') && <LinkIcon className="size-4" />
+                action === 'mint') && <LinkIcon className="h-4 w-4" />
             }
             key={index}
             onClick={() => {

@@ -11,6 +11,7 @@ export const Localstorage = {
   NonceStore: 'nonce.store',
   PreferencesStore: 'preferences.store',
   MessageStore: 'message.store',
+  OaCurrencyStore: 'oacurrency.store',
   LocaleStore: 'locale.store',
   FingerprintStore: 'fingerprint.store',
   FeaturesCache: 'gbFeaturesCache',

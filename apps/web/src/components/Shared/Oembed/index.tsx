@@ -1,7 +1,7 @@
 import type { OG } from '@lensshare/types/misc';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import type { FC } from 'react';
+import { useState, type FC, useEffect } from 'react';
 
 import Embed from './Embed';
 import Player from './Player';
@@ -44,6 +44,14 @@ const Oembed: FC<OembedProps> = ({
     queryKey: ['oembed', url],
     refetchOnMount: false
   });
+  const [currentPublication, setCurrentPublication] =
+    useState<AnyPublication>();
+
+  useEffect(() => {
+    if (publication) {
+      setCurrentPublication(publication);
+    }
+  }, [publication]);
 
   if (isLoading || error || !data) {
     return null;
@@ -63,49 +71,40 @@ const Oembed: FC<OembedProps> = ({
     title: data?.title,
     url: url as string
   };
+  const targetPublication =
+  currentPublication && isMirrorPublication(currentPublication)
+  ? currentPublication.mirrorOn
+  : currentPublication;
 
-  if (!og.title && !og.html  && !og.portal && !og.frame && !og.nft && !og.polymarket) {
+  const canPerformDecentAction: boolean =
+  !!targetPublication &&
+  targetPublication.openActionModules.some(
+    (module) =>
+      module.contract.address === VerifiedOpenActionModules.DecentNFT
+  );
+
+const embedDecentOpenAction: boolean =
+  canPerformDecentAction || !!openActionEmbed;
+
+  if (!og.title && !og.html && !og.nft && !embedDecentOpenAction) {
     return null;
   }
 
-  const targetPublication =
-    publication && isMirrorPublication(publication)
-      ? publication.mirrorOn
-      : publication;
-
-  // Check if the publication has an NFT minting open action module
-  const canPerformDecentAction: boolean =
-    !!targetPublication &&
-    targetPublication.openActionModules.some(
-      (module) =>
-        module.contract.address === VerifiedOpenActionModules.DecentNFT
-    );
-
-  const embedDecentOpenAction: boolean =
-    canPerformDecentAction || !!openActionEmbed;
-
   return (
     <div className={className}>
-      {embedDecentOpenAction && !!publication ? (
+       {embedDecentOpenAction ? (
         <DecentOpenAction
           og={og}
           openActionEmbed={!!openActionEmbed}
           openActionEmbedLoading={!!openActionEmbedLoading}
-          publication={publication}
+          publication={currentPublication}
         />
       ) : og.html ? (
         <Player og={og} />
       ) : og.nft ? (
         <Nft nft={og.nft} />
-      ) : og.portal ? (
-        <Portal portal={og.portal} publicationId={publication?.id} />
-      ) : og.frame ? (
-        <Frame frame={og.frame} publicationId={publication?.id} /> 
-      ):
-       og.polymarket ? (
-        <PolymarketWidget marketId={og.polymarket.marketId} publicationId={publication?.id} /> 
       ) : (
-        <Embed og={og} publicationId={publication?.id} />
+        <Embed og={og} publicationId={currentPublication?.id} />
       )}
     </div>
   );

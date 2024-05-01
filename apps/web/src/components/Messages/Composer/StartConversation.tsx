@@ -68,7 +68,7 @@ const StartConversation: FC = () => {
       setSelectedConversation(
         conversation.cachedConversation as CachedConversation
       );
-      Leafwatch.track(MESSAGES.START_CONVERSATION);
+   
       setIsSending(false);
     }
   };

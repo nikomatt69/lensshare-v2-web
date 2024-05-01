@@ -57,13 +57,10 @@ const MessagesList: FC = () => {
   if (!selectedConversation) {
     return null;
   }
-  const [streamedMessages, setStreamedMessages] = useState<
-    CachedMessageWithId[]
-  >([]);
 
   // callback to handle incoming messages
   const stream = useStreamMessages(selectedConversation);
-  const streamMex = useStreamAllMessages();
+
   let lastMessageDate: Date | undefined;
   useEffect(() => {
     endOfMessagesRef.current?.scrollTo(
@@ -78,7 +75,7 @@ const MessagesList: FC = () => {
         return;
       }
       stream;
-      streamMex
+
     }
   });
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -96,31 +93,17 @@ const MessagesList: FC = () => {
       </div>
       <div className="divider" />
       <div
-        ref={endOfMessagesRef && observe}
+        ref={observe}
         className={cn(
           'h-[69vh] max-h-[69vh]',
           'flex flex-col-reverse space-y-4 overflow-y-auto p-4'
         )}
       >
-        {[...messages].reverse().map((message) => {
-          const dateHasChanged = lastMessageDate
-            ? !isOnSameDay(lastMessageDate, message.sentAt)
-            : false;
-          const messageDiv = (
-            <div
-              key={`${message.id}_${messages}`}
-              ref={messages.length + 1 ? observe : observe}
-             
-            >
-               
-              <Messages key={message.id} message={message} />
-
-              {dateHasChanged ? <DateDivider date={lastMessageDate} /> : null}
-            </div>
-          );
-          lastMessageDate = message.sentAt;
-          return messageDiv;
-        })}
+         <div ref={endOfMessagesRef} />
+        {[...messages].reverse().map((message) => (
+          <Messages key={message.id} message={message} />
+        ))}
+    
       </div>
       <Composer conversation={selectedConversation} />
     </div>

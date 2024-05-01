@@ -106,9 +106,9 @@ const Attachment: FC = () => {
           whileTap={{ scale: 0.9 }}
         >
           {isUploading ? (
-            <Spinner size="sm" />
+            <Spinner size="xs" />
           ) : (
-            <PhotoIcon className="h-5 w-5" />
+            <PhotoIcon className="h-5 w-5 text-brand" />
           )}
         </Menu.Button>
         <MenuTransition show={showMenu}>

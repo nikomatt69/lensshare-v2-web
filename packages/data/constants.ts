@@ -25,6 +25,7 @@ export const WMATIC_ADDRESS = IS_MAINNET
   : '0x9c3c9283d3e44854697cd22d3faa240cfb032889';
 export const KNOWN_ATTRIBUTES = {
   POLL_ID: 'pollId',
+  HIDE_OEMBED : 'HideOembed',
   SWAP_OA_DEFAULT_AMOUNT: 'swapOADefaultAmount'
 };
 export const SIGNUP_PRICE = 1; // in MATIC

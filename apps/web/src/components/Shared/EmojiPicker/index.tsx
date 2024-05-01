@@ -29,7 +29,7 @@ const EmojiPicker: FC<EmojiPickerProps> = ({
 
   return (
     <Tooltip content="Emoji" placement="top">
-      <div className="relative" ref={listRef}>
+      <div className="relative hidden" ref={listRef}>
         <motion.button
           className="rounded-full outline-offset-8"
           onClick={(e) => {
@@ -39,7 +39,7 @@ const EmojiPicker: FC<EmojiPickerProps> = ({
           }}
           whileTap={{ scale: 0.9 }}
         >
-          {emoji ? <span>{emoji}</span> : <FaceSmileIcon className="h-5 w-5" />}
+          {emoji ? <span>{emoji}</span> : <FaceSmileIcon className="h-5 w-5 text-brand" />}
         </motion.button>
 
         {showEmojiPicker ? (
