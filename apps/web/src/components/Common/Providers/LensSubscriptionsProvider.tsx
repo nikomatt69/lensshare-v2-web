@@ -1,25 +1,27 @@
-import React, { useEffect } from 'react';
-import { useAccount } from 'wagmi';
-import { useNotificationStore } from 'src/store/persisted/useNotificationStore';
-import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
-import getCurrentSession from '@lib/getCurrentSession';
-import getPushNotificationData from '@lib/getPushNotificationData';
-import { BrowserPush } from '@lib/browserPush';
-import { subscribeUserToPush } from '@lib/notification';
+import type { Notification } from '@lensshare/lens';
 import {
   useNewNotificationSubscriptionSubscription,
-  useUserSigNoncesSubscriptionSubscription,
-  Notification
+  useUserSigNoncesSubscriptionSubscription
 } from '@lensshare/lens';
 
-const LensSubscriptionsProvider: React.FC = () => {
+import { BrowserPush } from '@lib/browserPush';
+import getPushNotificationData from '@lib/getPushNotificationData';
+import { useEffect, type FC } from 'react';
+
+import { useAccount } from 'wagmi';
+import { useNotificationStore } from 'src/store/persisted/useNotificationStore';
+import getCurrentSession from '@lib/getCurrentSession';
+import { useNonceStore } from 'src/store/non-persisted/useNonceStore';
+import { subscribeUserToPush } from '@lib/notification';
+
+const LensSubscriptionsProvider: FC = () => {
   const { setLatestNotificationId } = useNotificationStore();
   const { setLensHubOnchainSigNonce } = useNonceStore();
   const { address } = useAccount();
   const { id: sessionProfileId } = getCurrentSession();
   const canUseSubscriptions = Boolean(sessionProfileId) && address;
 
-  // Subscribe to new notifications from the Lens API
+  // Handle new notifications
   const { data: newNotificationData } = useNewNotificationSubscriptionSubscription({
     skip: !canUseSubscriptions,
     variables: { for: sessionProfileId }
@@ -27,17 +29,15 @@ const LensSubscriptionsProvider: React.FC = () => {
 
   useEffect(() => {
     if (newNotificationData?.newNotification) {
-      const notification: Notification = newNotificationData.newNotification;
+      const notification = newNotificationData?.newNotification as Notification;
       const notifyData = getPushNotificationData(notification);
 
       if (notifyData) {
-        // Display browser push notification
-        BrowserPush.notify({ title: notifyData.title || 'New Notification', body: notifyData.message });
-        
-        // This is where you could also handle backend subscription logic if needed
-        subscribeUserToPush(notification).catch(console.error);
+        BrowserPush.notify({ title: notifyData.title || '' }); // Local browser notification
+        subscribeUserToPush(async (subscription: any) => {
+          console.log('Subscribed with subscription:', subscription); // Log the subscription info (for debugging)
+        }).catch(console.error);
       }
-
       setLatestNotificationId(notification.id);
     }
   }, [newNotificationData, canUseSubscriptions]);
