@@ -1,24 +1,18 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+import { memo, useEffect, useRef, useState } from 'react';
+import type { ReactNode, FC } from 'react';
 import type { CachedConversation, CachedMessageWithId } from '@xmtp/react-sdk';
 import type { Address } from 'viem';
-
-import {
-  useMessages,
-  useStreamAllMessages,
-  useStreamMessages
-} from '@xmtp/react-sdk';
-import {  memo , useEffect, useRef, useState } from 'react';
-import type { ReactNode, FC } from 'react';
-
+import { useMessages, useStreamMessages } from '@xmtp/react-sdk';
+import { useInView } from 'react-cool-inview';
+import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
+import useSendMessage from 'src/hooks/useSendMessage';
+import { formatDate } from 'src/hooks/formatTime5';
+import cn from '@lensshare/ui/cn';
 import Composer from '../Composer';
 import Consent from './Consent';
 import Messages from './Message';
-import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
 import LazyDefaultProfile from '@components/Shared/LazyDefaultProfile';
-import useSendMessage from 'src/hooks/useSendMessage';
-import { useInView } from 'react-cool-inview';
-import { formatDate, isOnSameDay } from 'src/hooks/formatTime5';
-import cn from '@lensshare/ui/cn';
+
 interface DateDividerBorderProps {
   children: ReactNode;
 }
@@ -43,48 +37,39 @@ const DateDivider: FC<{ date?: Date }> = ({ date }) => (
 
 const MessagesList: FC = () => {
   const { selectedConversation } = useMessagesStore();
-  const { messages } = useMessages(selectedConversation as CachedConversation);
+  const [messages, setMessages] = useState<CachedMessageWithId[]>([]);
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
+
+  const sendMessage = useSendMessage(selectedConversation?.context?.conversationId as string);
+  const stream = useStreamMessages(selectedConversation as CachedConversation);
+
+  useEffect(() => {
+    stream.onMessage((message) => {
+      setMessages(prevMessages => [...prevMessages, message]);
+    });
+    return () => stream.disconnect(); // Disconnect on cleanup
+  }, [stream]);
+
   useEffect(() => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages.length]);
 
-  // Void hook, were xmtp/react-sdk stream messages realtime
-
-  const { sendMessage } = useSendMessage(
-    selectedConversation?.context?.conversationId as string
-  );
   if (!selectedConversation) {
     return null;
   }
 
-  // callback to handle incoming messages
-  const stream = useStreamMessages(selectedConversation);
-
-  let lastMessageDate: Date | undefined;
-  useEffect(() => {
-    endOfMessagesRef.current?.scrollTo(
-      0,
-      endOfMessagesRef.current.scrollHeight
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConversation]);
   const { observe } = useInView({
     onChange: ({ inView }) => {
-      if (!inView) {
-        return;
+      if (inView) {
+        stream.resume(); // Resume the message stream when the container is in view
+      } else {
+        stream.pause(); // Pause the message stream when the container is out of view
       }
-      stream;
-
     }
   });
-  // eslint-disable-next-line react-hooks/rules-of-hooks
 
-  useStreamMessages(selectedConversation as CachedConversation);
-  const [show, setShow] = useState(false);
-  const [meetingUrl, setMeetingUrl] = useState('');
   return (
-    <div >
+    <div>
       <div className="flex items-center justify-between px-5 py-1">
         <LazyDefaultProfile
           address={selectedConversation.peerAddress as Address}
@@ -99,11 +84,10 @@ const MessagesList: FC = () => {
           'flex flex-col-reverse space-y-4 overflow-y-auto p-4'
         )}
       >
-         <div ref={endOfMessagesRef} />
-        {[...messages].reverse().map((message) => (
+        <div ref={endOfMessagesRef} />
+        {messages.map((message) => (
           <Messages key={message.id} message={message} />
         ))}
-    
       </div>
       <Composer conversation={selectedConversation} />
     </div>
