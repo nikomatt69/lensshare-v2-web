@@ -22,5 +22,6 @@ export enum OpenAction {
   Tip = 'Tip',
   DecentNft = 'DecentNft',
   Swap = 'Swap',
+  RentableBillboard = 'Rentable Billboard',
   Polymarket = 'Polymarket'
 }

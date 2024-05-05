@@ -9,7 +9,7 @@ import OpenActionsConfig from './OpenActionsConfig';
 import SaveOrCancel from './SaveOrCancel';
 import { ScreenType, useOpenActionStore } from 'src/store/non-persisted/useOpenActionStore';
 import { TipIcon } from '@components/Publication/LensOpenActions/UnknownModule/Tip/TipIcon';
-import { ArrowsRightLeftIcon, BanknotesIcon } from '@heroicons/react/24/outline';
+import { ArrowsRightLeftIcon, BanknotesIcon, BuildingStorefrontIcon } from '@heroicons/react/24/outline';
 
 const OpenActionsList: FC = () => {
   const { screen, selectedOpenAction, setShowModal } = useOpenActionStore();
@@ -31,12 +31,12 @@ const OpenActionsList: FC = () => {
           title="Tipping"
           type={OpenAction.Tip}
         />
-         <OpenActionItem
-          description="Add ability to tip"
-          icon={<TipIcon className="h-6 w-6" />}
-          title="Polymarket"
-          type={OpenAction.Polymarket}
-        />
+        <OpenActionItem
+            description="Place an billboard on your post"
+            icon={<BuildingStorefrontIcon className="w-6 h-6" />}
+            title="Rentable Billboard"
+            type={OpenAction.RentableBillboard}
+          />
       </div>
       <SaveOrCancel
         onSave={() => setShowModal(false)}
