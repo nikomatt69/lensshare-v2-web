@@ -1,0 +1,30 @@
+13:39:27.871  Chromatic CLI v11.3.1
+              https://www.chromatic.com/docs/cli 
+ 
+13:39:28.535  Authenticating with Chromatic 
+13:39:28.535      → Connecting to https://index.chromatic.com
+13:39:31.309  Authenticated with Chromatic
+                  → Using project token '****************6c80'
+13:39:31.309  Retrieving git information
+13:39:31.362  git info: {"commit":{"commit":"2803f7c91f61da03847f794d904973fe2dbf4f6b","committedAt":1714927575000,"committerEmail":"nicola.mattioli.95@gmail.com","committerName":"nikomatt69"},"branch":"master","fromCI":false}
+13:39:32.601  App firstBuild: %o, lastBuild: %o {"committedAt":1714927575000} {"commit":"2803f7c91f61da03847f794d904973fe2dbf4f6b","committedAt":1714927575000}
+13:39:32.616  Adding last branch build commit 2803f7c91f61da03847f794d904973fe2dbf4f6b to commits with builds
+13:39:32.616  step: checking 20 up to 1714927575
+13:39:32.616  step: commitsWithBuilds: 2803f7c91f61da03847f794d904973fe2dbf4f6b
+13:39:32.616  step: commitsWithoutBuilds:
+13:39:32.616  running git rev-list HEAD       --since 1714927575       -n 20 --not 2803f7c91f61da03847f794d904973fe2dbf4f6b
+13:39:32.630  command output:
+13:39:32.630  step: candidateCommits: , visitedCommitsWithoutBuilds:
+13:39:32.630  step: no candidateCommits; we are done
+13:39:33.710  Final commitsWithBuilds: 2803f7c91f61da03847f794d904973fe2dbf4f6b
+13:39:33.711  running git rev-list 2803f7c91f61da03847f794d904973fe2dbf4f6b --not "2803f7c91f61da03847f794d904973fe2dbf4f6b^@"
+13:39:33.725  command output: 2803f7c91f61da03847f794d904973fe2dbf4f6b
+13:39:33.725  Found parentCommits: 2803f7c91f61da03847f794d904973fe2dbf4f6b
+13:39:36.294  Skipping build
+                  → Skipping rebuild of an already fully passed/accepted build
+13:39:36.295  ℹ Skipping rebuild of an already fully passed/accepted build
+              A build for the same commit as the last build on the branch is considered a rebuild.
+              If the last build is passed or accepted, the rebuild is skipped because it shouldn't change anything.
+              You can override this using the --force-rebuild flag.
+13:39:36.296  Tasks completed
+13:39:36.315  ℹ Wrote Chromatic diagnostics report to chromatic-diagnostics.json
