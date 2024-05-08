@@ -3,7 +3,9 @@ import { VerifiedOpenActionModules } from '@lensshare/data/verified-openaction-m
 const allowedUnknownOpenActionModules = [
   VerifiedOpenActionModules.Tip,
   VerifiedOpenActionModules.DecentNFT,
-  VerifiedOpenActionModules.Swap
+  VerifiedOpenActionModules.Swap,
+  VerifiedOpenActionModules.Polymarket,
+  VerifiedOpenActionModules.RentableBillboard,
 ];
 
 export default allowedUnknownOpenActionModules;

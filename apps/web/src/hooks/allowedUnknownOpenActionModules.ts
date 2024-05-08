@@ -4,7 +4,8 @@ const allowedUnknownOpenActionModules = [
   VerifiedOpenActionModules.Tip,
   VerifiedOpenActionModules.DecentNFT,
   VerifiedOpenActionModules.Swap,
-  VerifiedOpenActionModules.Polymarket
+  VerifiedOpenActionModules.Polymarket,
+  VerifiedOpenActionModules.RentableBillboard,
 ];
 
 export default allowedUnknownOpenActionModules;

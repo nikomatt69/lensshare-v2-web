@@ -19,8 +19,8 @@ const apolloClient = (authLink?: ApolloLink) =>
   new ApolloClient({
     connectToDevTools: true,
     link: authLink
-      ? from([authLink, retryLink, requestLink, httpLink, superfluidLink])
-      : from([retryLink, httpLink,superfluidLink]),
+      ? from([authLink, retryLink, requestLink])
+      : from([retryLink, httpLink]),
     cache
   });
 

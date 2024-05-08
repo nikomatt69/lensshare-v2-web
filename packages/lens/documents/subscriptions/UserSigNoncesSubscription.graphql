@@ -1,6 +1,5 @@
 subscription UserSigNoncesSubscription($address: EvmAddress!) {
-  userSigNoncesSubscription(address: $address) {
+  userSigNonces(address: $address) {
     lensHubOnchainSigNonce
-    lensPublicActProxyOnchainSigNonce
   }
 }

@@ -12,7 +12,8 @@ const IgnoredModules = [
   VerifiedOpenActionModules.Swap,
   VerifiedOpenActionModules.Tip,
   VerifiedOpenActionModules.DecentNFT,
-  VerifiedOpenActionModules.Polymarket
+  VerifiedOpenActionModules.Polymarket,
+  VerifiedOpenActionModules.RentableBillboard,
 ];
 
 interface ListProps {

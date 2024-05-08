@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 
 import Loader from '@components/Shared/Loader';
-import { DEFAULT_COLLECT_TOKEN } from '@lensshare/data/constants';
+import { DEFAULT_COLLECT_TOKEN, STATIC_ASSETS_URL } from '@lensshare/data/constants';
 import {
   FollowModuleType,
   LimitType,
@@ -82,8 +82,10 @@ const CollectModules: FC = () => {
         }}
         options={allowedTokens?.currencies.items.map((token) => ({
           label: token.name,
+          icon: `${STATIC_ASSETS_URL}/images/tokens/${token.symbol}.svg`,
+          selected: token.contract.address === selectedCurrency,
           value: token.contract.address
-        }))}
+        })) || [{ label: 'Loading...', value: 'Loading...' }]}
       />
       {loading || currencyLoading ? (
         <div className="py-5">
