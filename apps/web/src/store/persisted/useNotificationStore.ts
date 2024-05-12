@@ -24,3 +24,4 @@ const store = create(
 );
 
 export const useNotificationStore = createTrackedSelector(store);
+

@@ -12,7 +12,7 @@ interface Props {
 export const SongThumbnail = ({ className }: Props): JSX.Element => {
   return (
     <div
-      className={`w-[65px] h-[65px] rounded-[16px] bg-[url(/static/img/song-thumbnail.png)] bg-cover bg-[50%_50%] ${className}`}
+      className={`w-[65px] h-[65px] rounded-[16px] bg-cover bg-[50%_50%] ${className}`}
     />
   );
 };

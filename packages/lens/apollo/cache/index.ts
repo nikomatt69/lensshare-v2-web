@@ -20,6 +20,9 @@ import createPublicationsFieldPolicy from './createPublicationsFieldPolicy';
 import createSearchProfilesFieldPolicy from './createSearchProfilesFieldPolicy';
 import createSearchPublicationsPolicy from './createSearchPublicationsPolicy';
 import createWhoHaveBlockedFieldPolicy from './createWhoHaveBlockedFieldPolicy';
+import createExploreProfilesFieldPolicy from './createExploreProfilesFieldPolicy';
+import createLatestPaidActionsFieldPolicy from './createLatestPaidActionsFieldPolicy';
+import createModLatestReportsFieldPolicy from './createModLatestReportsFieldPolicy';
 
 const cache = new InMemoryCache({
   possibleTypes: result.possibleTypes,
@@ -27,25 +30,30 @@ const cache = new InMemoryCache({
     ProfilesManagedResult: { keyFields: profilesManagedKeyFields },
     Query: {
       fields: {
+        approvedAuthentications: createApprovedAuthenticationsFieldPolicy(),
+        exploreProfiles: createExploreProfilesFieldPolicy(),
+        explorePublications: createExplorePublicationsFieldPolicy(),
         feed: createFeedFieldPolicy(),
         feedHighlights: createFeedHighlightsFieldPolicy(),
-        explorePublications: createExplorePublicationsFieldPolicy(),
-        publications: createPublicationsFieldPolicy(),
-        publicationsProfileBookmarks: createPublicationsFieldPolicy(),
-        nfts: createNftsFieldPolicy(),
-        notifications: createNotificationsFieldPolicy(),
         followers: createFollowersFieldPolicy(),
         following: createFollowingFieldPolicy(),
+        latestPaidActions: createLatestPaidActionsFieldPolicy(),
+        modExplorePublications: createExplorePublicationsFieldPolicy(),
+        modFollowers: createFollowersFieldPolicy(),
+        modLatestReports: createModLatestReportsFieldPolicy(),
+        mutualFollowersProfiles: createMutualFollowersProfilesFieldPolicy(),
+        nfts: createNftsFieldPolicy(),
+        notifications: createNotificationsFieldPolicy(),
+        profileActionHistory: createProfileActionHistoryFieldPolicy(),
+        profileManagers: createProfileManagersFieldPolicy(),
         profiles: createProfilesFieldPolicy(),
+        profilesManaged: createProfilesManagedFieldPolicy(),
+        publications: createPublicationsFieldPolicy(),
+        publicationsProfileBookmarks: createPublicationsFieldPolicy(),
         searchProfiles: createSearchProfilesFieldPolicy(),
         searchPublications: createSearchPublicationsPolicy(),
         whoActedOnPublication: createActedOnPublicationFieldPolicy(),
-        whoHaveBlocked: createWhoHaveBlockedFieldPolicy(),
-        mutualFollowersProfiles: createMutualFollowersProfilesFieldPolicy(),
-        approvedAuthentications: createApprovedAuthenticationsFieldPolicy(),
-        profileActionHistory: createProfileActionHistoryFieldPolicy(),
-        profileManagers: createProfileManagersFieldPolicy(),
-        profilesManaged: createProfilesManagedFieldPolicy()
+        whoHaveBlocked: createWhoHaveBlockedFieldPolicy()
       }
     }
   }

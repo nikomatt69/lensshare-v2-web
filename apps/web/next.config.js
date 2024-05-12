@@ -17,9 +17,9 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   extendDefaultRuntimeCaching : true,
   dynamicStartUrl: true,
   swcMinify: true,
-  
   workboxOptions: {
     disableDevLogs: true
+    
   }
   // ... other options you like
 })

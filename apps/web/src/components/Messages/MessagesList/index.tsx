@@ -110,4 +110,5 @@ const MessagesList: FC = () => {
   );
 };
 
-export default memo(MessagesList);;
+export default memo(MessagesList);
+

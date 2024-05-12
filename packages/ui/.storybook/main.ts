@@ -10,17 +10,62 @@ function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, 'package.json')));
 }
 const config: StorybookConfig = {
-  stories: ['../src/**/*.tsx','../src/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../src/**.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',"../src/**/*.mdx", ],
   addons: [
-    getAbsolutePath('@storybook/addon-onboarding'),
-    getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-essentials'),
-    getAbsolutePath('@chromatic-com/storybook'),
-    getAbsolutePath('@storybook/addon-interactions')
+    '@storybook/addon-onboarding',
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-controls',
+    '@storybook/addon-a11y',
+    '@storybook/addon-styling-webpack',
+    '@storybook/addon-toolbars',
+    '@storybook/addon-viewport',
+    '@storybook/addon-backgrounds',
+    '@storybook/addon-docs',
+    
+    {
+      name: "@chromatic-com/storybook",
+      options: {
+        //👇 Loads the configuration file based on the current environment
+        configFile:
+          process.env.NODE_ENV === "development"
+            ? "chromatic.config.json"
+            : "production.config.json",
+      },
+    },
+   '@storybook/addon-interactions',
+   {
+    name: '@storybook/addon-styling-webpack',
+    options: {
+      rules: [
+        {
+          test: /\.css$/,
+          sideEffects: true,
+          use: [
+            require.resolve('style-loader'),
+            {
+              loader: require.resolve('css-loader'),
+              options: {
+                importLoaders: 1,
+              },
+            },
+            {
+              loader: require.resolve('postcss-loader'),
+              options: {
+                implementation: require.resolve('postcss'),
+              },
+            },
+          ],
+        },
+      ],
+    },
+  },
   ],
   framework: {
-    name: getAbsolutePath('@storybook/nextjs'),
-    options: {}
+    name: '@storybook/nextjs',
+    options: {
+      
+    },
   },
   docs: {
     autodocs: 'tag'

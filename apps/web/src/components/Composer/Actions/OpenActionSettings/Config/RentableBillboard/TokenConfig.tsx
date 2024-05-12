@@ -1,36 +1,39 @@
-import type { Address } from 'viem';
+import { isAddress, type Address } from 'viem';
 
 
+import { Input, Select } from '@lensshare/ui';
 import { type FC } from 'react';
+import { useAllowedTokensStore } from 'src/store/persisted/useAllowedTokensStore';
 
 import { useRentableBillboardActionStore } from '.';
-import { Select } from '@lensshare/ui';
-import { useAllowedTokensStore } from 'src/store/persisted/useAllowedTokensStore';
-import { STATIC_ASSETS_URL } from '@lensshare/data/constants';
+import { CHAIN_ID, STATIC_ASSETS_URL } from '@lensshare/data/constants';
+import useTokenMetadata from 'src/hooks/alchemy/useTokenMetadata';
 
 const TokenConfig: FC = () => {
   const { currency, setCurrency } = useRentableBillboardActionStore();
-  const { allowedTokens } = useAllowedTokensStore();
+  const { data } = useTokenMetadata({
+    address: currency.token,
+    chain: CHAIN_ID,
+    enabled: currency.token !== undefined && isAddress(currency.token)
+  });
 
   return (
-    <div className="mt-5">
-      <div className="label">Select currency</div>
-      <Select
-        
-        onChange={(event) => {
-          const value = event.target.value as string; // Cast the value to string
-          setCurrency(
-            value as unknown as  Address,
-            allowedTokens?.find((t) => t.symbol === value)?.decimals || 18
-          );
+    <div className="text-sm">
+      <Input
+        error={!isAddress(currency.token)}
+        label="Token address (Polygon)"
+        min="1"
+        onChange={(event: { target: { value: string; }; }) => {
+          setCurrency(event.target.value as Address , data?.decimals || 18);
         }}
-        options={allowedTokens?.map((token) => ({
-          icon: `${STATIC_ASSETS_URL}/images/tokens/${token.symbol}.svg`,
-          label: token.name,
-          selected: token.contractAddress === currency.token,
-          value: token.contractAddress
-        }))}
+        placeholder="0x..."
+        value={currency.token}
       />
+      {data ? (
+        <div className="mt-1 font-bold text-green-500">
+          {data.name} ({data.symbol})
+        </div>
+      ) : null}
     </div>
   );
 };

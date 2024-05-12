@@ -10,5 +10,5 @@ interface Props {
 }
 
 export const AirpodsProLeft = ({ className }: Props): JSX.Element => {
-  return <div className={`w-[24px] h-[24px] bg-[url(/static/img/image-6-4.png)] bg-[100%_100%] ${className}`} />;
+  return <div className={`w-[24px] h-[24px]  bg-[100%_100%] ${className}`} />;
 };
