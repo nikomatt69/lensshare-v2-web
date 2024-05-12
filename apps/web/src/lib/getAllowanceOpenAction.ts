@@ -23,6 +23,8 @@ const getAllowanceOpenAction = (
       return { name: 'Polymarket Open Action' };
     case VerifiedOpenActionModules.DecentNFT:
         return { name: 'Decent Open Action' };  
+    case VerifiedOpenActionModules.RentableBillboard:
+          return { name: 'Rentable Billboard' };
     default:
       return { name: 'Unknown Open Action' };
   }

@@ -1,0 +1,10 @@
+
+{
+  "projectId": "Project:chpt_5c2c8d5cb406c80",
+  "buildScriptName": "build-storybook",
+  "debug": true,
+  "zip": true,
+  "storybookBuildDir": "storybook-static",
+  
+  "storybookBaseDir": "@lensshare/ui"
+}

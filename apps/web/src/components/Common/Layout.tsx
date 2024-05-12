@@ -6,7 +6,7 @@ import { useCurrentProfileQuery } from '@lensshare/lens';
 import getToastOptions from '@lib/getToastOptions';
 import Head from 'next/head';
 import { useTheme } from 'next-themes';
-import { type FC, type ReactNode } from 'react';
+import { useEffect, type FC, type ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useAppStore } from 'src/store/persisted/useAppStore';
 
@@ -38,6 +38,7 @@ import { useOaTransactionStore } from 'src/store/persisted/useOaTransactionStore
 import OaTransactionToaster from './OaTransactionToaster';
 import { CachedConversation, useStreamMessages } from '@xmtp/react-sdk';
 import { useMessagesStore } from 'src/store/non-persisted/useMessagesStore';
+import { useIsClient } from '@uidotdev/usehooks';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -54,47 +55,24 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   const { resolvedTheme } = useTheme();
   const { selectedConversation } = useMessagesStore();
-  const { currentProfile, setCurrentProfile } = useAppStore();
+  const { currentProfile, setCurrentProfile , setFallbackToCuratedFeed } = useAppStore();
   const { resetPreferences } = usePreferencesStore();
 
   const { setLensHubOnchainSigNonce } = useNonceStore();
   useRouter();
 
-  const isMounted = useIsMounted();
   const { connector } = useAccount();
-  const { disconnect } = useDisconnect();
+;
 
-  const { id: sessionProfileId } = getCurrentSession();
 
-  const logout = (reload = false) => {
-    resetPreferences();
-    signOut();
-    disconnect?.();
-    if (reload) {
-      location.reload();
-    }
-  };
   const { isRoomJoined } = useRoom();
-  const { loading } = useCurrentProfileQuery({
-    variables: { request: { forProfileId: sessionProfileId } },
-    skip: !sessionProfileId || isAddress(sessionProfileId),
-    onCompleted: ({ profile, userSigNonces }) => {
-      setCurrentProfile(profile as Profile);
-      setLensHubOnchainSigNonce(userSigNonces.lensHubOnchainSigNonce);
-    }
-  });
 
   useEffectOnce(() => {
     // Listen for switch account in wallet and logout
     connector?.addListener('change', () => logout());
   });
 
-  const validateAuthentication = () => {
-    const { accessToken } = hydrateAuthTokens();
-    if (!accessToken) {
-      logout();
-    }
-  };
+ 
 
   const styles = StyleSheet.create({
     container: {
@@ -114,11 +92,58 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
   };
+
+
+
+  const isMounted = useIsClient();
+  const { disconnect } = useDisconnect();
+
+  const { id: sessionProfileId } = getCurrentSession();
+
+  const logout = (reload = false) => {
+    resetPreferences();
+
+    signOut();
+    disconnect?.();
+    if (reload) {
+      location.reload();
+    }
+  };
+
+  const { loading } = useCurrentProfileQuery({
+    onCompleted: ({ profile, userSigNonces }) => {
+      setCurrentProfile(profile as Profile);
+      setLensHubOnchainSigNonce(userSigNonces.lensHubOnchainSigNonce);
+
+      // If the user has no following, we should fallback to the curated feed
+      if (profile?.stats.followers === 0) {
+        setFallbackToCuratedFeed(true);
+      }
+    },
+    onError: () => logout(true),
+    skip: !sessionProfileId || isAddress(sessionProfileId),
+    variables: { request: { forProfileId: sessionProfileId } }
+  });
+
+  const validateAuthentication = () => {
+    const { accessToken } = hydrateAuthTokens();
+
+    if (!accessToken) {
+      logout();
+    }
+  };
+
+  useEffect(() => {
+    validateAuthentication();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const profileLoading = !currentProfile && loading;
 
-  if (profileLoading || !isMounted()) {
+  if (profileLoading || !isMounted) {
     return <Loading />;
   }
+
 
   return (
     <>
@@ -170,3 +195,4 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 };
 
 export default Layout;
+

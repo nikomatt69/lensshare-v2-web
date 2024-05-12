@@ -23,7 +23,7 @@ export const AirpodsProRight = ({
     <div className={`w-[22px] h-[22px] ${className}`}>
       <div className="relative w-[18px] h-[18px] top-[2px] left-[2px]">
         <div
-          className={`relative w-[20px] h-[20px] -top-px -left-px bg-[url(/static/img/ellipse-6-4.svg)] bg-[100%_100%] ${overlapGroupClassName}`}
+          className={`relative w-[20px] h-[20px] -top-px -left-px  bg-[100%_100%] ${overlapGroupClassName}`}
         >
           <img className={`absolute w-[20px] h-[20px] top-0 left-0 ${ellipseClassName}`} alt="Ellipse" src={ellipse} />
         </div>
